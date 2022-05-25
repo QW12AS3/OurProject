@@ -23,14 +23,27 @@ class Vigor extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.light,
         theme: ThemeData(
+          colorSchemeSeed: orangeColor,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+                textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(
+                    fontFamily: 'JosefinSans',
+                    color: orangeColor,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold)),
+                backgroundColor: MaterialStateProperty.all(orangeColor),
+                elevation: MaterialStateProperty.all(2)),
+          ),
           fontFamily: 'JosefinSans',
           textTheme: const TextTheme(
-            bodySmall: TextStyle(
+            bodyMedium: TextStyle(
                 color: orangeColor, fontSize: 20, fontWeight: FontWeight.bold),
+            bodySmall: TextStyle(
+                color: orangeColor, fontSize: 15, fontWeight: FontWeight.bold),
           ),
         ),
         darkTheme: ThemeData(),
-        home: const UserInformationView(),
+        home: UserInformationView(),
       ),
     );
   }
