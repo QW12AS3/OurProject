@@ -40,7 +40,7 @@ class UserInfoCustomText extends StatelessWidget {
         alignment: Alignment.topLeft,
         child: Text(
           text,
-          style: theme.textTheme.bodySmall!.copyWith(color: color),
+          style: theme.textTheme.bodyMedium!.copyWith(color: color),
         ),
       ),
     );
