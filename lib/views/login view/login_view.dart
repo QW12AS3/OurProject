@@ -128,7 +128,9 @@ class LogIn extends StatelessWidget {
                         width: 110,
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
-                            //  elevation: ,
+                            // shape: StadiumBorder(),
+                            side: BorderSide(width: 1, color: orangeColor),
+                            elevation: 55,
                             backgroundColor: Colors.white.withOpacity(0.2),
                             //orangeColor.withOpacity(0.7),
                             primary: orangeColor,
