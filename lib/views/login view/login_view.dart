@@ -43,7 +43,7 @@ class LogIn extends StatelessWidget {
                     height: mq.size.height * 0.07,
                   ),
                   Container(
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Vigor',
                         style: TextStyle(
@@ -131,7 +131,7 @@ class LogIn extends StatelessWidget {
                             // shape: StadiumBorder(),
                             side: BorderSide(width: 1, color: orangeColor),
                             elevation: 55,
-                            backgroundColor: Colors.white.withOpacity(0.2),
+                            backgroundColor: Colors.white.withOpacity(0.01),
                             //orangeColor.withOpacity(0.7),
                             primary: orangeColor,
                             shape: RoundedRectangleBorder(
