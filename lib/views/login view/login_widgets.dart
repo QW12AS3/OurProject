@@ -18,8 +18,9 @@ class inputTextForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 400,
       decoration: BoxDecoration(
-          color: Colors.white70.withOpacity(0.6),
+          color: Colors.white70.withOpacity(0.7),
           borderRadius: BorderRadius.circular(15)),
       child: TextFormField(
         decoration: InputDecoration(
@@ -30,6 +31,7 @@ class inputTextForm extends StatelessWidget {
           //     Radius.circular(15),
           //   ),
           // ),
+
           enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: greyColor, width: 1.5),
             borderRadius: BorderRadius.all(
