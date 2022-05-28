@@ -11,6 +11,7 @@ class LogIn extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
+
     return SafeArea(
       child: Scaffold(
         body: Stack(
@@ -88,56 +89,58 @@ class LogIn extends StatelessWidget {
                   SizedBox(
                     height: mq.size.height * 0.05,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        inputTextForm(
-                          specialIcon: Icons.email_outlined,
-                          textlabel: 'Email',
-                          inputType: TextInputType.emailAddress,
-                          inputAction: TextInputAction.next,
-                          secureText: false,
-                        ),
-                        SizedBox(
-                          height: mq.size.height * 0.03,
-                        ),
-                        inputTextForm(
-                          specialIcon: Icons.lock_outline_rounded,
-                          textlabel: 'Password',
-                          inputType: TextInputType.text,
-                          inputAction: TextInputAction.done,
-                          secureText: true,
-                        ),
-                        SizedBox(
-                          height: mq.size.height * 0.01,
-                        ),
-                        TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'Forgot password',
-                              style: theme.textTheme.bodySmall,
-                            ))
-                      ],
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      inputTextForm(
+                        specialIcon: Icons.email_outlined,
+                        textlabel: 'Email',
+                        inputType: TextInputType.emailAddress,
+                        inputAction: TextInputAction.next,
+                        secureText: false,
+                      ),
+                      SizedBox(
+                        height: mq.size.height * 0.03,
+                      ),
+                      inputTextForm(
+                        specialIcon: Icons.lock_outline_rounded,
+                        textlabel: 'Password',
+                        inputType: TextInputType.text,
+                        inputAction: TextInputAction.done,
+                        secureText: true,
+                      ),
+                      SizedBox(
+                        height: mq.size.height * 0.01,
+                      ),
+                      TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Forgot password',
+                            style: theme.textTheme.bodySmall,
+                          ))
+                    ],
                   ),
                   Column(
                     children: [
                       SizedBox(height: mq.size.height * 0.05),
                       Container(
+                        height: 40,
+                        width: 110,
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
-                            backgroundColor: orangeColor.withOpacity(0.7),
-                            // primary: Colors.pink,
+                            //  elevation: ,
+                            backgroundColor: Colors.white.withOpacity(0.2),
+                            //orangeColor.withOpacity(0.7),
+                            primary: orangeColor,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25)),
                           ),
                           onPressed: () {},
                           child: const Text(
-                            '    Login    ',
+                            'Login',
                             style: TextStyle(
-                                color: Colors.white,
+                                color: orangeColor,
+                                //Colors.white,
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold),
                           ),
