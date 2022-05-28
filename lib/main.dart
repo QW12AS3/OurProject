@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
+import 'package:home_workout_app/views/login%20view/login_view.dart';
 import 'package:provider/provider.dart';
 
 import 'views/User Information View/user_information_view.dart';
@@ -36,6 +37,8 @@ class Vigor extends StatelessWidget {
           ),
           fontFamily: 'JosefinSans',
           textTheme: const TextTheme(
+            // bodyLarge: TextStyle(
+            //     color: orangeColor, fontSize: 30, fontWeight: FontWeight.bold),
             bodyMedium: TextStyle(
                 color: orangeColor, fontSize: 20, fontWeight: FontWeight.bold),
             bodySmall: TextStyle(
@@ -43,7 +46,8 @@ class Vigor extends StatelessWidget {
           ),
         ),
         darkTheme: ThemeData(),
-        home: UserInformationView(),
+        home: LogIn(),
+        //UserInformationView(),
       ),
     );
   }
