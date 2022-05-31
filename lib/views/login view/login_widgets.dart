@@ -24,7 +24,7 @@ class inputTextForm extends StatelessWidget {
           borderRadius: BorderRadius.circular(15)),
       child: TextFormField(
         decoration: InputDecoration(
-          // focusedErrorBorder: const OutlineInputBorder(
+          // focusedErrorBorder:  OutlineInputBorder(
           //   borderSide:
           //       BorderSide(color: blueColor, width: 1.5),
           //   borderRadius: BorderRadius.all(
@@ -32,9 +32,9 @@ class inputTextForm extends StatelessWidget {
           //   ),
           // ),
 
-          enabledBorder: const OutlineInputBorder(
+          enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: greyColor, width: 1.5),
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
               Radius.circular(15),
             ),
           ),
@@ -44,14 +44,14 @@ class inputTextForm extends StatelessWidget {
               Radius.circular(15),
             ),
           ),
-          focusedBorder: const OutlineInputBorder(
+          focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: orangeColor, width: 1.5),
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
               Radius.circular(15),
             ),
           ),
           labelText: textlabel,
-          labelStyle: const TextStyle(
+          labelStyle: TextStyle(
               color: orangeColor, fontSize: 15, fontWeight: FontWeight.bold),
           prefixIcon: Icon(
             specialIcon,
@@ -59,7 +59,7 @@ class inputTextForm extends StatelessWidget {
             size: 33,
           ),
         ),
-        style: const TextStyle(
+        style: TextStyle(
             color: blueColor, fontSize: 15, fontWeight: FontWeight.bold),
         keyboardType: inputType,
         obscureText: secureText,

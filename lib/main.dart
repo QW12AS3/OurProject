@@ -7,11 +7,11 @@ import 'package:provider/provider.dart';
 import 'views/User Information View/user_information_view.dart';
 
 void main() {
-  runApp(const Vigor());
+  runApp(Vigor());
 }
 
 class Vigor extends StatelessWidget {
-  const Vigor({Key? key}) : super(key: key);
+  Vigor({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +24,16 @@ class Vigor extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.light,
         theme: ThemeData(
+          checkboxTheme: CheckboxThemeData(
+            fillColor: MaterialStateProperty.all(blueColor),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
           colorSchemeSeed: orangeColor,
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
-                textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(
+                textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
                     fontFamily: 'JosefinSans',
                     color: orangeColor,
                     fontSize: 15,
@@ -36,7 +42,7 @@ class Vigor extends StatelessWidget {
                 elevation: MaterialStateProperty.all(2)),
           ),
           fontFamily: 'JosefinSans',
-          textTheme: const TextTheme(
+          textTheme: TextTheme(
             // bodyLarge: TextStyle(
             //     color: orangeColor, fontSize: 30, fontWeight: FontWeight.bold),
             bodyMedium: TextStyle(
@@ -46,7 +52,7 @@ class Vigor extends StatelessWidget {
           ),
         ),
         darkTheme: ThemeData(),
-        home: LogIn(),
+        home: UserInformationView(),
         //UserInformationView(),
       ),
     );

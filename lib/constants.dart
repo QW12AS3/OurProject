@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
-const Color orangeColor = Color(0xFFFB8500);
-const Color blueColor = Color(0xff126782);
-const Color greyColor = Colors.grey;
+Color orangeColor = const Color(0xFFFB8500);
+Color blueColor = const Color(0xff126782);
+Color greyColor = Colors.grey;
 
 enum Gender { male, female }
 
 enum Units { kg, lb, cm, inch }
+
+//temporary
+

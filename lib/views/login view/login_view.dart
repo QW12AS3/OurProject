@@ -43,7 +43,7 @@ class LogIn extends StatelessWidget {
                     height: mq.size.height * 0.07,
                   ),
                   Container(
-                    child: const Center(
+                    child: Center(
                       child: Text(
                         'Vigor',
                         style: TextStyle(
@@ -138,7 +138,7 @@ class LogIn extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(25)),
                           ),
                           onPressed: () {},
-                          child: const Text(
+                          child: Text(
                             'Login',
                             style: TextStyle(
                                 color: orangeColor,
