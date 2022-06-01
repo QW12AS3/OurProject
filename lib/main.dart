@@ -24,6 +24,17 @@ class Vigor extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.light,
         theme: ThemeData(
+          snackBarTheme: SnackBarThemeData(
+            contentTextStyle: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: Colors.white),
+            backgroundColor: orangeColor.withOpacity(0.9),
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+                side: BorderSide(color: blueColor)),
+          ),
           checkboxTheme: CheckboxThemeData(
             fillColor: MaterialStateProperty.all(blueColor),
             shape: RoundedRectangleBorder(
@@ -31,6 +42,9 @@ class Vigor extends StatelessWidget {
             ),
           ),
           colorSchemeSeed: orangeColor,
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: orangeColor,
+          ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
                 textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
@@ -46,9 +60,15 @@ class Vigor extends StatelessWidget {
             // bodyLarge: TextStyle(
             //     color: orangeColor, fontSize: 30, fontWeight: FontWeight.bold),
             bodyMedium: TextStyle(
-                color: orangeColor, fontSize: 20, fontWeight: FontWeight.bold),
+                fontFamily: 'JosefinSans',
+                color: orangeColor,
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
             bodySmall: TextStyle(
-                color: orangeColor, fontSize: 15, fontWeight: FontWeight.bold),
+                fontFamily: 'JosefinSans',
+                color: orangeColor,
+                fontSize: 15,
+                fontWeight: FontWeight.bold),
           ),
         ),
         darkTheme: ThemeData(),

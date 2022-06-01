@@ -23,19 +23,10 @@ class Details1Page extends StatelessWidget {
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
     return Scaffold(
-      floatingActionButton: SizedBox(
-        width: 120,
-        child: ElevatedButton(
-          onPressed: () {
-            nextFunction();
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: const [
-              Text('Next'),
-              Icon(Icons.arrow_forward_ios_rounded)
-            ],
-          ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => nextFunction(),
+        child: const Icon(
+          Icons.arrow_forward_ios_rounded,
         ),
       ),
       body: SingleChildScrollView(
@@ -164,7 +155,7 @@ class Details1Page extends StatelessWidget {
                             Icons.height,
                             color: orangeColor,
                           ),
-                          label: const Text('Height'),
+                          label: const FittedBox(child: Text('Height')),
                           floatingLabelStyle: theme.textTheme.bodySmall,
                           focusedErrorBorder: OutlineInputBorder(
                             borderSide:
@@ -254,7 +245,7 @@ class Details1Page extends StatelessWidget {
                           Icons.monitor_weight_outlined,
                           color: orangeColor,
                         ),
-                        label: const Text('Weight'),
+                        label: const FittedBox(child: Text('Weight')),
                         floatingLabelStyle: theme.textTheme.bodySmall,
                         focusedErrorBorder: OutlineInputBorder(
                           borderSide:
