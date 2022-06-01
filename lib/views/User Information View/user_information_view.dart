@@ -19,7 +19,7 @@ class UserInformationView extends StatelessWidget {
     final mq = MediaQuery.of(context);
     return Scaffold(
       bottomNavigationBar: Image(
-        height: mq.size.width * 0.1,
+        height: mq.size.height * 0.1,
         width: double.infinity,
         fit: BoxFit.fill,
         image: const AssetImage('assets/images/wave_background.png'),
@@ -37,16 +37,9 @@ class UserInformationView extends StatelessWidget {
                   weightController: weightController,
                   formkey: _formkey,
                   nextFunction: () {
-                    if (_formkey.currentState != null) {
-                      if (_formkey.currentState!.validate()) {
-                        _pageController.animateToPage(1,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.linear);
-                      }
-                    } else if (Provider.of<UserInformationViewModel>(context,
+                    Provider.of<UserInformationViewModel>(context,
                             listen: false)
-                        .checkHWValues(heightController.text.trim(),
-                            weightController.text.trim(), context)) {}
+                        .checkDetails1Value(_formkey, _pageController, context);
                   }),
               Details2Page(saveFunction: () {}),
             ],

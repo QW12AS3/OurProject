@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:home_workout_app/constants.dart';
 
 class GenderContainer extends StatelessWidget {
   GenderContainer({required this.color, required this.imagePath, Key? key})
@@ -12,10 +11,10 @@ class GenderContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      width: mq.size.width > 400 ? mq.size.width * 0.2 : 400,
+      duration: const Duration(milliseconds: 300),
+      width: mq.size.width > 350 ? mq.size.width * 0.2 : 400,
       height: mq.size.height * 0.25,
-      padding: EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.only(bottom: 5),
       decoration:
           BoxDecoration(borderRadius: BorderRadius.circular(15), color: color),
       child: Image(
@@ -47,10 +46,12 @@ class UserInfoCustomText extends StatelessWidget {
           : EdgeInsets.all(0),
       child: Align(
         alignment: Alignment.topLeft,
-        child: Text(
-          text,
-          style: theme.textTheme.bodyMedium!
-              .copyWith(color: color, fontSize: fontsize),
+        child: FittedBox(
+          child: Text(
+            text,
+            style: theme.textTheme.bodyMedium!
+                .copyWith(color: color, fontSize: fontsize),
+          ),
         ),
       ),
     );

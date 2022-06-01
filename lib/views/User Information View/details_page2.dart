@@ -52,16 +52,23 @@ class Details2Page extends StatelessWidget {
                 builder: (context, consumer, child) => Scrollbar(
                   child: Column(
                     children: consumer.diseases.entries
-                        .map((e) => CheckboxListTile(
-                            title: UserInfoCustomText(
-                              text: e.key,
-                              color: blueColor,
-                              fontsize: 15,
-                            ),
-                            value: e.value,
-                            onChanged: (value) {
-                              consumer.changeDiseasesValue(e.key, value);
-                            }))
+                        .map((e) => Padding(
+                              padding: EdgeInsets.only(
+                                  bottom: e.key ==
+                                          consumer.diseases.entries.last.key
+                                      ? 40
+                                      : 0),
+                              child: CheckboxListTile(
+                                  title: UserInfoCustomText(
+                                    text: e.key,
+                                    color: blueColor,
+                                    fontsize: 15,
+                                  ),
+                                  value: e.value,
+                                  onChanged: (value) {
+                                    consumer.changeDiseasesValue(e.key, value);
+                                  }),
+                            ))
                         .toList(),
                   ),
                 ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 
 class UserInformationViewModel with ChangeNotifier {
   var gender;
   DateTime birthdate = DateTime.now();
+  bool dateIsSelected = false;
   Units weightUnit = Units.kg;
   Units heightUnit = Units.cm;
 
@@ -22,6 +24,20 @@ class UserInformationViewModel with ChangeNotifier {
 
   bool checkHWValues(String h, String w, BuildContext context) {
     return true;
+  }
+
+  checkDetails1Value(GlobalKey<FormState> _formkey,
+      PageController _pageController, BuildContext context) {
+    if (gender == null) {
+      showSnackbar(const Text('Please enter your gender'), context);
+    } else if (!dateIsSelected) {
+      showSnackbar(const Text('Please enter your birthdate'), context);
+    } else if (_formkey.currentState != null) {
+      if (_formkey.currentState!.validate()) {
+        _pageController.animateToPage(1,
+            duration: const Duration(milliseconds: 300), curve: Curves.linear);
+      }
+    }
   }
 
   void changeDiseasesValue(key, changedValue) {
@@ -67,6 +83,7 @@ class UserInformationViewModel with ChangeNotifier {
     );
     if (selectedBirthdate != null) {
       birthdate = selectedBirthdate;
+      dateIsSelected = true;
       notifyListeners();
     }
   }
