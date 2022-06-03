@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/view_models/mobile_home_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
 import 'package:home_workout_app/views/login%20view/login_view.dart';
@@ -18,7 +19,10 @@ class Vigor extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => UserInformationViewModel())
+        ChangeNotifierProvider(create: (context) => UserInformationViewModel()),
+        ChangeNotifierProvider(
+          create: (context) => MobileHomeViewModel(),
+        )
       ],
       child: MaterialApp(
         title: 'Vigor',
@@ -69,6 +73,11 @@ class Vigor extends StatelessWidget {
           ),
           fontFamily: 'JosefinSans',
           textTheme: TextTheme(
+            displaySmall: const TextStyle(
+                fontFamily: 'JosefinSans',
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w500),
             // bodyLarge: TextStyle(
             //     color: orangeColor, fontSize: 30, fontWeight: FontWeight.bold),
             bodyMedium: TextStyle(
