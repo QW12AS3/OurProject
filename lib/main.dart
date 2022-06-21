@@ -4,6 +4,7 @@ import 'package:home_workout_app/view_models/mobile_home_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
 import 'package:home_workout_app/views/login%20view/login_view.dart';
+import 'package:home_workout_app/views/start_view/start_view.dart';
 import 'package:provider/provider.dart';
 
 import 'views/User Information View/user_information_view.dart';
@@ -26,10 +27,8 @@ class Vigor extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Vigor',
-
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.light,
-
         theme: ThemeData(
           colorSchemeSeed: orangeColor,
           tabBarTheme: TabBarTheme(
@@ -78,8 +77,8 @@ class Vigor extends StatelessWidget {
                 color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.w500),
-            // bodyLarge: TextStyle(
-            //     color: orangeColor, fontSize: 30, fontWeight: FontWeight.bold),
+            bodyLarge: TextStyle(
+                color: orangeColor, fontSize: 35, fontWeight: FontWeight.bold),
             bodyMedium: TextStyle(
                 fontFamily: 'JosefinSans',
                 color: orangeColor,
@@ -93,8 +92,10 @@ class Vigor extends StatelessWidget {
           ),
         ),
         darkTheme: ThemeData(),
-        home: MobileHomeView(),
-        //UserInformationView(),
+        home: StartView(),
+        // LogIn(),
+        //MobileHomeView(),
+        //  UserInformationView(),
       ),
     );
   }

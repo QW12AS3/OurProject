@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/views/login%20view/login_widgets.dart';
@@ -27,7 +26,7 @@ class LogIn extends StatelessWidget {
                   colorFilter:
                       ColorFilter.mode(Colors.black54, BlendMode.darken),
                   //   color: Colors.black.withOpacity(0.001),
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ))
                 //  child: Image.asset(
                 //               'assets/images/MainPageExercise.gif',
