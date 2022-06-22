@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
-import 'package:home_workout_app/view_models/mobile_home_view_model.dart';
+import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
+import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view_widgets.dart';
+import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -58,127 +60,13 @@ class HomePage extends StatelessWidget {
                     .map(
                       (e) => Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: CircleAvatar(
-                                    backgroundImage: NetworkImage(e.imageUrl),
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Coach ${e.publisherName}',
-                                      style: theme.textTheme.bodySmall!
-                                          .copyWith(color: blueColor),
-                                    ),
-                                    Text(
-                                      '6/3/2022 - 5:33 PM',
-                                      style: theme.textTheme.displaySmall!
-                                          .copyWith(
-                                              color: greyColor, fontSize: 10),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                            Container(
-                              width: mq.width * 0.95,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade400,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: Image(
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) =>
-                                              loadingProgress != null
-                                                  ? const LoadingContainer()
-                                                  : child,
-                                      width: mq.width * 0.95,
-                                      height: 250,
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(e.imageUrl),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: mq.width * 0.95,
-                                    height: 250,
-                                    decoration: BoxDecoration(
-                                        color: Colors.black.withOpacity(0.65),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Container(
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(15),
-                                            bottomLeft: Radius.circular(15)),
-                                        color: orangeColor.withOpacity(0.5),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            FittedBox(
-                                              child: Text(
-                                                e.name,
-                                                style: theme
-                                                    .textTheme.displaySmall,
-                                              ),
-                                            ),
-                                            FittedBox(
-                                              child: Text(
-                                                'Exercises: ${e.excersises}',
-                                                style: theme
-                                                    .textTheme.displaySmall,
-                                              ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                const Icon(
-                                                  Icons.alarm,
-                                                  color: Colors.white,
-                                                  size: 25,
-                                                ),
-                                                Text(
-                                                  '${e.excpectedTime} min',
-                                                  style: theme
-                                                      .textTheme.displaySmall!
-                                                      .copyWith(fontSize: 15),
-                                                )
-                                              ],
-                                            ),
-                                            // FittedBox(
-                                            //   child: Text(
-                                            //     'Published by:\ncoach ${e.publisherName}',
-                                            //     style: theme.textTheme.displaySmall,
-                                            //   ),
-                                            // )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                        child: workoutCard(
+                          publisherName: e.publisherName,
+                          imageUrl: e.imageUrl,
+                          exercisesNum: e.excersises,
+                          min: e.excpectedTime,
+                          publisherImageUrl: e.imageUrl,
+                          workoutName: e.name,
                         ),
                       ),
                     )

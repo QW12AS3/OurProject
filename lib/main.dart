@@ -1,8 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
-import 'package:home_workout_app/view_models/mobile_home_view_model.dart';
+import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
+import 'package:home_workout_app/view_models/Home%20View%20Model/web_home_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
+import 'package:home_workout_app/views/Home%20View/Mobile/home_page.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
+import 'package:home_workout_app/views/Home%20View/Web/web_home_view.dart';
 import 'package:home_workout_app/views/login%20view/login_view.dart';
 import 'package:home_workout_app/views/start_view/start_view.dart';
 import 'package:provider/provider.dart';
@@ -21,9 +25,8 @@ class Vigor extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserInformationViewModel()),
-        ChangeNotifierProvider(
-          create: (context) => MobileHomeViewModel(),
-        )
+        ChangeNotifierProvider(create: (context) => MobileHomeViewModel()),
+        ChangeNotifierProvider(create: (context) => WebHomeViewModel())
       ],
       child: MaterialApp(
         title: 'Vigor',
@@ -92,7 +95,7 @@ class Vigor extends StatelessWidget {
           ),
         ),
         darkTheme: ThemeData(),
-        home: StartView(),
+        home: kIsWeb ? WebHomeView() : MobileHomeView(),
         // LogIn(),
         //MobileHomeView(),
         //  UserInformationView(),
