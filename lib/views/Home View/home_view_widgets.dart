@@ -54,9 +54,10 @@ class workoutCard extends StatelessWidget {
           width: mq.width * 0.95,
           height: 200,
           decoration: BoxDecoration(
-              color: Colors.grey.shade400,
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: blueColor, width: 2)),
+            color: Colors.grey.shade400,
+            borderRadius: BorderRadius.circular(17),
+            border: Border.all(color: blueColor, width: 2),
+          ),
           child: Stack(
             children: [
               ClipRRect(
@@ -76,8 +77,9 @@ class workoutCard extends StatelessWidget {
                 width: mq.width * 0.95,
                 height: 250,
                 decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.65),
-                    borderRadius: BorderRadius.circular(15)),
+                  color: Colors.black.withOpacity(0.65),
+                  borderRadius: BorderRadius.circular(15),
+                ),
               ),
               Align(
                 alignment: Alignment.bottomLeft,
