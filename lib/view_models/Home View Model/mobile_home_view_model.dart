@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:home_workout_app/models/workout_model.dart';
 
 class MobileHomeViewModel with ChangeNotifier {
+  int _currentTab = 0;
   //temporary
   Map<String, bool> categories = {
     'Recommended': true,
@@ -100,6 +101,11 @@ class MobileHomeViewModel with ChangeNotifier {
     }
   ];
 
+  void setCurrentTab(int i) {
+    _currentTab = i;
+    notifyListeners();
+  }
+
   List<WorkoutModel> getWorkouts() {
     List<WorkoutModel> workoutsList = [];
     for (int i = 0; i < workouts.length; i++) {
@@ -113,4 +119,6 @@ class MobileHomeViewModel with ChangeNotifier {
     categories.update(key, (value) => selectedValue);
     notifyListeners();
   }
+
+  int get getCurrentTab => _currentTab;
 }
