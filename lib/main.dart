@@ -98,7 +98,7 @@ class Vigor extends StatelessWidget {
           ),
         ),
         darkTheme: ThemeData(),
-        home: const MobileHomeView(),
+        home: const WebHomeView(),
         // LogIn(),
         //MobileHomeView(),
         //  UserInformationView(),
