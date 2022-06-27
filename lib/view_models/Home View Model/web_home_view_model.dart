@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:home_workout_app/models/workout_model.dart';
-import 'package:home_workout_app/views/Home%20View/Web/web_home_page.dart';
-import 'package:home_workout_app/views/Home%20View/Web/web_posts_page.dart';
+import 'package:home_workout_app/views/Home%20View/Mobile/Pages/posts_page.dart';
+import 'package:home_workout_app/views/Home%20View/Web/Pages/web_home_page.dart';
+import 'package:home_workout_app/views/Home%20View/Web/Pages/web_posts_page.dart';
 
 class WebHomeViewModel with ChangeNotifier {
   String selectedPage = 'Home';
