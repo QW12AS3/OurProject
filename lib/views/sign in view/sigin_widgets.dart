@@ -66,5 +66,12 @@ class inputTextForm extends StatelessWidget {
         textInputAction: inputAction,
       ),
     );
+    //  inputTextForm(
+    //                       specialIcon: ,
+    //                       textlabel: ,
+    //                       inputType: ,
+    //                       inputAction: ,
+    //                       secureText: ,
+    //                     ),
   }
 }
