@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/MyFlutterApp.ttf
 ///
-/// 
+///
 /// * Entypo, Copyright (C) 2012 by Daniel Bruce
 ///         Author:    Daniel Bruce
 ///         License:   SIL (http://scripts.sil.org/OFL)
@@ -27,10 +27,25 @@ class MyFlutterApp {
   MyFlutterApp._();
 
   static const _kFontFam = 'MyFlutterApp';
+  static const _kFontFam2 = 'MyFlutterApp2';
+  static const _kFontFam3 = 'MyFlutterApp3';
   static const String? _kFontPkg = null;
 
-  static const IconData doc_text = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData newspaper = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData poll_h = IconData(0xf682, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData scroll = IconData(0xf70e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData doc_text =
+      IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData newspaper =
+      IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData poll_h =
+      IconData(0xf682, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData scroll =
+      IconData(0xf70e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData thumbs_up =
+      IconData(0xe800, fontFamily: _kFontFam2, fontPackage: _kFontPkg);
+  static const IconData thumbs_down =
+      IconData(0xe801, fontFamily: _kFontFam2, fontPackage: _kFontPkg);
+
+  static const IconData clapping_svgrepo_com =
+      IconData(0xe800, fontFamily: _kFontFam3, fontPackage: _kFontPkg);
+  static const IconData muscle_svgrepo_com__1_ =
+      IconData(0xe802, fontFamily: _kFontFam3, fontPackage: _kFontPkg);
 }

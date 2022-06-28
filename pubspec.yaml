@@ -40,6 +40,7 @@ dependencies:
   shimmer: ^2.0.0
   video_player: ^2.4.5
   visibility_detector: ^0.3.3
+  percent_indicator: ^4.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -87,7 +88,13 @@ flutter:
         - asset: assets\fonts\JosefinSans-Regular.ttf
     - family: MyFlutterApp
       fonts:
-        - asset: assets\fonts\MyFlutterApp.ttf    
+        - asset: assets\fonts\MyFlutterApp.ttf   
+    - family: MyFlutterApp2
+      fonts:
+        - asset: assets\fonts\MyFlutterApp2.ttf   
+    - family: MyFlutterApp3
+      fonts:
+        - asset: assets\fonts\MyFlutterApp3.ttf              
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

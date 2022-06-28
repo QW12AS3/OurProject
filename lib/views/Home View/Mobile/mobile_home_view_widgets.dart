@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/my_flutter_app_icons.dart';
+import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class buildSummaryRow extends StatelessWidget {
@@ -31,6 +34,7 @@ class NormalPostCard extends StatelessWidget {
       required this.postImages,
       required this.comments,
       required this.likes,
+      required this.ctx,
       Key? key})
       : super(key: key);
 
@@ -40,6 +44,7 @@ class NormalPostCard extends StatelessWidget {
   String title;
   Map<String, int> likes;
   List<String> comments;
+  BuildContext ctx;
 
   @override
   Widget build(BuildContext context) {
@@ -137,46 +142,88 @@ class NormalPostCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.abc),
+                    Icon(
+                      MyFlutterApp.thumbs_up,
+                      color: orangeColor,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
                     Text(
                       likes['Like'].toString(),
                       style: theme.textTheme.bodySmall!
-                          .copyWith(color: blueColor, fontSize: 15),
+                          .copyWith(color: Colors.black, fontSize: 15),
                     )
                   ],
                 ),
                 Row(
                   children: [
-                    Icon(Icons.ac_unit_outlined),
+                    Icon(
+                      MyFlutterApp.thumbs_down,
+                      color: orangeColor,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
                     Text(
                       likes['Dislike'].toString(),
                       style: theme.textTheme.bodySmall!
-                          .copyWith(color: blueColor, fontSize: 15),
+                          .copyWith(color: Colors.black, fontSize: 15),
                     )
                   ],
                 ),
                 Row(
                   children: [
-                    Icon(Icons.access_time),
+                    Icon(
+                      MyFlutterApp.clapping_svgrepo_com,
+                      color: orangeColor,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
                     Text(
                       likes['Clap'].toString(),
                       style: theme.textTheme.bodySmall!
-                          .copyWith(color: blueColor, fontSize: 15),
+                          .copyWith(color: Colors.black, fontSize: 15),
                     )
                   ],
                 ),
                 Row(
                   children: [
-                    Icon(Icons.account_box_sharp),
+                    Icon(
+                      MyFlutterApp.muscle_svgrepo_com__1_,
+                      color: orangeColor,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
                     Text(
                       likes['Strong'].toString(),
                       style: theme.textTheme.bodySmall!
-                          .copyWith(color: blueColor, fontSize: 15),
+                          .copyWith(color: Colors.black, fontSize: 15),
                     )
                   ],
                 ),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // showBottomSheet(
+                      //     context: context,
+                      //     builder: (ctx) => BottomSheet(
+                      //           shape: const RoundedRectangleBorder(
+                      //               borderRadius: BorderRadius.only(
+                      //                   topLeft: Radius.circular(15),
+                      //                   topRight: Radius.circular(15))),
+                      //           onClosing: () {},
+                      //           builder: (BuildContext context) => SizedBox(
+                      //             width: double.infinity,
+                      //             height: mq.size.height * 0.75,
+                      //             child: Column(
+                      //               children:
+                      //                   comments.map((e) => Text(e)).toList(),
+                      //             ),
+                      //           ),
+                      //         ));
+                    },
                     child: Row(
                       children: [
                         Text(
@@ -193,6 +240,91 @@ class NormalPostCard extends StatelessWidget {
               ],
             ),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class pollPostCard extends StatelessWidget {
+  pollPostCard(
+      {required this.coachName,
+      required this.coachImageUrl,
+      required this.title,
+      required this.ctx,
+      Key? key})
+      : super(key: key);
+
+  String coachName;
+  String coachImageUrl;
+
+  String title;
+
+  BuildContext ctx;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final mq = MediaQuery.of(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: blueColor, width: 1.5),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(coachImageUrl),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Coach $coachName',
+                    style:
+                        theme.textTheme.bodySmall!.copyWith(color: blueColor),
+                  ),
+                  Text(
+                    '6/3/2022 - 5:33 PM',
+                    style: theme.textTheme.displaySmall!
+                        .copyWith(color: greyColor, fontSize: 10),
+                  )
+                ],
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              title,
+              style:
+                  theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
+            ),
+          ),
+          Consumer<MobileHomeViewModel>(
+            builder: (context, value, child) => RadioListTile<String>(
+              value: 'Agree',
+              groupValue: value.getRadioValue,
+              onChanged: (String? radioValue) {
+                value.setRadioValue(radioValue!);
+              },
+            ),
+          ),
+          Consumer<MobileHomeViewModel>(
+            builder: (context, value, child) => RadioListTile<String>(
+              value: 'Disagree',
+              groupValue: value.getRadioValue,
+              onChanged: (String? radioValue) {
+                value.setRadioValue(radioValue!);
+              },
+            ),
+          ),
         ],
       ),
     );

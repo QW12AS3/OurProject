@@ -7,25 +7,39 @@ class PostsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: NormalPostCard(
-            coachImageUrl:
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: NormalPostCard(
+              coachImageUrl:
+                  'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
+              postImages: const [
                 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
-            postImages: const [
-              'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
-              'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
-              'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg'
-            ],
-            coachName: 'Omar',
-            title:
-                'This is a test This is a test This is a test This is a test This is a test This is a test',
-            likes: const {'Like': 50, 'DisLike': 10, 'Clap': 15, 'Strong': 5},
-            comments: const ['Nice', 'Good Workout', 'Thanks'],
+                'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
+                'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg'
+              ],
+              coachName: 'Omar',
+              title:
+                  'This is a test This is a test This is a test This is a test This is a test This is a test',
+              likes: const {'Like': 50, 'Dislike': 10, 'Clap': 15, 'Strong': 5},
+              comments: const ['Nice', 'Good Workout', 'Thanks'],
+              ctx: context,
+            ),
           ),
-        )
-      ]),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: pollPostCard(
+              coachImageUrl:
+                  'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
+              coachName: 'Omar',
+              title:
+                  'This is a test This is a test This is a test This is a test This is a test This is a test',
+              ctx: context,
+            ),
+          )
+        ],
+      ),
     );
   }
 }
