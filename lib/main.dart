@@ -5,7 +5,9 @@ import 'package:home_workout_app/view_models/Home%20View%20Model/web_home_view_m
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
-
+import 'package:home_workout_app/views/Home%20View/Web/web_home_view.dart';
+import 'package:home_workout_app/views/start_view/start_view.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -77,7 +79,7 @@ class Vigor extends StatelessWidget {
                 fontSize: 20,
                 fontWeight: FontWeight.w500),
             bodyLarge: TextStyle(
-                color: orangeColor, fontSize: 35, fontWeight: FontWeight.bold),
+                color: orangeColor, fontSize: 30, fontWeight: FontWeight.bold),
             bodyMedium: TextStyle(
                 fontFamily: 'JosefinSans',
                 color: orangeColor,
@@ -91,7 +93,11 @@ class Vigor extends StatelessWidget {
           ),
         ),
         darkTheme: ThemeData(),
+
         home: const MobileHomeView(),
+
+       // home: StartView(),
+        //const WebHomeView(),
         // LogIn(),
         //MobileHomeView(),
         //  UserInformationView(),

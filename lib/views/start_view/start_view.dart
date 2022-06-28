@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_workout_app/constants.dart';
-import 'package:home_workout_app/views/login%20view/login_view.dart';
+import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:video_player/video_player.dart';
 
 class StartView extends StatefulWidget {
@@ -79,7 +80,39 @@ class _StartViewState extends State<StartView> {
             child: Column(
               children: [
                 SizedBox(
-                  height: mq.size.height * 0.2,
+                  height: mq.size.height * 0.03,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: Center(
+                        child: Text(
+                          'Vigor',
+                          style: TextStyle(
+                              color: orangeColor,
+                              fontSize: 55,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: mq.size.width * 0.05,
+                    ),
+                    Container(
+                      child: SvgPicture.asset(
+                        'assets/images/vigorlogo.svg',
+                        semanticsLabel: 'vigor Logo',
+                        height: mq.size.height * 0.1,
+                        width: mq.size.width * 0.15,
+                        color: orangeColor,
+                        // matchTextDirection: true,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: mq.size.height * 0.07,
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: mq.size.width * 0.02),

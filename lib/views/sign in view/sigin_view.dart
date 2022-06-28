@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_workout_app/constants.dart';
-import 'package:home_workout_app/views/login%20view/login_widgets.dart';
+import 'package:home_workout_app/views/sign%20in%20view/sigin_widgets.dart';
+
 
 class LogIn extends StatelessWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -39,32 +40,9 @@ class LogIn extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: mq.size.height * 0.07,
+                    height: mq.size.height * 0.3,
                   ),
-                  Container(
-                    child: Center(
-                      child: Text(
-                        'Vigor',
-                        style: TextStyle(
-                            color: orangeColor,
-                            fontSize: 55,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: mq.size.height * 0.03,
-                  ),
-                  Container(
-                    child: SvgPicture.asset(
-                      'assets/images/vigorlogo.svg',
-                      semanticsLabel: 'vigor Logo',
-                      height: mq.size.height * 0.1,
-                      width: mq.size.width * 0.15,
-                      color: orangeColor,
-                      // matchTextDirection: true,
-                    ),
-                  ),
+
                   // Container(
                   //   height: double.infinity,
                   //   // decoration: BoxDecoration(
@@ -88,36 +66,45 @@ class LogIn extends StatelessWidget {
                   SizedBox(
                     height: mq.size.height * 0.05,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      inputTextForm(
-                        specialIcon: Icons.email_outlined,
-                        textlabel: 'Email',
-                        inputType: TextInputType.emailAddress,
-                        inputAction: TextInputAction.next,
-                        secureText: false,
-                      ),
-                      SizedBox(
-                        height: mq.size.height * 0.03,
-                      ),
-                      inputTextForm(
-                        specialIcon: Icons.lock_outline_rounded,
-                        textlabel: 'Password',
-                        inputType: TextInputType.text,
-                        inputAction: TextInputAction.done,
-                        secureText: true,
-                      ),
-                      SizedBox(
-                        height: mq.size.height * 0.01,
-                      ),
-                      TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Forgot password',
-                            style: theme.textTheme.bodySmall,
-                          ))
-                    ],
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: Colors.white70.withOpacity(0.3),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          height: mq.size.height * 0.02,
+                        ),
+                        inputTextForm(
+                          specialIcon: Icons.email_outlined,
+                          textlabel: 'Email',
+                          inputType: TextInputType.emailAddress,
+                          inputAction: TextInputAction.next,
+                          secureText: false,
+                        ),
+                        SizedBox(
+                          height: mq.size.height * 0.03,
+                        ),
+                        inputTextForm(
+                          specialIcon: Icons.lock_outline_rounded,
+                          textlabel: 'Password',
+                          inputType: TextInputType.text,
+                          inputAction: TextInputAction.done,
+                          secureText: true,
+                        ),
+                        SizedBox(
+                          height: mq.size.height * 0.01,
+                        ),
+                        TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'Forgot password',
+                              style: theme.textTheme.bodySmall,
+                            ))
+                      ],
+                    ),
                   ),
                   Column(
                     children: [
