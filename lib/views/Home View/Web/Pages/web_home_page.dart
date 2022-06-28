@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/web_home_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/Web/web_home_view_widgets.dart';
-import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
 
 class WebHomePage extends StatelessWidget {
@@ -63,6 +62,8 @@ class WebHomePage extends StatelessWidget {
               ),
               children: value
                   .getWorkouts()
+                  .where(
+                      (element) => element.categorie == value.selectedCategorie)
                   .map(
                     (e) => Padding(
                       padding: const EdgeInsets.all(8.0),

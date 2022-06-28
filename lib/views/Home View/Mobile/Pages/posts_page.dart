@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view_widgets.dart';
 
 class PostsPage extends StatelessWidget {
@@ -25,6 +26,7 @@ class PostsPage extends StatelessWidget {
               likes: const {'Like': 50, 'Dislike': 10, 'Clap': 15, 'Strong': 5},
               comments: const ['Nice', 'Good Workout', 'Thanks'],
               ctx: context,
+              currentReact: Reacts.like,
             ),
           ),
           Padding(

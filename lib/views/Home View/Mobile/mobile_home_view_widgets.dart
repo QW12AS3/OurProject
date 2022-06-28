@@ -1,10 +1,12 @@
+// ignore_for_file: curly_braces_in_flow_control_structures, must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/my_flutter_app_icons.dart';
-import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
+
+import '../../../view_models/Home View Model/mobile_home_view_model.dart';
 
 class buildSummaryRow extends StatelessWidget {
   buildSummaryRow({required this.title1, required this.title2, Key? key})
@@ -26,7 +28,7 @@ class buildSummaryRow extends StatelessWidget {
   }
 }
 
-class NormalPostCard extends StatelessWidget {
+class NormalPostCard extends StatefulWidget {
   NormalPostCard(
       {required this.coachName,
       required this.coachImageUrl,
@@ -34,11 +36,13 @@ class NormalPostCard extends StatelessWidget {
       required this.postImages,
       required this.comments,
       required this.likes,
+      required this.currentReact,
       required this.ctx,
       Key? key})
       : super(key: key);
 
   String coachName;
+  Reacts currentReact;
   String coachImageUrl;
   List<String> postImages;
   String title;
@@ -47,10 +51,30 @@ class NormalPostCard extends StatelessWidget {
   BuildContext ctx;
 
   @override
+  State<NormalPostCard> createState() => _NormalPostCardState();
+}
+
+class _NormalPostCardState extends State<NormalPostCard> {
+  final PageController _pageController = PageController();
+  int currentPhotoIndex = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _pageController.addListener(() {
+      setState(() {
+        currentPhotoIndex = _pageController.page!.toInt();
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
     return Container(
+      height: 500,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: blueColor, width: 1.5),
@@ -62,14 +86,14 @@ class NormalPostCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CircleAvatar(
-                  backgroundImage: NetworkImage(coachImageUrl),
+                  backgroundImage: NetworkImage(widget.coachImageUrl),
                 ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Coach $coachName',
+                    'Coach ${widget.coachName}',
                     style:
                         theme.textTheme.bodySmall!.copyWith(color: blueColor),
                   ),
@@ -85,56 +109,55 @@ class NormalPostCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              title,
+              widget.title,
               style:
                   theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
             ),
           ),
-          if (postImages.length == 1)
+          if (widget.postImages.length == 1)
             Image(
               image: NetworkImage(
-                postImages[0],
+                widget.postImages[0],
               ),
             ),
-          if (postImages.length > 1)
-            SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: postImages
-                    .map(
-                      (e) => Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 5),
-                        child: Image(
-                          loadingBuilder: (context, child, loadingProgress) =>
-                              loadingProgress != null
-                                  ? const LoadingContainer()
-                                  : child,
-                          width: mq.size.width * 0.95,
-                          height: 250,
-                          fit: BoxFit.cover,
-                          image: NetworkImage(e),
-                        ),
+          if (widget.postImages.length > 1)
+            Expanded(
+                child: PageView(
+              controller: _pageController,
+              children: widget.postImages
+                  .map(
+                    (e) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 5),
+                      child: Image(
+                        loadingBuilder: (context, child, loadingProgress) =>
+                            loadingProgress != null
+                                ? const LoadingContainer()
+                                : child,
+                        width: mq.size.width * 0.95,
+                        height: 250,
+                        fit: BoxFit.cover,
+                        image: NetworkImage(e),
                       ),
-                    )
-                    .toList(),
+                    ),
+                  )
+                  .toList(),
+            )),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Text(
+                widget.postImages.length > 1
+                    ? '${currentPhotoIndex + 1}/${widget.postImages.length} Photos'
+                    : '${currentPhotoIndex + 1}/${widget.postImages.length} Photo',
+                style: theme.textTheme.bodySmall!.copyWith(
+                    color: greyColor,
+                    fontWeight: FontWeight.w200,
+                    fontSize: 12),
               ),
             ),
-          if (postImages.length > 1)
-            Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Text(
-                  '${postImages.length} Photos',
-                  style: theme.textTheme.bodySmall!.copyWith(
-                      color: greyColor,
-                      fontWeight: FontWeight.w200,
-                      fontSize: 12),
-                ),
-              ),
-            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -142,15 +165,69 @@ class NormalPostCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(
-                      MyFlutterApp.thumbs_up,
-                      color: orangeColor,
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          if (widget.currentReact == Reacts.like)
+                            widget.currentReact = Reacts.none;
+                          else
+                            widget.currentReact = Reacts.like;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: widget.currentReact == Reacts.like
+                              ? Border.all(color: blueColor, width: 2)
+                              : null,
+                        ),
+                        child: Icon(
+                          MyFlutterApp.thumbs_up,
+                          color: orangeColor,
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       width: 5,
                     ),
                     Text(
-                      likes['Like'].toString(),
+                      widget.likes['Like'].toString(),
+                      style: theme.textTheme.bodySmall!
+                          .copyWith(color: Colors.black, fontSize: 15),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          if (widget.currentReact == Reacts.dislike)
+                            widget.currentReact = Reacts.none;
+                          else
+                            widget.currentReact = Reacts.dislike;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: widget.currentReact == Reacts.dislike
+                              ? Border.all(color: blueColor, width: 2)
+                              : null,
+                        ),
+                        child: Icon(
+                          MyFlutterApp.thumbs_down,
+                          color: orangeColor,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      widget.likes['Dislike'].toString(),
                       style: theme.textTheme.bodySmall!
                           .copyWith(color: Colors.black, fontSize: 15),
                     )
@@ -158,15 +235,34 @@ class NormalPostCard extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Icon(
-                      MyFlutterApp.thumbs_down,
-                      color: orangeColor,
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          if (widget.currentReact == Reacts.clap)
+                            widget.currentReact = Reacts.none;
+                          else
+                            widget.currentReact = Reacts.clap;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: widget.currentReact == Reacts.clap
+                              ? Border.all(color: blueColor, width: 2)
+                              : null,
+                        ),
+                        child: Icon(
+                          MyFlutterApp.clapping_svgrepo_com,
+                          color: orangeColor,
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       width: 5,
                     ),
                     Text(
-                      likes['Dislike'].toString(),
+                      widget.likes['Clap'].toString(),
                       style: theme.textTheme.bodySmall!
                           .copyWith(color: Colors.black, fontSize: 15),
                     )
@@ -174,31 +270,34 @@ class NormalPostCard extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Icon(
-                      MyFlutterApp.clapping_svgrepo_com,
-                      color: orangeColor,
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          if (widget.currentReact == Reacts.strong)
+                            widget.currentReact = Reacts.none;
+                          else
+                            widget.currentReact = Reacts.strong;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: widget.currentReact == Reacts.strong
+                              ? Border.all(color: blueColor, width: 2)
+                              : null,
+                        ),
+                        child: Icon(
+                          MyFlutterApp.muscle_svgrepo_com__1_,
+                          color: orangeColor,
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       width: 5,
                     ),
                     Text(
-                      likes['Clap'].toString(),
-                      style: theme.textTheme.bodySmall!
-                          .copyWith(color: Colors.black, fontSize: 15),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Icon(
-                      MyFlutterApp.muscle_svgrepo_com__1_,
-                      color: orangeColor,
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      likes['Strong'].toString(),
+                      widget.likes['Strong'].toString(),
                       style: theme.textTheme.bodySmall!
                           .copyWith(color: Colors.black, fontSize: 15),
                     )
@@ -257,9 +356,7 @@ class pollPostCard extends StatelessWidget {
 
   String coachName;
   String coachImageUrl;
-
   String title;
-
   BuildContext ctx;
 
   @override
@@ -309,19 +406,37 @@ class pollPostCard extends StatelessWidget {
           ),
           Consumer<MobileHomeViewModel>(
             builder: (context, value, child) => RadioListTile<String>(
+              title: const Text('Agree'),
+              secondary: value.getRadioValue != ''
+                  ? Text(
+                      '79%',
+                      style: theme.textTheme.bodySmall,
+                    )
+                  : null,
+              activeColor: orangeColor,
               value: 'Agree',
               groupValue: value.getRadioValue,
+              toggleable: true,
               onChanged: (String? radioValue) {
-                value.setRadioValue(radioValue!);
+                value.setRadioValue(radioValue ?? '');
               },
             ),
           ),
           Consumer<MobileHomeViewModel>(
             builder: (context, value, child) => RadioListTile<String>(
+              title: const Text('Disagree'),
+              secondary: value.getRadioValue != ''
+                  ? Text(
+                      '21%',
+                      style: theme.textTheme.bodySmall,
+                    )
+                  : null,
+              activeColor: orangeColor,
               value: 'Disagree',
               groupValue: value.getRadioValue,
+              toggleable: true,
               onChanged: (String? radioValue) {
-                value.setRadioValue(radioValue!);
+                value.setRadioValue(radioValue ?? '');
               },
             ),
           ),
