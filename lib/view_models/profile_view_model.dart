@@ -10,7 +10,6 @@ class ProfileViewModel with ChangeNotifier {
 
   setInfoWidgetVisible(bool value) {
     _infoWidgetVisible = value;
-
     notifyListeners();
   }
 
@@ -20,7 +19,9 @@ class ProfileViewModel with ChangeNotifier {
       'name': 'Omar',
       'imageUrl':
           'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
-      'role': 'Manager'
+      'role': 'coach',
+      'finishedWorkouts': 5,
+      'enteredWorkouts': 7
     }
   };
 

@@ -3,6 +3,26 @@ import 'package:home_workout_app/models/workout_model.dart';
 
 class MobileHomeViewModel with ChangeNotifier {
   int _currentTab = 0;
+
+  String radioValue = '';
+  int _pollRadio1 = 0;
+  int _pollRadio2 = 1;
+
+  void setPollRadio1(int value) {
+    _pollRadio1 = value;
+    notifyListeners();
+  }
+
+  void setRadioValue(String value) {
+    radioValue = value;
+    notifyListeners();
+  }
+
+  void setPollRadio2(int value) {
+    _pollRadio2 = value;
+    notifyListeners();
+  }
+
   //temporary
   Map<String, bool> categories = {
     'Recommended': true,
@@ -121,4 +141,7 @@ class MobileHomeViewModel with ChangeNotifier {
   }
 
   int get getCurrentTab => _currentTab;
+  int get getPollRadio1 => _pollRadio1;
+  int get getPollRadio2 => _pollRadio2;
+  String get getRadioValue => radioValue;
 }

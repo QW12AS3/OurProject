@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/my_flutter_app_icons.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
+import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/Pages/home_page.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/Pages/profile_page.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,8 @@ class _MobileHomeViewState extends State<MobileHomeView>
   void initState() {
     // TODO: implement initState
     super.initState();
+    print('called');
+    Provider.of<ProfileViewModel>(context, listen: false).setUserData();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       Provider.of<MobileHomeViewModel>(context, listen: false)
@@ -162,10 +165,14 @@ class _MobileHomeViewState extends State<MobileHomeView>
                     Expanded(
                       child: TabBarView(
                         controller: _tabController,
-                        children: const [
+                        children: [
                           HomePage(),
                           PostsPage(),
-                          ProfilePage(),
+                          Consumer<ProfileViewModel>(
+                            builder: (context, value, child) => ProfilePage(
+                              user: value.getUserData,
+                            ),
+                          ),
                         ],
                       ),
                     ),
