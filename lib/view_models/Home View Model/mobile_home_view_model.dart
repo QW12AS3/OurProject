@@ -1,25 +1,14 @@
 import 'package:flutter/cupertino.dart';
+import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/workout_model.dart';
 
 class MobileHomeViewModel with ChangeNotifier {
   int _currentTab = 0;
 
-  String radioValue = '';
-  int _pollRadio1 = 0;
-  int _pollRadio2 = 1;
-
-  void setPollRadio1(int value) {
-    _pollRadio1 = value;
-    notifyListeners();
-  }
+  String _radioValue = '';
 
   void setRadioValue(String value) {
-    radioValue = value;
-    notifyListeners();
-  }
-
-  void setPollRadio2(int value) {
-    _pollRadio2 = value;
+    _radioValue = value;
     notifyListeners();
   }
 
@@ -141,7 +130,5 @@ class MobileHomeViewModel with ChangeNotifier {
   }
 
   int get getCurrentTab => _currentTab;
-  int get getPollRadio1 => _pollRadio1;
-  int get getPollRadio2 => _pollRadio2;
-  String get getRadioValue => radioValue;
+  String get getRadioValue => _radioValue;
 }

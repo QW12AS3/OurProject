@@ -8,5 +8,7 @@ enum Gender { male, female }
 
 enum Units { kg, lb, cm, inch }
 
+enum Reacts { like, dislike, clap, strong, none }
+
 //temporary
 
