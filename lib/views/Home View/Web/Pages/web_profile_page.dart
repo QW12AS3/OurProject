@@ -70,7 +70,7 @@ class _webProfilePageState extends State<webProfilePage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8),
                       child: Text(
-                        user.getUserData.name,
+                        '${user.getUserData.fname} ${user.getUserData.lname}',
                         style: theme.textTheme.bodyMedium!
                             .copyWith(color: Colors.black),
                       ),
@@ -127,7 +127,7 @@ class _webProfilePageState extends State<webProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        user.getUserData.name,
+                        '${user.getUserData.fname} ${user.getUserData.lname}',
                         style: theme.textTheme.bodyMedium!
                             .copyWith(color: Colors.black),
                       ),

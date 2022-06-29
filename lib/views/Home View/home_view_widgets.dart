@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../view_models/profile_view_model.dart';
 
 class workoutCard extends StatelessWidget {
   workoutCard(
@@ -157,6 +160,39 @@ class LoadingContainer extends StatelessWidget {
         height: 250,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15), color: Colors.white),
+      ),
+    );
+  }
+}
+
+class myDrawer extends StatelessWidget {
+  const myDrawer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Drawer(
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, 'editProfile', arguments: {
+                'userData':
+                    Provider.of<ProfileViewModel>(context, listen: false)
+                        .getUserData
+              });
+            },
+            child: Row(
+              children: [
+                const Icon(Icons.edit_note_rounded),
+                Text(
+                  'Edit profile',
+                  style: theme.textTheme.bodySmall,
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_vie
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/Pages/home_page.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/Pages/profile_page.dart';
+import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
 
 import 'Pages/posts_page.dart';
@@ -58,7 +59,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
           return false;
         },
         child: Scaffold(
-            drawer: const SafeArea(child: Drawer()),
+            drawer: const SafeArea(child: myDrawer()),
             body: SafeArea(
                 child: NestedScrollView(
               controller: _scrollController,

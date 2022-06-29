@@ -43,6 +43,7 @@ dependencies:
   percent_indicator: ^4.2.2
   http: ^0.13.4
   country_picker: ^2.0.15
+  image_picker: ^0.8.5+3
 dev_dependencies:
   flutter_test:
     sdk: flutter

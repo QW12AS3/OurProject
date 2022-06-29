@@ -65,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: Text(
-                      widget.user.name,
+                      '${widget.user.fname} ${widget.user.lname}',
                       style: theme.textTheme.bodyMedium!
                           .copyWith(color: Colors.black),
                     ),
@@ -119,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      widget.user.name,
+                      '${widget.user.fname} ${widget.user.lname}',
                       style: theme.textTheme.bodyMedium!
                           .copyWith(color: Colors.black),
                     ),
