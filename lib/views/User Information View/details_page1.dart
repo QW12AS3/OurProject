@@ -1,3 +1,4 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
@@ -279,6 +280,20 @@ class Details1Page extends StatelessWidget {
                 ],
               ),
             ),
+            UserInfoCustomText(
+              text: 'Your country',
+              color: orangeColor,
+            ),
+            TextButton(
+              onPressed: () {
+                showCountryPicker(
+                    context: context,
+                    onSelect: (country) {
+                      print(country);
+                    });
+              },
+              child: const Text('Select Country'),
+            )
           ],
         ),
       ),

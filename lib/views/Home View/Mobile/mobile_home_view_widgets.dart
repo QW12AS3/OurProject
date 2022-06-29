@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/models/comments_model.dart';
 import 'package:home_workout_app/my_flutter_app_icons.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +48,7 @@ class NormalPostCard extends StatefulWidget {
   List<String> postImages;
   String title;
   Map<String, int> likes;
-  List<String> comments;
+  List<CommentsModel> comments;
   BuildContext ctx;
 
   @override
@@ -323,18 +324,24 @@ class _NormalPostCardState extends State<NormalPostCard> {
                       //           ),
                       //         ));
                     },
-                    child: Row(
-                      children: [
-                        Text(
-                          'Comments',
-                          style: theme.textTheme.bodySmall,
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          size: 15,
-                          color: orangeColor,
-                        )
-                      ],
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, 'comments',
+                            arguments: {'comments': widget.comments});
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            'Comments',
+                            style: theme.textTheme.bodySmall,
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 15,
+                            color: orangeColor,
+                          )
+                        ],
+                      ),
                     ))
               ],
             ),

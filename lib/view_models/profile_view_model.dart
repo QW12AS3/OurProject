@@ -21,7 +21,9 @@ class ProfileViewModel with ChangeNotifier {
           'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
       'role': 'coach',
       'finishedWorkouts': 5,
-      'enteredWorkouts': 7
+      'enteredWorkouts': 7,
+      'bio':
+          'Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test '
     }
   };
 

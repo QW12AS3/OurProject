@@ -145,6 +145,31 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: blueColor, fontWeight: FontWeight.w400),
                     ),
                   ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                    child: Text(
+                      'Bio',
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: blueColor),
+                  ),
+                  child: Text(
+                    widget.user.bio,
+                    style: theme.textTheme.bodySmall!.copyWith(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
                 if (widget.user.role == 'coach' ||
                     widget.user.role == 'dietitian')
                   ExpansionTile(
@@ -163,24 +188,33 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: theme.textTheme.bodySmall,
                     ),
                   ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                ExpansionTile(
+                  iconColor: blueColor,
+                  title: Text(
+                    'Statistics',
+                    style: theme.textTheme.bodySmall,
+                  ),
                   children: [
-                    CircularPercentIndicator(
-                      radius: 50,
-                      animation: true,
-                      center: Text(
-                        'Finished Workouts \n ${widget.user.finishedWorkouts}/${widget.user.enteredWorkouts}',
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.bodySmall!
-                            .copyWith(fontSize: 10, color: blueColor),
-                      ),
-                      progressColor: blueColor,
-                      percent: widget.user.finishedWorkouts /
-                          widget.user.enteredWorkouts,
-                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        CircularPercentIndicator(
+                          radius: 50,
+                          animation: true,
+                          center: Text(
+                            'Finished Workouts \n ${widget.user.finishedWorkouts}/${widget.user.enteredWorkouts}',
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.bodySmall!
+                                .copyWith(fontSize: 10, color: blueColor),
+                          ),
+                          progressColor: blueColor,
+                          percent: widget.user.finishedWorkouts /
+                              widget.user.enteredWorkouts,
+                        ),
+                      ],
+                    )
                   ],
-                )
+                ),
               ],
             ),
           ),
