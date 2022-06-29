@@ -7,6 +7,7 @@ import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
 import 'package:home_workout_app/views/Home%20View/Web/web_home_view.dart';
+import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -93,11 +94,12 @@ class Vigor extends StatelessWidget {
         ),
         darkTheme: ThemeData(),
 
-        home: kIsWeb ? const WebHomeView() : const MobileHomeView(),
+        home:
+            //kIsWeb ? const WebHomeView() : const MobileHomeView(),
 
-        // home: StartView(),
-        //const WebHomeView(),
-        //LogIn(),
+            // home: StartView(),
+            //const WebHomeView(),
+            LogIn(),
         //MobileHomeView(),
         //  UserInformationView(),
       ),
