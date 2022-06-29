@@ -6,8 +6,11 @@ import 'package:home_workout_app/view_models/Home%20View%20Model/web_home_view_m
 import 'package:home_workout_app/view_models/Sign%20in%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
+import 'package:home_workout_app/views/Comments%20View/comments_view.dart';
+import 'package:home_workout_app/views/Edit%20Profile%20View/edit_profile_view.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
 import 'package:home_workout_app/views/Home%20View/Web/web_home_view.dart';
+import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:home_workout_app/views/start_view/start_view.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +33,9 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => signInViewModel())
       ],
       child: MaterialApp(
+        routes: {
+          'comments': (context) => CommentsView(),
+        },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.light,
@@ -97,12 +103,11 @@ class Vigor extends StatelessWidget {
         ),
         darkTheme: ThemeData(),
 
-        home:
-            // kIsWeb ? const WebHomeView() : const MobileHomeView(),
-
-            // StartView(),
-            //const WebHomeView(),
-            LogIn(),
+        //home: kIsWeb ? const WebHomeView() : const MobileHomeView(),
+        home: UserInformationView(),
+        // StartView(),
+        //const WebHomeView(),
+        //LogIn(),
         //MobileHomeView(),
         //  UserInformationView(),
       ),
