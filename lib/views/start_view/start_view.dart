@@ -32,8 +32,9 @@ class _StartViewState extends State<StartView> {
 
   @override
   void dispose() {
-    videoController.dispose();
     super.dispose();
+    videoController.dispose();
+    print("ddddddddddddddddddddddddddddddddddddddddddddddddddddddispose video");
   }
 
   @override
@@ -106,6 +107,7 @@ class _StartViewState extends State<StartView> {
                         height: mq.size.height * 0.1,
                         width: mq.size.width * 0.15,
                         color: orangeColor,
+
                         // matchTextDirection: true,
                       ),
                     ),
@@ -124,7 +126,7 @@ class _StartViewState extends State<StartView> {
                       ),
                       Text(
                         ' BODIES ',
-                        style: theme.textTheme.bodyLarge,
+                        style: TextStyle(color: orangeColor),
                       ),
                       const Text(
                         'ARE OUR GARDENS',
@@ -174,7 +176,7 @@ class _StartViewState extends State<StartView> {
                         style: OutlinedButton.styleFrom(
                           // shape: StadiumBorder(),
                           side: BorderSide(width: 1, color: orangeColor),
-                          elevation: 55,
+                          //   elevation: 55,
                           backgroundColor: Colors.white.withOpacity(0.01),
                           //orangeColor.withOpacity(0.7),
                           primary: orangeColor,
@@ -182,6 +184,7 @@ class _StartViewState extends State<StartView> {
                               borderRadius: BorderRadius.circular(25)),
                         ),
                         onPressed: () {
+                          // videoController.pause();
                           Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) => LogIn()));
                         },
@@ -257,8 +260,12 @@ class _StartViewState extends State<StartView> {
                               onPressed: () {},
                               icon: Image.asset('assets/images/google.png')),
                           IconButton(
-                              onPressed: () {},
-                              icon: Image.asset('assets/images/facebook.png')),
+                            onPressed: () {},
+                            icon: Image.asset(
+                              'assets/images/facebook.png',
+                            ),
+                            //   iconSize: mq.size.width * 0.01,
+                          ),
                         ],
                       ),
                     )
