@@ -100,9 +100,9 @@ class Vigor extends StatelessWidget {
         home:
             // kIsWeb ? const WebHomeView() : const MobileHomeView(),
 
-            StartView(),
-        //const WebHomeView(),
-        // LogIn(),
+            // StartView(),
+            //const WebHomeView(),
+            LogIn(),
         //MobileHomeView(),
         //  UserInformationView(),
       ),
