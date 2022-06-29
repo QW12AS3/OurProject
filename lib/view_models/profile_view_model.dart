@@ -16,7 +16,11 @@ class ProfileViewModel with ChangeNotifier {
   Map<dynamic, dynamic> user = {
     'id': 1,
     'data': {
-      'name': 'Omar',
+      'fname': 'Omar',
+      'lname': 'Za',
+      'gender': 'male',
+      'country': 'Syria',
+      'birthdate': '2001-6-21',
       'imageUrl':
           'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
       'role': 'coach',

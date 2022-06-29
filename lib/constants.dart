@@ -6,7 +6,7 @@ Color greyColor = Colors.grey;
 
 enum Gender { male, female }
 
-enum Units { kg, lb, cm, inch }
+enum Units { kg, lb, cm, ft }
 
 enum Reacts { like, dislike, clap, strong, none }
 

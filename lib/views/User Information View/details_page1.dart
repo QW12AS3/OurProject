@@ -134,17 +134,17 @@ class Details1Page extends StatelessWidget {
                                 ),
                                 InkWell(
                                   onTap: () {
-                                    if (value.weightUnit != Units.inch) {
-                                      value.ChangeHeightUnit(Units.inch);
+                                    if (value.weightUnit != Units.ft) {
+                                      value.ChangeHeightUnit(Units.ft);
                                     }
                                   },
                                   child: Text(
-                                    'inch',
+                                    'ft',
                                     style: theme.textTheme.bodySmall!.copyWith(
-                                        fontSize: value.heightUnit == Units.inch
+                                        fontSize: value.heightUnit == Units.ft
                                             ? 17
                                             : 15,
-                                        color: value.heightUnit == Units.inch
+                                        color: value.heightUnit == Units.ft
                                             ? orangeColor
                                             : greyColor),
                                   ),
