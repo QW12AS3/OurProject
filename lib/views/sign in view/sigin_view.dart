@@ -280,8 +280,10 @@ class LogIn extends StatelessWidget {
                               formGlobalKey.currentState!.save();
                               // use the email provided here
                               print('rrrrrrrrrrrrrrrrrrrr');
-                              api.createUser(
-                                  "eve.holt@reqres.in", "cityslicka");
+                              api
+                                  .createUser(
+                                      "eve.holt@reqres.in", "cityslicka")
+                                  .then((value) => print(value.f_name));
                             }
                           },
                           child: Text(
