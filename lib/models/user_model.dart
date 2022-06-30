@@ -13,6 +13,7 @@ class UserModel {
   late Gender gender;
   late DateTime birthdate;
   late String countryName;
+  late String email;
 
   UserModel(
       this.fname,
@@ -24,7 +25,9 @@ class UserModel {
       this.enteredWorkouts,
       this.finishedWorkouts,
       this.id,
-      this.birthdate);
+      this.birthdate,
+      this.countryName,
+      this.email);
 
   UserModel.fromJson(Map<dynamic, dynamic> json) {
     fname = json['data']['fname'] ?? '';
@@ -38,5 +41,6 @@ class UserModel {
     gender = json['data']['gender'] == 'male' ? Gender.male : Gender.female;
     birthdate = DateFormat("yyyy-MM-dd").parse(json['data']['birthdate']);
     countryName = json['data']['country'];
+    email = json['data']['email'];
   }
 }

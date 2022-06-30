@@ -11,6 +11,18 @@ class EditProfileViewModel with ChangeNotifier {
   DateTime _birthdate = DateTime.now();
   String _bio = '';
   String _country = '';
+  Units _weightUnit = Units.kg;
+  Units _heightUnit = Units.cm;
+
+  void ChangeWeightUnit(Units unit) {
+    _weightUnit = unit;
+    notifyListeners();
+  }
+
+  void ChangeHeightUnit(Units unit) {
+    _heightUnit = unit;
+    notifyListeners();
+  }
 
   bool _passwordObsecure1 = true;
   bool _passwordObsecure2 = true;
@@ -93,4 +105,6 @@ class EditProfileViewModel with ChangeNotifier {
   String get getCountry => _country;
   bool get getPasswordObsecure1 => _passwordObsecure1;
   bool get getPasswordObsecure2 => _passwordObsecure2;
+  Units get getWeight => _weightUnit;
+  Units get getHeight => _heightUnit;
 }

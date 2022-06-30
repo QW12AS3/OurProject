@@ -280,20 +280,45 @@ class Details1Page extends StatelessWidget {
                 ],
               ),
             ),
-            UserInfoCustomText(
-              text: 'Your country',
-              color: orangeColor,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Country: ',
+                    style: theme.textTheme.bodySmall,
+                  ),
+                  Consumer<UserInformationViewModel>(
+                    builder: (context, value, child) => Row(
+                      children: [
+                        Text(
+                          value.getCountryName == ''
+                              ? 'Unselected'
+                              : value.getCountryName,
+                          style: theme.textTheme.bodySmall!
+                              .copyWith(color: blueColor),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            showCountryPicker(
+                                context: context,
+                                onSelect: (country) {
+                                  value.setCountry(country.name);
+                                });
+                          },
+                          icon: Icon(
+                            Icons.edit,
+                            color: orangeColor,
+                            size: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-            TextButton(
-              onPressed: () {
-                showCountryPicker(
-                    context: context,
-                    onSelect: (country) {
-                      print(country);
-                    });
-              },
-              child: const Text('Select Country'),
-            )
           ],
         ),
       ),

@@ -59,7 +59,11 @@ class _MobileHomeViewState extends State<MobileHomeView>
           return false;
         },
         child: Scaffold(
-            drawer: const SafeArea(child: myDrawer()),
+            drawer: SafeArea(
+                child: myDrawer(
+              user: Provider.of<ProfileViewModel>(context, listen: true)
+                  .getUserData,
+            )),
             body: SafeArea(
                 child: NestedScrollView(
               controller: _scrollController,
