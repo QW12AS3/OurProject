@@ -8,6 +8,12 @@ class UserInformationViewModel with ChangeNotifier {
   bool dateIsSelected = false;
   Units weightUnit = Units.kg;
   Units heightUnit = Units.cm;
+  String _country = '';
+
+  setCountry(countryName) {
+    _country = countryName;
+    notifyListeners();
+  }
 
   Map<String, bool> diseases = {
     'Amyotrophic lateral sclerosis (ALS).': false,
@@ -87,4 +93,6 @@ class UserInformationViewModel with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  String get getCountryName => _country;
 }

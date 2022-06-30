@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/models/user_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -166,7 +167,9 @@ class LoadingContainer extends StatelessWidget {
 }
 
 class myDrawer extends StatelessWidget {
-  const myDrawer({Key? key}) : super(key: key);
+  myDrawer({required this.user, Key? key}) : super(key: key);
+
+  UserModel user;
 
   @override
   Widget build(BuildContext context) {
@@ -174,6 +177,61 @@ class myDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(user.imageUrl),
+                  onBackgroundImageError: (child, stacktrace) =>
+                      const LoadingContainer(),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: user.role == 'Manager'
+                              ? Colors.red.shade900
+                              : (user.role == 'Coach'
+                                  ? blueColor
+                                  : orangeColor),
+                          width: 2),
+                    ),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Text(
+                        '${user.fname} ${user.lname}',
+                        style: theme.textTheme.bodyMedium!
+                            .copyWith(color: Colors.black),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        user.role,
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                            color: user.role == 'Manager'
+                                ? Colors.red.shade900
+                                : (user.role == 'Coach'
+                                    ? blueColor
+                                    : orangeColor),
+                            fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            color: blueColor,
+            thickness: 2,
+          ),
           InkWell(
             onTap: () {
               Navigator.pushNamed(context, 'editProfile', arguments: {
@@ -182,14 +240,28 @@ class myDrawer extends StatelessWidget {
                         .getUserData
               });
             },
-            child: Row(
-              children: [
-                const Icon(Icons.edit_note_rounded),
-                Text(
-                  'Edit profile',
-                  style: theme.textTheme.bodySmall,
-                )
-              ],
+            child: ListTile(
+              title: Text(
+                'Edit profile',
+                style: theme.textTheme.bodySmall,
+              ),
+              trailing: Icon(
+                Icons.edit_note_rounded,
+                color: blueColor,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {},
+            child: ListTile(
+              title: Text(
+                'Settings',
+                style: theme.textTheme.bodySmall,
+              ),
+              trailing: Icon(
+                Icons.settings,
+                color: blueColor,
+              ),
             ),
           )
         ],

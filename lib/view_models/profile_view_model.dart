@@ -19,6 +19,7 @@ class ProfileViewModel with ChangeNotifier {
       'fname': 'Omar',
       'lname': 'Za',
       'gender': 'male',
+      'email': 'test@gmail.com',
       'country': 'Syria',
       'birthdate': '2001-6-21',
       'imageUrl':

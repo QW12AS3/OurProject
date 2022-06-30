@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
+import '../../view_models/user_information_view_model.dart';
 import '../Home View/home_view_widgets.dart';
 
 class EditProfileView extends StatefulWidget {
@@ -25,8 +26,9 @@ class _EditProfileViewState extends State<EditProfileView> {
     super.dispose();
   }
 
-  GlobalKey<FormState> formkey = GlobalKey();
-  GlobalKey<FormState> formkey2 = GlobalKey();
+  GlobalKey<FormState> nameKey = GlobalKey();
+  GlobalKey<FormState> hwKey = GlobalKey();
+  GlobalKey<FormState> emailPassKey = GlobalKey();
 
   final TextEditingController fnameController = TextEditingController();
   final TextEditingController lnameController = TextEditingController();
@@ -34,6 +36,10 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   final TextEditingController newPassword = TextEditingController();
   final TextEditingController confirmNewPassword = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+
+  final TextEditingController weightController = TextEditingController();
+  final TextEditingController heightController = TextEditingController();
 
   @override
   void initState() {
@@ -47,6 +53,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     fnameController.text = user.fname;
     lnameController.text = user.lname;
     bioController.text = user.bio;
+    emailController.text = user.email;
   }
 
   @override
@@ -65,6 +72,7 @@ class _EditProfileViewState extends State<EditProfileView> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            AddressText(title: 'Personal information:'),
             Center(
               child: Consumer<EditProfileViewModel>(
                 builder: (context, value, child) => CircleAvatar(
@@ -101,7 +109,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               },
             ),
             Form(
-              key: formkey,
+              key: nameKey,
               child: Column(
                 children: [
                   Padding(
@@ -239,6 +247,199 @@ class _EditProfileViewState extends State<EditProfileView> {
                 ],
               ),
             ),
+            Form(
+              key: hwKey,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 10),
+                      child: TextFormField(
+                        controller: heightController,
+                        validator: (value) {
+                          if (double.tryParse(value.toString()) == null) {
+                            return 'Invalid height';
+                          }
+                        },
+                        onSaved: (val) {},
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          suffixIcon: Consumer<UserInformationViewModel>(
+                            builder: (context, value, child) => Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    if (value.weightUnit != Units.cm) {
+                                      value.ChangeHeightUnit(Units.cm);
+                                    }
+                                  },
+                                  child: Text(
+                                    'cm',
+                                    style: theme.textTheme.bodySmall!.copyWith(
+                                        fontSize: value.heightUnit == Units.cm
+                                            ? 17
+                                            : 15,
+                                        color: value.heightUnit == Units.cm
+                                            ? orangeColor
+                                            : greyColor),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    if (value.weightUnit != Units.ft) {
+                                      value.ChangeHeightUnit(Units.ft);
+                                    }
+                                  },
+                                  child: Text(
+                                    'ft',
+                                    style: theme.textTheme.bodySmall!.copyWith(
+                                        fontSize: value.heightUnit == Units.ft
+                                            ? 17
+                                            : 15,
+                                        color: value.heightUnit == Units.ft
+                                            ? orangeColor
+                                            : greyColor),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          prefixIcon: Icon(
+                            Icons.height,
+                            color: orangeColor,
+                          ),
+                          label: const FittedBox(child: Text('Height')),
+                          floatingLabelStyle: theme.textTheme.bodySmall,
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: orangeColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: greyColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          errorBorder: const OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 1.5),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: orangeColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 10),
+                      child: TextFormField(
+                        controller: weightController,
+                        validator: (value) {
+                          if (double.tryParse(value.toString()) == null) {
+                            return 'Invalid weight';
+                          }
+                        },
+                        onSaved: (val) {},
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          suffixIcon: Consumer<EditProfileViewModel>(
+                            builder: (context, value, child) => Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    if (value.getWeight != Units.kg) {
+                                      value.ChangeWeightUnit(Units.kg);
+                                    }
+                                  },
+                                  child: Text(
+                                    'Kg',
+                                    style: theme.textTheme.bodySmall!.copyWith(
+                                        fontSize: value.getWeight == Units.kg
+                                            ? 15
+                                            : 12,
+                                        color: value.getWeight == Units.kg
+                                            ? orangeColor
+                                            : greyColor),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    if (value.getWeight != Units.lb) {
+                                      value.ChangeWeightUnit(Units.lb);
+                                    }
+                                  },
+                                  child: Text(
+                                    'lb',
+                                    style: theme.textTheme.bodySmall!.copyWith(
+                                        fontSize: value.getWeight == Units.lb
+                                            ? 17
+                                            : 15,
+                                        color: value.getWeight == Units.lb
+                                            ? orangeColor
+                                            : greyColor),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          prefixIcon: Icon(
+                            Icons.monitor_weight_outlined,
+                            color: orangeColor,
+                          ),
+                          label: const FittedBox(child: Text('Weight')),
+                          floatingLabelStyle: theme.textTheme.bodySmall,
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: orangeColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: greyColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          errorBorder: const OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 1.5),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: orangeColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
               child: Row(
@@ -324,6 +525,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 ],
               ),
             ),
+            AddressText(title: 'Account information:'),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
               child: Row(
@@ -361,127 +563,181 @@ class _EditProfileViewState extends State<EditProfileView> {
                 ],
               ),
             ),
-            ExpansionTile(
-              iconColor: blueColor,
-              title: Text(
-                'Change password',
-                style: theme.textTheme.bodySmall,
-              ),
-              children: [
-                Consumer<EditProfileViewModel>(
-                  builder: (context, value, child) => Form(
-                    key: formkey2,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 10),
-                          child: TextFormField(
-                            obscureText: value.getPasswordObsecure1,
-                            controller: newPassword,
-                            validator: (value) {},
-                            onSaved: (val) {},
-                            keyboardType: TextInputType.visiblePassword,
-                            decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                                icon: Icon(value.getPasswordObsecure1
-                                    ? Icons.visibility_rounded
-                                    : Icons.visibility_off_rounded),
-                                onPressed: () {
-                                  value.setPasswordObsecure1();
-                                },
-                              ),
-                              label:
-                                  const FittedBox(child: Text('New password')),
-                              floatingLabelStyle: theme.textTheme.bodySmall,
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: orangeColor, width: 1.5),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: greyColor, width: 1.5),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                              errorBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.red, width: 1.5),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: orangeColor, width: 1.5),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                            ),
-                          ),
+            Consumer<EditProfileViewModel>(
+              builder: (context, value, child) => Form(
+                key: emailPassKey,
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
+                        child: Text(
+                          'Change email: ',
+                          style: theme.textTheme.bodySmall,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 10),
-                          child: TextFormField(
-                            obscureText: value.getPasswordObsecure2,
-                            controller: confirmNewPassword,
-                            validator: (value) {},
-                            onSaved: (val) {},
-                            keyboardType: TextInputType.visiblePassword,
-                            decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                                icon: Icon(value.getPasswordObsecure2
-                                    ? Icons.visibility_rounded
-                                    : Icons.visibility_off_rounded),
-                                onPressed: () {
-                                  value.setPasswordObsecure2();
-                                },
-                              ),
-                              label: const FittedBox(
-                                  child: Text('Confirm new password')),
-                              floatingLabelStyle: theme.textTheme.bodySmall,
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: orangeColor, width: 1.5),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: greyColor, width: 1.5),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                              errorBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.red, width: 1.5),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: orangeColor, width: 1.5),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 10),
+                      child: TextFormField(
+                        controller: emailController,
+                        validator: (value) {},
+                        onSaved: (val) {},
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          label: const FittedBox(child: Text('Email')),
+                          floatingLabelStyle: theme.textTheme.bodySmall,
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: orangeColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: greyColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          errorBorder: const OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 1.5),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: orangeColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
+                        child: Text(
+                          'Change password: ',
+                          style: theme.textTheme.bodySmall,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 10),
+                      child: TextFormField(
+                        obscureText: value.getPasswordObsecure1,
+                        controller: newPassword,
+                        validator: (value) {},
+                        onSaved: (val) {},
+                        keyboardType: TextInputType.visiblePassword,
+                        decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                            icon: Icon(value.getPasswordObsecure1
+                                ? Icons.visibility_rounded
+                                : Icons.visibility_off_rounded),
+                            onPressed: () {
+                              value.setPasswordObsecure1();
+                            },
+                          ),
+                          label: const FittedBox(child: Text('New password')),
+                          floatingLabelStyle: theme.textTheme.bodySmall,
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: orangeColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: greyColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          errorBorder: const OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 1.5),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: orangeColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 10),
+                      child: TextFormField(
+                        obscureText: value.getPasswordObsecure2,
+                        controller: confirmNewPassword,
+                        validator: (value) {},
+                        onSaved: (val) {},
+                        keyboardType: TextInputType.visiblePassword,
+                        decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                            icon: Icon(value.getPasswordObsecure2
+                                ? Icons.visibility_rounded
+                                : Icons.visibility_off_rounded),
+                            onPressed: () {
+                              value.setPasswordObsecure2();
+                            },
+                          ),
+                          label: const FittedBox(
+                              child: Text('Confirm new password')),
+                          floatingLabelStyle: theme.textTheme.bodySmall,
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: orangeColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: greyColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          errorBorder: const OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 1.5),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: orangeColor, width: 1.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
             ElevatedButton(
               onPressed: () {},
@@ -491,6 +747,28 @@ class _EditProfileViewState extends State<EditProfileView> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class AddressText extends StatelessWidget {
+  AddressText({required this.title, Key? key}) : super(key: key);
+
+  String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 15),
+        child: Text(
+          title,
+          style: theme.textTheme.bodySmall!
+              .copyWith(color: greyColor, decoration: TextDecoration.underline),
         ),
       ),
     );
