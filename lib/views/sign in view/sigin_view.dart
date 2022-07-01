@@ -4,7 +4,6 @@ import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/sign_in_model.dart';
 import 'package:home_workout_app/view_models/Sign%20in%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_widgets.dart';
-import 'package:home_workout_app/views/sign%20in%20view/sign_in_functions.dart';
 import 'package:provider/provider.dart';
 
 class LogIn extends StatelessWidget {
