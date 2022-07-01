@@ -6,6 +6,7 @@ import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
@@ -36,7 +37,6 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   final TextEditingController newPassword = TextEditingController();
   final TextEditingController confirmNewPassword = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
 
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
@@ -53,7 +53,6 @@ class _EditProfileViewState extends State<EditProfileView> {
     fnameController.text = user.fname;
     lnameController.text = user.lname;
     bioController.text = user.bio;
-    emailController.text = user.email;
   }
 
   @override
@@ -563,187 +562,46 @@ class _EditProfileViewState extends State<EditProfileView> {
                 ],
               ),
             ),
-            Consumer<EditProfileViewModel>(
-              builder: (context, value, child) => Form(
-                key: emailPassKey,
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 5),
-                        child: Text(
-                          'Change email: ',
-                          style: theme.textTheme.bodySmall,
-                        ),
-                      ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'changeEmail');
+                  },
+                  child: ListTile(
+                    title: Text(
+                      'Change email',
+                      style: theme.textTheme.bodySmall,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 10),
-                      child: TextFormField(
-                        controller: emailController,
-                        validator: (value) {},
-                        onSaved: (val) {},
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          label: const FittedBox(child: Text('Email')),
-                          floatingLabelStyle: theme.textTheme.bodySmall,
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: orangeColor, width: 1.5),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: greyColor, width: 1.5),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                          errorBorder: const OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.red, width: 1.5),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: orangeColor, width: 1.5),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                        ),
-                      ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: blueColor,
+                      size: 15,
                     ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 5),
-                        child: Text(
-                          'Change password: ',
-                          style: theme.textTheme.bodySmall,
-                        ),
-                      ),
+                  )),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'changePassword');
+                  },
+                  child: ListTile(
+                    title: Text(
+                      'Change password',
+                      style: theme.textTheme.bodySmall,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 10),
-                      child: TextFormField(
-                        obscureText: value.getPasswordObsecure1,
-                        controller: newPassword,
-                        validator: (value) {},
-                        onSaved: (val) {},
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            icon: Icon(value.getPasswordObsecure1
-                                ? Icons.visibility_rounded
-                                : Icons.visibility_off_rounded),
-                            onPressed: () {
-                              value.setPasswordObsecure1();
-                            },
-                          ),
-                          label: const FittedBox(child: Text('New password')),
-                          floatingLabelStyle: theme.textTheme.bodySmall,
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: orangeColor, width: 1.5),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: greyColor, width: 1.5),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                          errorBorder: const OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.red, width: 1.5),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: orangeColor, width: 1.5),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                        ),
-                      ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: blueColor,
+                      size: 15,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 10),
-                      child: TextFormField(
-                        obscureText: value.getPasswordObsecure2,
-                        controller: confirmNewPassword,
-                        validator: (value) {},
-                        onSaved: (val) {},
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            icon: Icon(value.getPasswordObsecure2
-                                ? Icons.visibility_rounded
-                                : Icons.visibility_off_rounded),
-                            onPressed: () {
-                              value.setPasswordObsecure2();
-                            },
-                          ),
-                          label: const FittedBox(
-                              child: Text('Confirm new password')),
-                          floatingLabelStyle: theme.textTheme.bodySmall,
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: orangeColor, width: 1.5),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: greyColor, width: 1.5),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                          errorBorder: const OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.red, width: 1.5),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: orangeColor, width: 1.5),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                  )),
             ),
             ElevatedButton(
               onPressed: () {},
-              child: Text(
+              child: const Text(
                 'Save changes',
-                style: theme.textTheme.bodySmall!.copyWith(color: Colors.white),
               ),
             ),
           ],
