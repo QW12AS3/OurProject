@@ -31,5 +31,18 @@
     "Statistics": "Statistics",
     "Finished Workouts": "Finished Workouts",
     "Edit profile": "Edit profile",
-    "Settings": "Settings"
+    "Settings": "Settings",
+    "Personal information:": "Personal information:",
+    "Change profile photo": "Change profile photo",
+    "Change profile photo from:": "Change profile photo from:",
+    "Gallery": "Gallery",
+    "Camera": "Camera",
+    "First name": "First name",
+    "Last name": "Last name",
+    "Gender: ": "Gender: ",
+    "Birthdate: ": "Birthdate: ",
+    "Account information:": "Account information:",
+    "Change email": "Change email",
+    "Change password": "Change password",
+    "Save changes": "Save changes"
 }
