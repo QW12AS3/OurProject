@@ -38,6 +38,57 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => EditProfileViewModel())
       ],
       child: MaterialApp(
+
+        routes: {
+          'comments': (context) => CommentsView(),
+          'editProfile': (context) => EditProfileView(),
+        },
+        title: 'Vigor',
+        debugShowCheckedModeBanner: false,
+        themeMode: ThemeMode.light,
+        theme: ThemeData(
+          colorSchemeSeed: orangeColor,
+          tabBarTheme: TabBarTheme(
+            labelColor: orangeColor,
+            unselectedLabelColor: greyColor,
+            indicatorSize: TabBarIndicatorSize.tab,
+          ),
+          appBarTheme: AppBarTheme(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              iconTheme: IconThemeData(color: orangeColor)),
+          snackBarTheme: SnackBarThemeData(
+            contentTextStyle: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: Colors.white),
+            backgroundColor: orangeColor.withOpacity(0.9),
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+                side: BorderSide(color: blueColor)),
+          ),
+          checkboxTheme: CheckboxThemeData(
+            fillColor: MaterialStateProperty.all(blueColor),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: orangeColor,
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15))),
+                textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
+                    fontFamily: 'JosefinSans',
+                    color: orangeColor,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold)),
+                backgroundColor: MaterialStateProperty.all(orangeColor),
+                elevation: MaterialStateProperty.all(2)),
+
           // onGenerateRoute: (settings) {
           //   switch (settings.name) {
           //     case 'comments':
@@ -139,7 +190,9 @@ class Vigor extends StatelessWidget {
           //home: LogIn(),
           //MobileHomeView(),
           //  UserInformationView(),
-          ),
+
+         
+      ),
     );
   }
 }

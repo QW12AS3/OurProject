@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/Api%20services/sign_in_api.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/models/sign_in_model.dart';
 import 'package:home_workout_app/view_models/Sign%20in%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_widgets.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sign_in_functions.dart';
@@ -73,10 +75,9 @@ class LogIn extends StatelessWidget {
                                   child: TextFormField(
                                     controller: emailController,
                                     validator: (value) {
-                                      if (!checkValidation()
-                                          .checkEmail(value.toString())) {
-                                        return ' Invalid email';
-                                      }
+                                      return signInViewModel()
+                                          .checkEmail(value.toString());
+
                                       // if (value!.trim().isEmpty) {
                                       //   return ' You have to fill the Email';
                                       // } else if (!value.trim().contains('@') ||
@@ -152,7 +153,7 @@ class LogIn extends StatelessWidget {
                                                 // } else if (value.trim().length < 6) {
                                                 //   return " Password should be 6 characters or more";
                                                 // }
-                                                return checkValidation()
+                                                return signInViewModel()
                                                     .checkPassword(
                                                         value.toString());
                                               },
@@ -274,16 +275,31 @@ class LogIn extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25)),
                           ),
-                          onPressed: () {
-                            print('pppppppppppp');
+                          onPressed: () async {
+                            // print('pppppppppppp');
                             if (formGlobalKey.currentState!.validate()) {
                               formGlobalKey.currentState!.save();
                               // use the email provided here
                               print('rrrrrrrrrrrrrrrrrrrr');
-                              api
-                                  .createUser(
-                                      "eve.holt@reqres.in", "cityslicka")
-                                  .then((value) => print(value.f_name));
+
+                              final BackEndMessage = await signInViewModel()
+                                  .postUserInfo(emailController.text,
+                                      passwordController.text);
+                              print(BackEndMessage);
+                              final sBar = SnackBar(
+                                  content: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                      "${BackEndMessage.error == '' ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.error}"), ///////////////////////////////
+                                ],
+                              ));
+                              ScaffoldMessenger.of(context).showSnackBar(sBar);
+                              if (BackEndMessage.token != '') {
+                                emailController.clear();
+                                passwordController.clear();
+                                //Navigate
+                              }
                             }
                           },
                           child: Text(
