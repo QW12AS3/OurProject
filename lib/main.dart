@@ -7,6 +7,8 @@ import 'package:home_workout_app/view_models/Sign%20in%20View%20Model/sign_in_vi
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
+import 'package:home_workout_app/views/Change%20Email%20View/change_email_view.dart';
+import 'package:home_workout_app/views/Change%20Password%20View/change_password_view.dart';
 import 'package:home_workout_app/views/Comments%20View/comments_view.dart';
 import 'package:home_workout_app/views/Edit%20Profile%20View/edit_profile_view.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
@@ -14,6 +16,7 @@ import 'package:home_workout_app/views/Home%20View/Web/web_home_view.dart';
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:home_workout_app/views/start_view/start_view.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -35,9 +38,28 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => EditProfileViewModel())
       ],
       child: MaterialApp(
+          // onGenerateRoute: (settings) {
+          //   switch (settings.name) {
+          //     case 'comments':
+          //       return PageTransition(
+          //           child: CommentsView(),
+          //           type: PageTransitionType.leftToRight);
+          //     case 'editProfile':
+          //       return PageTransition(
+          //           child: EditProfileView(), type: PageTransitionType.scale);
+          //     case 'changeEmail':
+          //       return PageTransition(
+          //           child: ChangeEmailView(),
+          //           type: PageTransitionType.leftToRight);
+          //     default:
+          //       return null;
+          //   }
+          // },
           routes: {
             'comments': (context) => CommentsView(),
             'editProfile': (context) => EditProfileView(),
+            'changeEmail': (context) => ChangeEmailView(),
+            'changePassword': (context) => ChangePasswordView(),
           },
           title: 'Vigor',
           debugShowCheckedModeBanner: false,
@@ -111,7 +133,7 @@ class Vigor extends StatelessWidget {
           darkTheme: ThemeData(),
 
           //home: kIsWeb ? const WebHomeView() : const MobileHomeView(),
-          home: UserInformationView()
+          home: MobileHomeView()
           // StartView(),
           //const WebHomeView(),
           //home: LogIn(),
