@@ -1,5 +1,6 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/user_model.dart';
@@ -10,22 +11,23 @@ import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({required this.user, Key? key}) : super(key: key);
-
-  UserModel user;
+  ProfilePage({Key? key}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late UserModel user;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Provider.of<ProfileViewModel>(context, listen: false).setUserData();
+    user = Provider.of<ProfileViewModel>(context, listen: false).getUserData;
   }
 
+  String finishedWorkouts = 'Finished Workouts'.tr();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -46,16 +48,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundImage: NetworkImage(widget.user.imageUrl),
+                    backgroundImage: NetworkImage(user.imageUrl),
                     onBackgroundImageError: (child, stacktrace) =>
                         const LoadingContainer(),
                     child: Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                            color: widget.user.role == 'Manager'
+                            color: user.role == 'Manager'
                                 ? Colors.red.shade900
-                                : (widget.user.role == 'Coach'
+                                : (user.role == 'Coach'
                                     ? blueColor
                                     : orangeColor),
                             width: 2),
@@ -63,9 +65,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      '${widget.user.fname} ${widget.user.lname}',
+                      '${user.fname} ${user.lname}',
                       style: theme.textTheme.bodyMedium!
                           .copyWith(color: Colors.black),
                     ),
@@ -83,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Center(
                   child: Consumer<ProfileViewModel>(
                     builder: (context, value, child) => VisibilityDetector(
-                      key: Key(widget.user.id),
+                      key: Key(user.id),
                       onVisibilityChanged: (VisibilityInfo info) {
                         if (info.visibleBounds.isEmpty)
                           value.setInfoWidgetVisible(true);
@@ -93,16 +95,16 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: CircleAvatar(
                         radius: 60,
                         backgroundColor: Colors.transparent,
-                        backgroundImage: NetworkImage(widget.user.imageUrl),
+                        backgroundImage: NetworkImage(user.imageUrl),
                         onBackgroundImageError: (child, stacktrace) =>
                             const LoadingContainer(),
                         child: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                                color: widget.user.role == 'Manager'
+                                color: user.role == 'Manager'
                                     ? Colors.red.shade900
-                                    : (widget.user.role == 'Coach'
+                                    : (user.role == 'Coach'
                                         ? blueColor
                                         : orangeColor),
                                 width: 3),
@@ -119,24 +121,22 @@ class _ProfilePageState extends State<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${widget.user.fname} ${widget.user.lname}',
+                      '${user.fname} ${user.lname}',
                       style: theme.textTheme.bodyMedium!
                           .copyWith(color: Colors.black),
                     ),
                     Text(
-                      ' ( ${widget.user.role.toUpperCase()} )',
+                      ' ( ${user.role.toUpperCase()} )',
                       style: theme.textTheme.bodyMedium!.copyWith(
                         fontSize: 15,
-                        color: widget.user.role == 'Manager'
+                        color: user.role == 'Manager'
                             ? Colors.red.shade900
-                            : (widget.user.role == 'Coach'
-                                ? blueColor
-                                : orangeColor),
+                            : (user.role == 'Coach' ? blueColor : orangeColor),
                       ),
                     ),
                   ],
                 ),
-                if (widget.user.id != '1' && widget.user.role == 'coach')
+                if (user.id != '1' && user.role == 'coach')
                   TextButton(
                     onPressed: () {},
                     child: Text(
@@ -146,14 +146,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: context.locale == Locale('en')
+                      ? Alignment.centerLeft
+                      : Alignment.centerRight,
                   child: Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                     child: Text(
                       'Bio',
                       style: theme.textTheme.bodySmall,
-                    ),
+                    ).tr(),
                   ),
                 ),
                 Container(
@@ -164,36 +166,34 @@ class _ProfilePageState extends State<ProfilePage> {
                     border: Border.all(color: blueColor),
                   ),
                   child: Text(
-                    widget.user.bio,
+                    user.bio,
                     style: theme.textTheme.bodySmall!.copyWith(
                       color: Colors.black,
                     ),
                   ),
                 ),
-                if (widget.user.role == 'coach' ||
-                    widget.user.role == 'dietitian')
+                if (user.role == 'coach' || user.role == 'dietitian')
                   ExpansionTile(
                     iconColor: blueColor,
                     title: Text(
                       'Shared workouts',
                       style: theme.textTheme.bodySmall,
-                    ),
+                    ).tr(),
                   ),
-                if (widget.user.role == 'coach' ||
-                    widget.user.role == 'dietitian')
+                if (user.role == 'coach' || user.role == 'dietitian')
                   ExpansionTile(
                     iconColor: blueColor,
                     title: Text(
                       'Shared posts',
                       style: theme.textTheme.bodySmall,
-                    ),
+                    ).tr(),
                   ),
                 ExpansionTile(
                   iconColor: blueColor,
                   title: Text(
                     'Statistics',
                     style: theme.textTheme.bodySmall,
-                  ),
+                  ).tr(),
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -202,14 +202,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           radius: 50,
                           animation: true,
                           center: Text(
-                            'Finished Workouts \n ${widget.user.finishedWorkouts}/${widget.user.enteredWorkouts}',
+                            '$finishedWorkouts \n ${user.finishedWorkouts}/${user.enteredWorkouts}',
                             textAlign: TextAlign.center,
                             style: theme.textTheme.bodySmall!
                                 .copyWith(fontSize: 10, color: blueColor),
                           ),
                           progressColor: blueColor,
-                          percent: widget.user.finishedWorkouts /
-                              widget.user.enteredWorkouts,
+                          percent: user.finishedWorkouts / user.enteredWorkouts,
                         ),
                       ],
                     )

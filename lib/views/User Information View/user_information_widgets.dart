@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class GenderContainer extends StatelessWidget {
@@ -38,20 +39,27 @@ class UserInfoCustomText extends StatelessWidget {
   bool padding;
   @override
   Widget build(BuildContext context) {
+    print(context.locale);
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
     return Padding(
       padding: padding
-          ? EdgeInsets.only(left: 10, bottom: 25, top: 25)
+          ? EdgeInsets.only(
+              left: context.locale == const Locale('en') ? 10 : 0,
+              bottom: 25,
+              top: 25,
+              right: context.locale == const Locale('en') ? 0 : 10)
           : EdgeInsets.all(0),
       child: Align(
-        alignment: Alignment.topLeft,
+        alignment: context.locale == const Locale('en')
+            ? Alignment.topLeft
+            : Alignment.topRight,
         child: FittedBox(
           child: Text(
-            text,
+            text.tr(),
             style: theme.textTheme.bodyMedium!
                 .copyWith(color: color, fontSize: fontsize),
-          ),
+          ).tr(),
         ),
       ),
     );

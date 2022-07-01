@@ -32,6 +32,7 @@ class UserInformationView extends StatelessWidget {
             controller: _pageController,
             physics: const NeverScrollableScrollPhysics(),
             children: [
+              Details2Page(saveFunction: () {}),
               Details1Page(
                   heightController: heightController,
                   weightController: weightController,
@@ -41,7 +42,6 @@ class UserInformationView extends StatelessWidget {
                             listen: false)
                         .checkDetails1Value(_formkey, _pageController, context);
                   }),
-              Details2Page(saveFunction: () {}),
             ],
           ),
         ),

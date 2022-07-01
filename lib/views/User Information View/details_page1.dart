@@ -1,10 +1,9 @@
 import 'package:country_picker/country_picker.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 import 'user_information_widgets.dart';
 
 class Details1Page extends StatelessWidget {
@@ -76,7 +75,7 @@ class Details1Page extends StatelessWidget {
                         : DateFormat('yyyy-MM-dd').format(value.birthdate),
                     style:
                         theme.textTheme.bodySmall!.copyWith(color: blueColor),
-                  ),
+                  ).tr(),
                   IconButton(
                     onPressed: () {
                       value.changeBirthdate(context);
@@ -105,7 +104,7 @@ class Details1Page extends StatelessWidget {
                         controller: heightController,
                         validator: (value) {
                           if (double.tryParse(value.toString()) == null) {
-                            return 'Invalid height';
+                            return 'Invalid height'.tr();
                           }
                         },
                         onSaved: (val) {},
@@ -122,7 +121,7 @@ class Details1Page extends StatelessWidget {
                                     }
                                   },
                                   child: Text(
-                                    'cm',
+                                    'cm'.tr(),
                                     style: theme.textTheme.bodySmall!.copyWith(
                                         fontSize: value.heightUnit == Units.cm
                                             ? 17
@@ -130,7 +129,7 @@ class Details1Page extends StatelessWidget {
                                         color: value.heightUnit == Units.cm
                                             ? orangeColor
                                             : greyColor),
-                                  ),
+                                  ).tr(),
                                 ),
                                 InkWell(
                                   onTap: () {
@@ -147,7 +146,7 @@ class Details1Page extends StatelessWidget {
                                         color: value.heightUnit == Units.ft
                                             ? orangeColor
                                             : greyColor),
-                                  ),
+                                  ).tr(),
                                 )
                               ],
                             ),
@@ -156,7 +155,7 @@ class Details1Page extends StatelessWidget {
                             Icons.height,
                             color: orangeColor,
                           ),
-                          label: const FittedBox(child: Text('Height')),
+                          label: FittedBox(child: const Text('Height').tr()),
                           floatingLabelStyle: theme.textTheme.bodySmall,
                           focusedErrorBorder: OutlineInputBorder(
                             borderSide:
@@ -195,7 +194,7 @@ class Details1Page extends StatelessWidget {
                       controller: weightController,
                       validator: (value) {
                         if (double.tryParse(value.toString()) == null) {
-                          return 'Invalid weight';
+                          return 'Invalid weight'.tr();
                         }
                       },
                       onSaved: (val) {},
@@ -220,7 +219,7 @@ class Details1Page extends StatelessWidget {
                                       color: value.weightUnit == Units.kg
                                           ? orangeColor
                                           : greyColor),
-                                ),
+                                ).tr(),
                               ),
                               InkWell(
                                 onTap: () {
@@ -237,7 +236,7 @@ class Details1Page extends StatelessWidget {
                                       color: value.weightUnit == Units.lb
                                           ? orangeColor
                                           : greyColor),
-                                ),
+                                ).tr(),
                               )
                             ],
                           ),
@@ -246,7 +245,7 @@ class Details1Page extends StatelessWidget {
                           Icons.monitor_weight_outlined,
                           color: orangeColor,
                         ),
-                        label: const FittedBox(child: Text('Weight')),
+                        label: FittedBox(child: const Text('Weight').tr()),
                         floatingLabelStyle: theme.textTheme.bodySmall,
                         focusedErrorBorder: OutlineInputBorder(
                           borderSide:
@@ -280,44 +279,42 @@ class Details1Page extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Country: ',
-                    style: theme.textTheme.bodySmall,
-                  ),
-                  Consumer<UserInformationViewModel>(
-                    builder: (context, value, child) => Row(
-                      children: [
-                        Text(
-                          value.getCountryName == ''
-                              ? 'Unselected'
-                              : value.getCountryName,
-                          style: theme.textTheme.bodySmall!
-                              .copyWith(color: blueColor),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                UserInfoCustomText(text: 'Country: ', color: orangeColor),
+                // Text(
+                //   'Country: ',
+                //   style: theme.textTheme.bodySmall,
+                // ).tr(),
+                Consumer<UserInformationViewModel>(
+                  builder: (context, value, child) => Row(
+                    children: [
+                      Text(
+                        value.getCountryName == ''
+                            ? 'Unselected'
+                            : value.getCountryName,
+                        style: theme.textTheme.bodySmall!
+                            .copyWith(color: blueColor),
+                      ).tr(),
+                      IconButton(
+                        onPressed: () {
+                          showCountryPicker(
+                              context: context,
+                              onSelect: (country) {
+                                value.setCountry(country.name);
+                              });
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: orangeColor,
+                          size: 20,
                         ),
-                        IconButton(
-                          onPressed: () {
-                            showCountryPicker(
-                                context: context,
-                                onSelect: (country) {
-                                  value.setCountry(country.name);
-                                });
-                          },
-                          icon: Icon(
-                            Icons.edit,
-                            color: orangeColor,
-                            size: 20,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
@@ -12,22 +12,30 @@ import 'package:home_workout_app/views/Change%20Password%20View/change_password_
 import 'package:home_workout_app/views/Comments%20View/comments_view.dart';
 import 'package:home_workout_app/views/Edit%20Profile%20View/edit_profile_view.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
-import 'package:home_workout_app/views/Home%20View/Web/web_home_view.dart';
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
-import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
-import 'package:home_workout_app/views/start_view/start_view.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(Vigor());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('ar'), Locale('en')],
+      path:
+          'assets/translations', // <-- change the path of the translation files
+      fallbackLocale: const Locale('ar'),
+      child: const Vigor(),
+    ),
+  );
 }
 
 class Vigor extends StatelessWidget {
-  Vigor({Key? key}) : super(key: key);
+  const Vigor({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    context.setLocale(Locale('ar'));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserInformationViewModel()),
@@ -38,6 +46,11 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => EditProfileViewModel())
       ],
       child: MaterialApp(
+
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+
 
         routes: {
           'comments': (context) => CommentsView(),
@@ -88,6 +101,7 @@ class Vigor extends StatelessWidget {
                     fontWeight: FontWeight.bold)),
                 backgroundColor: MaterialStateProperty.all(orangeColor),
                 elevation: MaterialStateProperty.all(2)),
+
 
           // onGenerateRoute: (settings) {
           //   switch (settings.name) {

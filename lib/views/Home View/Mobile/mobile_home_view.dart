@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/my_flutter_app_icons.dart';
@@ -26,7 +27,6 @@ class _MobileHomeViewState extends State<MobileHomeView>
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('called');
     Provider.of<ProfileViewModel>(context, listen: false).setUserData();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
@@ -60,10 +60,11 @@ class _MobileHomeViewState extends State<MobileHomeView>
         },
         child: Scaffold(
             drawer: SafeArea(
-                child: myDrawer(
-              user: Provider.of<ProfileViewModel>(context, listen: true)
-                  .getUserData,
-            )),
+              child: myDrawer(
+                user: Provider.of<ProfileViewModel>(context, listen: true)
+                    .getUserData,
+              ),
+            ),
             body: SafeArea(
                 child: NestedScrollView(
               controller: _scrollController,
@@ -72,6 +73,14 @@ class _MobileHomeViewState extends State<MobileHomeView>
                   (BuildContext context, bool innerBoxIsScrolled) => [
                 SliverAppBar(
                   elevation: 0,
+                  toolbarHeight:
+                      Provider.of<MobileHomeViewModel>(context, listen: true)
+                                  .getCurrentTab ==
+                              2
+                          ? 50
+                          : context.locale == const Locale('en')
+                              ? 50
+                              : 90,
                   bottom: Provider.of<MobileHomeViewModel>(context,
                                   listen: true)
                               .getCurrentTab ==
@@ -96,7 +105,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
                                   children: [
                                     Align(
                                       alignment: Alignment.topCenter,
-                                      child: Text('Your short summary: ',
+                                      child: Text('Your short summary: '.tr(),
                                           style: theme.textTheme.bodySmall),
                                     ),
                                     const SizedBox(
@@ -142,7 +151,8 @@ class _MobileHomeViewState extends State<MobileHomeView>
                                 ),
                               ),
                             ],
-                          )),
+                          ),
+                        ),
                   actions: [
                     IconButton(
                       onPressed: () {},
@@ -174,9 +184,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
                           HomePage(),
                           PostsPage(),
                           Consumer<ProfileViewModel>(
-                            builder: (context, value, child) => ProfilePage(
-                              user: value.getUserData,
-                            ),
+                            builder: (context, value, child) => ProfilePage(),
                           ),
                         ],
                       ),
