@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types, curly_braces_in_flow_control_structures
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
@@ -505,7 +506,7 @@ class _webNormalPostCardState extends State<webNormalPostCard> {
                       child: Row(
                         children: [
                           Text(
-                            'Comments',
+                            'Comments'.tr(),
                             style: theme.textTheme.bodySmall,
                             maxLines: 1,
                           ),
@@ -590,7 +591,7 @@ class webpollPostCard extends StatelessWidget {
           ),
           Consumer<MobileHomeViewModel>(
             builder: (context, value, child) => RadioListTile<String>(
-              title: const Text('Agree'),
+              title: const Text('Agree').tr(),
               secondary: value.getRadioValue != ''
                   ? Text(
                       '79%',
@@ -608,7 +609,7 @@ class webpollPostCard extends StatelessWidget {
           ),
           Consumer<MobileHomeViewModel>(
             builder: (context, value, child) => RadioListTile<String>(
-              title: const Text('Disagree'),
+              title: const Text('Disagree').tr(),
               secondary: value.getRadioValue != ''
                   ? Text(
                       '21%',

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:home_workout_app/models/workout_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/Pages/posts_page.dart';
+import 'package:home_workout_app/views/Home%20View/Mobile/Pages/profile_page.dart';
 import 'package:home_workout_app/views/Home%20View/Web/Pages/web_home_page.dart';
 import 'package:home_workout_app/views/Home%20View/Web/Pages/web_posts_page.dart';
 import 'package:home_workout_app/views/Home%20View/Web/Pages/web_profile_page.dart';
@@ -61,7 +62,7 @@ class WebHomeViewModel with ChangeNotifier {
   Map<String, dynamic> pages = {
     'Home': WebHomePage(),
     'Posts': WebPostsPage(),
-    'Profile': webProfilePage()
+    'Profile': ProfilePage()
   };
 
   changeSelectedPage(String page) {

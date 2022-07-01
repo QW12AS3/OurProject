@@ -1,5 +1,6 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, must_be_immutable
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/comments_model.dart';
@@ -20,10 +21,8 @@ class buildSummaryRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        FittedBox(
-          child: Text(title1, style: theme.textTheme.bodySmall),
-        ),
-        Text(title2, style: theme.textTheme.bodySmall)
+        FittedBox(child: Text(title1, style: theme.textTheme.bodySmall).tr()),
+        Text(title2, style: theme.textTheme.bodySmall).tr()
       ],
     );
   }
@@ -334,7 +333,7 @@ class _NormalPostCardState extends State<NormalPostCard> {
                           Text(
                             'Comments',
                             style: theme.textTheme.bodySmall,
-                          ),
+                          ).tr(),
                           Icon(
                             Icons.arrow_forward_ios_rounded,
                             size: 15,
@@ -413,7 +412,7 @@ class pollPostCard extends StatelessWidget {
           ),
           Consumer<MobileHomeViewModel>(
             builder: (context, value, child) => RadioListTile<String>(
-              title: const Text('Agree'),
+              title: const Text('Agree').tr(),
               secondary: value.getRadioValue != ''
                   ? Text(
                       '79%',
@@ -431,7 +430,7 @@ class pollPostCard extends StatelessWidget {
           ),
           Consumer<MobileHomeViewModel>(
             builder: (context, value, child) => RadioListTile<String>(
-              title: const Text('Disagree'),
+              title: const Text('Disagree').tr(),
               secondary: value.getRadioValue != ''
                   ? Text(
                       '21%',

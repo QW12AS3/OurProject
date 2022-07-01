@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
@@ -17,12 +18,13 @@ class Details2Page extends StatelessWidget {
         width: 90,
         child: ElevatedButton(
           onPressed: () {},
-          child: const Text('Save'),
+          child: const Text('Save').tr(),
         ),
       ),
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          toolbarHeight: 80,
           title: Column(
             children: [
               Padding(
@@ -36,7 +38,7 @@ class Details2Page extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: UserInfoCustomText(
-                  text: 'If you suffer any of this please check the box.',
+                  text: 'If you suffer any of this check the box.',
                   fontsize: 12,
                   color: greyColor,
                   padding: false,
