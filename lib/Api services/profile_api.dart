@@ -80,7 +80,7 @@ class ProfileApi {
         body: {
           'oldPassword': oldPassword,
           'newPassword': newPassword,
-          'confirmPassword': confirmNewPassword
+          'password_confirmation': confirmNewPassword
         },
       );
       if (response.statusCode == 200) {

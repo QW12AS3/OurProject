@@ -31,5 +31,18 @@
     "Statistics": "احصائيات",
     "Finished Workouts": "التمارين المنجزة",
     "Edit profile": "تعديل الملف الشخصي",
-    "Settings": "الاعدادات"
+    "Settings": "الاعدادات",
+    "Personal information:": "المعلومات الشخصية:",
+    "Change profile photo": "تغيير صورة الملف الشخصي",
+    "Change profile photo from:": "تغيير الصورة من:",
+    "Gallery": "المعرض",
+    "Camera": "الكاميرا",
+    "First name": "الاسم الأول",
+    "Last name": "الاسم الأخير",
+    "Gender: ": "الجنس: ",
+    "Birthdate: ": "تاريخ الميلاد: ",
+    "Account information:": "معلومات الحساب:",
+    "Change email": "تغيير الايميل",
+    "Change password": "تغيير كلمة المرور",
+    "Save changes": "حفظ التغييرات"
 }

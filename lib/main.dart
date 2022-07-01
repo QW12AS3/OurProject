@@ -35,7 +35,7 @@ class Vigor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //context.setLocale(Locale('ar'));
+    context.setLocale(Locale('ar'));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserInformationViewModel()),
