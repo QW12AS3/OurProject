@@ -1,13 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
 import 'package:provider/provider.dart';
 
-class SignIn extends StatelessWidget {
-  SignIn({Key? key}) : super(key: key);
+class SignUp extends StatelessWidget {
+  SignUp({Key? key}) : super(key: key);
   final formGlobalKey = GlobalKey<FormState>();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confimPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -41,9 +46,10 @@ class SignIn extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: mq.size.height * 0.25,
+                    height: mq.size.height * 0.15,
                   ),
                   Container(
+                    width: 450,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
                       color: Colors.white70.withOpacity(0.3),
@@ -60,6 +66,132 @@ class SignIn extends StatelessWidget {
                             key: formGlobalKey,
                             child: Column(
                               children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 190,
+                                      decoration: BoxDecoration(
+                                          color:
+                                              Colors.white70.withOpacity(0.7),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: TextFormField(
+                                        controller: firstNameController,
+                                        validator: (value) {
+                                          // return signInViewModel()
+                                          //     .checkEmail(value.toString());
+                                          //////////////////////////////////////////////////////////////////////////////
+                                        },
+                                        decoration: InputDecoration(
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: greyColor, width: 1.5),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(15),
+                                            ),
+                                          ),
+                                          errorBorder: const OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.red, width: 1.5),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(15),
+                                            ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: orangeColor, width: 1.5),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(15),
+                                            ),
+                                          ),
+                                          labelText: 'First name',
+                                          labelStyle: TextStyle(
+                                              color: orangeColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                          prefixIcon: Icon(
+                                            CupertinoIcons.profile_circled,
+                                            color: blueColor,
+                                            size: 33,
+                                          ),
+                                        ),
+                                        style: TextStyle(
+                                            color: blueColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                        keyboardType: TextInputType.name,
+                                        textInputAction: TextInputAction.next,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Container(
+                                      width: 190,
+                                      decoration: BoxDecoration(
+                                          color:
+                                              Colors.white70.withOpacity(0.7),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: TextFormField(
+                                        controller: lastNameController,
+                                        validator: (value) {
+                                          // return signInViewModel()
+                                          //     .checkEmail(value.toString());
+                                          /////////////////////////////////////////////////////////
+                                        },
+                                        decoration: InputDecoration(
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: greyColor, width: 1.5),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(15),
+                                            ),
+                                          ),
+                                          errorBorder: const OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.red, width: 1.5),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(15),
+                                            ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: orangeColor, width: 1.5),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(15),
+                                            ),
+                                          ),
+                                          labelText: 'Last name',
+                                          labelStyle: TextStyle(
+                                              color: orangeColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                          prefixIcon: Icon(
+                                            CupertinoIcons.profile_circled,
+                                            color: blueColor,
+                                            size: 33,
+                                          ),
+                                        ),
+                                        style: TextStyle(
+                                            color: blueColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        textInputAction: TextInputAction.next,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: mq.size.height * 0.02,
+                                ),
                                 Container(
                                   width: 400,
                                   decoration: BoxDecoration(
@@ -68,25 +200,11 @@ class SignIn extends StatelessWidget {
                                   child: TextFormField(
                                     controller: emailController,
                                     validator: (value) {
-                                      return signInViewModel()
-                                          .checkEmail(value.toString());
-
-                                      // if (value!.trim().isEmpty) {
-                                      //   return ' You have to fill the Email';
-                                      // } else if (!value.trim().contains('@') ||
-                                      //     !value.trim().contains('.')) {
-
-                                      // }
+                                      // return signInViewModel()
+                                      //     .checkEmail(value.toString());
+                                      ///////////////////////////////////////////////
                                     },
                                     decoration: InputDecoration(
-                                      // focusedErrorBorder:  OutlineInputBorder(
-                                      //   borderSide:
-                                      //       BorderSide(color: blueColor, width: 1.5),
-                                      //   borderRadius: BorderRadius.all(
-                                      //     Radius.circular(15),
-                                      //   ),
-                                      // ),
-
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: greyColor, width: 1.5),
@@ -128,7 +246,7 @@ class SignIn extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: mq.size.height * 0.03,
+                                  height: mq.size.height * 0.02,
                                 ),
                                 Container(
                                     width: 400,
@@ -141,24 +259,11 @@ class SignIn extends StatelessWidget {
                                             TextFormField(
                                               controller: passwordController,
                                               validator: (value) {
-                                                // if (value!.trim().isEmpty) {
-                                                //   return " You have to fill the password";
-                                                // } else if (value.trim().length < 6) {
-                                                //   return " Password should be 6 characters or more";
-                                                // }
-                                                return signInViewModel()
-                                                    .checkPassword(
-                                                        value.toString());
+                                                // return signInViewModel()
+                                                //     .checkPassword(
+                                                //         value.toString());
                                               },
                                               decoration: InputDecoration(
-                                                  // focusedErrorBorder:  OutlineInputBorder(
-                                                  //   borderSide:
-                                                  //       BorderSide(color: blueColor, width: 1.5),
-                                                  //   borderRadius: BorderRadius.all(
-                                                  //     Radius.circular(15),
-                                                  //   ),
-                                                  // ),
-
                                                   enabledBorder:
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
@@ -190,6 +295,103 @@ class SignIn extends StatelessWidget {
                                                     ),
                                                   ),
                                                   labelText: 'Password',
+                                                  labelStyle: TextStyle(
+                                                      color: orangeColor,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  prefixIcon: Icon(
+                                                    Icons.lock_outline_rounded,
+                                                    color: blueColor,
+                                                    size: 33,
+                                                  ),
+                                                  suffixIcon: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: IconButton(
+                                                        onPressed: () {
+                                                          // Provider.of<signInViewModel>(
+                                                          //         context,
+                                                          //         listen: false)
+                                                          //     .changePasswordobscure();
+                                                          ///////////////////////////////////////////
+                                                        },
+                                                        icon: Icon(
+                                                          /////////////////////////////////////
+                                                          Provider.of<signInViewModel>(
+                                                                      context)
+                                                                  .obscurePassword
+                                                              ? Icons
+                                                                  .visibility_off
+                                                              : Icons
+                                                                  .visibility,
+                                                          color: blueColor,
+                                                          size: 33,
+                                                        )),
+                                                  )),
+                                              style: TextStyle(
+                                                  color: blueColor,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold),
+                                              keyboardType: TextInputType.text,
+                                              obscureText:
+                                                  Provider.of<signInViewModel>(
+                                                          context)
+                                                      .obscurePassword,
+                                              textInputAction:
+                                                  TextInputAction.next,
+                                            )))),
+                                SizedBox(
+                                  height: mq.size.height * 0.02,
+                                ),
+                                Container(
+                                    width: 400,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white70.withOpacity(0.7),
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: Consumer<signInViewModel>(
+                                        builder: ((context, value, _) =>
+                                            TextFormField(
+                                              controller: passwordController,
+                                              validator: (value) {
+                                                // return signInViewModel()
+                                                //     .checkPassword(
+                                                //         value.toString());
+                                              },
+                                              decoration: InputDecoration(
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: greyColor,
+                                                        width: 1.5),
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                      Radius.circular(15),
+                                                    ),
+                                                  ),
+                                                  errorBorder:
+                                                      const OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Colors.red,
+                                                        width: 1.5),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                      Radius.circular(15),
+                                                    ),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: orangeColor,
+                                                        width: 1.5),
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                      Radius.circular(15),
+                                                    ),
+                                                  ),
+                                                  labelText: 'Confirm password',
                                                   labelStyle: TextStyle(
                                                       color: orangeColor,
                                                       fontSize: 15,
@@ -296,7 +498,7 @@ class SignIn extends StatelessWidget {
                             }
                           },
                           child: Text(
-                            'Login',
+                            'Sign up',
                             style: TextStyle(
                                 color: orangeColor,
                                 //Colors.white,
@@ -319,7 +521,7 @@ class SignIn extends StatelessWidget {
                           TextButton(
                               onPressed: () {},
                               child: Text(
-                                'Sign up here',
+                                'Sign in here',
                                 style: theme.textTheme.bodySmall,
                               )),
                         ],
@@ -358,7 +560,7 @@ class SignIn extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: mq.size.height * 0.07),
+                  SizedBox(height: mq.size.height * 0.03),
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: mq.size.width * 0.1),

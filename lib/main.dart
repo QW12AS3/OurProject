@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/web_home_view_model.dart';
-import 'package:home_workout_app/view_models/Sign%20in%20View%20Model/sign_in_view_model.dart';
+import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
@@ -13,6 +13,7 @@ import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart'
 import 'package:home_workout_app/views/Home%20View/Web/web_home_view.dart';
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
+import 'package:home_workout_app/views/sign%20up%20view/sign_up_view.dart';
 import 'package:home_workout_app/views/start_view/start_view.dart';
 import 'package:provider/provider.dart';
 
@@ -112,7 +113,8 @@ class Vigor extends StatelessWidget {
         // home: UserInformationView()
         // StartView(),
         //const WebHomeView(),
-        home: LogIn(),
+        // home: SignIn(),
+        home: SignUp(),
         //MobileHomeView(),
         //  UserInformationView(),
       ),
