@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +47,8 @@ class ChangePasswordView extends StatelessWidget {
                               value.setPasswordObsecure1();
                             },
                           ),
-                          label: const FittedBox(child: Text('Old password')),
+                          label:
+                              FittedBox(child: const Text('Old password').tr()),
                           floatingLabelStyle: theme.textTheme.bodySmall,
                           focusedErrorBorder: OutlineInputBorder(
                             borderSide:
@@ -97,7 +99,8 @@ class ChangePasswordView extends StatelessWidget {
                               value.setPasswordObsecure2();
                             },
                           ),
-                          label: const FittedBox(child: Text('New password')),
+                          label:
+                              FittedBox(child: const Text('New password').tr()),
                           floatingLabelStyle: theme.textTheme.bodySmall,
                           focusedErrorBorder: OutlineInputBorder(
                             borderSide:
@@ -148,8 +151,8 @@ class ChangePasswordView extends StatelessWidget {
                               value.setPasswordObsecure3();
                             },
                           ),
-                          label: const FittedBox(
-                              child: Text('Confirm new password')),
+                          label: FittedBox(
+                              child: const Text('Confirm new password').tr()),
                           floatingLabelStyle: theme.textTheme.bodySmall,
                           focusedErrorBorder: OutlineInputBorder(
                             borderSide:
@@ -195,7 +198,7 @@ class ChangePasswordView extends StatelessWidget {
                           newPasswordController.text.trim(),
                           confirmPasswordController.text.trim());
                 },
-                child: const Text('Save changes'))
+                child: const Text('Save changes').tr())
           ],
         ),
       ),

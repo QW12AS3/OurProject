@@ -44,5 +44,13 @@
     "Account information:": "معلومات الحساب:",
     "Change email": "تغيير الايميل",
     "Change password": "تغيير كلمة المرور",
-    "Save changes": "حفظ التغييرات"
+    "Save changes": "حفظ التغييرات",
+    "male": "ذكر",
+    "female": "انثى",
+    "Old email": "الايميل القديم",
+    "New email": "الايميل الجديد",
+    "Password": "كلمة المرور",
+    "Old password": "كلمة المرور القديمة",
+    "New password": "كلمة المرور الجديدة",
+    "Confirm new password": "تأكيد كلمة المرور الجديدة"
 }
