@@ -44,5 +44,13 @@
     "Account information:": "Account information:",
     "Change email": "Change email",
     "Change password": "Change password",
-    "Save changes": "Save changes"
+    "Save changes": "Save changes",
+    "male": "male",
+    "female": "female",
+    "Old email": "Old email",
+    "New email": "New email",
+    "Password": "Password",
+    "Old password": "Old password",
+    "New password": "New password",
+    "Confirm new password": "Confirm new password"
 }

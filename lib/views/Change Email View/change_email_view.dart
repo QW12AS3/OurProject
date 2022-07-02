@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,7 @@ class ChangeEmailView extends StatelessWidget {
                         onSaved: (val) {},
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          label: const FittedBox(child: Text('Old email')),
+                          label: FittedBox(child: const Text('Old email').tr()),
                           floatingLabelStyle: theme.textTheme.bodySmall,
                           focusedErrorBorder: OutlineInputBorder(
                             borderSide:
@@ -79,7 +80,7 @@ class ChangeEmailView extends StatelessWidget {
                         onSaved: (val) {},
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          label: const FittedBox(child: Text('New email')),
+                          label: FittedBox(child: const Text('New email').tr()),
                           floatingLabelStyle: theme.textTheme.bodySmall,
                           focusedErrorBorder: OutlineInputBorder(
                             borderSide:
@@ -130,7 +131,7 @@ class ChangeEmailView extends StatelessWidget {
                               value.setemailPasswordObsecure();
                             },
                           ),
-                          label: const FittedBox(child: Text('Password')),
+                          label: FittedBox(child: const Text('Password').tr()),
                           floatingLabelStyle: theme.textTheme.bodySmall,
                           focusedErrorBorder: OutlineInputBorder(
                             borderSide:
@@ -176,7 +177,7 @@ class ChangeEmailView extends StatelessWidget {
                           newEmailController.text.trim(),
                           passwordController.text.trim());
                 },
-                child: const Text('Save changes'))
+                child: const Text('Save changes').tr())
           ],
         ),
       ),

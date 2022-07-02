@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:country_picker/country_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
@@ -29,7 +29,6 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   GlobalKey<FormState> nameKey = GlobalKey();
   GlobalKey<FormState> hwKey = GlobalKey();
-  GlobalKey<FormState> emailPassKey = GlobalKey();
 
   final TextEditingController fnameController = TextEditingController();
   final TextEditingController lnameController = TextEditingController();
@@ -197,7 +196,12 @@ class _EditProfileViewState extends State<EditProfileView> {
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextFormField(
                             controller: fnameController,
-                            validator: (value) {},
+                            validator: (value) {
+                              // if (RegExp('[a-zA-Z]+[^0-9]').hasMatch(value!) ==
+                              //     false) {
+                              //   return 'invalid name';
+                              // }
+                            },
                             onSaved: (val) {},
                             keyboardType: TextInputType.name,
                             decoration: InputDecoration(
@@ -504,19 +508,13 @@ class _EditProfileViewState extends State<EditProfileView> {
                           .map(
                             (e) => DropdownMenuItem<Gender>(
                               value: e,
-                              child: Container(
-                                margin: const EdgeInsets.all(4),
-                                padding: const EdgeInsets.all(7),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4),
-                                  child: Text(
-                                    e.name,
-                                    style: theme.textTheme.bodySmall!.copyWith(
-                                        color: blueColor, fontSize: 15),
-                                  ),
-                                ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(4),
+                                child: Text(
+                                  e.name,
+                                  style: theme.textTheme.bodySmall!
+                                      .copyWith(color: blueColor, fontSize: 15),
+                                ).tr(),
                               ),
                             ),
                           )
@@ -638,7 +636,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                   )),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                nameKey.currentState!.validate();
+              },
               child: const Text(
                 'Save changes',
               ).tr(),
