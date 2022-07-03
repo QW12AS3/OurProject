@@ -73,7 +73,7 @@ class SignIn extends StatelessWidget {
                                   ),
                                 ),
                                 Container(
-                                  width: 400,
+                                  width: 380,
                                   decoration: BoxDecoration(
                                       color: Colors.white70.withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(15)),
@@ -143,7 +143,7 @@ class SignIn extends StatelessWidget {
                                   height: mq.size.height * 0.03,
                                 ),
                                 Container(
-                                    width: 400,
+                                    width: 380,
                                     decoration: BoxDecoration(
                                         color: Colors.white70.withOpacity(0.5),
                                         borderRadius:
@@ -286,19 +286,23 @@ class SignIn extends StatelessWidget {
                               formGlobalKey.currentState!.save();
                               // use the email provided here
                               print('rrrrrrrrrrrrrrrrrrrr');
-
+                              print(emailController.text);
+                              print(passwordController.text);
+                              print(c_nameController.text);
                               final BackEndMessage = await signInViewModel()
                                   .postUserInfo(
                                       emailController.text,
                                       passwordController.text,
-                                      c_nameController.text);
+                                      c_nameController.text == null
+                                          ? ''
+                                          : c_nameController.text);
                               print(BackEndMessage);
                               final sBar = SnackBar(
                                   content: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                      "${BackEndMessage.error == null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.error}"), ///////////////////////////////
+                                      "${BackEndMessage.message == null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message}"), ///////////////////////////////
                                 ],
                               ));
                               ScaffoldMessenger.of(context).showSnackBar(sBar);

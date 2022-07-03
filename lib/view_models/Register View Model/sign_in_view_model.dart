@@ -18,20 +18,21 @@ class signInViewModel with ChangeNotifier {
   postUserInfo(String emailVal, String passwordVal, String c_nameVal) async {
     SignInModel? result;
     await SignInAPI.createUser(SignInModel(
-      email: // "eve.holt@reqres.in" "d3Dfhghfgh#"
-          emailVal,
+      email: emailVal,
       password: passwordVal,
-      // "cityslicka",
+
       c_name: c_nameVal,
-      // token: '',
-      // error: '',
+      m_token: '',
+      mac: '',
+      // message: '',
     )).then((value) {
       print(value);
-      print("dddddddddassdads" + value.access_token!);
+      // print("toooooooooooooken:   " + value.access_token!);
+      // print("messaaaaaaaaaaaaaage:${value.}")
 
       result = value;
     });
-    if (result?.error == null) setData(result!);
+    if (result?.message == null) setData(result!);
     return result;
   }
 
@@ -58,12 +59,12 @@ class signInViewModel with ChangeNotifier {
   }
 
   String? checkPassword(String password) {
-    RegExp regex = RegExp(
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[/?,.!@#\$&*~]).{8,}$');
+    // RegExp regex = RegExp(
+    //     r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[/?,.!@#\$&*~]).{8,}$');
     if (password.isEmpty) {
       return ' Please enter password';
-    } else if (!regex.hasMatch(password)) {
-      return ' Invalid password';
+    } else if (password.length < 6) {
+      return ' Password should be at least 6 characters';
     } else {
       return null;
     }
