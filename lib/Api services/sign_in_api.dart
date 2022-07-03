@@ -10,10 +10,13 @@ class SignInAPI {
         headers: <String, String>{
           // 'Content-Type': 'application/json;charset=UTF-8'
           'Accept': 'application/json',
+          'apikey':
+              'THSzx8cmJny4DFmjvjX2calOKSduaJxb3YKC9sCuoCdEiF4J9w6qul5kRFwt1mUR',
           'lang': 'en',
           'timeZone': 'Asia/Damascus'
         },
-        body: jsonEncode(user.toJson()));
+        body: user.toJson());
+    print('ssssssssssssssssssssssssssssssssssssssssssssss');
     print(response.statusCode);
     if (response.statusCode / 100 == 2) {
       print(response.body);
@@ -24,7 +27,7 @@ class SignInAPI {
       return SignInModel.fromJsonWithErrors(json.decode(response.body));
       // print(response.m)
       // throw "can't do sign in";
-      // return SignInModel(email: '', password: '', token: '',error:'');
+      // return SignInModel(email: '', password: '', token: '',message:'');
     }
   }
 }

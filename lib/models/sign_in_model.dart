@@ -17,7 +17,7 @@ class SignInModel {
   String password;
   String token;
   */
-  String? error;
+  String? message;
   SignInModel({
     this.id,
     this.f_name,
@@ -28,7 +28,7 @@ class SignInModel {
     this.m_token,
     this.mac,
     this.c_name,
-    this.error,
+    this.message,
     this.profile_img,
     this.access_token,
     this.refresh_token,
@@ -71,7 +71,7 @@ class SignInModel {
             : user['data']['refresh_token'],
       );
   factory SignInModel.fromJsonWithErrors(Map<String, dynamic> user) =>
-      SignInModel(error: user['error']);
+      SignInModel(message: user['message']);
   //to convert data to json
   Map<String, dynamic> toJson() => {
         'email': email,
