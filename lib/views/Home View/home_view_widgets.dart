@@ -264,7 +264,38 @@ class myDrawer extends StatelessWidget {
                 color: blueColor,
               ),
             ),
-          )
+          ),
+          InkWell(
+            onTap: () async {
+              Provider.of<ProfileViewModel>(context, listen: false).logout();
+            },
+            child: ListTile(
+              title: Text(
+                'Logout',
+                style: theme.textTheme.bodySmall,
+              ).tr(),
+              trailing: Icon(
+                Icons.logout_rounded,
+                color: blueColor,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () async {
+              Provider.of<ProfileViewModel>(context, listen: false)
+                  .logoutFromAll();
+            },
+            child: ListTile(
+              title: Text(
+                'Logout from all devices',
+                style: theme.textTheme.bodySmall,
+              ).tr(),
+              trailing: Icon(
+                Icons.logout_rounded,
+                color: blueColor,
+              ),
+            ),
+          ),
         ],
       ),
     );
