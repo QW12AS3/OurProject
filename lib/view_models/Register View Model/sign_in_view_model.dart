@@ -15,13 +15,14 @@ class signInViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  postUserInfo(String emailVal, String passwordVal) async {
+  postUserInfo(String emailVal, String passwordVal, String c_nameVal) async {
     SignInModel? result;
     await SignInAPI.createUser(SignInModel(
       email: // "eve.holt@reqres.in" "d3Dfhghfgh#"
           emailVal,
       password: passwordVal,
       // "cityslicka",
+      c_name: c_nameVal,
       // token: '',
       // error: '',
     )).then((value) {
@@ -48,9 +49,11 @@ class signInViewModel with ChangeNotifier {
     bool emailValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email);
-    if (!emailValid)
+    if (email.isEmpty) {
+      return ' Please enter email';
+    } else if (!emailValid) {
       return ' Invalid email';
-    else
+    } else
       return null;
   }
 
@@ -58,13 +61,11 @@ class signInViewModel with ChangeNotifier {
     RegExp regex = RegExp(
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[/?,.!@#\$&*~]).{8,}$');
     if (password.isEmpty) {
-      return 'Please enter password';
+      return ' Please enter password';
+    } else if (!regex.hasMatch(password)) {
+      return ' Invalid password';
     } else {
-      if (!regex.hasMatch(password)) {
-        return ' Invalid password';
-      } else {
-        return null;
-      }
+      return null;
     }
   }
 }

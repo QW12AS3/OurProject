@@ -233,7 +233,7 @@ class _StartViewState extends State<StartView> {
                         ),
                         Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text('Or'),
+                          child: Text('or'),
                         ),
                         Expanded(
                           child: Padding(
