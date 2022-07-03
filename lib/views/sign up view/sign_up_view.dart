@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
+import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
 import 'package:provider/provider.dart';
 
 class SignUp extends StatelessWidget {
@@ -12,6 +13,7 @@ class SignUp extends StatelessWidget {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confimPasswordController = TextEditingController();
+  TextEditingController c_nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +48,10 @@ class SignUp extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: mq.size.height * 0.15,
+                    height: mq.size.height * 0.13,
                   ),
                   Container(
-                    width: 450,
+                    width: 420,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
                       color: Colors.white70.withOpacity(0.3),
@@ -70,18 +72,24 @@ class SignUp extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Container(
-                                      width: 190,
+                                      height: 0,
+                                      width: 0,
+                                      child: TextFormField(
+                                        controller: c_nameController,
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 185,
                                       decoration: BoxDecoration(
                                           color:
-                                              Colors.white70.withOpacity(0.7),
+                                              Colors.white70.withOpacity(0.5),
                                           borderRadius:
                                               BorderRadius.circular(15)),
                                       child: TextFormField(
                                         controller: firstNameController,
                                         validator: (value) {
-                                          // return signInViewModel()
-                                          //     .checkEmail(value.toString());
-                                          //////////////////////////////////////////////////////////////////////////////
+                                          return SignUpViewModel()
+                                              .checkFirstName(value.toString());
                                         },
                                         decoration: InputDecoration(
                                           enabledBorder: OutlineInputBorder(
@@ -130,18 +138,17 @@ class SignUp extends StatelessWidget {
                                       width: 20,
                                     ),
                                     Container(
-                                      width: 190,
+                                      width: 185,
                                       decoration: BoxDecoration(
                                           color:
-                                              Colors.white70.withOpacity(0.7),
+                                              Colors.white70.withOpacity(0.5),
                                           borderRadius:
                                               BorderRadius.circular(15)),
                                       child: TextFormField(
                                         controller: lastNameController,
                                         validator: (value) {
-                                          // return signInViewModel()
-                                          //     .checkEmail(value.toString());
-                                          /////////////////////////////////////////////////////////
+                                          return SignUpViewModel()
+                                              .checkLastName(value.toString());
                                         },
                                         decoration: InputDecoration(
                                           enabledBorder: OutlineInputBorder(
@@ -182,8 +189,7 @@ class SignUp extends StatelessWidget {
                                             color: blueColor,
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold),
-                                        keyboardType:
-                                            TextInputType.emailAddress,
+                                        keyboardType: TextInputType.name,
                                         textInputAction: TextInputAction.next,
                                       ),
                                     ),
@@ -195,14 +201,13 @@ class SignUp extends StatelessWidget {
                                 Container(
                                   width: 400,
                                   decoration: BoxDecoration(
-                                      color: Colors.white70.withOpacity(0.7),
+                                      color: Colors.white70.withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: TextFormField(
                                     controller: emailController,
                                     validator: (value) {
-                                      // return signInViewModel()
-                                      //     .checkEmail(value.toString());
-                                      ///////////////////////////////////////////////
+                                      return SignUpViewModel()
+                                          .checkEmail(value.toString());
                                     },
                                     decoration: InputDecoration(
                                       enabledBorder: OutlineInputBorder(
@@ -251,17 +256,17 @@ class SignUp extends StatelessWidget {
                                 Container(
                                     width: 400,
                                     decoration: BoxDecoration(
-                                        color: Colors.white70.withOpacity(0.7),
+                                        color: Colors.white70.withOpacity(0.5),
                                         borderRadius:
                                             BorderRadius.circular(15)),
-                                    child: Consumer<signInViewModel>(
+                                    child: Consumer<SignUpViewModel>(
                                         builder: ((context, value, _) =>
                                             TextFormField(
                                               controller: passwordController,
                                               validator: (value) {
-                                                // return signInViewModel()
-                                                //     .checkPassword(
-                                                //         value.toString());
+                                                return SignUpViewModel()
+                                                    .checkPassword(
+                                                        value.toString());
                                               },
                                               decoration: InputDecoration(
                                                   enabledBorder:
@@ -311,15 +316,13 @@ class SignUp extends StatelessWidget {
                                                             8.0),
                                                     child: IconButton(
                                                         onPressed: () {
-                                                          // Provider.of<signInViewModel>(
-                                                          //         context,
-                                                          //         listen: false)
-                                                          //     .changePasswordobscure();
-                                                          ///////////////////////////////////////////
+                                                          Provider.of<SignUpViewModel>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .changePasswordobscure();
                                                         },
                                                         icon: Icon(
-                                                          /////////////////////////////////////
-                                                          Provider.of<signInViewModel>(
+                                                          Provider.of<SignUpViewModel>(
                                                                       context)
                                                                   .obscurePassword
                                                               ? Icons
@@ -336,7 +339,7 @@ class SignUp extends StatelessWidget {
                                                   fontWeight: FontWeight.bold),
                                               keyboardType: TextInputType.text,
                                               obscureText:
-                                                  Provider.of<signInViewModel>(
+                                                  Provider.of<SignUpViewModel>(
                                                           context)
                                                       .obscurePassword,
                                               textInputAction:
@@ -348,17 +351,20 @@ class SignUp extends StatelessWidget {
                                 Container(
                                     width: 400,
                                     decoration: BoxDecoration(
-                                        color: Colors.white70.withOpacity(0.7),
+                                        color: Colors.white70.withOpacity(0.5),
                                         borderRadius:
                                             BorderRadius.circular(15)),
-                                    child: Consumer<signInViewModel>(
+                                    child: Consumer<SignUpViewModel>(
                                         builder: ((context, value, _) =>
                                             TextFormField(
-                                              controller: passwordController,
+                                              controller:
+                                                  confimPasswordController,
                                               validator: (value) {
-                                                // return signInViewModel()
-                                                //     .checkPassword(
-                                                //         value.toString());
+                                                return SignUpViewModel()
+                                                    .checkConfirmPassword(
+                                                        value.toString(),
+                                                        passwordController
+                                                            .text);
                                               },
                                               decoration: InputDecoration(
                                                   enabledBorder:
@@ -408,15 +414,15 @@ class SignUp extends StatelessWidget {
                                                             8.0),
                                                     child: IconButton(
                                                         onPressed: () {
-                                                          Provider.of<signInViewModel>(
+                                                          Provider.of<SignUpViewModel>(
                                                                   context,
                                                                   listen: false)
-                                                              .changePasswordobscure();
+                                                              .changeConfirmPasswordobscure();
                                                         },
                                                         icon: Icon(
-                                                          Provider.of<signInViewModel>(
+                                                          Provider.of<SignUpViewModel>(
                                                                       context)
-                                                                  .obscurePassword
+                                                                  .obscureConfirmPassword
                                                               ? Icons
                                                                   .visibility_off
                                                               : Icons
@@ -431,9 +437,9 @@ class SignUp extends StatelessWidget {
                                                   fontWeight: FontWeight.bold),
                                               keyboardType: TextInputType.text,
                                               obscureText:
-                                                  Provider.of<signInViewModel>(
+                                                  Provider.of<SignUpViewModel>(
                                                           context)
-                                                      .obscurePassword,
+                                                      .obscureConfirmPassword,
                                               textInputAction:
                                                   TextInputAction.done,
                                             )))),
@@ -471,28 +477,40 @@ class SignUp extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(25)),
                           ),
                           onPressed: () async {
-                            // print('pppppppppppp');
+                            print('pppppppppppp');
                             if (formGlobalKey.currentState!.validate()) {
                               formGlobalKey.currentState!.save();
                               // use the email provided here
                               print('rrrrrrrrrrrrrrrrrrrr');
 
-                              final BackEndMessage = await signInViewModel()
-                                  .postUserInfo(emailController.text,
-                                      passwordController.text);
+                              final BackEndMessage = await SignUpViewModel()
+                                  .postUserInfo(
+                                      firstNameController.text,
+                                      lastNameController.text,
+                                      emailController.text,
+                                      passwordController.text,
+                                      confimPasswordController.text,
+                                      '',
+                                      '',
+                                      c_nameController.text);
                               print(BackEndMessage);
                               final sBar = SnackBar(
                                   content: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                      "${BackEndMessage.error == '' ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.error}"), ///////////////////////////////
+                                      "${BackEndMessage.error == null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.error}"), ///////////////////////////////
                                 ],
                               ));
                               ScaffoldMessenger.of(context).showSnackBar(sBar);
                               if (BackEndMessage.access_token != '') {
+                                firstNameController.clear();
+                                lastNameController.clear();
                                 emailController.clear();
                                 passwordController.clear();
+                                confimPasswordController.clear();
+                                if (c_nameController != null)
+                                  c_nameController.clear();
                                 //Navigate
                               }
                             }
@@ -507,7 +525,7 @@ class SignUp extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: mq.size.height * 0.1),
+                      SizedBox(height: mq.size.height * 0.05),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -544,7 +562,7 @@ class SignUp extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text('Or'),
+                        child: Text('or'),
                       ),
                       Expanded(
                         child: Padding(

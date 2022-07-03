@@ -11,6 +11,8 @@ class SignIn extends StatelessWidget {
   final formGlobalKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController c_nameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -44,7 +46,7 @@ class SignIn extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: mq.size.height * 0.25,
+                    height: mq.size.height * 0.23,
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -64,9 +66,16 @@ class SignIn extends StatelessWidget {
                             child: Column(
                               children: [
                                 Container(
+                                  height: 0,
+                                  width: 0,
+                                  child: TextFormField(
+                                    controller: c_nameController,
+                                  ),
+                                ),
+                                Container(
                                   width: 400,
                                   decoration: BoxDecoration(
-                                      color: Colors.white70.withOpacity(0.7),
+                                      color: Colors.white70.withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: TextFormField(
                                     controller: emailController,
@@ -136,7 +145,7 @@ class SignIn extends StatelessWidget {
                                 Container(
                                     width: 400,
                                     decoration: BoxDecoration(
-                                        color: Colors.white70.withOpacity(0.7),
+                                        color: Colors.white70.withOpacity(0.5),
                                         borderRadius:
                                             BorderRadius.circular(15)),
                                     child: Consumer<signInViewModel>(
@@ -279,21 +288,25 @@ class SignIn extends StatelessWidget {
                               print('rrrrrrrrrrrrrrrrrrrr');
 
                               final BackEndMessage = await signInViewModel()
-                                  .postUserInfo(emailController.text,
-                                      passwordController.text);
+                                  .postUserInfo(
+                                      emailController.text,
+                                      passwordController.text,
+                                      c_nameController.text);
                               print(BackEndMessage);
                               final sBar = SnackBar(
                                   content: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                      "${BackEndMessage.error == '' ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.error}"), ///////////////////////////////
+                                      "${BackEndMessage.error == null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.error}"), ///////////////////////////////
                                 ],
                               ));
                               ScaffoldMessenger.of(context).showSnackBar(sBar);
                               if (BackEndMessage.access_token != '') {
                                 emailController.clear();
                                 passwordController.clear();
+                                if (c_nameController != null)
+                                  c_nameController.clear();
                                 //Navigate
                               }
                             }
@@ -308,7 +321,7 @@ class SignIn extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: mq.size.height * 0.1),
+                      SizedBox(height: mq.size.height * 0.05),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -345,7 +358,7 @@ class SignIn extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text('Or'),
+                        child: Text('or'),
                       ),
                       Expanded(
                         child: Padding(
@@ -361,7 +374,7 @@ class SignIn extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: mq.size.height * 0.07),
+                  SizedBox(height: mq.size.height * 0.05),
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: mq.size.width * 0.1),
