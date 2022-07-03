@@ -185,8 +185,8 @@ class _StartViewState extends State<StartView> {
                         ),
                         onPressed: () {
                           // videoController.pause();
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => LogIn()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => SignIn()));
                         },
                         child: Text(
                           'Sign In',
@@ -268,7 +268,7 @@ class _StartViewState extends State<StartView> {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 )
               ],

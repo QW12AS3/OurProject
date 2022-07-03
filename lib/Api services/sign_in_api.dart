@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/sign_in_model.dart';
-import 'package:home_workout_app/view_models/Sign%20in%20View%20Model/sign_in_view_model.dart';
 import 'package:http/http.dart';
 
 class SignInAPI {
