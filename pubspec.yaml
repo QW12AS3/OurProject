@@ -44,7 +44,12 @@ dependencies:
   http: ^0.13.4
   country_picker: ^2.0.15
   image_picker: ^0.8.5+3
+
   shared_preferences: ^2.0.15
+
+  page_transition: ^2.0.9
+  easy_localization: ^3.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -86,6 +91,7 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+ 
   fonts:
     - family: JosefinSans
       fonts:

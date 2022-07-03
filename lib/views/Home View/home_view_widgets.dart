@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/user_model.dart';
@@ -203,7 +204,7 @@ class myDrawer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
                         '${user.fname} ${user.lname}',
                         style: theme.textTheme.bodyMedium!
@@ -211,7 +212,7 @@ class myDrawer extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
                         user.role,
                         style: theme.textTheme.bodyMedium!.copyWith(
@@ -244,7 +245,7 @@ class myDrawer extends StatelessWidget {
               title: Text(
                 'Edit profile',
                 style: theme.textTheme.bodySmall,
-              ),
+              ).tr(),
               trailing: Icon(
                 Icons.edit_note_rounded,
                 color: blueColor,
@@ -257,7 +258,7 @@ class myDrawer extends StatelessWidget {
               title: Text(
                 'Settings',
                 style: theme.textTheme.bodySmall,
-              ),
+              ).tr(),
               trailing: Icon(
                 Icons.settings,
                 color: blueColor,

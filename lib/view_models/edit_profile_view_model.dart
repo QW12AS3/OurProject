@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/Api%20services/profile_api.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,6 +15,12 @@ class EditProfileViewModel with ChangeNotifier {
   Units _weightUnit = Units.kg;
   Units _heightUnit = Units.cm;
 
+  bool _emailpasswordObsecure = true;
+
+  bool _passwordObsecure1 = true;
+  bool _passwordObsecure2 = true;
+  bool _passwordObsecure3 = true;
+
   void ChangeWeightUnit(Units unit) {
     _weightUnit = unit;
     notifyListeners();
@@ -24,8 +31,10 @@ class EditProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  bool _passwordObsecure1 = true;
-  bool _passwordObsecure2 = true;
+  void setemailPasswordObsecure() {
+    _emailpasswordObsecure = !_emailpasswordObsecure;
+    notifyListeners();
+  }
 
   void setPasswordObsecure1() {
     _passwordObsecure1 = !_passwordObsecure1;
@@ -34,6 +43,11 @@ class EditProfileViewModel with ChangeNotifier {
 
   void setPasswordObsecure2() {
     _passwordObsecure2 = !_passwordObsecure2;
+    notifyListeners();
+  }
+
+  void setPasswordObsecure3() {
+    _passwordObsecure3 = !_passwordObsecure3;
     notifyListeners();
   }
 
@@ -98,6 +112,30 @@ class EditProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> changeEmail(
+      String oldEmail, String newEmail, String password) async {
+    bool response =
+        await ProfileApi().changeEmail(oldEmail, newEmail, password);
+    if (response) {
+      //Navigate to confirmation page
+
+    } else {
+      //drop
+    }
+  }
+
+  Future<void> changePassword(
+      String oldPassword, String newPassword, String confirmPassword) async {
+    bool response = await ProfileApi()
+        .changePassword(oldPassword, newPassword, confirmPassword);
+    if (response) {
+      //Navigate to confirmation page
+
+    } else {
+      //drop
+    }
+  }
+
   XFile get getUserImage => _userImage;
   Gender get getGender => _gender;
   DateTime get getBirthdate => _birthdate;
@@ -105,6 +143,10 @@ class EditProfileViewModel with ChangeNotifier {
   String get getCountry => _country;
   bool get getPasswordObsecure1 => _passwordObsecure1;
   bool get getPasswordObsecure2 => _passwordObsecure2;
+  bool get getPasswordObsecure3 => _passwordObsecure3;
+
+  bool get getemailPasswordObsecure => _emailpasswordObsecure;
+
   Units get getWeight => _weightUnit;
   Units get getHeight => _heightUnit;
 }
