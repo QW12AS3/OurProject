@@ -136,6 +136,20 @@ class EditProfileViewModel with ChangeNotifier {
     }
   }
 
+  Future<void> editProfile(
+      String fname,
+      String lname,
+      XFile image,
+      String bio,
+      String height,
+      String weight,
+      Gender gender,
+      DateTime birthdate,
+      String country) async {
+    await ProfileApi().editProfile(
+        fname, lname, image, bio, height, weight, gender, birthdate, country);
+  }
+
   XFile get getUserImage => _userImage;
   Gender get getGender => _gender;
   DateTime get getBirthdate => _birthdate;

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/User%20Information%20View/details_page1.dart';
@@ -32,7 +34,6 @@ class UserInformationView extends StatelessWidget {
             controller: _pageController,
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              Details2Page(saveFunction: () {}),
               Details1Page(
                   heightController: heightController,
                   weightController: weightController,
@@ -40,8 +41,15 @@ class UserInformationView extends StatelessWidget {
                   nextFunction: () {
                     Provider.of<UserInformationViewModel>(context,
                             listen: false)
-                        .checkDetails1Value(_formkey, _pageController, context);
+                        .checkDetails1Value(
+                      _formkey,
+                      _pageController,
+                      context,
+                      heightController.text.trim(),
+                      weightController.text.trim(),
+                    );
                   }),
+              Details2Page(saveFunction: () {}),
             ],
           ),
         ),

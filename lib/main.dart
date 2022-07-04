@@ -151,7 +151,7 @@ class Vigor extends StatelessWidget {
         // home: UserInformationView()
         // StartView(),
         //const WebHomeView(),
-        home: SignIn(),
+        home: MobileHomeView(),
         // home: SignUp(),
         //MobileHomeView(),
         //  UserInformationView(),

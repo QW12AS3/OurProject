@@ -136,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ],
                 ),
-                if (user.id != '1' && user.role == 'coach')
+                if (user.id != '1' && user.role == 'Coach')
                   TextButton(
                     onPressed: () {},
                     child: Text(
@@ -172,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                if (user.role == 'coach' || user.role == 'dietitian')
+                if (user.role == 'Coach' || user.role == 'dietitian')
                   ExpansionTile(
                     iconColor: blueColor,
                     title: Text(
@@ -180,7 +180,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: theme.textTheme.bodySmall,
                     ).tr(),
                   ),
-                if (user.role == 'coach' || user.role == 'dietitian')
+                if (user.role == 'Coach' || user.role == 'dietitian')
                   ExpansionTile(
                     iconColor: blueColor,
                     title: Text(
