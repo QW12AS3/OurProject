@@ -1,15 +1,24 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
-import 'dart:js';
 
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/locale.dart';
 
 import '../constants.dart';
 
 class ProfileApi {
+  Future<void> getUserProfile(String lang) async {
+    try {
+      final response = await http.get(Uri.parse('$base_URL/user/'), headers: {
+        'apikey': apiKey,
+        'lang': lang,
+        'accept': 'application/json',
+        'authorization': token
+      });
+    } catch (e) {}
+  }
+
   Future<void> editProfile(
     String fname,
     String lname,
@@ -179,6 +188,40 @@ class ProfileApi {
     try {
       final response = await http.get(
         Uri.parse('$base_URL/user/unfollow/$id'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization': token
+        },
+      );
+      print(jsonDecode(response.body));
+    } catch (e) {
+      print('Unfollow error: $e');
+    }
+  }
+
+  Future getFollowers(String lang) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/user/unfollow/followers'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization': token
+        },
+      );
+      print(jsonDecode(response.body));
+    } catch (e) {
+      print('Unfollow error: $e');
+    }
+  }
+
+  Future getFollowings(String lang) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/user/unfollow/following'),
         headers: {
           'apikey': apiKey,
           'lang': lang,

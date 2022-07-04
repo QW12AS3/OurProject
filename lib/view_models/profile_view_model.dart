@@ -46,6 +46,18 @@ class ProfileViewModel with ChangeNotifier {
     await ProfileApi().logoutFromAll('en');
   }
 
+  // Future<void> followUser() async {
+  //   await ProfileApi().followUser(1, 'en');
+  // }
+
+  Future<void> getFollowers() async {
+    await ProfileApi().getFollowers('en');
+  }
+
+  Future<void> getFollowings() async {
+    await ProfileApi().getFollowings('en');
+  }
+
   UserModel get getUserData => _userData;
   bool get getInfoWidgetVisible => _infoWidgetVisible;
 }
