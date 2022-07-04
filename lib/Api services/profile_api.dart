@@ -135,6 +135,7 @@ class ProfileApi {
   }
 
   Future<void> logoutFromAll() async {
+    //
     try {
       final response = await http.get(
         Uri.parse('$url/user/all_logout'),
