@@ -62,7 +62,9 @@ class WebHomeViewModel with ChangeNotifier {
   Map<String, dynamic> pages = {
     'Home': WebHomePage(),
     'Posts': WebPostsPage(),
-    'Profile': ProfilePage()
+    'Profile': ProfilePage(
+      id: 1,
+    )
   };
 
   changeSelectedPage(String page) {

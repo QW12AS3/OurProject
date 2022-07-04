@@ -451,3 +451,73 @@ class pollPostCard extends StatelessWidget {
     );
   }
 }
+
+showBottomList(BuildContext context, String title) {
+  final users = {
+    {
+      'id': 1,
+      'imageUrl':
+          'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
+      'name': 'test1'
+    },
+    {
+      'id': 2,
+      'imageUrl':
+          'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
+      'name': 'test2'
+    },
+  };
+  final theme = Theme.of(context);
+  showModalBottomSheet(
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(15),
+        topRight: Radius.circular(15),
+      ),
+    ),
+    context: context,
+    builder: (BuildContext ctx) => Container(
+      height: MediaQuery.of(context).size.height * 0.75,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                title,
+                style: theme.textTheme.bodyMedium!.copyWith(color: blueColor),
+              ),
+            ),
+            Column(
+              children: users.map((e) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(e['imageUrl'].toString()),
+                        onBackgroundImageError: (child, stacktrace) =>
+                            const LoadingContainer(),
+                        child: Container(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          e['name'].toString(),
+                          style: theme.textTheme.bodyMedium!
+                              .copyWith(color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}

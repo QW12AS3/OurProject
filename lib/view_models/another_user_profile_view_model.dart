@@ -1,26 +1,16 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
-
 import 'package:flutter/cupertino.dart';
-import 'package:home_workout_app/Api%20services/profile_api.dart';
 import 'package:home_workout_app/models/user_model.dart';
 
-class ProfileViewModel with ChangeNotifier {
+class AnotherUserProfileViewModel with ChangeNotifier {
   late UserModel _userData;
 
-  bool _infoWidgetVisible = false;
-
-  setInfoWidgetVisible(bool value) {
-    _infoWidgetVisible = value;
-    notifyListeners();
-  }
-
   Map<dynamic, dynamic> user = {
-    'id': 1,
+    'id': 2,
     'data': {
       'fname': 'Omar',
       'lname': 'Za',
       'gender': 'male',
-      'email': 'test@gmail.com',
+      'followed': false,
       'country': 'Syria',
       'birthdate': '2001-6-21',
       'imageUrl':
@@ -34,18 +24,14 @@ class ProfileViewModel with ChangeNotifier {
     }
   };
 
+  void setFollow() {
+    _userData.followed = !getUserData.followed;
+    notifyListeners();
+  }
+
   void setUserData() {
     _userData = UserModel.fromJson(user);
   }
 
-  Future<void> logout() async {
-    await ProfileApi().logout('en');
-  }
-
-  Future<void> logoutFromAll() async {
-    await ProfileApi().logoutFromAll('en');
-  }
-
   UserModel get getUserData => _userData;
-  bool get getInfoWidgetVisible => _infoWidgetVisible;
 }

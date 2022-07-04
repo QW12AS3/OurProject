@@ -4,14 +4,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/user_model.dart';
+import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
+import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view_widgets.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({Key? key}) : super(key: key);
+  ProfilePage({required this.id, Key? key}) : super(key: key);
+  int id;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -23,8 +26,17 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<ProfileViewModel>(context, listen: false).setUserData();
-    user = Provider.of<ProfileViewModel>(context, listen: false).getUserData;
+    // final args = ModalRoute.of(context)!.settings.arguments as Map;
+    // int id = args['id'];
+    if (widget.id == 1) {
+      Provider.of<ProfileViewModel>(context, listen: false).setUserData();
+      user = Provider.of<ProfileViewModel>(context, listen: false).getUserData;
+    } else {
+      Provider.of<AnotherUserProfileViewModel>(context, listen: false)
+          .setUserData();
+      user = Provider.of<AnotherUserProfileViewModel>(context, listen: false)
+          .getUserData;
+    }
   }
 
   String finishedWorkouts = 'Finished Workouts'.tr();
@@ -34,7 +46,11 @@ class _ProfilePageState extends State<ProfilePage> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(
+              Provider.of<ProfileViewModel>(context, listen: true)
+                      .getInfoWidgetVisible
+                  ? 10
+                  : 0),
           child: AnimatedOpacity(
             opacity: Provider.of<ProfileViewModel>(context, listen: true)
                     .getInfoWidgetVisible
@@ -42,6 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 : 0,
             duration: const Duration(milliseconds: 300),
             child: AnimatedContainer(
+              color: Colors.transparent,
               duration: const Duration(milliseconds: 300),
               //height: user.getInfoWidgetVisible ? 100 : 0,
               child: Row(
@@ -134,17 +151,133 @@ class _ProfilePageState extends State<ProfilePage> {
                             : (user.role == 'Coach' ? blueColor : orangeColor),
                       ),
                     ),
+                    if (user.id != '1' && user.role == 'Coach')
+                      Align(
+                        alignment: context.locale == Locale('en')
+                            ? Alignment.topRight
+                            : Alignment.topLeft,
+                        child: PopupMenuButton<String>(
+                          icon: const Icon(Icons.more_vert_rounded),
+                          onSelected: (String result) {
+                            switch (result) {
+                              case 'block':
+                                print('filter 1 clicked');
+                                break;
+                              default:
+                            }
+                          },
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<String>>[
+                            PopupMenuItem<String>(
+                              value: 'Block',
+                              child: Text(
+                                'Block',
+                                style: theme.textTheme.bodySmall!
+                                    .copyWith(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
-                if (user.id != '1' && user.role == 'Coach')
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      ' + Follow',
-                      style: theme.textTheme.bodySmall!.copyWith(
-                          color: blueColor, fontWeight: FontWeight.w400),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (user.id != '1' && user.role == 'Coach')
+                      Consumer<AnotherUserProfileViewModel>(
+                        builder: (context, value, child) => SizedBox(
+                          width: 80,
+                          height: 25,
+                          child: ElevatedButton(
+                            style: theme.elevatedButtonTheme.style!.copyWith(
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  side: BorderSide(
+                                    color: !value.getUserData.followed
+                                        ? Colors.transparent
+                                        : blueColor,
+                                  ),
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all(
+                                  !value.getUserData.followed
+                                      ? blueColor
+                                      : Colors.white),
+                            ),
+                            onPressed: () {
+                              value.setFollow();
+                            },
+                            child: Text(
+                              !value.getUserData.followed
+                                  ? '+ Follow'
+                                  : 'Unfollow',
+                              style: theme.textTheme.bodySmall!.copyWith(
+                                  color: !value.getUserData.followed
+                                      ? Colors.white
+                                      : blueColor,
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 12),
+                            ),
+                          ),
+                        ),
+                      ),
+                    TextButton(
+                      onPressed: () {
+                        showBottomList(context, 'Followers');
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Followers',
+                            style: theme.textTheme.bodySmall!.copyWith(
+                                color: blueColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            '50',
+                            style: theme.textTheme.bodySmall!.copyWith(
+                                color: greyColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                    TextButton(
+                      onPressed: () {
+                        showBottomList(context, 'Followings');
+                      },
+                      child: Column(
+                        children: [
+                          Text(
+                            'Followings',
+                            style: theme.textTheme.bodySmall!.copyWith(
+                                color: blueColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            '50',
+                            style: theme.textTheme.bodySmall!.copyWith(
+                                color: greyColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
                 Align(
                   alignment: context.locale == Locale('en')
                       ? Alignment.centerLeft

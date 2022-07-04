@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 Color orangeColor = const Color(0xFFFB8500);
@@ -8,7 +10,7 @@ const String base_URL = 'http://192.168.43.113:8000/api';
 
 const String apiKey =
     'THSzx8cmJny4DFmjvjX2calOKSduaJxb3YKC9sCuoCdEiF4J9w6qul5kRFwt1mUR';
-const String url = 'http://192.168.43.113:8000/api';
+// const String url = 'http://localhost:8000/api';
 
 Map<String, dynamic> headers = {'accept': 'application/json'};
 
