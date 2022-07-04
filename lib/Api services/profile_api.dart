@@ -1,9 +1,11 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:js';
 
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/locale.dart';
 
 import '../constants.dart';
 
@@ -21,7 +23,7 @@ class ProfileApi {
   ) async {
     try {
       var request =
-          http.MultipartRequest("Post", Uri.parse('$url/user/update'));
+          http.MultipartRequest("Post", Uri.parse('$base_URL/user/update'));
       request.headers['accept'] = 'application/json';
       request.headers['apikey'] = apiKey;
       request.headers['authorization'] = token;
@@ -54,7 +56,7 @@ class ProfileApi {
     //const String url = '';
     try {
       final response = await http.post(
-        Uri.parse('$url/user/updateEmail'),
+        Uri.parse('$base_URL/user/updateEmail'),
         headers: {
           'apikey': apiKey,
           'lang': 'en',
@@ -85,7 +87,7 @@ class ProfileApi {
       String oldPassword, String newPassword, String confirmNewPassword) async {
     try {
       final response = await http.post(
-        Uri.parse('$url/user/updatePassword'),
+        Uri.parse('$base_URL/user/updatePassword'),
         headers: {
           'apikey': apiKey,
           'lang': 'en',
@@ -113,13 +115,13 @@ class ProfileApi {
     return false;
   }
 
-  Future<void> logout() async {
+  Future<void> logout(String lang) async {
     try {
       final response = await http.get(
-        Uri.parse('$url/user/logout'),
+        Uri.parse('$base_URL/user/logout'),
         headers: {
           'apikey': apiKey,
-          'lang': 'ar',
+          'lang': lang,
           'accept': 'application/json',
           'authorization': token
         },
@@ -134,14 +136,14 @@ class ProfileApi {
     }
   }
 
-  Future<void> logoutFromAll() async {
+  Future<void> logoutFromAll(String lang) async {
     //
     try {
       final response = await http.get(
-        Uri.parse('$url/user/all_logout'),
+        Uri.parse('$base_URL/user/all_logout'),
         headers: {
           'apikey': apiKey,
-          'lang': 'ar',
+          'lang': lang,
           'accept': 'application/json',
           'authorization': token
         },
@@ -153,6 +155,40 @@ class ProfileApi {
       }
     } catch (e) {
       print('Logout Error: $e');
+    }
+  }
+
+  Future<void> followUser(int id, String lang) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/user/follow/$id'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization': token
+        },
+      );
+      print(jsonDecode(response.body));
+    } catch (e) {
+      print('Follow error: $e');
+    }
+  }
+
+  Future<void> unFollowUser(int id, String lang) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/user/unfollow/$id'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization': token
+        },
+      );
+      print(jsonDecode(response.body));
+    } catch (e) {
+      print('Unfollow error: $e');
     }
   }
 }

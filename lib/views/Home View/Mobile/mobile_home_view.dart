@@ -75,16 +75,24 @@ class _MobileHomeViewState extends State<MobileHomeView>
                   elevation: 0,
                   toolbarHeight:
                       Provider.of<MobileHomeViewModel>(context, listen: true)
-                                  .getCurrentTab ==
-                              2
+                                      .getCurrentTab ==
+                                  2 ||
+                              Provider.of<MobileHomeViewModel>(context,
+                                          listen: true)
+                                      .getCurrentTab ==
+                                  1
                           ? 50
                           : context.locale == const Locale('en')
                               ? 50
                               : 90,
                   bottom: Provider.of<MobileHomeViewModel>(context,
-                                  listen: true)
-                              .getCurrentTab ==
-                          2
+                                      listen: true)
+                                  .getCurrentTab ==
+                              2 ||
+                          Provider.of<MobileHomeViewModel>(context,
+                                      listen: true)
+                                  .getCurrentTab ==
+                              1
                       ? null
                       : PreferredSize(
                           preferredSize: const Size(double.infinity, 80),
@@ -184,7 +192,9 @@ class _MobileHomeViewState extends State<MobileHomeView>
                           HomePage(),
                           PostsPage(),
                           Consumer<ProfileViewModel>(
-                            builder: (context, value, child) => ProfilePage(),
+                            builder: (context, value, child) => ProfilePage(
+                              id: 1,
+                            ),
                           ),
                         ],
                       ),

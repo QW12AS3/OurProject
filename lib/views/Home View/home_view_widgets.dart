@@ -31,29 +31,35 @@ class workoutCard extends StatelessWidget {
     final theme = Theme.of(context);
     return Column(
       children: [
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(publisherImageUrl),
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Coach $publisherName',
-                  style: theme.textTheme.bodySmall!.copyWith(color: blueColor),
+        InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, 'anotherUserProfile');
+          },
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(publisherImageUrl),
                 ),
-                Text(
-                  '6/3/2022 - 5:33 PM',
-                  style: theme.textTheme.displaySmall!
-                      .copyWith(color: greyColor, fontSize: 10),
-                )
-              ],
-            )
-          ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Coach $publisherName',
+                    style:
+                        theme.textTheme.bodySmall!.copyWith(color: blueColor),
+                  ),
+                  Text(
+                    '6/3/2022 - 5:33 PM',
+                    style: theme.textTheme.displaySmall!
+                        .copyWith(color: greyColor, fontSize: 10),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
         Container(
           width: mq.width * 0.95,
@@ -265,37 +271,43 @@ class myDrawer extends StatelessWidget {
               ),
             ),
           ),
-          InkWell(
-            onTap: () async {
-              Provider.of<ProfileViewModel>(context, listen: false).logout();
-            },
-            child: ListTile(
-              title: Text(
-                'Logout',
-                style: theme.textTheme.bodySmall,
-              ).tr(),
-              trailing: Icon(
-                Icons.logout_rounded,
-                color: blueColor,
-              ),
+          ExpansionTile(
+            trailing: Icon(
+              Icons.logout_rounded,
+              color: blueColor,
             ),
-          ),
-          InkWell(
-            onTap: () async {
-              Provider.of<ProfileViewModel>(context, listen: false)
-                  .logoutFromAll();
-            },
-            child: ListTile(
-              title: Text(
-                'Logout from all devices',
-                style: theme.textTheme.bodySmall,
-              ).tr(),
-              trailing: Icon(
-                Icons.logout_rounded,
-                color: blueColor,
-              ),
+            title: Text(
+              'Logout',
+              style: theme.textTheme.bodySmall,
             ),
-          ),
+            iconColor: blueColor,
+            children: [
+              InkWell(
+                onTap: () async {
+                  Provider.of<ProfileViewModel>(context, listen: false)
+                      .logout();
+                },
+                child: ListTile(
+                  title: Text(
+                    'From this device',
+                    style: theme.textTheme.bodySmall,
+                  ).tr(),
+                ),
+              ),
+              InkWell(
+                onTap: () async {
+                  Provider.of<ProfileViewModel>(context, listen: false)
+                      .logoutFromAll();
+                },
+                child: ListTile(
+                  title: Text(
+                    'From all devices',
+                    style: theme.textTheme.bodySmall,
+                  ).tr(),
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );
