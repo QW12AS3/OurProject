@@ -6,7 +6,12 @@ import 'package:http/http.dart' as http;
 
 class SignUpAPI {
   static Future<SignUpModel> createUser(SignUpModel user) async {
-    final response = await http.post(Uri.parse('$base_URL/login'),
+
+   
+
+    // try {
+     final response = await http.post(Uri.parse('$base_URL/login'),
+
         headers: <String, String>{
           // 'Content-Type': 'application/json;charset=UTF-8'
           'Accept': 'application/json',
@@ -26,6 +31,9 @@ class SignUpAPI {
       // throw "can't do sign up";
       // return SignUpModel(email: '', password: '', token: '',error:'');
     }
+    // } catch (e) {
+    //   return e;
+    // }
   }
 
   Future sendUserInfo(
