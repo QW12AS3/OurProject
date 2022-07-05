@@ -19,7 +19,7 @@ class SignInAPI {
           body: user.toJson());
       print('ssssssssssssssssssssssssssssssssssssssssssssss');
       print(response.statusCode);
-      if (response.statusCode / 100 == 2) {
+      if (response.statusCode == 201) {
         print(response.body);
         return SignInModel.fromJson(json.decode(response.body));
       } else {
@@ -33,6 +33,6 @@ class SignInAPI {
     } catch (e) {
       print(e);
     }
-    return SignInModel(email: '', password: '', message: '');
+    return SignInModel(message: '');
   }
 }

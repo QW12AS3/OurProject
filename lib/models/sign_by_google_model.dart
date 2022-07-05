@@ -1,4 +1,4 @@
-class SignUpModel {
+class SignByGoogleModel {
   int? id;
   String? f_name;
   String? l_name;
@@ -12,34 +12,37 @@ class SignUpModel {
   String? access_token;
   String? refresh_token;
   String? expire_at;
+  String? access_provider_token;
   /*
   String email;
   String password;
   String token;
   */
   String? message;
-  SignUpModel({
-    this.id,
-    this.f_name,
-    this.l_name,
-    this.email,
-    this.password,
-    this.password_confirmation,
-    this.m_token,
-    this.mac,
-    this.c_name,
-    this.message,
-    this.profile_img,
-    this.access_token,
-    this.refresh_token,
-    this.expire_at,
-    /*  required this.email,
+  SignByGoogleModel(
+      {this.id,
+      this.f_name,
+      this.l_name,
+      this.email,
+      this.password,
+      this.password_confirmation,
+      this.m_token,
+      this.mac,
+      this.c_name,
+      this.message,
+      this.profile_img,
+      this.access_token,
+      this.refresh_token,
+      this.expire_at,
+      this.access_provider_token
+      /*  required this.email,
     required this.password,
     required this.token,
     */
-  });
+      });
   // to convert data from json to dart object
-  factory SignUpModel.fromJson(Map<String, dynamic> user) => SignUpModel(
+  factory SignByGoogleModel.fromJson(Map<String, dynamic> user) =>
+      SignByGoogleModel(
         // f_name: user['f_name'],
         // l_name: user['l_name'],
         // email: user['email'],
@@ -68,17 +71,14 @@ class SignUpModel {
             ? ''
             : user['data']['refresh_token'],
       );
-  factory SignUpModel.fromJsonWithErrors(Map<String, dynamic> user) =>
-      SignUpModel(message: user['message'] == null ? '' : user['message']);
+  factory SignByGoogleModel.fromJsonWithErrors(Map<String, dynamic> user) =>
+      SignByGoogleModel(message: user['message']);
   //to convert data to json
   Map<String, dynamic> toJson() => {
-        'f_name': f_name,
-        'l_name': l_name,
-        'email': email,
-        'password': password,
-        'password_confirmation': password_confirmation,
-        'm_token': m_token,
+        'access_provider_token': access_provider_token,
+        'provider': 'google',
+        'c_name': c_name,
         'mac': mac,
-        'c_name': c_name
+        'm_token': m_token
       };
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/web_home_view_model.dart';
+import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
 import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
@@ -56,6 +57,7 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => signInViewModel()),
         ChangeNotifierProvider(create: (context) => SignUpViewModel()),
         ChangeNotifierProvider(create: (context) => EditProfileViewModel()),
+        ChangeNotifierProvider(create: (context) => SignByGoogleViewModel()),
         ChangeNotifierProvider(
             create: (context) => AnotherUserProfileViewModel())
       ],
@@ -162,9 +164,13 @@ class Vigor extends StatelessWidget {
         //const WebHomeView(),
 
         // home: SignIn(),
+
         //    home: SignUp(),
-        home: MobileHomeView(),
+//         home: MobileHomeView(),
+
         // home: SignUp(),
+        // home: MobileHomeView(),
+        home: SignUp(),
 
         //MobileHomeView(),
         //  UserInformationView(),

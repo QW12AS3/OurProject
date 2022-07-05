@@ -7,22 +7,26 @@ import 'package:http/http.dart' as http;
 class SignUpAPI {
   static Future<SignUpModel> createUser(SignUpModel user) async {
     try {
-      final response = await http.post(Uri.parse('$base_URL/'),
+
+      final http.Response response = await http.post(Uri.parse('$base_URL/'),
+
           headers: <String, String>{
             // 'Content-Type': 'application/json;charset=UTF-8'
             'Accept': 'application/json',
-            'apikey':
-                'THSzx8cmJny4DFmjvjX2calOKSduaJxb3YKC9sCuoCdEiF4J9w6qul5kRFwt1mUR',
+            'apikey': apiKey,
             'lang': 'en',
             'timeZone': 'Asia/Damascus'
           },
-          body: jsonEncode(user.toJson()));
+          body: user.toJson());
 
       print(response.statusCode);
-      if (response.statusCode / 100 == 2) {
+      if (response.statusCode == 201) {
+        print('respoooooooooooooooooooooooooooooooonse');
         print(response.body);
         return SignUpModel.fromJson(json.decode(response.body));
       } else {
+        print((response.statusCode.toInt() / 100).toInt());
+        print('dddddddddddddddddddddddddddddddddddd');
         print(response.statusCode);
         print(response.body);
         return SignUpModel.fromJsonWithErrors(json.decode(response.body));
@@ -33,7 +37,7 @@ class SignUpAPI {
     } catch (e) {
       print(e);
     }
-    return SignUpModel(email: '', password: '', message: '');
+    return SignUpModel(message: '');
   }
 
   Future sendUserInfo(

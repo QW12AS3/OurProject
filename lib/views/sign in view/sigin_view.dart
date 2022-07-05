@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/models/sign_in_model.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_widgets.dart';
@@ -297,16 +298,22 @@ class SignIn extends StatelessWidget {
                                           ? ''
                                           : c_nameController.text);
                               print(BackEndMessage);
+                              print(BackEndMessage.refresh_token);
                               final sBar = SnackBar(
-                                  content: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                      "${BackEndMessage.message == null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message}"), ///////////////////////////////
-                                ],
+                                  content: Container(
+                                child: Text(
+                                    "${BackEndMessage.f_name != null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message != null ? BackEndMessage.message : ''}"),
+                                // "${BackEndMessage.message == null ?BackEndMessage.message != null? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message:''}"), ///////////////////////////////
                               ));
-                              ScaffoldMessenger.of(context).showSnackBar(sBar);
-                              if (BackEndMessage.access_token != '') {
+                              if ((BackEndMessage.f_name != null &&
+                                      BackEndMessage.f_name != '') ||
+                                  (BackEndMessage.message != null &&
+                                      BackEndMessage.message != '')) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(sBar);
+                              }
+                              if (BackEndMessage.access_token != null &&
+                                  BackEndMessage.access_token != '') {
                                 emailController.clear();
                                 passwordController.clear();
                                 if (c_nameController != null)
@@ -386,7 +393,11 @@ class SignIn extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Provider.of<SignByGoogleViewModel>(context,
+                                      listen: false)
+                                  .signIn();
+                            },
                             icon: Image.asset('assets/images/google.png')),
                         IconButton(
                           onPressed: () {},

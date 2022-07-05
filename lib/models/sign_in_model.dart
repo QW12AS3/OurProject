@@ -1,5 +1,5 @@
 class SignInModel {
-  String? id;
+  int? id;
   String? f_name;
   String? l_name;
   String? email;
@@ -48,9 +48,7 @@ class SignInModel {
         // m_token: user['token'],
         // mac: user['mac'],
         // c_name: user['c_name']
-        id: user['data']['user']['id'] == null
-            ? ''
-            : user['data']['user']['id'],
+        id: user['data']['user']['id'] == null ? 0 : user['data']['user']['id'],
         f_name: user['data']['user']['f_name'] == null
             ? ''
             : user['data']['user']['f_name'],
