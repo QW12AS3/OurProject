@@ -452,7 +452,8 @@ class pollPostCard extends StatelessWidget {
   }
 }
 
-showBottomList(BuildContext context, String title) {
+showBottomList(BuildContext context, String title, List user) {
+  print(user);
   final users = {
     {
       'id': 1,

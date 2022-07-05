@@ -3,11 +3,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:home_workout_app/Api%20services/profile_api.dart';
 import 'package:home_workout_app/models/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileViewModel with ChangeNotifier {
-  late UserModel _userData;
+  UserModel _userData = UserModel();
+  bool _isLoading = false;
 
   bool _infoWidgetVisible = false;
+  List _followers = [];
+  List _followings = [];
+
+  Future<void> setFollowers(int id, String lang) async {
+    _followers = await ProfileApi().getFollowers(lang, id);
+    notifyListeners();
+  }
+
+  Future<void> setFollowings(int id, String lang) async {
+    _followers = await ProfileApi().getFollowings(lang, id);
+    notifyListeners();
+  }
 
   setInfoWidgetVisible(bool value) {
     _infoWidgetVisible = value;
@@ -34,8 +48,11 @@ class ProfileViewModel with ChangeNotifier {
     }
   };
 
-  void setUserData() {
-    _userData = UserModel.fromJson(user);
+  Future<void> setCurrentUserData() async {
+    _isLoading = true;
+    _userData = await ProfileApi().getUserProfile('en');
+    _isLoading = false;
+    notifyListeners();
   }
 
   Future<void> logout() async {
@@ -50,14 +67,17 @@ class ProfileViewModel with ChangeNotifier {
   //   await ProfileApi().followUser(1, 'en');
   // }
 
-  Future<void> getFollowers() async {
-    await ProfileApi().getFollowers('en');
-  }
+  // Future<void> getFollowers() async {
+  //   await ProfileApi().getFollowers('en');
+  // }
 
-  Future<void> getFollowings() async {
-    await ProfileApi().getFollowings('en');
-  }
+  // Future<void> getFollowings() async {
+  //   await ProfileApi().getFollowings('en');
+  // }
 
   UserModel get getUserData => _userData;
   bool get getInfoWidgetVisible => _infoWidgetVisible;
+  bool get getIsLoading => _isLoading;
+  List get getFollowers => _followers;
+  List get getFollowings => _followings;
 }

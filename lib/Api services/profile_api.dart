@@ -2,21 +2,57 @@
 
 import 'dart:convert';
 
+import 'package:home_workout_app/models/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 import '../constants.dart';
 
 class ProfileApi {
-  Future<void> getUserProfile(String lang) async {
+  Future<UserModel> getUserProfile(String lang) async {
     try {
-      final response = await http.get(Uri.parse('$base_URL/user/'), headers: {
+      final response =
+          await http.get(Uri.parse('$base_URL/user/profile'), headers: {
         'apikey': apiKey,
         'lang': lang,
         'accept': 'application/json',
         'authorization': token
       });
-    } catch (e) {}
+
+      if (response.statusCode == 200) {
+        UserModel _userModel = UserModel.fromJson(jsonDecode(response.body));
+        print(_userModel);
+        return _userModel;
+      } else {
+        print(jsonDecode(response.body));
+      }
+    } catch (e) {
+      print('Get profile error: $e');
+    }
+    return UserModel();
+  }
+
+  Future<UserModel> getAnotherUserProfile(String lang, int id) async {
+    try {
+      final response =
+          await http.get(Uri.parse('$base_URL/user/profile/$id'), headers: {
+        'apikey': apiKey,
+        'lang': lang,
+        'accept': 'application/json',
+        'authorization': token
+      });
+
+      if (response.statusCode == 200) {
+        UserModel _userModel = UserModel.fromJson(jsonDecode(response.body));
+        print(_userModel);
+        return _userModel;
+      } else {
+        print(jsonDecode(response.body));
+      }
+    } catch (e) {
+      print('Get another profile error: $e');
+    }
+    return UserModel();
   }
 
   Future<void> editProfile(
@@ -167,7 +203,7 @@ class ProfileApi {
     }
   }
 
-  Future<void> followUser(int id, String lang) async {
+  Future<Map<String, dynamic>> followUser(int id, String lang) async {
     try {
       final response = await http.get(
         Uri.parse('$base_URL/user/follow/$id'),
@@ -178,13 +214,25 @@ class ProfileApi {
           'authorization': token
         },
       );
-      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print(data);
+        return {
+          'success': true,
+          'followers': data['data']['followers'],
+          'followings': data['data']['followings'],
+        };
+      } else {
+        print(jsonDecode(response.body));
+      }
     } catch (e) {
       print('Follow error: $e');
+      return {'success': false};
     }
+    return {'success': false};
   }
 
-  Future<void> unFollowUser(int id, String lang) async {
+  Future<Map<String, dynamic>> unFollowUser(int id, String lang) async {
     try {
       final response = await http.get(
         Uri.parse('$base_URL/user/unfollow/$id'),
@@ -195,16 +243,28 @@ class ProfileApi {
           'authorization': token
         },
       );
-      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print(data);
+        return {
+          'success': true,
+          'followers': data['data']['followers'],
+          'followings': data['data']['followings'],
+        };
+      } else {
+        print(jsonDecode(response.body));
+        return {'success': false};
+      }
     } catch (e) {
       print('Unfollow error: $e');
+      return {'success': false};
     }
   }
 
-  Future getFollowers(String lang) async {
+  Future<List> getFollowers(String lang, int id) async {
     try {
       final response = await http.get(
-        Uri.parse('$base_URL/user/unfollow/followers'),
+        Uri.parse('$base_URL/user/followers/$id'),
         headers: {
           'apikey': apiKey,
           'lang': lang,
@@ -212,16 +272,25 @@ class ProfileApi {
           'authorization': token
         },
       );
-      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        List data = jsonDecode(response.body)['data'] ?? [];
+        print(data);
+        return data;
+      } else {
+        print(jsonDecode(response.body));
+      }
     } catch (e) {
       print('Unfollow error: $e');
+
+      return [];
     }
+    return [];
   }
 
-  Future getFollowings(String lang) async {
+  Future<List> getFollowings(String lang, int id) async {
     try {
       final response = await http.get(
-        Uri.parse('$base_URL/user/unfollow/following'),
+        Uri.parse('$base_URL/user/following/$id'),
         headers: {
           'apikey': apiKey,
           'lang': lang,
@@ -229,9 +298,66 @@ class ProfileApi {
           'authorization': token
         },
       );
-      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        List data = jsonDecode(response.body)['data'] ?? [];
+        print(data);
+        return data;
+      } else {
+        print(jsonDecode(response.body));
+      }
     } catch (e) {
       print('Unfollow error: $e');
+
+      return [];
+    }
+    return [];
+  }
+
+  Future<bool> blockUser(int id, String lang) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/user/block/$id'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization': token
+        },
+      );
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
+        return true;
+      } else {
+        print(jsonDecode(response.body));
+        return false;
+      }
+    } catch (e) {
+      print('Block error: $e');
+      return false;
+    }
+  }
+
+  Future<bool> unblockUser(int id, String lang) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/user/unblock/$id'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization': token
+        },
+      );
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
+        return true;
+      } else {
+        print(jsonDecode(response.body));
+        return false;
+      }
+    } catch (e) {
+      print('Block error: $e');
+      return false;
     }
   }
 }
