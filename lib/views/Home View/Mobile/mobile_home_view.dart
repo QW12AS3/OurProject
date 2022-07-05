@@ -27,7 +27,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<ProfileViewModel>(context, listen: false).setUserData();
+    // Provider.of<ProfileViewModel>(context, listen: false).setCurrentUserData();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       Provider.of<MobileHomeViewModel>(context, listen: false)
@@ -192,9 +192,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
                           HomePage(),
                           PostsPage(),
                           Consumer<ProfileViewModel>(
-                            builder: (context, value, child) => ProfilePage(
-                              id: 1,
-                            ),
+                            builder: (context, value, child) => ProfilePage(),
                           ),
                         ],
                       ),

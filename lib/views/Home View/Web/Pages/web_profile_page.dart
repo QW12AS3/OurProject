@@ -27,7 +27,7 @@ class _webProfilePageState extends State<webProfilePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<ProfileViewModel>(context, listen: false).setUserData();
+    Provider.of<ProfileViewModel>(context, listen: false).setCurrentUserData();
   }
 
   @override

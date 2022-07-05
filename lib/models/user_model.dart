@@ -2,51 +2,65 @@ import 'package:home_workout_app/constants.dart';
 import 'package:intl/intl.dart';
 
 class UserModel {
-  late String id;
-  late String fname;
-  late String lname;
-  late String imageUrl;
-  late String role;
-  late int roleId;
-  late int enteredWorkouts;
-  late int finishedWorkouts;
-  late String bio;
-  late Gender gender;
-  late DateTime birthdate;
-  late String countryName;
-  late String email;
-  late bool followed;
+  String id = '';
+  String fname = '';
+  String lname = '';
+  String imageUrl = '';
+  String role = '';
+  int roleId = 0;
+  int enteredWorkouts = 0;
+  int finishedWorkouts = 0;
+  String bio = '';
+  Gender gender = Gender.male;
+  DateTime birthdate = DateTime.now();
+  String countryName = '';
+  String email = '';
+  bool followed = false;
+  String createdAt = '';
+  bool isBlocked = false;
+  int followers = 0;
+  int followings = 0;
+  bool i_block = false;
 
   UserModel(
-      this.fname,
-      this.lname,
-      this.imageUrl,
-      this.role,
-      this.bio,
-      this.gender,
-      this.enteredWorkouts,
-      this.finishedWorkouts,
-      this.id,
-      this.birthdate,
-      this.countryName,
-      this.email,
-      this.roleId,
-      this.followed);
+      // this.fname,
+      // this.lname,
+      // this.imageUrl,
+      // this.role,
+      // this.bio,
+      // this.gender,
+      // this.enteredWorkouts,
+      // this.finishedWorkouts,
+      // this.id,
+      // this.birthdate,
+      // this.countryName,
+      // this.email,
+      // this.roleId,
+      // this.followed,
+      );
 
   UserModel.fromJson(Map<dynamic, dynamic> json) {
-    fname = json['data']['fname'] ?? '';
-    lname = json['data']['lname'] ?? '';
-    imageUrl = json['data']['imageUrl'] ?? '';
-    role = json['data']['role'] ?? '';
-    id = json['id'].toString();
-    enteredWorkouts = json['data']['enteredWorkouts'] ?? 0;
-    finishedWorkouts = json['data']['finishedWorkouts'] ?? 0;
-    bio = json['data']['bio'];
-    gender = json['data']['gender'] == 'male' ? Gender.male : Gender.female;
-    birthdate = DateFormat("yyyy-MM-dd").parse(json['data']['birthdate']);
-    countryName = json['data']['country'];
-    email = json['data']['email'] ?? '';
-    roleId = json['data']['role_id'];
-    followed = json['data']['followed'] ?? false;
+    fname = json['data']['user']['fname'] ?? '';
+    lname = json['data']['user']['lname'] ?? '';
+    imageUrl = json['data']['user']['profile_img'] ?? '';
+
+    role = json['data']['user']['role_name'] ?? '';
+    id = json['data']['user']['id'].toString();
+    // enteredWorkouts = json['data']['user']['enteredWorkouts'] ?? 0;
+    // finishedWorkouts = json['data']['user']['finishedWorkouts'] ?? 0;
+    bio = json['data']['user']['bio'] ?? '';
+    gender =
+        json['data']['user']['gender'] == 'male' ? Gender.male : Gender.female;
+    birthdate = DateFormat('yyyy-MM-dd')
+        .parse(json['data']['user']['birth_date'] ?? '');
+    countryName = json['data']['user']['country'] ?? '';
+    email = json['data']['user']['email'] ?? '';
+    roleId = json['data']['user']['role_id'] ?? 0;
+
+    followed = json['data']['is_following'] ?? false;
+    isBlocked = json['data']['is_blocked'] ?? false;
+    followers = json['data']['followers'] ?? 0;
+    followings = json['data']['following'] ?? 0;
+    i_block = json['data']['I_block'];
   }
 }
