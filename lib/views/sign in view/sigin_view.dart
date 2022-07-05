@@ -288,7 +288,7 @@ class SignIn extends StatelessWidget {
                               print('rrrrrrrrrrrrrrrrrrrr');
                               print(emailController.text);
                               print(passwordController.text);
-                              print(c_nameController.text);
+                              //   print(c_nameController.text);
                               final BackEndMessage = await signInViewModel()
                                   .postUserInfo(
                                       emailController.text,

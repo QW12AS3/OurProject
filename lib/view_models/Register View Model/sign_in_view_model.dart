@@ -17,31 +17,37 @@ class signInViewModel with ChangeNotifier {
 
   postUserInfo(String emailVal, String passwordVal, String c_nameVal) async {
     SignInModel? result;
-    await SignInAPI.createUser(SignInModel(
-      email: emailVal,
-      password: passwordVal,
+    try {
+      await SignInAPI.createUser(SignInModel(
+        email: emailVal,
+        password: passwordVal,
 
-      c_name: c_nameVal,
-      m_token: '',
-      mac: '',
-      // message: '',
-    )).then((value) {
-      print(value);
-      // print("toooooooooooooken:   " + value.access_token!);
-      // print("messaaaaaaaaaaaaaage:${value.}")
+        c_name: c_nameVal,
+        m_token: '',
+        mac: '',
+        // message: '',
+      )).then((value) {
+        print(value);
+        // print("toooooooooooooken:   " + value.access_token!);
+        // print("messaaaaaaaaaaaaaage:${value.}")
 
-      result = value;
-    });
-    if (result?.message == null) setData(result!);
+        result = value;
+      });
+    } catch (e) {
+      print(e);
+    }
+
+    if (result!.access_token != null && result!.refresh_token != null)
+      setData(result!);
     return result;
   }
 
   setData(SignInModel Data) async {
     SharedPreferences _pref = await SharedPreferences.getInstance();
-    _pref.setString("f_name", Data.f_name!);
-    _pref.setString("l_name", Data.l_name!);
-    _pref.setString("email", Data.email!);
-    _pref.setString("profile_img", Data.profile_img!);
+    // _pref.setString("f_name", Data.f_name!);
+    // _pref.setString("l_name", Data.l_name!);
+    // _pref.setString("email", Data.email!);
+    // _pref.setString("profile_img", Data.profile_img!);
     _pref.setString("access_token", Data.access_token!);
     _pref.setString("refresh_token", Data.refresh_token!);
   }

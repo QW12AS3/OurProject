@@ -492,14 +492,16 @@ class SignUp extends StatelessWidget {
                                       confimPasswordController.text,
                                       '',
                                       '',
-                                      c_nameController.text);
+                                      c_nameController.text == null
+                                          ? ''
+                                          : c_nameController.text);
                               print(BackEndMessage);
                               final sBar = SnackBar(
                                   content: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                      "${BackEndMessage.error == null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.error}"), ///////////////////////////////
+                                      "${BackEndMessage.message == null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message}"), ///////////////////////////////
                                 ],
                               ));
                               ScaffoldMessenger.of(context).showSnackBar(sBar);
