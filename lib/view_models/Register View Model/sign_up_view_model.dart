@@ -34,31 +34,37 @@ class SignUpViewModel with ChangeNotifier {
       String macVal,
       String c_nameVal) async {
     SignUpModel? result;
-    await SignUpAPI.createUser(SignUpModel(
-            f_name: f_nameVal,
-            l_name: l_nameVal,
-            email: emailVal,
-            password: passwordVal,
-            password_confirmation: ConfirmPasswordVal,
-            m_token: m_tokenVal,
-            mac: macVal,
-            c_name: c_nameVal))
-        .then((value) {
-      print(value);
-      print("dddddddddassdads" + value.access_token!);
+    try {
+      await SignUpAPI.createUser(SignUpModel(
+              f_name: f_nameVal,
+              l_name: l_nameVal,
+              email: emailVal,
+              password: passwordVal,
+              password_confirmation: ConfirmPasswordVal,
+              m_token: m_tokenVal,
+              mac: macVal,
+              c_name: c_nameVal))
+          .then((value) {
+        print(value);
+        // print("dddddddddassdads" + value.access_token!);
 
-      result = value;
-    });
-    if (result?.error == null) setData(result!);
+        result = value;
+      });
+    } catch (e) {
+      print(e);
+    }
+
+    if (result!.access_token != null && result!.refresh_token != null)
+      setData(result!);
     return result;
   }
 
   setData(SignUpModel Data) async {
     SharedPreferences _pref = await SharedPreferences.getInstance();
-    _pref.setString("f_name", Data.f_name!);
-    _pref.setString("l_name", Data.l_name!);
-    _pref.setString("email", Data.email!);
-    _pref.setString("profile_img", Data.profile_img!);
+    // _pref.setString("f_name", Data.f_name!);
+    // _pref.setString("l_name", Data.l_name!);
+    // _pref.setString("email", Data.email!);
+    // _pref.setString("profile_img", Data.profile_img!);
     _pref.setString("access_token", Data.access_token!);
     _pref.setString("refresh_token", Data.refresh_token!);
   }
@@ -90,26 +96,22 @@ class SignUpViewModel with ChangeNotifier {
   }
 
   String? checkPassword(String password) {
-    RegExp regex = RegExp(
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[/?,.!@#\$&*~]).{8,}$');
     if (password.isEmpty) {
       return ' Please enter password';
-    } else if (!regex.hasMatch(password)) {
-      return ' Invalid password';
+    } else if (password.length < 6) {
+      return ' Password should be at least 6 characters';
     } else {
       return null;
     }
   }
 
   String? checkConfirmPassword(String confirmPassword, String password) {
-    RegExp regex = RegExp(
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[/?,.!@#\$&*~]).{8,}$');
     if (confirmPassword.isEmpty) {
       return ' Please enter password';
     } else if (confirmPassword != password)
       return " This password isn't the same as the previous password";
-    else if (!regex.hasMatch(confirmPassword)) {
-      return ' Invalid password';
+    else if (password.length < 6) {
+      return ' Password should be at least 6 characters';
     } else {
       return null;
     }
