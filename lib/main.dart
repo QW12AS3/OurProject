@@ -22,10 +22,14 @@ import 'package:home_workout_app/views/sign%20up%20view/sign_up_view.dart';
 import 'package:home_workout_app/views/start_view/start_view.dart';
 
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+
+  SharedPreferences _sharedpref = await SharedPreferences.getInstance();
+  _sharedpref.setInt('id', 1);
 
   runApp(
     EasyLocalization(
@@ -160,6 +164,10 @@ class Vigor extends StatelessWidget {
         //const WebHomeView(),
 
         // home: SignIn(),
+
+        //    home: SignUp(),
+//         home: MobileHomeView(),
+
         // home: SignUp(),
         // home: MobileHomeView(),
         home: SignUp(),

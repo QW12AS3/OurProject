@@ -7,7 +7,9 @@ import 'package:http/http.dart' as http;
 class SignUpAPI {
   static Future<SignUpModel> createUser(SignUpModel user) async {
     try {
+
       final http.Response response = await http.post(Uri.parse('$base_URL/'),
+
           headers: <String, String>{
             // 'Content-Type': 'application/json;charset=UTF-8'
             'Accept': 'application/json',
