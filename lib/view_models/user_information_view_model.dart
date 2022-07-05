@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/Api%20services/sign_up_api.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 
@@ -32,16 +33,23 @@ class UserInformationViewModel with ChangeNotifier {
     return true;
   }
 
-  checkDetails1Value(GlobalKey<FormState> _formkey,
-      PageController _pageController, BuildContext context) {
+  checkDetails1Value(
+    GlobalKey<FormState> _formkey,
+    PageController _pageController,
+    BuildContext context,
+    String height,
+    String weight,
+  ) async {
     if (gender == null) {
       showSnackbar(const Text('Please enter your gender'), context);
     } else if (!dateIsSelected) {
       showSnackbar(const Text('Please enter your birthdate'), context);
     } else if (_formkey.currentState != null) {
       if (_formkey.currentState!.validate()) {
-        _pageController.animateToPage(1,
-            duration: const Duration(milliseconds: 300), curve: Curves.linear);
+        await sendInfo(getGender, getBirthdate, height, weight, getCountryName,
+            getHeightunit.name, getWeightUnit.name);
+        // _pageController.animateToPage(1,
+        //     duration: const Duration(milliseconds: 300), curve: Curves.linear);
       }
     }
   }
@@ -94,5 +102,21 @@ class UserInformationViewModel with ChangeNotifier {
     }
   }
 
+  Future<void> sendInfo(
+      Gender gender,
+      DateTime birthdate,
+      String height,
+      String weight,
+      String country,
+      String heightUnit,
+      String weightUnit) async {
+    await SignUpAPI().sendUserInfo(
+        gender, birthdate, height, weight, country, heightUnit, weightUnit);
+  }
+
   String get getCountryName => _country;
+  get getGender => gender;
+  DateTime get getBirthdate => birthdate;
+  Units get getHeightunit => heightUnit;
+  Units get getWeightUnit => weightUnit;
 }

@@ -7,6 +7,7 @@ class UserModel {
   late String lname;
   late String imageUrl;
   late String role;
+  late int roleId;
   late int enteredWorkouts;
   late int finishedWorkouts;
   late String bio;
@@ -14,6 +15,7 @@ class UserModel {
   late DateTime birthdate;
   late String countryName;
   late String email;
+  late bool followed;
 
   UserModel(
       this.fname,
@@ -27,7 +29,9 @@ class UserModel {
       this.id,
       this.birthdate,
       this.countryName,
-      this.email);
+      this.email,
+      this.roleId,
+      this.followed);
 
   UserModel.fromJson(Map<dynamic, dynamic> json) {
     fname = json['data']['fname'] ?? '';
@@ -41,6 +45,8 @@ class UserModel {
     gender = json['data']['gender'] == 'male' ? Gender.male : Gender.female;
     birthdate = DateFormat("yyyy-MM-dd").parse(json['data']['birthdate']);
     countryName = json['data']['country'];
-    email = json['data']['email'];
+    email = json['data']['email'] ?? '';
+    roleId = json['data']['role_id'];
+    followed = json['data']['followed'] ?? false;
   }
 }

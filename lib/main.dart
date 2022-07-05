@@ -5,9 +5,11 @@ import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_vie
 import 'package:home_workout_app/view_models/Home%20View%20Model/web_home_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
+import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
+import 'package:home_workout_app/views/Another%20User%20Profile%20View/another_user_profile_view.dart';
 import 'package:home_workout_app/views/Change%20Email%20View/change_email_view.dart';
 import 'package:home_workout_app/views/Change%20Password%20View/change_password_view.dart';
 import 'package:home_workout_app/views/Comments%20View/comments_view.dart';
@@ -40,7 +42,7 @@ class Vigor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.setLocale(Locale('en'));
+    //context.setLocale(Locale('en'));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserInformationViewModel()),
@@ -49,7 +51,9 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ProfileViewModel()),
         ChangeNotifierProvider(create: (context) => signInViewModel()),
         ChangeNotifierProvider(create: (context) => SignUpViewModel()),
-        ChangeNotifierProvider(create: (context) => EditProfileViewModel())
+        ChangeNotifierProvider(create: (context) => EditProfileViewModel()),
+        ChangeNotifierProvider(
+            create: (context) => AnotherUserProfileViewModel())
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -77,6 +81,7 @@ class Vigor extends StatelessWidget {
           'editProfile': (context) => EditProfileView(),
           'changeEmail': (context) => ChangeEmailView(),
           'changePassword': (context) => ChangePasswordView(),
+          'anotherUserProfile': (context) => AnotherUserProfileView()
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,
@@ -151,8 +156,12 @@ class Vigor extends StatelessWidget {
         // home: UserInformationView()
         // StartView(),
         //const WebHomeView(),
+
         // home: SignIn(),
-        home: SignUp(),
+    //    home: SignUp(),
+        home: MobileHomeView(),
+        // home: SignUp(),
+
         //MobileHomeView(),
         //  UserInformationView(),
       ),

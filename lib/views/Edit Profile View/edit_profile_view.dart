@@ -635,13 +635,27 @@ class _EditProfileViewState extends State<EditProfileView> {
                     ),
                   )),
             ),
-            ElevatedButton(
-              onPressed: () {
-                nameKey.currentState!.validate();
-              },
-              child: const Text(
-                'Save changes',
-              ).tr(),
+            Consumer<EditProfileViewModel>(
+              builder: (context, value, child) => ElevatedButton(
+                onPressed: () async {
+                  //nameKey.currentState!.validate();
+                  await Provider.of<EditProfileViewModel>(context,
+                          listen: false)
+                      .editProfile(
+                          fnameController.text.trim(),
+                          lnameController.text.trim(),
+                          value.getUserImage,
+                          bioController.text.trim(),
+                          heightController.text.trim(),
+                          weightController.text.trim(),
+                          value.getGender,
+                          value.getBirthdate,
+                          value.getCountry);
+                },
+                child: const Text(
+                  'Save changes',
+                ).tr(),
+              ),
             ),
           ],
         ),
