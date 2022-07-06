@@ -400,7 +400,11 @@ class SignIn extends StatelessWidget {
                             },
                             icon: Image.asset('assets/images/google.png')),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            DateTime dateTime = DateTime.now();
+                            print(dateTime.timeZoneName);
+                            print(dateTime.timeZoneOffset);
+                          },
                           icon: Image.asset(
                             'assets/images/facebook.png',
                           ),
