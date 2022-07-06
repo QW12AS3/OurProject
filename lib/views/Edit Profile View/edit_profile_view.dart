@@ -56,8 +56,6 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map;
-    final user = args['userData'];
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
     return Scaffold(
@@ -72,25 +70,26 @@ class _EditProfileViewState extends State<EditProfileView> {
           children: [
             AddressText(title: 'Personal information:'),
             Center(
-              child: Consumer<EditProfileViewModel>(
-                builder: (context, value, child) => CircleAvatar(
+              child: Consumer2<EditProfileViewModel, ProfileViewModel>(
+                builder: (context, value, user, child) => CircleAvatar(
                   radius: 60,
                   backgroundColor: Colors.transparent,
                   backgroundImage: value.getUserImage.path != ''
                       ? FileImage(File(value.getUserImage.path))
-                      : NetworkImage(user.imageUrl) as ImageProvider,
+                      : NetworkImage(user.getUserData.imageUrl)
+                          as ImageProvider,
                   onBackgroundImageError: (child, stacktrace) =>
                       const LoadingContainer(),
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                          color: user.role == 'Manager'
-                              ? Colors.red.shade900
-                              : (user.role == 'Coach'
+                          color: user.getUserData.roleId == 2
+                              ? orangeColor
+                              : (user.getUserData.roleId == 3
                                   ? blueColor
-                                  : orangeColor),
-                          width: 3),
+                                  : Colors.transparent),
+                          width: 2),
                     ),
                   ),
                 ),

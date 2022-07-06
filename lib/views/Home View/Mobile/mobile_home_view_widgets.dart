@@ -454,20 +454,7 @@ class pollPostCard extends StatelessWidget {
 
 showBottomList(BuildContext context, String title, List user) {
   print(user);
-  final users = {
-    {
-      'id': 1,
-      'imageUrl':
-          'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
-      'name': 'test1'
-    },
-    {
-      'id': 2,
-      'imageUrl':
-          'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
-      'name': 'test2'
-    },
-  };
+
   final theme = Theme.of(context);
   showModalBottomSheet(
     isScrollControlled: true,
@@ -491,27 +478,33 @@ showBottomList(BuildContext context, String title, List user) {
               ),
             ),
             Column(
-              children: users.map((e) {
+              children: user.map((e) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundImage: NetworkImage(e['imageUrl'].toString()),
-                        onBackgroundImageError: (child, stacktrace) =>
-                            const LoadingContainer(),
-                        child: Container(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Text(
-                          e['name'].toString(),
-                          style: theme.textTheme.bodyMedium!
-                              .copyWith(color: Colors.black),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'anotherUserProfile',
+                          arguments: {'id': e['id']});
+                    },
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 20,
+                          backgroundImage: NetworkImage(e['img'].toString()),
+                          onBackgroundImageError: (child, stacktrace) =>
+                              const LoadingContainer(),
+                          child: Container(),
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            e['name'].toString(),
+                            style: theme.textTheme.bodyMedium!
+                                .copyWith(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }).toList(),

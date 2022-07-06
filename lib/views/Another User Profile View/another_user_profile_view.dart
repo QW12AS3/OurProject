@@ -24,10 +24,15 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
   @override
   void initState() {
     // TODO: implement initState
-
     super.initState();
-    Provider.of<AnotherUserProfileViewModel>(context, listen: false)
-        .setUserData(1);
+    Future.delayed(
+      Duration.zero,
+    ).then((value) {
+      final args = ModalRoute.of(context)!.settings.arguments as Map;
+
+      Provider.of<AnotherUserProfileViewModel>(context, listen: false)
+          .setUserData(args['id']);
+    });
   }
 
   String finishedWorkouts = 'Finished Workouts'.tr();
@@ -39,11 +44,11 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
         appBar: AppBar(),
         body: Provider.of<AnotherUserProfileViewModel>(context, listen: true)
                 .getIsLoading
-            ? CustomLoading()
+            ? const CustomLoading()
             : Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: AnimatedOpacity(
                       opacity: Provider.of<AnotherUserProfileViewModel>(context,
                                   listen: true)
@@ -68,12 +73,11 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                        color: user.getUserData.role ==
-                                                'manager'
-                                            ? Colors.red.shade900
-                                            : (user.getUserData.role == 'coach'
+                                        color: user.getUserData.roleId == 2
+                                            ? orangeColor
+                                            : (user.getUserData.roleId == 3
                                                 ? blueColor
-                                                : orangeColor),
+                                                : Colors.transparent),
                                         width: 2),
                                   ),
                                 ),
@@ -122,14 +126,12 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       border: Border.all(
-                                          color:
-                                              user.getUserData.role == 'manager'
-                                                  ? Colors.red.shade900
-                                                  : (user.getUserData.role ==
-                                                          'coach'
-                                                      ? blueColor
-                                                      : orangeColor),
-                                          width: 3),
+                                          color: user.getUserData.roleId == 2
+                                              ? orangeColor
+                                              : (user.getUserData.roleId == 3
+                                                  ? blueColor
+                                                  : Colors.transparent),
+                                          width: 2),
                                     ),
                                   ),
                                 ),
@@ -148,17 +150,19 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                   style: theme.textTheme.bodyMedium!
                                       .copyWith(color: Colors.black),
                                 ),
-                                Text(
-                                  ' ( ${user.getUserData.role.toUpperCase()} )',
-                                  style: theme.textTheme.bodyMedium!.copyWith(
-                                    fontSize: 15,
-                                    color: user.getUserData.role == 'manager'
-                                        ? Colors.red.shade900
-                                        : (user.getUserData.role == 'coach'
-                                            ? blueColor
-                                            : orangeColor),
+                                if (user.getUserData.roleId == 3 ||
+                                    user.getUserData.roleId == 2)
+                                  Text(
+                                    ' ( ${user.getUserData.role.toUpperCase()} )',
+                                    style: theme.textTheme.bodyMedium!.copyWith(
+                                      fontSize: 15,
+                                      color: user.getUserData.roleId == 2
+                                          ? orangeColor
+                                          : (user.getUserData.roleId == 3
+                                              ? blueColor
+                                              : Colors.transparent),
+                                    ),
                                   ),
-                                ),
                                 Align(
                                   alignment: context.locale == Locale('en')
                                       ? Alignment.topRight
@@ -172,13 +176,15 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                           case 'block':
                                             if (user.getUserData.i_block)
                                               user.unblockUser(
-                                                  1,
+                                                  int.parse(
+                                                      user.getUserData.id),
                                                   context.locale == Locale('en')
                                                       ? 'en'
                                                       : 'ar');
                                             else
                                               user.blockUser(
-                                                  1,
+                                                  int.parse(
+                                                      user.getUserData.id),
                                                   context.locale == Locale('en')
                                                       ? 'en'
                                                       : 'ar');
@@ -189,16 +195,22 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                       },
                                       itemBuilder: (BuildContext context) =>
                                           <PopupMenuEntry<String>>[
-                                        PopupMenuItem<String>(
-                                          value: 'block',
-                                          child: Text(
-                                            user.getUserData.i_block
-                                                ? 'unblock'
-                                                : 'Block',
-                                            style: theme.textTheme.bodySmall!
-                                                .copyWith(color: Colors.red),
+                                        if (Provider.of<ProfileViewModel>(
+                                                    context,
+                                                    listen: false)
+                                                .getUserData
+                                                .roleId !=
+                                            1)
+                                          PopupMenuItem<String>(
+                                            value: 'block',
+                                            child: Text(
+                                              user.getUserData.i_block
+                                                  ? 'unblock'
+                                                  : 'Block',
+                                              style: theme.textTheme.bodySmall!
+                                                  .copyWith(color: Colors.red),
+                                            ),
                                           ),
-                                        ),
                                       ],
                                     ),
                                   ),
@@ -250,7 +262,8 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                                         : 'ar');
                                               else
                                                 user.setUnfollow(
-                                                    1,
+                                                    int.parse(
+                                                        user.getUserData.id),
                                                     context.locale ==
                                                             Locale('en')
                                                         ? 'en'
@@ -277,7 +290,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                   TextButton(
                                     onPressed: () async {
                                       await user.setFollowers(
-                                          1,
+                                          int.parse(user.getUserData.id),
                                           context.locale == Locale('en')
                                               ? 'en'
                                               : 'ar');
@@ -312,8 +325,8 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                   ),
                                 TextButton(
                                   onPressed: () async {
-                                    await user.setFollowers(
-                                        1,
+                                    await user.setFollowings(
+                                        int.parse(user.getUserData.id),
                                         context.locale == Locale('en')
                                             ? 'en'
                                             : 'ar');
@@ -385,13 +398,13 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                           if (Provider.of<AnotherUserProfileViewModel>(context,
                                           listen: true)
                                       .getUserData
-                                      .role ==
-                                  'coach' ||
+                                      .roleId ==
+                                  2 ||
                               Provider.of<AnotherUserProfileViewModel>(context,
                                           listen: true)
                                       .getUserData
-                                      .role ==
-                                  'dietitian')
+                                      .roleId ==
+                                  3)
                             ExpansionTile(
                               iconColor: blueColor,
                               title: Text(
@@ -402,13 +415,13 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                           if (Provider.of<AnotherUserProfileViewModel>(context,
                                           listen: true)
                                       .getUserData
-                                      .role ==
-                                  'coach' ||
+                                      .roleId ==
+                                  2 ||
                               Provider.of<AnotherUserProfileViewModel>(context,
                                           listen: true)
                                       .getUserData
-                                      .role ==
-                                  'dietitian')
+                                      .roleId ==
+                                  3)
                             ExpansionTile(
                               iconColor: blueColor,
                               title: Text(
