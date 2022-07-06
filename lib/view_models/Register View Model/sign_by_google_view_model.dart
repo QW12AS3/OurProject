@@ -24,32 +24,33 @@ class SignByGoogleViewModel with ChangeNotifier {
     _googleSignIn.disconnect();
   }
 
-  // Future<void> signIn() async {
-  //   try {
-  //     _googleSignIn.signIn().then((result) {
-  //       result?.authentication.then((googleKey) {
-  //         accessToken = googleKey.accessToken.toString();
+  Future<void> signIn() async {
+    try {
+      _googleSignIn.signIn().then((result) {
+        result?.authentication.then((googleKey) {
+          if (googleKey.accessToken != null)
+            accessToken = googleKey.accessToken.toString();
 
-  //         print("ACCESS TOKEN:${googleKey.accessToken}");
-  //         //   print(googleKey.idToken);
-  //         print("Name: ${_googleSignIn.currentUser?.displayName}");
-  //       }).catchError((err) {
-  //         print('inner error');
-  //         print(err);
-  //       });
-  //     }).catchError((err) {
-  //       print('error occured');
-  //       print(err);
-  //     });
-  //   } catch (e) {
-  //     print('Google Sign in Error: $e');
-  //   }
+          print("ACCESS TOKEN:${googleKey.accessToken}");
+          //   print(googleKey.idToken);
+          print("Name: ${_googleSignIn.currentUser?.displayName}");
+        }).catchError((err) {
+          print('inner error');
+          print(err);
+        });
+      }).catchError((err) {
+        print('error occured');
+        print(err);
+      });
+    } catch (e) {
+      print('Google Sign in Error: $e');
+    }
 
-  //   if (accessToken != null && accessToken != '') {
-  //     SignByGoogleViewModel().signOut();
-  //     final BackEndMessage = postUserInfo(accessToken, '');
-  //   }
-  // }
+    if (accessToken != null && accessToken != '') {
+      final BackEndMessage = postUserInfo(accessToken, '');
+      SignByGoogleViewModel().signOut();
+    }
+  }
 
   postUserInfo(String access_provider_tokenVal, String c_nameVal) async {
     SignByGoogleModel? result;
@@ -87,13 +88,13 @@ class SignByGoogleViewModel with ChangeNotifier {
     _pref.setString("refresh_token", Data.refresh_token!);
   }
 
-  Future<void> signIn() async {
-    try {
-      await _googleSignIn.signIn();
-    } catch (e) {
-      print('Google Sign in Errooor: $e');
-    }
-  }
+  // Future<void> signIn() async {
+  //   try {
+  //     await _googleSignIn.signIn();
+  //   } catch (e) {
+  //     print('Google Sign in Errooor: $e');
+  //   }
+  // }
 }
 
 
@@ -206,47 +207,27 @@ BUILD SUCCESSFUL in 29s
 
 
 /*
-buildscript {
-  repositories {
-    // Check that you have the following line (if not, add it):
-    google()  // Google's Maven repository
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  }
-  dependencies {
-    ...
-    // Add this line
-    classpath 'com.google.gms:google-services:4.3.13'
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCDcRQ3MdgoVTNuqA9w5ex7otZrkJ2WuEM",
+    authDomain: "vigor-8b0ed.firebaseapp.com",
+    projectId: "vigor-8b0ed",
+    storageBucket: "vigor-8b0ed.appspot.com",
+    messagingSenderId: "107435010609",
+    appId: "1:107435010609:web:a5eee1c4bad66c6f29c310",
+    measurementId: "G-6WMMNGBESE"
+  };
 
-  }
-}
-
-allprojects {
-  ...
-  repositories {
-    // Check that you have the following line (if not, add it):
-    google()  // Google's Maven repository
-
-    ...
-  }
-}*/
-/*
-apply plugin: 'com.android.application'
-
-// Add this line
-apply plugin: 'com.google.gms.google-services'
-
-
-dependencies {
-  // Import the Firebase BoM
-  implementation platform('com.google.firebase:firebase-bom:30.2.0')
-
-
-  // Add the dependency for the Firebase SDK for Google Analytics
-  // When using the BoM, don't specify versions in Firebase dependencies
-  implementation 'com.google.firebase:firebase-analytics'
-
-
-  // Add the dependencies for any other desired Firebase products
-  // https://firebase.google.com/docs/android/setup#available-libraries
-}*/
-
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+*/

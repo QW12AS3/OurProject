@@ -45,6 +45,8 @@ class UserModel {
     imageUrl = json['data']['user']['profile_img'] ?? '';
 
     role = json['data']['user']['role_name'] ?? '';
+
+    print(json['data']['user']['role_id']);
     id = json['data']['user']['id'].toString();
     // enteredWorkouts = json['data']['user']['enteredWorkouts'] ?? 0;
     // finishedWorkouts = json['data']['user']['finishedWorkouts'] ?? 0;
@@ -55,12 +57,12 @@ class UserModel {
         .parse(json['data']['user']['birth_date'] ?? '');
     countryName = json['data']['user']['country'] ?? '';
     email = json['data']['user']['email'] ?? '';
-    roleId = json['data']['user']['role_id'] ?? 0;
+    roleId = json['data']['user']['role_id'];
 
     followed = json['data']['is_following'] ?? false;
     isBlocked = json['data']['is_blocked'] ?? false;
     followers = json['data']['followers'] ?? 0;
     followings = json['data']['following'] ?? 0;
-    i_block = json['data']['I_block'];
+    i_block = json['data']['I_block'] ?? false;
   }
 }

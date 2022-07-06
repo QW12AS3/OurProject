@@ -595,14 +595,18 @@ class SignUp extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              try {
+                                Provider.of<SignByGoogleViewModel>(context,
+                                        listen: false)
+                                    .signIn();
+                              } catch (e) {
+                                print('sign by google erroooor: $e');
+                              }
+                            },
                             icon: Image.asset('assets/images/google.png')),
                         IconButton(
-                          onPressed: () {
-                            Provider.of<SignByGoogleViewModel>(context,
-                                    listen: false)
-                                .signIn();
-                          },
+                          onPressed: () {},
                           icon: Image.asset(
                             'assets/images/facebook.png',
                           ),

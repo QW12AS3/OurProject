@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/User%20Information%20View/details_page1.dart';

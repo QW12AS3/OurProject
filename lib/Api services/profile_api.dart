@@ -280,7 +280,7 @@ class ProfileApi {
         print(jsonDecode(response.body));
       }
     } catch (e) {
-      print('Unfollow error: $e');
+      print('Get followers error: $e');
 
       return [];
     }
@@ -306,7 +306,7 @@ class ProfileApi {
         print(jsonDecode(response.body));
       }
     } catch (e) {
-      print('Unfollow error: $e');
+      print('Get followings error: $e');
 
       return [];
     }
