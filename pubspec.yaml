@@ -49,6 +49,7 @@ dependencies:
   easy_localization: ^3.0.1
   google_sign_in: ^5.3.3
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
