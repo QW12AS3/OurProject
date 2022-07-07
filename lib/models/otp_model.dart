@@ -1,4 +1,4 @@
-class SignInModel {
+class OTPModel {
   int? id;
   String? f_name;
   String? l_name;
@@ -12,13 +12,15 @@ class SignInModel {
   String? access_token;
   String? refresh_token;
   String? expire_at;
+
+  String? verification_code;
   /*
   String email;
   String password;
   String token;
   */
   String? message;
-  SignInModel({
+  OTPModel({
     this.id,
     this.f_name,
     this.l_name,
@@ -33,13 +35,14 @@ class SignInModel {
     this.access_token,
     this.refresh_token,
     this.expire_at,
+    this.verification_code,
     /*  required this.email,
     required this.password,
     required this.token,
     */
   });
   // to convert data from json to dart object
-  factory SignInModel.fromJson(Map<String, dynamic> user) => SignInModel(
+  factory OTPModel.fromJson(Map<String, dynamic> user) => OTPModel(
         // f_name: user['f_name'],
         // l_name: user['l_name'],
         // email: user['email'],
@@ -69,14 +72,11 @@ class SignInModel {
             : user['data']['refresh_token'],
         message: user['message'] == null ? '' : user['message'],
       );
-  factory SignInModel.fromJsonWithErrors(Map<String, dynamic> user) =>
-      SignInModel(message: user['message']);
+  factory OTPModel.fromJsonWithErrors(Map<String, dynamic> user) =>
+      OTPModel(message: user['message']);
   //to convert data to json
   Map<String, dynamic> toJson() => {
-        'email': email,
-        'password': password,
+        'verification_code': verification_code,
         'c_name': c_name,
-        'mac': mac,
-        'm_token': m_token
       };
 }

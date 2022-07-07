@@ -17,38 +17,40 @@ class UserInformationView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
-    return Scaffold(
-      bottomNavigationBar: Image(
-        height: mq.size.height * 0.1,
-        width: double.infinity,
-        fit: BoxFit.fill,
-        image: const AssetImage('assets/images/wave_background.png'),
-        filterQuality: FilterQuality.high,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: PageView(
-            controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              Details1Page(
-                  heightController: heightController,
-                  weightController: weightController,
-                  formkey: _formkey,
-                  nextFunction: () {
-                    Provider.of<UserInformationViewModel>(context,
-                            listen: false)
-                        .checkDetails1Value(
-                      _formkey,
-                      _pageController,
-                      context,
-                      heightController.text.trim(),
-                      weightController.text.trim(),
-                    );
-                  }),
-              Details2Page(saveFunction: () {}),
-            ],
+    return SafeArea(
+      child: Scaffold(
+        bottomNavigationBar: Image(
+          height: mq.size.height * 0.1,
+          width: double.infinity,
+          fit: BoxFit.fill,
+          image: const AssetImage('assets/images/wave_background.png'),
+          filterQuality: FilterQuality.high,
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: PageView(
+              controller: _pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                Details1Page(
+                    heightController: heightController,
+                    weightController: weightController,
+                    formkey: _formkey,
+                    nextFunction: () {
+                      Provider.of<UserInformationViewModel>(context,
+                              listen: false)
+                          .checkDetails1Value(
+                        _formkey,
+                        _pageController,
+                        context,
+                        heightController.text.trim(),
+                        weightController.text.trim(),
+                      );
+                    }),
+                Details2Page(saveFunction: () {}),
+              ],
+            ),
           ),
         ),
       ),

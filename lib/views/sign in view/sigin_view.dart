@@ -79,6 +79,7 @@ class SignIn extends StatelessWidget {
                                       color: Colors.white70.withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: TextFormField(
+                                    // maxLength: 25,
                                     controller: emailController,
                                     validator: (value) {
                                       return signInViewModel()
@@ -240,7 +241,8 @@ class SignIn extends StatelessWidget {
                                                   color: blueColor,
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold),
-                                              keyboardType: TextInputType.text,
+                                              keyboardType:
+                                                  TextInputType.visiblePassword,
                                               obscureText:
                                                   Provider.of<signInViewModel>(
                                                           context)

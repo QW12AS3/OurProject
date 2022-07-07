@@ -8,6 +8,7 @@ import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_vie
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
 import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
+import 'package:home_workout_app/view_models/otp_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/Another%20User%20Profile%20View/another_user_profile_view.dart';
@@ -17,6 +18,7 @@ import 'package:home_workout_app/views/Comments%20View/comments_view.dart';
 import 'package:home_workout_app/views/Edit%20Profile%20View/edit_profile_view.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
+import 'package:home_workout_app/views/otp_view.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:home_workout_app/views/sign%20up%20view/sign_up_view.dart';
 import 'package:home_workout_app/views/start_view/start_view.dart';
@@ -58,6 +60,7 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => SignUpViewModel()),
         ChangeNotifierProvider(create: (context) => EditProfileViewModel()),
         ChangeNotifierProvider(create: (context) => SignByGoogleViewModel()),
+        ChangeNotifierProvider(create: (context) => otpViewModel()),
         ChangeNotifierProvider(
             create: (context) => AnotherUserProfileViewModel())
       ],
@@ -163,8 +166,9 @@ class Vigor extends StatelessWidget {
         // StartView(),
         //const WebHomeView(),
 
-        // home: SignIn(),
-        home: SignUp(),
+        //home: SignIn(),
+        home: OTPView(),
+        // home: SignUp(),
 //         home: MobileHomeView(),
         //  UserInformationView(),
       ),
