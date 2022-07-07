@@ -338,7 +338,8 @@ class SignUp extends StatelessWidget {
                                                   color: blueColor,
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold),
-                                              keyboardType: TextInputType.text,
+                                              keyboardType:
+                                                  TextInputType.visiblePassword,
                                               obscureText:
                                                   Provider.of<SignUpViewModel>(
                                                           context)
@@ -436,7 +437,8 @@ class SignUp extends StatelessWidget {
                                                   color: blueColor,
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold),
-                                              keyboardType: TextInputType.text,
+                                              keyboardType:
+                                                  TextInputType.visiblePassword,
                                               obscureText:
                                                   Provider.of<SignUpViewModel>(
                                                           context)

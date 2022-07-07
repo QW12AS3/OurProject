@@ -31,9 +31,13 @@ class SignByGoogleViewModel with ChangeNotifier {
           if (googleKey.accessToken != null)
             accessToken = googleKey.accessToken.toString();
 
-          print("ACCESS TOKEN:${googleKey.accessToken}");
+          print("ACCESS TOKEN:${googleKey.accessToken.toString()}");
           //   print(googleKey.idToken);
           print("Name: ${_googleSignIn.currentUser?.displayName}");
+          if (accessToken != null && accessToken != '') {
+            print('fffffffffffffffffffff');
+            final BackEndMessage = postUserInfo(accessToken, '');
+          }
         }).catchError((err) {
           print('inner error');
           print(err);
@@ -45,11 +49,7 @@ class SignByGoogleViewModel with ChangeNotifier {
     } catch (e) {
       print('Google Sign in Error: $e');
     }
-
-    if (accessToken != null && accessToken != '') {
-      final BackEndMessage = postUserInfo(accessToken, '');
-      SignByGoogleViewModel().signOut();
-    }
+    print('fzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
   }
 
   postUserInfo(String access_provider_tokenVal, String c_nameVal) async {

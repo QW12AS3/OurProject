@@ -25,10 +25,12 @@ class SignByGoogleAPI {
       print(response.statusCode);
       if (response.statusCode == 201) {
         print(response.body);
+        SignByGoogleViewModel().signOut();
         return SignByGoogleModel.fromJson(json.decode(response.body));
       } else {
         print(response.statusCode);
         print(response.body);
+        SignByGoogleViewModel().signOut();
         return SignByGoogleModel.fromJsonWithErrors(json.decode(response.body));
         // print(response.m)
         // throw "can't do sign in";
@@ -37,6 +39,7 @@ class SignByGoogleAPI {
     } catch (e) {
       print(e);
     }
+    SignByGoogleViewModel().signOut();
     return SignByGoogleModel(message: '');
   }
 }
