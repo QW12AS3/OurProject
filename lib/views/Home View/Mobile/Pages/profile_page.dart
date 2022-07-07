@@ -3,8 +3,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
-import 'package:home_workout_app/models/user_model.dart';
-import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view_widgets.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
@@ -24,18 +22,17 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // final args = ModalRoute.of(context)!.settings.arguments as Map;
-    // int id = args['id'];
 
     Provider.of<ProfileViewModel>(context, listen: false).setCurrentUserData();
   }
 
   String finishedWorkouts = 'Finished Workouts'.tr();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Provider.of<ProfileViewModel>(context, listen: true).getIsLoading
-        ? CustomLoading()
+        ? const CustomLoading()
         : Column(
             children: [
               Padding(
@@ -63,11 +60,11 @@ class _ProfilePageState extends State<ProfilePage> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                    color: user.getUserData.role == 'manager'
-                                        ? Colors.red.shade900
-                                        : (user.getUserData.role == 'coach'
+                                    color: user.getUserData.roleId == 2
+                                        ? orangeColor
+                                        : (user.getUserData.roleId == 3
                                             ? blueColor
-                                            : orangeColor),
+                                            : Colors.transparent),
                                     width: 2),
                               ),
                             ),
@@ -114,12 +111,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                      color: user.getUserData.role == 'manager'
-                                          ? Colors.red.shade900
-                                          : (user.getUserData.role == 'coach'
+                                      color: user.getUserData.roleId == 2
+                                          ? orangeColor
+                                          : (user.getUserData.roleId == 3
                                               ? blueColor
-                                              : orangeColor),
-                                      width: 3),
+                                              : Colors.transparent),
+                                      width: 2),
                                 ),
                               ),
                             ),
@@ -138,15 +135,206 @@ class _ProfilePageState extends State<ProfilePage> {
                               style: theme.textTheme.bodyMedium!
                                   .copyWith(color: Colors.black),
                             ),
-                            Text(
-                              ' ( ${user.getUserData.role.toUpperCase()} )',
-                              style: theme.textTheme.bodyMedium!.copyWith(
-                                fontSize: 15,
-                                color: user.getUserData.role == 'manager'
-                                    ? Colors.red.shade900
-                                    : (user.getUserData.role == 'coach'
-                                        ? blueColor
-                                        : orangeColor),
+                            if (user.getUserData.roleId == 2 ||
+                                user.getUserData.roleId == 3)
+                              Text(
+                                ' ( ${user.getUserData.role.toUpperCase()} )',
+                                style: theme.textTheme.bodyMedium!.copyWith(
+                                  fontSize: 15,
+                                  color: user.getUserData.roleId == 2
+                                      ? orangeColor
+                                      : (user.getUserData.roleId == 3
+                                          ? blueColor
+                                          : Colors.transparent),
+                                ),
+                              ),
+                            Align(
+                              alignment: context.locale == Locale('en')
+                                  ? Alignment.topRight
+                                  : Alignment.topLeft,
+                              child: Consumer<ProfileViewModel>(
+                                builder: (context, user, child) =>
+                                    PopupMenuButton<String>(
+                                  icon: Icon(
+                                    Icons.more_vert_rounded,
+                                    color: blueColor,
+                                  ),
+                                  onSelected: (String result) {
+                                    switch (result) {
+                                      case 'edit':
+                                        Navigator.pushNamed(
+                                            context, 'editProfile', arguments: {
+                                          'userData':
+                                              Provider.of<ProfileViewModel>(
+                                                      context,
+                                                      listen: false)
+                                                  .getUserData
+                                        });
+                                        break;
+                                      case 'delete':
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext ctx) =>
+                                                AlertDialog(
+                                                  title: Text(
+                                                    'Are you sure to delete your account ?',
+                                                    style: theme
+                                                        .textTheme.bodySmall,
+                                                  ),
+                                                  content: Container(
+                                                    height: 75,
+                                                    child: Column(
+                                                      children: [
+                                                        Text(
+                                                          'Note: You can reactive your account in 30 days.',
+                                                          style: theme.textTheme
+                                                              .bodySmall!
+                                                              .copyWith(
+                                                                  color:
+                                                                      greyColor,
+                                                                  fontSize: 12),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        TextField(
+                                                          obscureText: true,
+                                                          controller:
+                                                              passwordController,
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .visiblePassword,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            label: FittedBox(
+                                                                child: const Text(
+                                                                        'Password')
+                                                                    .tr()),
+                                                            floatingLabelStyle:
+                                                                theme.textTheme
+                                                                    .bodySmall,
+                                                            focusedErrorBorder:
+                                                                OutlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                      color:
+                                                                          orangeColor,
+                                                                      width:
+                                                                          1.5),
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .all(
+                                                                Radius.circular(
+                                                                    15),
+                                                              ),
+                                                            ),
+                                                            enabledBorder:
+                                                                OutlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                      color:
+                                                                          greyColor,
+                                                                      width:
+                                                                          1.5),
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .all(
+                                                                Radius.circular(
+                                                                    15),
+                                                              ),
+                                                            ),
+                                                            errorBorder:
+                                                                const OutlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                      color:
+                                                                          Colors
+                                                                              .red,
+                                                                      width:
+                                                                          1.5),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .all(
+                                                                Radius.circular(
+                                                                    15),
+                                                              ),
+                                                            ),
+                                                            focusedBorder:
+                                                                OutlineInputBorder(
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                      color:
+                                                                          orangeColor,
+                                                                      width:
+                                                                          1.5),
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .all(
+                                                                Radius.circular(
+                                                                    15),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {},
+                                                      child: Text(
+                                                        'Yes',
+                                                        style: theme.textTheme
+                                                            .bodySmall,
+                                                      ),
+                                                    ),
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(ctx);
+                                                        },
+                                                        child: Text(
+                                                          'Cancel',
+                                                          style: theme.textTheme
+                                                              .bodySmall!
+                                                              .copyWith(
+                                                                  color:
+                                                                      blueColor),
+                                                        ))
+                                                  ],
+                                                ));
+                                        break;
+                                      default:
+                                    }
+                                  },
+                                  itemBuilder: (BuildContext context) =>
+                                      <PopupMenuEntry<String>>[
+                                    PopupMenuItem<String>(
+                                      value: 'edit',
+                                      child: Text(
+                                        'Edit profile',
+                                        style: theme.textTheme.bodySmall!
+                                            .copyWith(color: blueColor),
+                                      ),
+                                    ),
+                                    if (user.getUserData.roleId != 1)
+                                      PopupMenuItem<String>(
+                                        value: 'blocklist',
+                                        child: Text(
+                                          'Blocklist',
+                                          style: theme.textTheme.bodySmall!
+                                              .copyWith(color: blueColor),
+                                        ),
+                                      ),
+                                    PopupMenuItem<String>(
+                                      value: 'delete',
+                                      child: Text(
+                                        'Delete account',
+                                        style: theme.textTheme.bodySmall!
+                                            .copyWith(color: Colors.red),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
@@ -161,7 +349,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               TextButton(
                                 onPressed: () async {
                                   await user.setFollowers(
-                                      5,
+                                      int.parse(user.getUserData.id),
                                       context.locale == Locale('en')
                                           ? 'en'
                                           : 'ar');
@@ -196,7 +384,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             TextButton(
                               onPressed: () async {
                                 await user.setFollowings(
-                                    5,
+                                    int.parse(user.getUserData.id),
                                     context.locale == Locale('en')
                                         ? 'en'
                                         : 'ar');

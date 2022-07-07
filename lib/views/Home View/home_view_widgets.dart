@@ -33,7 +33,8 @@ class workoutCard extends StatelessWidget {
       children: [
         InkWell(
           onTap: () {
-            Navigator.pushNamed(context, 'anotherUserProfile');
+            Navigator.pushNamed(context, 'anotherUserProfile',
+                arguments: {'id': 1});
           },
           child: Row(
             children: [
@@ -238,25 +239,6 @@ class myDrawer extends StatelessWidget {
           Divider(
             color: blueColor,
             thickness: 2,
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, 'editProfile', arguments: {
-                'userData':
-                    Provider.of<ProfileViewModel>(context, listen: false)
-                        .getUserData
-              });
-            },
-            child: ListTile(
-              title: Text(
-                'Edit profile',
-                style: theme.textTheme.bodySmall,
-              ).tr(),
-              trailing: Icon(
-                Icons.edit_note_rounded,
-                color: blueColor,
-              ),
-            ),
           ),
           InkWell(
             onTap: () {},

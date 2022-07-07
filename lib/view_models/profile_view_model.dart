@@ -13,6 +13,13 @@ class ProfileViewModel with ChangeNotifier {
   List _followers = [];
   List _followings = [];
 
+  //bool _PasswordObsecure = false;
+
+  // void setPasswordObsecure() {
+  //   _PasswordObsecure = !_PasswordObsecure;
+  //   notifyListeners();
+  // }
+
   Future<void> setFollowers(int id, String lang) async {
     _followers = await ProfileApi().getFollowers(lang, id);
     notifyListeners();
@@ -28,25 +35,25 @@ class ProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Map<dynamic, dynamic> user = {
-    'id': 1,
-    'data': {
-      'fname': 'Omar',
-      'lname': 'Za',
-      'gender': 'male',
-      'email': 'test@gmail.com',
-      'country': 'Syria',
-      'birthdate': '2001-6-21',
-      'imageUrl':
-          'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
-      'role': 'Coach',
-      'role_id': 2,
-      'finishedWorkouts': 5,
-      'enteredWorkouts': 7,
-      'bio':
-          'Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test '
-    }
-  };
+  // Map<dynamic, dynamic> user = {
+  //   'id': 1,
+  //   'data': {
+  //     'fname': 'Omar',
+  //     'lname': 'Za',
+  //     'gender': 'male',
+  //     'email': 'test@gmail.com',
+  //     'country': 'Syria',
+  //     'birthdate': '2001-6-21',
+  //     'imageUrl':
+  //         'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
+  //     'role': 'Coach',
+  //     'role_id': 2,
+  //     'finishedWorkouts': 5,
+  //     'enteredWorkouts': 7,
+  //     'bio':
+  //         'Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test '
+  //   }
+  // };
 
   Future<void> setCurrentUserData() async {
     _isLoading = true;
@@ -80,4 +87,5 @@ class ProfileViewModel with ChangeNotifier {
   bool get getIsLoading => _isLoading;
   List get getFollowers => _followers;
   List get getFollowings => _followings;
+  //bool get getPasswordObsecure => _PasswordObsecure;
 }

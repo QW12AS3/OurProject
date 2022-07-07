@@ -53,7 +53,7 @@ class AnotherUserProfileViewModel with ChangeNotifier {
   }
 
   Future<void> setFollowings(int id, String lang) async {
-    _followers = await ProfileApi().getFollowings(lang, id);
+    _followings = await ProfileApi().getFollowings(lang, id);
     notifyListeners();
   }
 

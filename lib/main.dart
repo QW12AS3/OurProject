@@ -17,11 +17,13 @@ import 'package:home_workout_app/views/Change%20Password%20View/change_password_
 import 'package:home_workout_app/views/Comments%20View/comments_view.dart';
 import 'package:home_workout_app/views/Edit%20Profile%20View/edit_profile_view.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
+
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
 import 'package:home_workout_app/views/otp_view.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:home_workout_app/views/sign%20up%20view/sign_up_view.dart';
 import 'package:home_workout_app/views/start_view/start_view.dart';
+
 
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -164,11 +166,20 @@ class Vigor extends StatelessWidget {
         //home: kIsWeb ? const WebHomeView() : const MobileHomeView(),
         // home: UserInformationView()
         // StartView(),
-        //const WebHomeView(),
+        home: const MobileHomeView(),
+
 
         //home: SignIn(),
         home: OTPView(),
         // home: SignUp(),
+
+        // home: SignIn(),
+
+        //home: SignUp(),
+
+       // home: SignUp(),
+
+
 //         home: MobileHomeView(),
         //  UserInformationView(),
       ),
