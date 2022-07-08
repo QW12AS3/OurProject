@@ -58,6 +58,7 @@ class SignInModel {
         email: user['data']['user']['email'] == null
             ? ''
             : user['data']['user']['email'],
+
         profile_img: user['data']['user']['profile_img'] == null
             ? ''
             : user['data']['user']['profile_img'],
@@ -80,3 +81,8 @@ class SignInModel {
         'm_token': m_token
       };
 }
+/*
+     role_id: user['data']['user']['role_id'] == null
+            ? ''
+            : user['data']['user']['role_id'],
+            */
