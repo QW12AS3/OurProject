@@ -89,7 +89,7 @@ class _webProfilePageState extends State<webProfilePage> {
                 Center(
                   child: Consumer<ProfileViewModel>(
                     builder: (context, user, child) => VisibilityDetector(
-                      key: Key(user.getUserData.id),
+                      key: Key(user.getUserData.id.toString()),
                       onVisibilityChanged: (VisibilityInfo info) {
                         if (info.visibleBounds.isEmpty)
                           user.setInfoWidgetVisible(true);

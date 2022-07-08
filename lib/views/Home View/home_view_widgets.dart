@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/user_model.dart';
+import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -175,9 +176,11 @@ class LoadingContainer extends StatelessWidget {
 }
 
 class myDrawer extends StatelessWidget {
-  myDrawer({required this.user, Key? key}) : super(key: key);
+  myDrawer({required this.user, required this.tabController, Key? key})
+      : super(key: key);
 
   UserModel user;
+  TabController tabController;
 
   @override
   Widget build(BuildContext context) {
@@ -187,53 +190,60 @@ class myDrawer extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(user.imageUrl),
-                  onBackgroundImageError: (child, stacktrace) =>
-                      const LoadingContainer(),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: user.role == 'Manager'
-                              ? Colors.red.shade900
-                              : (user.role == 'Coach'
-                                  ? blueColor
-                                  : orangeColor),
-                          width: 2),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+                tabController.animateTo(2);
+              },
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(user.imageUrl),
+                    onBackgroundImageError: (child, stacktrace) =>
+                        const LoadingContainer(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            color: user.roleId == 2
+                                ? orangeColor
+                                : (user.roleId == 3
+                                    ? blueColor
+                                    : Colors.transparent),
+                            width: 2),
+                      ),
                     ),
                   ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        '${user.fname} ${user.lname}',
-                        style: theme.textTheme.bodyMedium!
-                            .copyWith(color: Colors.black),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          '${user.fname} ${user.lname}',
+                          style: theme.textTheme.bodyMedium!
+                              .copyWith(color: Colors.black),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        user.role,
-                        style: theme.textTheme.bodyMedium!.copyWith(
-                            color: user.role == 'Manager'
-                                ? Colors.red.shade900
-                                : (user.role == 'Coach'
-                                    ? blueColor
-                                    : orangeColor),
-                            fontSize: 12),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                      if (user.roleId != 1)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            user.role,
+                            style: theme.textTheme.bodyMedium!.copyWith(
+                                color: user.roleId == 2
+                                    ? orangeColor
+                                    : (user.roleId == 3
+                                        ? blueColor
+                                        : Colors.transparent),
+                                fontSize: 12),
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           Divider(

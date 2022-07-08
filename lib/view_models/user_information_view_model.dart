@@ -10,24 +10,42 @@ class UserInformationViewModel with ChangeNotifier {
   Units weightUnit = Units.kg;
   Units heightUnit = Units.cm;
   String _country = '';
+  List _diseases = [];
 
   setCountry(countryName) {
     _country = countryName;
     notifyListeners();
   }
 
-  Map<String, bool> diseases = {
-    'Amyotrophic lateral sclerosis (ALS).': false,
-    'Charcot-Marie-Tooth disease.': false,
-    'Multiple sclerosis.': false,
-    'Muscular dystrophy.': false,
-    'Myasthenia gravis.': false,
-    'Myopathy.': false,
-    'Peripheral neuropathy.': false,
-    'Peripheral neuropa1thy.': false,
-    'Peripheral neuropa2thy.': false,
-    'Peripheral neuropa3thy.': false,
-  };
+  // Map<String, bool> diseases = {
+  //   'Amyotrophic lateral sclerosis (ALS).': false,
+  //   'Charcot-Marie-Tooth disease.': false,
+  //   'Multiple sclerosis.': false,
+  //   'Muscular dystrophy.': false,
+  //   'Myasthenia gravis.': false,
+  //   'Myopathy.': false,
+  //   'Peripheral neuropathy.': false,
+  //   'Peripheral neuropa1thy.': false,
+  //   'Peripheral neuropa2thy.': false,
+  //   'Peripheral neuropa3thy.': false,
+  // };
+
+  Future<void> setDiseases(String lang) async {
+    final resp = await SignUpAPI().getDiseases(lang);
+    resp.forEach(
+      (element) {
+        _diseases.add(
+          {
+            'id': element['id'],
+            'name': element['name'],
+            'selected': false,
+          },
+        );
+      },
+    );
+    print(_diseases);
+    notifyListeners();
+  }
 
   bool checkHWValues(String h, String w, BuildContext context) {
     return true;
@@ -55,7 +73,8 @@ class UserInformationViewModel with ChangeNotifier {
   }
 
   void changeDiseasesValue(key, changedValue) {
-    diseases.update(key, (value) => changedValue);
+    _diseases.firstWhere((element) => element['id'] == key)['selected'] =
+        changedValue;
     notifyListeners();
   }
 
@@ -119,4 +138,5 @@ class UserInformationViewModel with ChangeNotifier {
   DateTime get getBirthdate => birthdate;
   Units get getHeightunit => heightUnit;
   Units get getWeightUnit => weightUnit;
+  List get getDiseases => _diseases;
 }

@@ -17,22 +17,25 @@ import 'package:home_workout_app/views/Change%20Password%20View/change_password_
 import 'package:home_workout_app/views/Comments%20View/comments_view.dart';
 import 'package:home_workout_app/views/Edit%20Profile%20View/edit_profile_view.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
-
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
-import 'package:home_workout_app/views/otp_view.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:home_workout_app/views/sign%20up%20view/sign_up_view.dart';
+
+
 import 'package:home_workout_app/views/start_view/start_view.dart';
+
 
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+late SharedPreferences sharedPreferences;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-  SharedPreferences _sharedpref = await SharedPreferences.getInstance();
-  _sharedpref.setInt('id', 1);
+  sharedPreferences = await SharedPreferences.getInstance();
+  sharedPreferences.setBool('provider', true);
+  print(sharedPreferences.getBool('provider'));
 
   runApp(
     EasyLocalization(
@@ -61,9 +64,10 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => SignUpViewModel()),
         ChangeNotifierProvider(create: (context) => EditProfileViewModel()),
         ChangeNotifierProvider(create: (context) => SignByGoogleViewModel()),
-        ChangeNotifierProvider(create: (context) => otpViewModel()),
         ChangeNotifierProvider(
-            create: (context) => AnotherUserProfileViewModel())
+          create: (context) => AnotherUserProfileViewModel(),
+        ),
+        ChangeNotifierProvider(create: (context) => otpViewModel())
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -91,7 +95,8 @@ class Vigor extends StatelessWidget {
           'editProfile': (context) => EditProfileView(),
           'changeEmail': (context) => ChangeEmailView(),
           'changePassword': (context) => ChangePasswordView(),
-          'anotherUserProfile': (context) => AnotherUserProfileView()
+          'anotherUserProfile': (context) => AnotherUserProfileView(),
+          'home': (context) => MobileHomeView()
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,
@@ -164,16 +169,25 @@ class Vigor extends StatelessWidget {
 
         //home: kIsWeb ? const WebHomeView() : const MobileHomeView(),
         // home: UserInformationView()
+
+        // StartView(),
+        home: UserInformationView(),
+
+        //home: SignUp(),
+
+        //home: SignUp(),
+
         // home: StartView(),
         //  home: const MobileHomeView(),
 
         //home: SignIn(),
-        home: OTPView(),
+        //home: OTPView(),
         // home: SignUp(),
 
         // home: SignIn(),
 
         // home: SignUp(),
+
 
         // home: SignUp(),
 

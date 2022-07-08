@@ -5,10 +5,25 @@ import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/User%20Information%20View/user_information_widgets.dart';
 import 'package:provider/provider.dart';
 
-class Details2Page extends StatelessWidget {
+class Details2Page extends StatefulWidget {
   Details2Page({required this.saveFunction, Key? key}) : super(key: key);
 
   Function saveFunction;
+
+  @override
+  State<Details2Page> createState() => _Details2PageState();
+}
+
+class _Details2PageState extends State<Details2Page> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero).then((value) {
+      Provider.of<UserInformationViewModel>(context, listen: false)
+          .setDiseases(context.locale == const Locale('en') ? 'en' : 'ar');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,24 +68,17 @@ class Details2Page extends StatelessWidget {
               Consumer<UserInformationViewModel>(
                 builder: (context, consumer, child) => Scrollbar(
                   child: Column(
-                    children: consumer.diseases.entries
-                        .map((e) => Padding(
-                              padding: EdgeInsets.only(
-                                  bottom: e.key ==
-                                          consumer.diseases.entries.last.key
-                                      ? 40
-                                      : 0),
-                              child: CheckboxListTile(
-                                  title: UserInfoCustomText(
-                                    text: e.key,
-                                    color: blueColor,
-                                    fontsize: 15,
-                                  ),
-                                  value: e.value,
-                                  onChanged: (value) {
-                                    consumer.changeDiseasesValue(e.key, value);
-                                  }),
-                            ))
+                    children: consumer.getDiseases
+                        .map((e) => CheckboxListTile(
+                            title: UserInfoCustomText(
+                              text: e['name'].toString(),
+                              color: blueColor,
+                              fontsize: 15,
+                            ),
+                            value: e['selected'],
+                            onChanged: (value) {
+                              consumer.changeDiseasesValue(e['id'], value);
+                            }))
                         .toList(),
                   ),
                 ),
@@ -82,3 +90,8 @@ class Details2Page extends StatelessWidget {
     );
   }
 }
+  // padding: EdgeInsets.only(
+  //                                 bottom: e['id'] ==
+  //                                         consumer.diseases.entries.last.key
+  //                                     ? 40
+  //                                     : 0),

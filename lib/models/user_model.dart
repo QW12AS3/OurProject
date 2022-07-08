@@ -2,7 +2,7 @@ import 'package:home_workout_app/constants.dart';
 import 'package:intl/intl.dart';
 
 class UserModel {
-  String id = '';
+  int id = -1;
   String fname = '';
   String lname = '';
   String imageUrl = '';
@@ -43,11 +43,14 @@ class UserModel {
     fname = json['data']['user']['fname'] ?? '';
     lname = json['data']['user']['lname'] ?? '';
     imageUrl = json['data']['user']['profile_img'] ?? '';
+    print(json['data']['user']['profile_img']);
+    if (imageUrl.substring(0, 4) != 'http') {
+      imageUrl = '$ip/$imageUrl';
+    }
 
     role = json['data']['user']['role_name'] ?? '';
 
-    print(json['data']['user']['role_id']);
-    id = json['data']['user']['id'].toString();
+    id = json['data']['user']['id'] ?? -1;
     // enteredWorkouts = json['data']['user']['enteredWorkouts'] ?? 0;
     // finishedWorkouts = json['data']['user']['finishedWorkouts'] ?? 0;
     bio = json['data']['user']['bio'] ?? '';
@@ -55,6 +58,7 @@ class UserModel {
         json['data']['user']['gender'] == 'male' ? Gender.male : Gender.female;
     birthdate = DateFormat('yyyy-MM-dd')
         .parse(json['data']['user']['birth_date'] ?? '');
+
     countryName = json['data']['user']['country'] ?? '';
     email = json['data']['user']['email'] ?? '';
     roleId = json['data']['user']['role_id'];
