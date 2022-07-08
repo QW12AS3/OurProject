@@ -14,6 +14,7 @@ class OTPView extends StatefulWidget {
 class _OTPViewState extends State<OTPView> {
   final formGlobalKey = GlobalKey<FormState>();
   TextEditingController otpController = TextEditingController();
+  TextEditingController c_nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -176,40 +177,36 @@ class _OTPViewState extends State<OTPView> {
                       if (formGlobalKey.currentState!.validate()) {
                         formGlobalKey.currentState!.save();
                         // use the email provided here
-                        // print('rrrrrrrrrrrrrrrrrrrr');
-                        // print(emailController.text);
-                        // print(passwordController.text);
-                        // //   print(c_nameController.text);
-                        // final BackEndMessage = await signInViewModel()
-                        //     .postUserInfo(
-                        //         emailController.text,
-                        //         passwordController.text,
-                        //         c_nameController.text == null
-                        //             ? ''
-                        //             : c_nameController.text);
-                        // print(BackEndMessage);
-                        // print(BackEndMessage.refresh_token);
-                        // final sBar = SnackBar(
-                        //     content: Container(
-                        //   child: Text(
-                        //       "${BackEndMessage.f_name != null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message != null ? BackEndMessage.message : ''}"),
-                        //   // "${BackEndMessage.message == null ?BackEndMessage.message != null? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message:''}"), ///////////////////////////////
-                        // ));
-                        // if ((BackEndMessage.f_name != null &&
-                        //         BackEndMessage.f_name != '') ||
-                        //     (BackEndMessage.message != null &&
-                        //         BackEndMessage.message != '')) {
-                        //   ScaffoldMessenger.of(context)
-                        //       .showSnackBar(sBar);
-                        // }
-                        // if (BackEndMessage.access_token != null &&
-                        //     BackEndMessage.access_token != '') {
-                        //   emailController.clear();
-                        //   passwordController.clear();
-                        //   if (c_nameController != null)
-                        //     c_nameController.clear();
-                        //   //Navigate
-                        // }
+                        print('rrrrrrrrrrrrrrrrrrrr');
+                        print(otpController.text);
+                        //   print(c_nameController.text);
+                        final BackEndMessage = await otpViewModel()
+                            .postUserInfo(
+                                otpController.text,
+                                c_nameController.text == null
+                                    ? ''
+                                    : c_nameController.text,
+                                '/emailVerfiy/');
+                        print(BackEndMessage);
+
+                        final sBar = SnackBar(
+                            content: Container(
+                          child: Text(
+                              "${BackEndMessage.f_name != null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message != null ? BackEndMessage.message : ''}"),
+                          // "${BackEndMessage.message == null ?BackEndMessage.message != null? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message:''}"), ///////////////////////////////
+                        ));
+                        if ((BackEndMessage.f_name != null &&
+                                BackEndMessage.f_name != '') ||
+                            (BackEndMessage.message != null &&
+                                BackEndMessage.message != '')) {
+                          ScaffoldMessenger.of(context).showSnackBar(sBar);
+                        }
+                        if (BackEndMessage.access_token != null &&
+                            BackEndMessage.access_token != '') {
+                          if (c_nameController != null)
+                            c_nameController.clear();
+                          //Navigate
+                        }
                       }
                     },
                     child: Text('Verify'),
@@ -229,7 +226,15 @@ class _OTPViewState extends State<OTPView> {
                           fontWeight: FontWeight.bold),
                     ),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          final BackEndMessage = await otpViewModel()
+                              .postUserInfo(
+                                  otpController.text,
+                                  c_nameController.text == null
+                                      ? ''
+                                      : c_nameController.text,
+                                  '/emailVerfiy/reget');
+                        },
                         child: Text(
                           'Resend again',
                           style: theme.textTheme.bodySmall,

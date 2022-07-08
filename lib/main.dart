@@ -24,7 +24,6 @@ import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:home_workout_app/views/sign%20up%20view/sign_up_view.dart';
 import 'package:home_workout_app/views/start_view/start_view.dart';
 
-
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -165,9 +164,8 @@ class Vigor extends StatelessWidget {
 
         //home: kIsWeb ? const WebHomeView() : const MobileHomeView(),
         // home: UserInformationView()
-        // StartView(),
-        home: const MobileHomeView(),
-
+        // home: StartView(),
+        //  home: const MobileHomeView(),
 
         //home: SignIn(),
         home: OTPView(),
@@ -175,10 +173,9 @@ class Vigor extends StatelessWidget {
 
         // home: SignIn(),
 
-        //home: SignUp(),
+        // home: SignUp(),
 
-       // home: SignUp(),
-
+        // home: SignUp(),
 
 //         home: MobileHomeView(),
         //  UserInformationView(),

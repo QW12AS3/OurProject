@@ -4,6 +4,7 @@ import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
+import 'package:home_workout_app/views/otp_view.dart';
 import 'package:provider/provider.dart';
 
 class SignUp extends StatelessWidget {
@@ -522,6 +523,8 @@ class SignUp extends StatelessWidget {
                                 confimPasswordController.clear();
                                 if (c_nameController != null)
                                   c_nameController.clear();
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => OTPView()));
                                 //Navigate
                               }
                             }

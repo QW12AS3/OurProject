@@ -11,19 +11,18 @@ class otpViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  postUserInfo(String emailVal, String passwordVal, String c_nameVal) async {
+  postUserInfo(String otpVal, String c_nameVal, String addedURL) async {
     OTPModel? result;
     try {
       await OTPAPI
-          .createUser(OTPModel(
-        email: emailVal,
-        password: passwordVal,
-
-        c_name: c_nameVal,
-        m_token: '',
-        mac: '',
-        // message: '',
-      ))
+          .createUser(
+              OTPModel(
+                verification_code: otpVal,
+                c_name: c_nameVal,
+                mac: '',
+                // message: '',
+              ),
+              addedURL)
           .then((value) {
         print(value);
         // print("toooooooooooooken:   " + value.access_token!);

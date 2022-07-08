@@ -76,7 +76,7 @@ class OTPModel {
       OTPModel(message: user['message']);
   //to convert data to json
   Map<String, dynamic> toJson() => {
-        'verification_code': verification_code,
+        'code': verification_code,
         'c_name': c_name,
       };
 }
