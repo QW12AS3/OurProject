@@ -7,7 +7,9 @@ Color blueColor = const Color(0xff126782);
 Color greyColor = Colors.grey;
 
 const String base_URL = 'http://192.168.43.113:8000/api';
+
 final String ip = base_URL.replaceAll('/api', '');
+
 
 const String apiKey =
     'THSzx8cmJny4DFmjvjX2calOKSduaJxb3YKC9sCuoCdEiF4J9w6qul5kRFwt1mUR';
