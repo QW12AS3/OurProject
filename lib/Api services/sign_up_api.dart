@@ -38,7 +38,7 @@ class SignUpAPI {
     return SignUpModel(message: '');
   }
 
-  Future sendUserInfo(
+  Future<Map<String, dynamic>> sendUserInfo(
       Gender gender,
       DateTime birthdate,
       String height,
@@ -66,14 +66,17 @@ class SignUpAPI {
           'country': country
         },
       );
+      final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        print('success');
+        return {'success': true, 'message': data['message']};
       } else {
         print(jsonDecode(response.body));
+        return {'success': false, 'message': data['message']};
       }
     } catch (e) {
       print('Sending info error: $e');
+      return {'success': false, 'message': e.toString()};
     }
   }
 
@@ -91,7 +94,7 @@ class SignUpAPI {
       );
       if (response.statusCode == 200) {
         List data = jsonDecode(response.body)['data'] ?? [];
-        print(data);
+        print('Data:$data');
         return data;
       } else {
         print(jsonDecode(response.body));

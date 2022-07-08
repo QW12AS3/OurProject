@@ -645,20 +645,25 @@ class _EditProfileViewState extends State<EditProfileView> {
                   await Provider.of<EditProfileViewModel>(context,
                           listen: false)
                       .editProfile(
-                          fnameController.text.trim(),
-                          lnameController.text.trim(),
-                          value.getUserImage,
-                          bioController.text.trim(),
-                          heightController.text.trim(),
-                          weightController.text.trim(),
-                          value.getGender,
-                          value.getBirthdate,
-                          value.getCountry);
-                  Navigator.pop(context);
+                    fnameController.text.trim(),
+                    lnameController.text.trim(),
+                    value.getUserImage,
+                    bioController.text.trim(),
+                    heightController.text.trim(),
+                    weightController.text.trim(),
+                    value.getGender,
+                    value.getBirthdate,
+                    context,
+                    value.getCountry,
+                  );
                 },
-                child: const Text(
-                  'Save changes',
-                ).tr(),
+                child: value.getIsLoading
+                    ? const CircularProgressIndicator(
+                        color: Colors.white,
+                      )
+                    : const Text(
+                        'Save changes',
+                      ).tr(),
               ),
             ),
           ],

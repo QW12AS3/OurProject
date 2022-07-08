@@ -60,19 +60,31 @@ class ProfileViewModel with ChangeNotifier {
   //   }
   // };
 
-  Future<void> setCurrentUserData() async {
+  Future<void> setCurrentUserData(BuildContext context) async {
     _isLoading = true;
-    _userData = await ProfileApi().getUserProfile('en');
+    _userData = await ProfileApi().getUserProfile('en', context);
     _isLoading = false;
     notifyListeners();
   }
 
-  Future<void> logout() async {
-    await ProfileApi().logout('en');
+  Future<void> logout(BuildContext context) async {
+    final response = await ProfileApi().logout('en');
+    if (response) {
+      Navigator.pushNamed(context, 'startView');
+    } else {
+      showSnackbar(const Text('Logout failed'), context);
+      Navigator.pop(context);
+    }
   }
 
-  Future<void> logoutFromAll() async {
-    await ProfileApi().logoutFromAll('en');
+  Future<void> logoutFromAll(BuildContext context) async {
+    final response = await ProfileApi().logoutFromAll('en');
+    if (response) {
+      Navigator.pushReplacementNamed(context, 'startView');
+    } else {
+      showSnackbar(const Text('Logout failed'), context);
+      Navigator.pop(context);
+    }
   }
 
   // Future<void> followUser() async {
@@ -91,14 +103,11 @@ class ProfileViewModel with ChangeNotifier {
       String password, String lang, BuildContext context) async {
     final response = await ProfileApi().deleteAccount(password, lang);
     if (response['success']) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => StartView(),
-        ),
-      );
-    } else
+      Navigator.pushReplacementNamed(context, 'startView');
+    } else {
       showSnackbar(Text(response['message'].toString()).tr(), context);
+      Navigator.pop(context);
+    }
   }
 
   Future<void> setBlocklist(String lang) async {

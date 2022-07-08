@@ -1,7 +1,9 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -9,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import '../constants.dart';
 
 class ProfileApi {
-  Future<UserModel> getUserProfile(String lang) async {
+  Future<UserModel> getUserProfile(String lang, BuildContext context) async {
     try {
       print(getTimezone());
       final response =
@@ -21,20 +23,23 @@ class ProfileApi {
         'timeZone': getTimezone()
       });
 
+      final data = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
         UserModel userModel = UserModel.fromJson(jsonDecode(response.body));
-        print(userModel);
         return userModel;
       } else {
-        print(jsonDecode(response.body));
+        showSnackbar(Text(data['message']), context);
       }
     } catch (e) {
+      showSnackbar(Text(e.toString()), context);
       print('Get profile error: $e');
     }
     return UserModel();
   }
 
-  Future<UserModel> getAnotherUserProfile(String lang, int id) async {
+  Future<UserModel> getAnotherUserProfile(
+      String lang, int id, BuildContext context) async {
     try {
       final response =
           await http.get(Uri.parse('$base_URL/user/profile/$id'), headers: {
@@ -44,31 +49,33 @@ class ProfileApi {
         'authorization': token,
         'timeZone': getTimezone()
       });
-
+      final data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         UserModel _userModel = UserModel.fromJson(jsonDecode(response.body));
         print(_userModel);
         return _userModel;
       } else {
+        showSnackbar(Text(data['message']), context);
         print(jsonDecode(response.body));
       }
     } catch (e) {
+      showSnackbar(Text(e.toString()), context);
       print('Get another profile error: $e');
     }
     return UserModel();
   }
 
-  Future<void> editProfile(
-    String fname,
-    String lname,
-    XFile image,
-    String bio,
-    String height,
-    String weight,
-    Gender gender,
-    DateTime birthdate,
-    String country,
-  ) async {
+  Future<dynamic> editProfile(
+      String fname,
+      String lname,
+      XFile image,
+      String bio,
+      String height,
+      String weight,
+      Gender gender,
+      DateTime birthdate,
+      String country,
+      BuildContext context) async {
     try {
       var request =
           http.MultipartRequest("Post", Uri.parse('$base_URL/user/update'));
@@ -91,12 +98,17 @@ class ProfileApi {
         request.files.add(pic);
       }
       var response = await request.send();
-
       var responseData = await response.stream.toBytes();
       var responseString = String.fromCharCodes(responseData);
-      print(responseString);
+      if (response.statusCode == 200) {
+        return {'success': true, 'message': 'Edited successfully'};
+      } else {
+        return {'success': false, 'message': 'Edit Failed'};
+      }
     } catch (e) {
       print('Update profile error: $e');
+
+      return {'success': false, 'message': e.toString()};
     }
   }
 
@@ -166,7 +178,7 @@ class ProfileApi {
     return false;
   }
 
-  Future<void> logout(String lang) async {
+  Future<bool> logout(String lang) async {
     try {
       final response = await http.get(
         Uri.parse('$base_URL/user/logout'),
@@ -180,15 +192,18 @@ class ProfileApi {
       );
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
+        return true;
       } else {
         print(jsonDecode(response.body));
+        return false;
       }
     } catch (e) {
       print('Logout Error: $e');
+      return false;
     }
   }
 
-  Future<void> logoutFromAll(String lang) async {
+  Future<bool> logoutFromAll(String lang) async {
     //
     try {
       final response = await http.get(
@@ -203,11 +218,14 @@ class ProfileApi {
       );
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
+        return true;
       } else {
         print(jsonDecode(response.body));
+        return false;
       }
     } catch (e) {
       print('Logout Error: $e');
+      return false;
     }
   }
 

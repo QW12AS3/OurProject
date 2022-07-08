@@ -43,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
             color: orangeColor,
             onRefresh: () async {
               await Provider.of<ProfileViewModel>(context, listen: false)
-                  .setCurrentUserData();
+                  .setCurrentUserData(context);
             },
             child: Column(
               children: [
