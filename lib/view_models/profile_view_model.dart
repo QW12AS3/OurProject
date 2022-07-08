@@ -1,8 +1,12 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: curly_braces_in_flow_control_structures, use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/profile_api.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/user_model.dart';
+import 'package:home_workout_app/views/start_view/start_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileViewModel with ChangeNotifier {
@@ -12,6 +16,7 @@ class ProfileViewModel with ChangeNotifier {
   bool _infoWidgetVisible = false;
   List _followers = [];
   List _followings = [];
+  List _blocklist = [];
 
   //bool _PasswordObsecure = false;
 
@@ -82,10 +87,30 @@ class ProfileViewModel with ChangeNotifier {
   //   await ProfileApi().getFollowings('en');
   // }
 
+  Future<void> deleteAccount(
+      String password, String lang, BuildContext context) async {
+    final response = await ProfileApi().deleteAccount(password, lang);
+    if (response['success']) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => StartView(),
+        ),
+      );
+    } else
+      showSnackbar(Text(response['message'].toString()).tr(), context);
+  }
+
+  Future<void> setBlocklist(String lang) async {
+    _blocklist = await ProfileApi().getBlocklist(lang);
+    notifyListeners();
+  }
+
   UserModel get getUserData => _userData;
   bool get getInfoWidgetVisible => _infoWidgetVisible;
   bool get getIsLoading => _isLoading;
   List get getFollowers => _followers;
   List get getFollowings => _followings;
+  List get getBlocklist => _blocklist;
   //bool get getPasswordObsecure => _PasswordObsecure;
 }

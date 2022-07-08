@@ -6,9 +6,8 @@ Color orangeColor = const Color(0xFFFB8500);
 Color blueColor = const Color(0xff126782);
 Color greyColor = Colors.grey;
 
-
-const String base_URL = 'http://192.168.1.111:8003/api';
-
+const String base_URL = 'http://192.168.43.113:8000/api';
+final String ip = base_URL.replaceAll('/api', '');
 
 const String apiKey =
     'THSzx8cmJny4DFmjvjX2calOKSduaJxb3YKC9sCuoCdEiF4J9w6qul5kRFwt1mUR';
@@ -17,7 +16,7 @@ const String apiKey =
 Map<String, dynamic> headers = {'accept': 'application/json'};
 
 String token = 'Bearer ' +
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiY2E5NjRmMzE5YzFiMjA2YWIzM2ZjODMxNjc5ZTkxNDRmYzQ2ZWViOTBlYTJmZDc5MjZkOTlmMDVkZDI2ZjY3MzY2ZGNmYzY3ZTM3NjA1NWQiLCJpYXQiOjE2NTcxNDYxNjkuNTUxNzI2LCJuYmYiOjE2NTcxNDYxNjkuNTUxNzMsImV4cCI6MTY1Nzc1MDk2OS41MzMwMjcsInN1YiI6IjYiLCJzY29wZXMiOlsiKiJdfQ.EmeDcRSJSR61qw4_pZmDCHR5Vn4ST6yLy_6SdRK8uyG4KhWWCZdKT-UVORKRAoKdvP4IMyIrlFsUjNF2bj5AzUVkmIZ1VNSAymCV_S063f3d7gRi-sPPE7fni0lsOrDdZWm29jKZwoQQEDkDR1qSkHBaBoJxKL0irjnjn2ish5dipBqY-rjFzgQfG5W1KuhzisrVYOhriJhi9Hcv5u5JdAsmabbWZEUd3-lWd0qaYZyxQCirxXRuLZjexCqC3acWliRsW6WBsSBm9Ueb6Y1WOSs-8RkG8FofQyWuY9kADx698SA-RyEKtccaJ6TD3hD4-sZKpUOOa3PjoQbs9DcD1LNbtyaRTYJBkExYebzle2SLrFoI9OFKCWr7_cOFqFVU4k03Wcn2D-yUYb0La7B8yKQvgPeN4vzsNUfmv5YsYhvcdB4S0HxMuMVbc1fB978zmfpuxektxIzkw3aqn2Yvw-6m5nftEDnKZLKA5oMeLtPGzSebjnFg0qQ9rpfTL6hc2nRRhgWWc7Kt_CElQ9CRg-P3F0qr4lIYnnYF3Zya2r9y_XpMX9SvSxvICClARAHQoMTVp3aNzqQDYN-8JrrOeLIWIOX11UHgqpoorvl_3LAuOOLCg8ix-kaRe3Ln539H3XNLZ1Ys__6lVXBVsnDhPbR_ruvP5wQtRYbDhuq2rBE';
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiOWRhZWRhMmRmZDA0YzVmNTEzN2I1MmZjZDkxZDg2MTVhNzE2Njk3YWY0Y2UyZTViMzExYTU5MzQ3MzhlM2U1NzU1YWU0OWI2NGEyOTUzNjUiLCJpYXQiOjE2NTcxODY4MTUuNDM1MjI3LCJuYmYiOjE2NTcxODY4MTUuNDM1MjMxLCJleHAiOjE2NTc3OTE2MTUuNDI1NzM1LCJzdWIiOiIxIiwic2NvcGVzIjpbIioiXX0.gF-j4I9Hlh94NOTv__UyUTO-XSf4uVsyu0C607diV7RdiVv4qxU_-MJEhfEOBu1zfzSLncK_ys47DPa7dOZAnZGfUSzZuoJuV5_K7UTGUHX42GI341kxsB-Tbs7IxOneRy-tB2ng63ll4lIZYZGiP9TIlsZhUHgY7WOl7xN6e8VADsTelxOKjMfyjFQScuOaOrjZJXDLD8zCzjctA2Deb7lcIegJPVSQsiVQeCR2nu8CDPK7R_7Vpg_C-lmuGuw7AQJcu06f8LWMEVrwBsgSQ3EnCqZDnXz3YUCGVVisb5C_nYmRVyyiRfewAAsmrcpXdNw24G2bwE-uy2JyMUytsga65G7NLzc5x5NQRf1Pkka6yDoIBcF_WfS3GyurAKTvQzApDdA129ZHNdjFTc9lTLDqzSWF3rcVamYsYwb-FGa86I1eJAESeyNGHbaYenhb64sShKK8HFt7YKFvPv8lNjwt6E3-RGvm8DhOSvEDrD6mUPRuzAdTqBrAs6v44WIZC2UZJ6ZhubZYcFmCGyJhWIAJwHM8sp1nBcuAjx5soWzeevlWU6flT0vinPzJGL25bUCJ29N7Yoq1V0Fzx8wBYfjri-7xulKWq70cZompEjNqKRAJm9ckOYxCuhxrEqxEKAw5yngvLnStPHHU4oPeiopfk9p7pcTJDOIwqen9lcg';
 
 enum Gender { male, female }
 
@@ -38,5 +37,10 @@ class CustomLoading extends StatelessWidget {
     );
   }
 }
+
+String getTimezone() {
+  return DateTime.now().timeZoneOffset.inMinutes.toString();
+}
+
 //temporary
 
