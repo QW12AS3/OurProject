@@ -196,7 +196,8 @@ class ChangePasswordView extends StatelessWidget {
                       .changePassword(
                           oldPasswordController.text.trim(),
                           newPasswordController.text.trim(),
-                          confirmPasswordController.text.trim());
+                          confirmPasswordController.text.trim(),
+                          context);
                 },
                 child: const Text('Save changes').tr())
           ],

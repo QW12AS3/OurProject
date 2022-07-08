@@ -277,7 +277,7 @@ class myDrawer extends StatelessWidget {
               InkWell(
                 onTap: () async {
                   Provider.of<ProfileViewModel>(context, listen: false)
-                      .logout();
+                      .logout(context);
                 },
                 child: ListTile(
                   title: Text(
@@ -289,7 +289,7 @@ class myDrawer extends StatelessWidget {
               InkWell(
                 onTap: () async {
                   Provider.of<ProfileViewModel>(context, listen: false)
-                      .logoutFromAll();
+                      .logoutFromAll(context);
                 },
                 child: ListTile(
                   title: Text(

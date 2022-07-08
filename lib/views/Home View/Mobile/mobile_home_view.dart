@@ -33,7 +33,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
       Provider.of<MobileHomeViewModel>(context, listen: false)
           .setCurrentTab(_tabController.index);
       Provider.of<ProfileViewModel>(context, listen: false)
-          .setCurrentUserData();
+          .setCurrentUserData(context);
     });
 
     Future.delayed(Duration.zero).then((value) {

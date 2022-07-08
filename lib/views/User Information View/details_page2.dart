@@ -25,8 +25,11 @@ class _Details2PageState extends State<Details2Page> {
     });
   }
 
+  TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: SizedBox(
@@ -39,7 +42,7 @@ class _Details2PageState extends State<Details2Page> {
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          toolbarHeight: 80,
+          toolbarHeight: 150,
           title: Column(
             children: [
               Padding(
@@ -59,6 +62,49 @@ class _Details2PageState extends State<Details2Page> {
                   padding: false,
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 70,
+                  child: TextField(
+                    onChanged: (value) {
+                      Provider.of<UserInformationViewModel>(context,
+                              listen: false)
+                          .setSearchValue(value);
+                    },
+                    controller: searchController,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      label: FittedBox(child: const Text('Search').tr()),
+                      floatingLabelStyle: theme.textTheme.bodySmall,
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: orangeColor, width: 1.5),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: greyColor, width: 1.5),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                      ),
+                      errorBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.5),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: orangeColor, width: 1.5),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           )),
       body: Scrollbar(
@@ -67,20 +113,39 @@ class _Details2PageState extends State<Details2Page> {
             children: [
               Consumer<UserInformationViewModel>(
                 builder: (context, consumer, child) => Scrollbar(
-                  child: Column(
-                    children: consumer.getDiseases
-                        .map((e) => CheckboxListTile(
-                            title: UserInfoCustomText(
-                              text: e['name'].toString(),
-                              color: blueColor,
-                              fontsize: 15,
-                            ),
-                            value: e['selected'],
-                            onChanged: (value) {
-                              consumer.changeDiseasesValue(e['id'], value);
-                            }))
-                        .toList(),
-                  ),
+                  child: consumer.getDiseases.isEmpty
+                      ? Center(
+                          child: Text(
+                            'Something went wrong',
+                            style: theme.textTheme.bodySmall!
+                                .copyWith(color: greyColor),
+                          ),
+                        )
+                      : Column(
+                          children: consumer.getDiseases
+                              .where(
+                                (element) => consumer.getSearchValue.isEmpty
+                                    ? element
+                                    : consumer.getSearchValue.contains(
+                                        element['name'],
+                                      ),
+                              )
+                              .map(
+                                (e) => CheckboxListTile(
+                                  title: UserInfoCustomText(
+                                    text: e['name'].toString(),
+                                    color: blueColor,
+                                    fontsize: 15,
+                                  ),
+                                  value: e['selected'],
+                                  onChanged: (value) {
+                                    consumer.changeDiseasesValue(
+                                        e['id'], value);
+                                  },
+                                ),
+                              )
+                              .toList(),
+                        ),
                 ),
               ),
             ],

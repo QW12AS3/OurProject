@@ -31,7 +31,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
       final args = ModalRoute.of(context)!.settings.arguments as Map;
 
       Provider.of<AnotherUserProfileViewModel>(context, listen: false)
-          .setUserData(args['id']);
+          .setUserData(args['id'], context);
       Provider.of<ProfileViewModel>(context, listen: false)
           .setInfoWidgetVisible(false);
     });
@@ -182,13 +182,15 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                                   user.getUserData.id,
                                                   context.locale == Locale('en')
                                                       ? 'en'
-                                                      : 'ar');
+                                                      : 'ar',
+                                                  context);
                                             else
                                               user.blockUser(
                                                   user.getUserData.id,
                                                   context.locale == Locale('en')
                                                       ? 'en'
-                                                      : 'ar');
+                                                      : 'ar',
+                                                  context);
 
                                             break;
                                           default:
@@ -259,14 +261,16 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                                     context.locale ==
                                                             Locale('en')
                                                         ? 'en'
-                                                        : 'ar');
+                                                        : 'ar',
+                                                    context);
                                               else
                                                 user.setUnfollow(
                                                     user.getUserData.id,
                                                     context.locale ==
                                                             Locale('en')
                                                         ? 'en'
-                                                        : 'ar');
+                                                        : 'ar',
+                                                    context);
                                             },
                                             child: Text(
                                               !user.getUserData.followed
