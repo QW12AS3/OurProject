@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/models/sign_in_model.dart';
-import 'package:home_workout_app/views/sign%20in%20view/sigin_widgets.dart';
+import 'package:home_workout_app/views/otp_view.dart';
 
 import 'package:provider/provider.dart';
 
@@ -12,7 +13,7 @@ class SignIn extends StatelessWidget {
   final formGlobalKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController c_nameController = TextEditingController();
+  TextEditingController c_nameController = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +22,24 @@ class SignIn extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: FloatingActionButton.extended(
+            elevation: 0,
+            icon: Icon(
+              Icons.skip_next,
+              color: orangeColor,
+            ),
+            onPressed: () {}, //TODO:
+            backgroundColor: Colors.white.withOpacity(0.001),
+            label: Text(
+              'Skip',
+              style: theme.textTheme.bodySmall,
+            )),
         body: Stack(
           children: [
             Container(
                 height: double.infinity,
-                decoration: BoxDecoration(
-                    // color: Color.fromARGB(251, 133, 0, 78),
-                    image: const DecorationImage(
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
                   image: AssetImage(
                     'assets/images/login.jpg',
                   ),
@@ -35,234 +47,238 @@ class SignIn extends StatelessWidget {
                       ColorFilter.mode(Colors.black54, BlendMode.darken),
                   //   color: Colors.black.withOpacity(0.001),
                   fit: BoxFit.cover,
-                ))
-                //  child: Image.asset(
-                //               'assets/images/MainPageExercise.gif',
-                //              // color: Colors.black.withOpacity(0.001),
-                //               fit: BoxFit.fill,
-                //             ),
-                ),
+                ))),
             SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: mq.size.height * 0.23,
+                    height: mq.size.height * 0.2,
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: Colors.white70.withOpacity(0.3),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            height: mq.size.height * 0.02,
-                          ),
-                          Form(
-                            key: formGlobalKey,
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 0,
-                                  width: 0,
-                                  child: TextFormField(
-                                    controller: c_nameController,
-                                  ),
-                                ),
-                                Container(
-                                  width: 380,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white70.withOpacity(0.5),
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: TextFormField(
-                                    // maxLength: 25,
-                                    controller: emailController,
-                                    validator: (value) {
-                                      return signInViewModel()
-                                          .checkEmail(value.toString());
-
-                                      // if (value!.trim().isEmpty) {
-                                      //   return ' You have to fill the Email';
-                                      // } else if (!value.trim().contains('@') ||
-                                      //     !value.trim().contains('.')) {
-
-                                      // }
-                                    },
-                                    decoration: InputDecoration(
-                                      // focusedErrorBorder:  OutlineInputBorder(
-                                      //   borderSide:
-                                      //       BorderSide(color: blueColor, width: 1.5),
-                                      //   borderRadius: BorderRadius.all(
-                                      //     Radius.circular(15),
-                                      //   ),
-                                      // ),
-
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: greyColor, width: 1.5),
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(15),
-                                        ),
-                                      ),
-                                      errorBorder: const OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.red, width: 1.5),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(15),
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: orangeColor, width: 1.5),
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(15),
-                                        ),
-                                      ),
-                                      labelText: 'Email',
-                                      labelStyle: TextStyle(
-                                          color: orangeColor,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                      prefixIcon: Icon(
-                                        Icons.email_outlined,
-                                        color: blueColor,
-                                        size: 33,
-                                      ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Colors.white70.withOpacity(0.3),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              height: mq.size.height * 0.02,
+                            ),
+                            Form(
+                              key: formGlobalKey,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 0,
+                                    width: 0,
+                                    child: TextFormField(
+                                      controller: c_nameController,
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(5),
+                                      ],
                                     ),
-                                    style: TextStyle(
-                                        color: blueColor,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                    keyboardType: TextInputType.emailAddress,
-                                    textInputAction: TextInputAction.next,
                                   ),
-                                ),
-                                SizedBox(
-                                  height: mq.size.height * 0.03,
-                                ),
-                                Container(
+                                  Container(
                                     width: 380,
                                     decoration: BoxDecoration(
                                         color: Colors.white70.withOpacity(0.5),
                                         borderRadius:
                                             BorderRadius.circular(15)),
-                                    child: Consumer<signInViewModel>(
-                                        builder: ((context, value, _) =>
-                                            TextFormField(
-                                              controller: passwordController,
-                                              validator: (value) {
-                                                // if (value!.trim().isEmpty) {
-                                                //   return " You have to fill the password";
-                                                // } else if (value.trim().length < 6) {
-                                                //   return " Password should be 6 characters or more";
-                                                // }
-                                                return signInViewModel()
-                                                    .checkPassword(
-                                                        value.toString());
-                                              },
-                                              decoration: InputDecoration(
-                                                  // focusedErrorBorder:  OutlineInputBorder(
-                                                  //   borderSide:
-                                                  //       BorderSide(color: blueColor, width: 1.5),
-                                                  //   borderRadius: BorderRadius.all(
-                                                  //     Radius.circular(15),
-                                                  //   ),
-                                                  // ),
+                                    child: TextFormField(
+                                      // maxLength: 25,
+                                      controller: emailController,
+                                      validator: (value) {
+                                        return signInViewModel()
+                                            .checkEmail(value.toString());
+                                      },
+                                      decoration: InputDecoration(
+                                        // focusedErrorBorder:  OutlineInputBorder(
+                                        //   borderSide:
+                                        //       BorderSide(color: blueColor, width: 1.5),
+                                        //   borderRadius: BorderRadius.all(
+                                        //     Radius.circular(15),
+                                        //   ),
+                                        // ),
 
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: greyColor,
-                                                        width: 1.5),
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                      Radius.circular(15),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: greyColor, width: 1.5),
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(15),
+                                          ),
+                                        ),
+                                        errorBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.red, width: 1.5),
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(15),
+                                          ),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: orangeColor, width: 1.5),
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(15),
+                                          ),
+                                        ),
+                                        labelText: 'Email',
+                                        labelStyle: TextStyle(
+                                            color: orangeColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                        prefixIcon: Icon(
+                                          Icons.email_outlined,
+                                          color: blueColor,
+                                          size: 33,
+                                        ),
+                                      ),
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(50),
+                                      ],
+                                      style: TextStyle(
+                                          color: blueColor,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                      keyboardType: TextInputType.emailAddress,
+
+                                      textInputAction: TextInputAction.next,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: mq.size.height * 0.03,
+                                  ),
+                                  Container(
+                                      width: 380,
+                                      decoration: BoxDecoration(
+                                          color:
+                                              Colors.white70.withOpacity(0.5),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Consumer<signInViewModel>(
+                                          builder: ((context, value, _) =>
+                                              TextFormField(
+                                                controller: passwordController,
+                                                validator: (value) {
+                                                  return signInViewModel()
+                                                      .checkPassword(
+                                                          value.toString());
+                                                },
+                                                decoration: InputDecoration(
+                                                    // focusedErrorBorder:  OutlineInputBorder(
+                                                    //   borderSide:
+                                                    //       BorderSide(color: blueColor, width: 1.5),
+                                                    //   borderRadius: BorderRadius.all(
+                                                    //     Radius.circular(15),
+                                                    //   ),
+                                                    // ),
+
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: greyColor,
+                                                          width: 1.5),
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .all(
+                                                        Radius.circular(15),
+                                                      ),
                                                     ),
-                                                  ),
-                                                  errorBorder:
-                                                      const OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Colors.red,
-                                                        width: 1.5),
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                      Radius.circular(15),
+                                                    errorBorder:
+                                                        const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.red,
+                                                          width: 1.5),
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                        Radius.circular(15),
+                                                      ),
                                                     ),
-                                                  ),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: orangeColor,
+                                                          width: 1.5),
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .all(
+                                                        Radius.circular(15),
+                                                      ),
+                                                    ),
+                                                    labelText: 'Password',
+                                                    labelStyle: TextStyle(
                                                         color: orangeColor,
-                                                        width: 1.5),
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                      Radius.circular(15),
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    prefixIcon: Icon(
+                                                      Icons
+                                                          .lock_outline_rounded,
+                                                      color: blueColor,
+                                                      size: 33,
                                                     ),
-                                                  ),
-                                                  labelText: 'Password',
-                                                  labelStyle: TextStyle(
-                                                      color: orangeColor,
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  prefixIcon: Icon(
-                                                    Icons.lock_outline_rounded,
+                                                    suffixIcon: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: IconButton(
+                                                          onPressed: () {
+                                                            Provider.of<signInViewModel>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .changePasswordobscure();
+                                                          },
+                                                          icon: Icon(
+                                                            Provider.of<signInViewModel>(
+                                                                        context)
+                                                                    .obscurePassword
+                                                                ? Icons
+                                                                    .visibility_off
+                                                                : Icons
+                                                                    .visibility,
+                                                            color: blueColor,
+                                                            size: 33,
+                                                          )),
+                                                    )),
+                                                style: TextStyle(
                                                     color: blueColor,
-                                                    size: 33,
-                                                  ),
-                                                  suffixIcon: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: IconButton(
-                                                        onPressed: () {
-                                                          Provider.of<signInViewModel>(
-                                                                  context,
-                                                                  listen: false)
-                                                              .changePasswordobscure();
-                                                        },
-                                                        icon: Icon(
-                                                          Provider.of<signInViewModel>(
-                                                                      context)
-                                                                  .obscurePassword
-                                                              ? Icons
-                                                                  .visibility_off
-                                                              : Icons
-                                                                  .visibility,
-                                                          color: blueColor,
-                                                          size: 33,
-                                                        )),
-                                                  )),
-                                              style: TextStyle(
-                                                  color: blueColor,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold),
-                                              keyboardType:
-                                                  TextInputType.visiblePassword,
-                                              obscureText:
-                                                  Provider.of<signInViewModel>(
-                                                          context)
-                                                      .obscurePassword,
-                                              textInputAction:
-                                                  TextInputAction.done,
-                                            )))),
-                              ],
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                keyboardType: TextInputType
+                                                    .visiblePassword,
+                                                obscureText: Provider.of<
+                                                            signInViewModel>(
+                                                        context)
+                                                    .obscurePassword,
+                                                textInputAction:
+                                                    TextInputAction.done,
+                                                inputFormatters: [
+                                                  LengthLimitingTextInputFormatter(
+                                                      50),
+                                                ],
+                                              )))),
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: mq.size.height * 0.01,
-                          ),
-                          TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Forgot password ?',
-                                style: theme.textTheme.bodySmall,
-                              ))
-                        ],
+                            SizedBox(
+                              height: mq.size.height * 0.01,
+                            ),
+                            TextButton(
+                                //TODO:
+                                onPressed: () {},
+                                child: Text(
+                                  'Forgot password ?',
+                                  style: theme.textTheme.bodySmall,
+                                ))
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -284,48 +300,42 @@ class SignIn extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(25)),
                           ),
                           onPressed: () async {
-                            // print('pppppppppppp');
                             if (formGlobalKey.currentState!.validate()) {
                               formGlobalKey.currentState!.save();
                               // use the email provided here
-                              print('rrrrrrrrrrrrrrrrrrrr');
-                              print(emailController.text);
-                              print(passwordController.text);
-                              //   print(c_nameController.text);
-                              final BackEndMessage = await signInViewModel()
-                                  .postUserInfo(
+
+                              final SignInModel BackEndMessage =
+                                  await signInViewModel().postUserInfo(
                                       emailController.text,
                                       passwordController.text,
-                                      c_nameController.text == null
-                                          ? ''
-                                          : c_nameController.text);
+                                      c_nameController.text);
                               print(BackEndMessage);
                               print(BackEndMessage.refresh_token);
                               final sBar = SnackBar(
-                                  content: Container(
-                                child: Text(
-                                    "${BackEndMessage.f_name != null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message != null ? BackEndMessage.message : ''}"),
-                                // "${BackEndMessage.message == null ?BackEndMessage.message != null? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message:''}"), ///////////////////////////////
-                              ));
-                              if ((BackEndMessage.f_name != null &&
-                                      BackEndMessage.f_name != '') ||
-                                  (BackEndMessage.message != null &&
-                                      BackEndMessage.message != '')) {
+                                  // margin: EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.all(8.0),
+                                  content: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                          "${BackEndMessage.message ?? ''}")));
+                              if (BackEndMessage.message != null) {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(sBar);
                               }
-                              if (BackEndMessage.access_token != null &&
-                                  BackEndMessage.access_token != '') {
+                              if (BackEndMessage.statusCode == 201 ||
+                                  BackEndMessage.statusCode == 450) {
                                 emailController.clear();
                                 passwordController.clear();
                                 if (c_nameController != null)
                                   c_nameController.clear();
-                                //Navigate
+                                Navigator.of(context).pushReplacementNamed(
+                                  '/otp',
+                                );
                               }
                             }
                           },
                           child: Text(
-                            'Login',
+                            'Log in',
                             style: TextStyle(
                                 color: orangeColor,
                                 //Colors.white,
@@ -346,7 +356,11 @@ class SignIn extends StatelessWidget {
                                 fontWeight: FontWeight.normal),
                           ),
                           TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).pushReplacementNamed(
+                                  '/signup',
+                                );
+                              },
                               child: Text(
                                 'Sign up here',
                                 style: theme.textTheme.bodySmall,
@@ -406,6 +420,9 @@ class SignIn extends StatelessWidget {
                             DateTime dateTime = DateTime.now();
                             print(dateTime.timeZoneName);
                             print(dateTime.timeZoneOffset);
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => OTPView()));
                           },
                           icon: Image.asset(
                             'assets/images/facebook.png',

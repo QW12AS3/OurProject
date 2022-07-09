@@ -9,6 +9,7 @@ class SignByGoogleViewModel with ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   GoogleSignInAccount? _currentUser;
   String accessToken = '';
+  var statusCode = 0;
   userIsSignedIn() {
     // to make user signedin if the user signein before
     // maybe don't need it
@@ -22,6 +23,12 @@ class SignByGoogleViewModel with ChangeNotifier {
   printDetails() {}
   void signOut() {
     _googleSignIn.disconnect();
+  }
+
+  setStatusCode(var statusCodeValue) {
+    statusCode = statusCodeValue;
+    notifyListeners();
+    print("staaaaaaaaaaaaaaaaattttttuuuuuuuuus" + "$statusCode");
   }
 
   Future<void> signIn() async {

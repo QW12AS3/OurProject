@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
@@ -15,7 +16,7 @@ class SignUp extends StatelessWidget {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confimPasswordController = TextEditingController();
-  TextEditingController c_nameController = TextEditingController();
+  TextEditingController c_nameController = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,18 @@ class SignUp extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: FloatingActionButton.extended(
+            elevation: 0,
+            icon: Icon(
+              Icons.skip_next,
+              color: orangeColor,
+            ),
+            onPressed: () {}, //TODO:
+            backgroundColor: Colors.white.withOpacity(0.001),
+            label: Text(
+              'Skip',
+              style: theme.textTheme.bodySmall,
+            )),
         body: Stack(
           children: [
             Container(
@@ -78,6 +91,9 @@ class SignUp extends StatelessWidget {
                                       width: 0,
                                       child: TextFormField(
                                         controller: c_nameController,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(5),
+                                        ],
                                       ),
                                     ),
                                     Container(
@@ -501,10 +517,14 @@ class SignUp extends StatelessWidget {
                                           : c_nameController.text);
                               print(BackEndMessage);
                               final sBar = SnackBar(
-                                  content: Container(
-                                child: Text(
-                                    "${BackEndMessage.f_name != null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message != null ? BackEndMessage.message : ''}"),
-                                // "${BackEndMessage.message == null ?BackEndMessage.message != null? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message:''}"), ///////////////////////////////
+                                  content: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  margin: EdgeInsets.all(8.0),
+                                  child: Text(
+                                      "${BackEndMessage.f_name != null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message != null ? BackEndMessage.message : ''}"),
+                                  // "${BackEndMessage.message == null ?BackEndMessage.message != null? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message:''}"), ///////////////////////////////
+                                ),
                               ));
                               if ((BackEndMessage.f_name != null &&
                                       BackEndMessage.f_name != '') ||

@@ -86,7 +86,12 @@ class Vigor extends StatelessWidget {
         //       return null;
         //   }
         // },
+        initialRoute: '/',
         routes: {
+          '/signup': (context) => SignUp(),
+          '/signin': (context) => SignIn(),
+          '/': (context) => StartView(),
+          '/otp': (context) => OTPView(),
           'comments': (context) => CommentsView(),
           'editProfile': (context) => EditProfileView(),
           'changeEmail': (context) => ChangeEmailView(),
@@ -167,16 +172,9 @@ class Vigor extends StatelessWidget {
         // home: StartView(),
         //  home: const MobileHomeView(),
 
-        //home: SignIn(),
-        home: OTPView(),
-        // home: SignUp(),
-
         // home: SignIn(),
-
+        // home: OTPView(),
         // home: SignUp(),
-
-        // home: SignUp(),
-
 //         home: MobileHomeView(),
         //  UserInformationView(),
       ),
