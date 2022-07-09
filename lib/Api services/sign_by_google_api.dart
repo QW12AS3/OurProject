@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/sign_by_google_model.dart';
-import 'package:home_workout_app/models/sign_in_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 
 class SignByGoogleAPI {
   static Future<SignByGoogleModel> createUser(SignByGoogleModel user) async {
@@ -24,6 +23,7 @@ class SignByGoogleAPI {
       print(user.toJson());
       print(response.statusCode);
       if (response.statusCode == 201) {
+        SignByGoogleViewModel().setStatusCode(response.statusCode);
         print(response.body);
         SignByGoogleViewModel().signOut();
         return SignByGoogleModel.fromJson(json.decode(response.body));

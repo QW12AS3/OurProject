@@ -7,7 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class signInViewModel with ChangeNotifier {
   bool obscurePassword = true;
-
+  var statusCode = 0;
+  late BuildContext statusCodeContext;
   changePasswordobscure() {
     obscurePassword = !obscurePassword;
     print(obscurePassword);
@@ -34,6 +35,18 @@ class signInViewModel with ChangeNotifier {
       });
     } catch (e) {
       print(e);
+    }
+    setStatusCode(var statusCodeValue) {
+      statusCode = statusCodeValue;
+      notifyListeners();
+      print("staaaaaaaaaaaaaaaaattttttuuuuuuuuus" + "$statusCode");
+    }
+
+    setStatusCodeContext(BuildContext statusCodeContextValue) {
+      statusCodeContext = statusCodeContextValue;
+      notifyListeners();
+      print(
+          "staaaaaaaaaaaaaaaaattttttuuuuuuuuusContext " + "$statusCodeContext");
     }
 
     if (result!.access_token != null && result!.refresh_token != null)

@@ -14,7 +14,8 @@ class OTPView extends StatefulWidget {
 class _OTPViewState extends State<OTPView> {
   final formGlobalKey = GlobalKey<FormState>();
   TextEditingController otpController = TextEditingController();
-  TextEditingController c_nameController = TextEditingController();
+  TextEditingController c_nameController =
+      TextEditingController(text: ''); //TODO: add cname
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -60,108 +61,123 @@ class _OTPViewState extends State<OTPView> {
                 ),
                 Form(
                   key: formGlobalKey,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: mq.size.height * 0.1,
-                        vertical: mq.size.width * 0.05),
-                    child: Container(
-                      width: 380,
-                      decoration: BoxDecoration(
-                          color: Colors.white70.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Consumer<otpViewModel>(
-                        builder: ((context, value, _) => TextFormField(
-                              controller: otpController,
-                              validator: (value) {
-                                return otpViewModel()
-                                    .checkCode(value.toString());
-                              },
-                              decoration: InputDecoration(
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.red, width: 1.5),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(15),
-                                  ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: greyColor, width: 1.5),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(15),
-                                  ),
-                                ),
-                                errorBorder: const OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.red, width: 1.5),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(15),
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: orangeColor, width: 1.5),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(15),
-                                  ),
-                                ),
-                                hintText: " * * * * * ",
-                                // helperText: " R R R R",
-                                // counterText: "W WW w",
-                                // suffixText: "sss ss",
-                                hintStyle: TextStyle(
-                                    color: blueColor.withOpacity(0.7),
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.w900),
-                                labelText: 'Validation code',
-                                labelStyle: TextStyle(
-                                    color: orangeColor,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                                prefixIcon: Icon(
-                                  Icons.verified_user_outlined,
-                                  color: blueColor,
-                                  size: 33,
-                                ),
-                                suffixIcon: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: IconButton(
-                                      onPressed: () {
-                                        Provider.of<otpViewModel>(context,
-                                                listen: false)
-                                            .changeCodeobscure();
-                                      },
-                                      icon: Icon(
-                                        Provider.of<otpViewModel>(context)
-                                                .obscureCode
-                                            ? Icons.visibility_off
-                                            : Icons.visibility,
-                                        color: blueColor,
-                                        size: 33,
-                                      )),
-                                ),
-                              ),
-                              style: TextStyle(
-                                  color: blueColor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
-                              keyboardType: TextInputType.visiblePassword,
-                              textInputAction: TextInputAction.done,
-                              obscureText: Provider.of<otpViewModel>(context)
-                                  .obscureCode,
-                              obscuringCharacter: 'X',
-                              maxLength: 5,
-                              textAlign: TextAlign.center,
-                              cursorHeight: 30,
-                              // inputFormatters: [
-                              // LengthLimitingTextInputFormatter(5),
-                              // FilteringTextInputFormatter.digitsOnly,
-                              // ],
-                              showCursor: false,
-                              // readOnly: false,
-                            )),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 0,
+                        width: 0,
+                        child: TextFormField(
+                          controller: c_nameController,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(5),
+                          ],
+                        ),
                       ),
-                    ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: mq.size.height * 0.1,
+                            vertical: mq.size.width * 0.05),
+                        child: Container(
+                          width: 380,
+                          decoration: BoxDecoration(
+                              color: Colors.white70.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Consumer<otpViewModel>(
+                            builder: ((context, value, _) => TextFormField(
+                                  controller: otpController,
+                                  validator: (value) {
+                                    return otpViewModel()
+                                        .checkCode(value.toString());
+                                  },
+                                  decoration: InputDecoration(
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.red, width: 1.5),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(15),
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: greyColor, width: 1.5),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(15),
+                                      ),
+                                    ),
+                                    errorBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.red, width: 1.5),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(15),
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: orangeColor, width: 1.5),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(15),
+                                      ),
+                                    ),
+                                    hintText: " * * * * * ",
+                                    // helperText: " R R R R",
+                                    // counterText: "W WW w",
+                                    // suffixText: "sss ss",
+                                    hintStyle: TextStyle(
+                                        color: blueColor.withOpacity(0.7),
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.w900),
+                                    labelText: 'Validation code',
+                                    labelStyle: TextStyle(
+                                        color: orangeColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                    prefixIcon: Icon(
+                                      Icons.verified_user_outlined,
+                                      color: blueColor,
+                                      size: 33,
+                                    ),
+                                    suffixIcon: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            Provider.of<otpViewModel>(context,
+                                                    listen: false)
+                                                .changeCodeobscure();
+                                          },
+                                          icon: Icon(
+                                            Provider.of<otpViewModel>(context)
+                                                    .obscureCode
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
+                                            color: blueColor,
+                                            size: 33,
+                                          )),
+                                    ),
+                                  ),
+                                  style: TextStyle(
+                                      color: blueColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                  keyboardType: TextInputType.visiblePassword,
+                                  textInputAction: TextInputAction.done,
+                                  obscureText:
+                                      Provider.of<otpViewModel>(context)
+                                          .obscureCode,
+                                  obscuringCharacter: 'X',
+                                  maxLength: 5,
+                                  textAlign: TextAlign.center,
+                                  cursorHeight: 30,
+                                  // inputFormatters: [
+                                  // LengthLimitingTextInputFormatter(5),
+                                  // FilteringTextInputFormatter.digitsOnly,
+                                  // ],
+                                  showCursor: false,
+                                  // readOnly: false,
+                                )),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 // SizedBox(

@@ -48,28 +48,16 @@ class SignUpModel {
         // m_token: user['token'],
         // mac: user['mac'],
         // c_name: user['c_name']
-        id: user['data']['user']['id'] == null ? 0 : user['data']['user']['id'],
-        f_name: user['data']['user']['f_name'] == null
-            ? ''
-            : user['data']['user']['f_name'],
-        l_name: user['data']['user']['l_name'] == null
-            ? ''
-            : user['data']['user']['l_name'],
-        email: user['data']['user']['email'] == null
-            ? ''
-            : user['data']['user']['email'],
-        profile_img: user['data']['user']['profile_img'] == null
-            ? ''
-            : user['data']['user']['profile_img'],
-        access_token: user['data']['access_token'] == null
-            ? ''
-            : user['data']['access_token'],
-        refresh_token: user['data']['refresh_token'] == null
-            ? ''
-            : user['data']['refresh_token'],
+        id: user['data']['user']['id'] ?? 0,
+        f_name: user['data']['user']['f_name'] ?? '',
+        l_name: user['data']['user']['l_name'] ?? '',
+        email: user['data']['user']['email'] ?? '',
+        profile_img: user['data']['user']['profile_img'] ?? '',
+        access_token: user['data']['access_token'] ?? '',
+        refresh_token: user['data']['refresh_token'] ?? '',
       );
   factory SignUpModel.fromJsonWithErrors(Map<String, dynamic> user) =>
-      SignUpModel(message: user['message'] == null ? '' : user['message']);
+      SignUpModel(message: user['message'] ?? '');
   //to convert data to json
   Map<String, dynamic> toJson() => {
         'f_name': f_name,
