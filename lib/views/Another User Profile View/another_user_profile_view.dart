@@ -31,7 +31,9 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
       final args = ModalRoute.of(context)!.settings.arguments as Map;
 
       Provider.of<AnotherUserProfileViewModel>(context, listen: false)
-          .setUserData(args['id']);
+          .setUserData(args['id'], context);
+      Provider.of<ProfileViewModel>(context, listen: false)
+          .setInfoWidgetVisible(false);
     });
   }
 
@@ -39,6 +41,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
     final theme = Theme.of(context);
     return Scaffold(
         appBar: AppBar(),
@@ -108,7 +111,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                             child: Consumer<AnotherUserProfileViewModel>(
                               builder: (context, user, child) =>
                                   VisibilityDetector(
-                                key: Key(user.getUserData.id),
+                                key: Key(user.getUserData.id.toString()),
                                 onVisibilityChanged: (VisibilityInfo info) {
                                   if (info.visibleBounds.isEmpty)
                                     user.setInfoWidgetVisible(true);
@@ -176,18 +179,18 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                           case 'block':
                                             if (user.getUserData.i_block)
                                               user.unblockUser(
-                                                  int.parse(
-                                                      user.getUserData.id),
+                                                  user.getUserData.id,
                                                   context.locale == Locale('en')
                                                       ? 'en'
-                                                      : 'ar');
+                                                      : 'ar',
+                                                  context);
                                             else
                                               user.blockUser(
-                                                  int.parse(
-                                                      user.getUserData.id),
+                                                  user.getUserData.id,
                                                   context.locale == Locale('en')
                                                       ? 'en'
-                                                      : 'ar');
+                                                      : 'ar',
+                                                  context);
 
                                             break;
                                           default:
@@ -254,20 +257,20 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                             onPressed: () {
                                               if (!user.getUserData.followed)
                                                 user.setFollow(
-                                                    int.parse(
-                                                        user.getUserData.id),
+                                                    user.getUserData.id,
                                                     context.locale ==
                                                             Locale('en')
                                                         ? 'en'
-                                                        : 'ar');
+                                                        : 'ar',
+                                                    context);
                                               else
                                                 user.setUnfollow(
-                                                    int.parse(
-                                                        user.getUserData.id),
+                                                    user.getUserData.id,
                                                     context.locale ==
                                                             Locale('en')
                                                         ? 'en'
-                                                        : 'ar');
+                                                        : 'ar',
+                                                    context);
                                             },
                                             child: Text(
                                               !user.getUserData.followed
@@ -290,7 +293,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                   TextButton(
                                     onPressed: () async {
                                       await user.setFollowers(
-                                          int.parse(user.getUserData.id),
+                                          user.getUserData.id,
                                           context.locale == Locale('en')
                                               ? 'en'
                                               : 'ar');
@@ -326,7 +329,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                 TextButton(
                                   onPressed: () async {
                                     await user.setFollowings(
-                                        int.parse(user.getUserData.id),
+                                        user.getUserData.id,
                                         context.locale == Locale('en')
                                             ? 'en'
                                             : 'ar');
@@ -378,6 +381,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                 user.getUserData.bio == ''
                                     ? const Text('')
                                     : Container(
+                                        width: mq.size.width * 0.95,
                                         margin: const EdgeInsets.symmetric(
                                             horizontal: 10),
                                         padding: const EdgeInsets.all(10),
@@ -392,6 +396,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                               .copyWith(
                                             color: Colors.black,
                                           ),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
                           ),

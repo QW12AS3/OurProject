@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/profile_api.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,6 +23,8 @@ class EditProfileViewModel with ChangeNotifier {
   bool _passwordObsecure1 = true;
   bool _passwordObsecure2 = true;
   bool _passwordObsecure3 = true;
+
+  bool _isLoading = false;
 
   void ChangeWeightUnit(Units unit) {
     _weightUnit = unit;
@@ -124,15 +129,14 @@ class EditProfileViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> changePassword(
-      String oldPassword, String newPassword, String confirmPassword) async {
+  Future<void> changePassword(String oldPassword, String newPassword,
+      String confirmPassword, BuildContext context) async {
     bool response = await ProfileApi()
         .changePassword(oldPassword, newPassword, confirmPassword);
     if (response) {
-      //Navigate to confirmation page
-
+      Navigator.pop(context);
     } else {
-      //drop
+      showSnackbar(const Text('Change password failed'), context);
     }
   }
 
@@ -145,9 +149,19 @@ class EditProfileViewModel with ChangeNotifier {
       String weight,
       Gender gender,
       DateTime birthdate,
+      BuildContext context,
       String country) async {
-    await ProfileApi().editProfile(
-        fname, lname, image, bio, height, weight, gender, birthdate, country);
+    _isLoading = true;
+    final response = await ProfileApi().editProfile(fname, lname, image, bio,
+        height, weight, gender, birthdate, country, context);
+    _isLoading = false;
+    if (response['success']) {
+      showSnackbar(Text(response['message']), context);
+      Navigator.pop(context);
+    } else {
+      showSnackbar(Text(response['message']), context);
+    }
+    notifyListeners();
   }
 
   XFile get getUserImage => _userImage;
@@ -163,4 +177,5 @@ class EditProfileViewModel with ChangeNotifier {
 
   Units get getWeight => _weightUnit;
   Units get getHeight => _heightUnit;
+  bool get getIsLoading => _isLoading;
 }

@@ -7,9 +7,7 @@ import 'package:http/http.dart' as http;
 class SignUpAPI {
   static Future<SignUpModel> createUser(SignUpModel user) async {
     try {
-
       final http.Response response = await http.post(Uri.parse('$base_URL/'),
-
           headers: <String, String>{
             // 'Content-Type': 'application/json;charset=UTF-8'
             'Accept': 'application/json',
@@ -40,7 +38,7 @@ class SignUpAPI {
     return SignUpModel(message: '');
   }
 
-  Future sendUserInfo(
+  Future<Map<String, dynamic>> sendUserInfo(
       Gender gender,
       DateTime birthdate,
       String height,
@@ -68,14 +66,44 @@ class SignUpAPI {
           'country': country
         },
       );
+      final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        print('success');
+        return {'success': true, 'message': data['message']};
+      } else {
+        print(jsonDecode(response.body));
+        return {'success': false, 'message': data['message']};
+      }
+    } catch (e) {
+      print('Sending info error: $e');
+      return {'success': false, 'message': e.toString()};
+    }
+  }
+
+  Future<List> getDiseases(String lang) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/diseases'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization': token,
+          'timeZone': getTimezone()
+        },
+      );
+      if (response.statusCode == 200) {
+        List data = jsonDecode(response.body)['data'] ?? [];
+        print('Data:$data');
+        return data;
       } else {
         print(jsonDecode(response.body));
       }
     } catch (e) {
-      print('Sending info error: $e');
+      print('Get diseases error: $e');
+
+      return [];
     }
+    return [];
   }
 }

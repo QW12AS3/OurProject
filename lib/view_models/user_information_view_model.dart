@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/sign_up_api.dart';
 import 'package:home_workout_app/components.dart';
@@ -10,24 +12,52 @@ class UserInformationViewModel with ChangeNotifier {
   Units weightUnit = Units.kg;
   Units heightUnit = Units.cm;
   String _country = '';
+  List _diseases = [];
+
+  String _searchValue = '';
+
+  bool _isLoading = false;
+
+  void setSearchValue(String value) {
+    _searchValue = value;
+    notifyListeners();
+  }
 
   setCountry(countryName) {
     _country = countryName;
     notifyListeners();
   }
 
-  Map<String, bool> diseases = {
-    'Amyotrophic lateral sclerosis (ALS).': false,
-    'Charcot-Marie-Tooth disease.': false,
-    'Multiple sclerosis.': false,
-    'Muscular dystrophy.': false,
-    'Myasthenia gravis.': false,
-    'Myopathy.': false,
-    'Peripheral neuropathy.': false,
-    'Peripheral neuropa1thy.': false,
-    'Peripheral neuropa2thy.': false,
-    'Peripheral neuropa3thy.': false,
-  };
+  // Map<String, bool> diseases = {
+  //   'Amyotrophic lateral sclerosis (ALS).': false,
+  //   'Charcot-Marie-Tooth disease.': false,
+  //   'Multiple sclerosis.': false,
+  //   'Muscular dystrophy.': false,
+  //   'Myasthenia gravis.': false,
+  //   'Myopathy.': false,
+  //   'Peripheral neuropathy.': false,
+  //   'Peripheral neuropa1thy.': false,
+  //   'Peripheral neuropa2thy.': false,
+  //   'Peripheral neuropa3thy.': false,
+  // };
+
+  Future<void> setDiseases(String lang) async {
+    final resp = await SignUpAPI().getDiseases(lang);
+
+    resp.forEach(
+      (element) {
+        _diseases.add(
+          {
+            'id': element['id'],
+            'name': element['name'],
+            'selected': false,
+          },
+        );
+      },
+    );
+    print(_diseases);
+    notifyListeners();
+  }
 
   bool checkHWValues(String h, String w, BuildContext context) {
     return true;
@@ -46,16 +76,33 @@ class UserInformationViewModel with ChangeNotifier {
       showSnackbar(const Text('Please enter your birthdate'), context);
     } else if (_formkey.currentState != null) {
       if (_formkey.currentState!.validate()) {
-        await sendInfo(getGender, getBirthdate, height, weight, getCountryName,
-            getHeightunit.name, getWeightUnit.name);
-        // _pageController.animateToPage(1,
-        //     duration: const Duration(milliseconds: 300), curve: Curves.linear);
+        if (_country.isEmpty) {
+          showSnackbar(const Text('Please enter your country'), context);
+        } else {
+          _isLoading = true;
+          final response = await sendInfo(
+              getGender,
+              getBirthdate,
+              height,
+              weight,
+              getCountryName,
+              getHeightunit.name,
+              getWeightUnit.name,
+              context);
+          _isLoading = false;
+          if (response) {
+            _pageController.animateToPage(1,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.linear);
+          }
+        }
       }
     }
   }
 
   void changeDiseasesValue(key, changedValue) {
-    diseases.update(key, (value) => changedValue);
+    _diseases.firstWhere((element) => element['id'] == key)['selected'] =
+        changedValue;
     notifyListeners();
   }
 
@@ -102,16 +149,23 @@ class UserInformationViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> sendInfo(
+  Future<bool> sendInfo(
       Gender gender,
       DateTime birthdate,
       String height,
       String weight,
       String country,
       String heightUnit,
-      String weightUnit) async {
-    await SignUpAPI().sendUserInfo(
+      String weightUnit,
+      BuildContext context) async {
+    final response = await SignUpAPI().sendUserInfo(
         gender, birthdate, height, weight, country, heightUnit, weightUnit);
+    if (response['success']) {
+      return true;
+    } else {
+      showSnackbar(Text(response['message'].toString()), context);
+      return false;
+    }
   }
 
   String get getCountryName => _country;
@@ -119,4 +173,7 @@ class UserInformationViewModel with ChangeNotifier {
   DateTime get getBirthdate => birthdate;
   Units get getHeightunit => heightUnit;
   Units get getWeightUnit => weightUnit;
+  List get getDiseases => _diseases;
+  String get getSearchValue => _searchValue;
+  bool get getIsLoading => _isLoading;
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:country_picker/country_picker.dart';
@@ -120,9 +122,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                               .copyWith(color: blueColor),
                         ).tr(),
                         onPressed: () async {
-                          Provider.of<EditProfileViewModel>(context,
+                          await Provider.of<EditProfileViewModel>(context,
                                   listen: false)
                               .changePhoto(ImageSource.gallery);
+                          Navigator.pop(ctx);
                         },
                       ),
                       TextButton(
@@ -132,9 +135,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                               .copyWith(color: blueColor),
                         ).tr(),
                         onPressed: () async {
-                          Provider.of<EditProfileViewModel>(context,
+                          await Provider.of<EditProfileViewModel>(context,
                                   listen: false)
                               .changePhoto(ImageSource.camera);
+                          Navigator.pop(ctx);
                         },
                       ),
                     ],
@@ -641,19 +645,25 @@ class _EditProfileViewState extends State<EditProfileView> {
                   await Provider.of<EditProfileViewModel>(context,
                           listen: false)
                       .editProfile(
-                          fnameController.text.trim(),
-                          lnameController.text.trim(),
-                          value.getUserImage,
-                          bioController.text.trim(),
-                          heightController.text.trim(),
-                          weightController.text.trim(),
-                          value.getGender,
-                          value.getBirthdate,
-                          value.getCountry);
+                    fnameController.text.trim(),
+                    lnameController.text.trim(),
+                    value.getUserImage,
+                    bioController.text.trim(),
+                    heightController.text.trim(),
+                    weightController.text.trim(),
+                    value.getGender,
+                    value.getBirthdate,
+                    context,
+                    value.getCountry,
+                  );
                 },
-                child: const Text(
-                  'Save changes',
-                ).tr(),
+                child: value.getIsLoading
+                    ? const CircularProgressIndicator(
+                        color: Colors.white,
+                      )
+                    : const Text(
+                        'Save changes',
+                      ).tr(),
               ),
             ),
           ],

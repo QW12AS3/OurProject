@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/comments_model.dart';
 import 'package:home_workout_app/my_flutter_app_icons.dart';
+import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -483,14 +484,26 @@ showBottomList(BuildContext context, String title, List user) {
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, 'anotherUserProfile',
-                          arguments: {'id': e['id']});
+                      if (Provider.of<ProfileViewModel>(context, listen: false)
+                              .getUserData
+                              .id
+                              .toString() ==
+                          e['id'].toString()) {
+                        Navigator.pushNamed(context, 'home',
+                            arguments: {'page': 2});
+                      } else {
+                        Navigator.pushNamed(context, 'anotherUserProfile',
+                            arguments: {'id': e['id']});
+                      }
                     },
                     child: Row(
                       children: [
                         CircleAvatar(
                           radius: 20,
-                          backgroundImage: NetworkImage(e['img'].toString()),
+                          backgroundImage: NetworkImage(
+                              e['img'].toString().substring(0, 4) != 'http'
+                                  ? '$ip/${e['img']}'
+                                  : e['img']),
                           onBackgroundImageError: (child, stacktrace) =>
                               const LoadingContainer(),
                           child: Container(),

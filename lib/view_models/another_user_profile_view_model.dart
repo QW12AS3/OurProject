@@ -1,5 +1,8 @@
+// ignore_for_file: curly_braces_in_flow_control_structures, use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:home_workout_app/Api%20services/profile_api.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/user_model.dart';
 
 class AnotherUserProfileViewModel with ChangeNotifier {
@@ -35,15 +38,23 @@ class AnotherUserProfileViewModel with ChangeNotifier {
     }
   };
 
-  Future<void> blockUser(int id, String lang) async {
+  Future<void> blockUser(int id, String lang, BuildContext context) async {
     bool response = await ProfileApi().blockUser(id, lang);
-    if (response) _anotherUserData.isBlocked = true;
+    if (response)
+      _anotherUserData.isBlocked = true;
+    else {
+      showSnackbar(Text('Block failed'), context);
+    }
     notifyListeners();
   }
 
-  Future<void> unblockUser(int id, String lang) async {
+  Future<void> unblockUser(int id, String lang, BuildContext context) async {
     bool response = await ProfileApi().unblockUser(id, lang);
-    if (response) _anotherUserData.isBlocked = false;
+    if (response)
+      _anotherUserData.isBlocked = false;
+    else {
+      showSnackbar(Text('Unblock failed'), context);
+    }
     notifyListeners();
   }
 
@@ -57,7 +68,7 @@ class AnotherUserProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setFollow(int id, String lang) async {
+  Future<void> setFollow(int id, String lang, BuildContext context) async {
     _isLoading = true;
     final response = await ProfileApi().followUser(id, lang);
 
@@ -66,12 +77,14 @@ class AnotherUserProfileViewModel with ChangeNotifier {
       _anotherUserData.followers = response['followers'];
       _anotherUserData.followings = response['followings'];
       _isLoading = false;
+    } else {
+      showSnackbar(Text('Follow failed'), context);
     }
 
     notifyListeners();
   }
 
-  Future<void> setUnfollow(int id, String lang) async {
+  Future<void> setUnfollow(int id, String lang, BuildContext context) async {
     _isLoading = true;
     final response = await ProfileApi().unFollowUser(id, lang);
     if (response['success']) {
@@ -79,14 +92,17 @@ class AnotherUserProfileViewModel with ChangeNotifier {
       _anotherUserData.followers = response['followers'];
       _anotherUserData.followings = response['followings'];
       _isLoading = false;
+    } else {
+      showSnackbar(Text('Unfollow failed'), context);
     }
     _isLoading = false;
     notifyListeners();
   }
 
-  Future<void> setUserData(int id) async {
+  Future<void> setUserData(int id, BuildContext context) async {
     _isLoading = true;
-    _anotherUserData = await ProfileApi().getAnotherUserProfile('en', id);
+    _anotherUserData =
+        await ProfileApi().getAnotherUserProfile('en', id, context);
     _isLoading = false;
     notifyListeners();
   }

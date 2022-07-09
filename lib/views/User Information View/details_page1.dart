@@ -25,9 +25,14 @@ class Details1Page extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () => nextFunction(),
-        child: const Icon(
-          Icons.arrow_forward_ios_rounded,
-        ),
+        child: Provider.of<UserInformationViewModel>(context, listen: true)
+                .getIsLoading
+            ? const CircularProgressIndicator(
+                color: Colors.white,
+              )
+            : const Icon(
+                Icons.arrow_forward_ios_rounded,
+              ),
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -22,7 +22,7 @@ class MobileHomeView extends StatefulWidget {
 class _MobileHomeViewState extends State<MobileHomeView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     // TODO: implement initState
@@ -32,6 +32,15 @@ class _MobileHomeViewState extends State<MobileHomeView>
     _tabController.addListener(() {
       Provider.of<MobileHomeViewModel>(context, listen: false)
           .setCurrentTab(_tabController.index);
+      Provider.of<ProfileViewModel>(context, listen: false)
+          .setCurrentUserData(context);
+    });
+
+    Future.delayed(Duration.zero).then((value) {
+      final args = ModalRoute.of(context)!.settings.arguments as Map;
+      if (args['page'] != null) {
+        _tabController.animateTo(args['page']);
+      }
     });
   }
 
@@ -41,28 +50,29 @@ class _MobileHomeViewState extends State<MobileHomeView>
     return DefaultTabController(
       length: 3,
       child: WillPopScope(
-        onWillPop: () async {
-          if (_scrollController.offset > 0) {
-            _scrollController.animateTo(
-              0,
-              duration: const Duration(milliseconds: 100),
-              curve: Curves.linear,
-            );
-          } else {
-            _tabController.animateTo(
-              _tabController.index >= 0 ? (_tabController.index - 1) : 0,
-              duration: const Duration(milliseconds: 100),
-              curve: Curves.linear,
-            );
-          }
+          onWillPop: () async {
+            if (_scrollController.offset > 0) {
+              _scrollController.animateTo(
+                0,
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.linear,
+              );
+            } else {
+              _tabController.animateTo(
+                _tabController.index >= 0 ? (_tabController.index - 1) : 0,
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.linear,
+              );
+            }
 
-          return false;
-        },
-        child: Scaffold(
+            return false;
+          },
+          child: Scaffold(
             drawer: SafeArea(
               child: myDrawer(
                 user: Provider.of<ProfileViewModel>(context, listen: true)
                     .getUserData,
+                tabController: _tabController,
               ),
             ),
             body: SafeArea(
@@ -200,8 +210,8 @@ class _MobileHomeViewState extends State<MobileHomeView>
                   ],
                 ),
               ),
-            ))),
-      ),
+            )),
+          )),
     );
   }
 }
