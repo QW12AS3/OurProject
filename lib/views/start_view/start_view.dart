@@ -72,18 +72,25 @@ class _StartViewState extends State<StartView> {
     final mq = MediaQuery.of(context);
     return SafeArea(
         child: Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-          elevation: 0,
-          icon: Icon(
-            Icons.skip_next,
-            color: orangeColor,
-          ),
-          onPressed: () {}, //TODO:
-          backgroundColor: Colors.white.withOpacity(0.001),
-          label: Text(
-            'Skip',
-            style: theme.textTheme.bodySmall,
-          )),
+      // floatingActionButton: FloatingActionButton.extended(
+      //     // focusColor: orangeColor,
+      //     // hoverColor: orangeColor,
+      //     // splashColor: orangeColor,
+      //     elevation: 0,
+      //     icon: Icon(
+      //       Icons.skip_next,
+      //       color: blueColor,
+      //     ),
+      //     onPressed: () {}, //TODO:
+      //     backgroundColor: Colors.white.withOpacity(0),
+      //     label: Text(
+      //       'Skip',
+      //       style: TextStyle(
+      //         color: blueColor,
+      //         fontSize: 20,
+      //         fontWeight: FontWeight.bold,
+      //       ),
+      //     )),
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -104,8 +111,8 @@ class _StartViewState extends State<StartView> {
                     ),
                   )
                 : Container(
-                    color: orangeColor.withOpacity(0.5),
-                    child: CustomLoading(),
+                    color: Colors.white, //orangeColor.withOpacity(0.5),
+                    // child: CustomLoading(),
                   ),
           ),
           Container(
@@ -327,6 +334,20 @@ class _StartViewState extends State<StartView> {
                               ),
                               //   iconSize: mq.size.width * 0.01,
                             ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                                onPressed: () {}, //TODO:
+                                child: Text(
+                                  ' Skip > ',
+                                  style: theme.textTheme.bodySmall,
+                                ))
                           ],
                         ),
                       ),

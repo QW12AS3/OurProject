@@ -22,18 +22,25 @@ class SignIn extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton.extended(
-            elevation: 0,
-            icon: Icon(
-              Icons.skip_next,
-              color: orangeColor,
-            ),
-            onPressed: () {}, //TODO:
-            backgroundColor: Colors.white.withOpacity(0.001),
-            label: Text(
-              'Skip',
-              style: theme.textTheme.bodySmall,
-            )),
+        // floatingActionButton: FloatingActionButton.extended(
+        //     // focusColor: orangeColor,
+        //     // hoverColor: orangeColor,
+        //     // splashColor: orangeColor,
+        //     elevation: 0,
+        //     icon: Icon(
+        //       Icons.skip_next,
+        //       color: blueColor,
+        //     ),
+        //     onPressed: () {}, //TODO:
+        //     backgroundColor: Colors.white.withOpacity(0),
+        //     label: Text(
+        //       'Skip',
+        //       style: TextStyle(
+        //         color: blueColor,
+        //         fontSize: 20,
+        //         fontWeight: FontWeight.bold,
+        //       ),
+        //     )),
         body: Stack(
           children: [
             Container(
@@ -306,19 +313,25 @@ class SignIn extends StatelessWidget {
 
                               final SignInModel BackEndMessage =
                                   await signInViewModel().postUserInfo(
+                                      //TODO:
                                       emailController.text,
                                       passwordController.text,
+                                      '',
+                                      '',
                                       c_nameController.text);
                               print(BackEndMessage);
                               print(BackEndMessage.refresh_token);
                               final sBar = SnackBar(
                                   // margin: EdgeInsets.all(8.0),
                                   padding: EdgeInsets.all(8.0),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(33)),
                                   content: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                          "${BackEndMessage.message ?? ''}")));
-                              if (BackEndMessage.message != null) {
+                                      child:
+                                          Text(BackEndMessage.message ?? '')));
+                              if (BackEndMessage.message != null &&
+                                  BackEndMessage.message != '') {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(sBar);
                               }
@@ -326,11 +339,16 @@ class SignIn extends StatelessWidget {
                                   BackEndMessage.statusCode == 450) {
                                 emailController.clear();
                                 passwordController.clear();
-                                if (c_nameController != null)
+                                if (c_nameController != null) {
                                   c_nameController.clear();
-                                Navigator.of(context).pushReplacementNamed(
-                                  '/otp',
-                                );
+                                }
+                                try {
+                                  Navigator.of(context).pushReplacementNamed(
+                                    '/otp',
+                                  );
+                                } catch (e) {
+                                  print('navigate to otp error: $e');
+                                }
                               }
                             }
                           },
@@ -417,6 +435,7 @@ class SignIn extends StatelessWidget {
                             icon: Image.asset('assets/images/google.png')),
                         IconButton(
                           onPressed: () {
+                            //TODO:
                             DateTime dateTime = DateTime.now();
                             print(dateTime.timeZoneName);
                             print(dateTime.timeZoneOffset);
@@ -429,6 +448,20 @@ class SignIn extends StatelessWidget {
                           ),
                           //   iconSize: mq.size.width * 0.01,
                         ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                            onPressed: () {}, //TODO:
+                            child: Text(
+                              ' Skip > ',
+                              style: theme.textTheme.bodySmall,
+                            ))
                       ],
                     ),
                   ),

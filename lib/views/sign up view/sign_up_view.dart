@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/models/sign_up_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
@@ -25,18 +26,49 @@ class SignUp extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton.extended(
-            elevation: 0,
-            icon: Icon(
-              Icons.skip_next,
-              color: orangeColor,
-            ),
-            onPressed: () {}, //TODO:
-            backgroundColor: Colors.white.withOpacity(0.001),
-            label: Text(
-              'Skip',
-              style: theme.textTheme.bodySmall,
-            )),
+        // bottomNavigationBar: Container(
+        //   color: Colors.white.withOpacity(0),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.end,
+        //     // mainAxisSize: MainAxisSize.min,
+        //     children: [
+        //       ElevatedButton.icon(
+        //         onPressed: () {},
+        //         icon: Icon(
+        //           Icons.skip_next,
+        //           color: blueColor,
+        //         ),
+        //         label: Text(
+        //           'Skip',
+        //           style: TextStyle(
+        //             color: blueColor,
+        //             fontSize: 20,
+        //             fontWeight: FontWeight.bold,
+        //           ),
+        //         ),
+        //       )
+        //     ],
+        //   ),
+        // ),
+        // floatingActionButton: FloatingActionButton.extended(
+        //     // focusColor: orangeColor,
+        //     // hoverColor: orangeColor,
+        //     // splashColor: orangeColor,
+        //     elevation: 0,
+        //     icon: Icon(
+        //       Icons.skip_next,
+        //       color: blueColor,
+        //     ),
+        //     onPressed: () {}, //TODO:
+        //     backgroundColor: Colors.white.withOpacity(0.3),
+        //     label: Text(
+        //       'Skip',
+        //       style: TextStyle(
+        //         color: blueColor,
+        //         fontSize: 17,
+        //         fontWeight: FontWeight.bold,
+        //       ),
+        //     )),
         body: Stack(
           children: [
             Container(
@@ -63,7 +95,7 @@ class SignUp extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: mq.size.height * 0.13,
+                    height: mq.size.height * 0.1,
                   ),
                   Container(
                     width: 420,
@@ -97,7 +129,7 @@ class SignUp extends StatelessWidget {
                                       ),
                                     ),
                                     Container(
-                                      width: 185,
+                                      width: 180,
                                       decoration: BoxDecoration(
                                           color:
                                               Colors.white70.withOpacity(0.5),
@@ -153,10 +185,10 @@ class SignUp extends StatelessWidget {
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 20,
+                                      width: 10,
                                     ),
                                     Container(
-                                      width: 185,
+                                      width: 180,
                                       decoration: BoxDecoration(
                                           color:
                                               Colors.white70.withOpacity(0.5),
@@ -497,14 +529,12 @@ class SignUp extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(25)),
                           ),
                           onPressed: () async {
-                            print('pppppppppppp');
                             if (formGlobalKey.currentState!.validate()) {
                               formGlobalKey.currentState!.save();
                               // use the email provided here
-                              print('rrrrrrrrrrrrrrrrrrrr');
 
-                              final BackEndMessage = await SignUpViewModel()
-                                  .postUserInfo(
+                              final SignUpModel BackEndMessage =
+                                  await SignUpViewModel().postUserInfo(
                                       firstNameController.text,
                                       lastNameController.text,
                                       emailController.text,
@@ -512,30 +542,29 @@ class SignUp extends StatelessWidget {
                                       confimPasswordController.text,
                                       '',
                                       '',
-                                      c_nameController.text == null
-                                          ? ''
-                                          : c_nameController.text);
+                                      c_nameController.text);
                               print(BackEndMessage);
                               final sBar = SnackBar(
+                                  // margin: EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(8.0),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(33)),
                                   content: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  margin: EdgeInsets.all(8.0),
-                                  child: Text(
-                                      "${BackEndMessage.f_name != null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message != null ? BackEndMessage.message : ''}"),
-                                  // "${BackEndMessage.message == null ?BackEndMessage.message != null? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message:''}"), ///////////////////////////////
-                                ),
-                              ));
-                              if ((BackEndMessage.f_name != null &&
-                                      BackEndMessage.f_name != '') ||
-                                  (BackEndMessage.message != null &&
-                                      BackEndMessage.message != '')) {
+                                      padding: const EdgeInsets.all(8.0),
+                                      child:
+                                          Text(BackEndMessage.message ?? '')));
+                              if (BackEndMessage.message != null &&
+                                  BackEndMessage.message != '') {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(sBar);
                               }
-
-                              if (BackEndMessage.access_token != null &&
-                                  BackEndMessage.access_token != '') {
+                              print("ffffffffffffxsxxxxxxxxxxxxxxxxx");
+                              print(BackEndMessage.statusCode);
+                              if (BackEndMessage.statusCode == 201 ||
+                                  BackEndMessage.statusCode == 450) {
+                                Navigator.of(context).pushReplacementNamed(
+                                  '/otp',
+                                );
                                 firstNameController.clear();
                                 lastNameController.clear();
                                 emailController.clear();
@@ -543,9 +572,6 @@ class SignUp extends StatelessWidget {
                                 confimPasswordController.clear();
                                 if (c_nameController != null)
                                   c_nameController.clear();
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => OTPView()));
-                                //Navigate
                               }
                             }
                           },
@@ -571,7 +597,11 @@ class SignUp extends StatelessWidget {
                                 fontWeight: FontWeight.normal),
                           ),
                           TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).pushReplacementNamed(
+                                  '/signin',
+                                );
+                              },
                               child: Text(
                                 'Sign in here',
                                 style: theme.textTheme.bodySmall,
@@ -640,9 +670,49 @@ class SignUp extends StatelessWidget {
                       ],
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                            onPressed: () {}, //TODO:
+                            child: Text(
+                              ' Skip > ',
+                              style: theme.textTheme.bodySmall,
+                            ))
+                      ],
+                    ),
+                  ),
                 ],
               ),
-            )
+            ),
+            // Column(
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   children: [
+            //     Row(
+            //       mainAxisAlignment: MainAxisAlignment.end,
+            //       children: [
+            //         // OutlinedButton(
+            //         //   style: OutlinedButton.styleFrom(
+            //         //     // shape: StadiumBorder(),
+            //         //     side: BorderSide(width: 1, color: orangeColor),
+            //         //     // elevation: 55,
+            //         //     backgroundColor: Colors.white.withOpacity(0.01),
+            //         //     //orangeColor.withOpacity(0.7),
+            //         //     primary: orangeColor,
+            //         //     shape: RoundedRectangleBorder(
+            //         //         borderRadius: BorderRadius.circular(25)),
+            //         //   ),
+            //         //   onPressed: () {},
+            //         //   child: Text('xxx'),
+            //         // ),
+            //         // ElevatedButton(onPressed: () {}, child: Text('yyy')),
+            //       ],
+            //     )
+            //   ],
+            // )
+            // ElevatedButton(onPressed: () {}, child: Text('yyy')),
           ],
         ),
       ),

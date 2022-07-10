@@ -18,6 +18,7 @@ import 'package:home_workout_app/views/Comments%20View/comments_view.dart';
 import 'package:home_workout_app/views/Edit%20Profile%20View/edit_profile_view.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
+import 'package:home_workout_app/views/otp_view.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:home_workout_app/views/sign%20up%20view/sign_up_view.dart';
 
@@ -175,7 +176,7 @@ class Vigor extends StatelessWidget {
         // home: UserInformationView()
 
         // StartView(),
-        home: UserInformationView(),
+        //  home: UserInformationView(),
 
         //home: SignUp(),
 
@@ -183,7 +184,6 @@ class Vigor extends StatelessWidget {
 
         // home: StartView(),
         //  home: const MobileHomeView(),
-
 
         // home: SignIn(),
         // home: OTPView(),

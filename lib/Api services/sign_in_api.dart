@@ -10,6 +10,7 @@ class SignInAPI {
     try {
       final Response response = await post(Uri.parse('$base_URL/login'),
           headers: <String, String>{
+            // "Access-Control-Allow-Origin": "*",
             // 'Content-Type': 'application/json;charset=UTF-8'
             'Accept': 'application/json',
             'apikey': apiKey,
