@@ -11,12 +11,10 @@ class SignUpModel {
   String? profile_img;
   String? access_token;
   String? refresh_token;
-  String? expire_at;
-  /*
-  String email;
-  String password;
-  String token;
-  */
+  String? token_expiration;
+  int? statusCode;
+  int? role_id;
+  String? role_name;
   String? message;
   SignUpModel({
     this.id,
@@ -32,7 +30,11 @@ class SignUpModel {
     this.profile_img,
     this.access_token,
     this.refresh_token,
-    this.expire_at,
+    this.token_expiration,
+    this.statusCode,
+    this.role_id,
+    this.role_name,
+
     /*  required this.email,
     required this.password,
     required this.token,
@@ -40,14 +42,8 @@ class SignUpModel {
   });
   // to convert data from json to dart object
   factory SignUpModel.fromJson(Map<String, dynamic> user) => SignUpModel(
-        // f_name: user['f_name'],
-        // l_name: user['l_name'],
-        // email: user['email'],
-        // password: user['password'],
-        // password_confirmation: user['password_confirmation'],
-        // m_token: user['token'],
-        // mac: user['mac'],
-        // c_name: user['c_name']
+        message: user['message'] ?? '',
+        statusCode: user['status'] ?? 0,
         id: user['data']['user']['id'] ?? 0,
         f_name: user['data']['user']['f_name'] ?? '',
         l_name: user['data']['user']['l_name'] ?? '',
@@ -55,9 +51,13 @@ class SignUpModel {
         profile_img: user['data']['user']['profile_img'] ?? '',
         access_token: user['data']['access_token'] ?? '',
         refresh_token: user['data']['refresh_token'] ?? '',
+        token_expiration: user['data']['expire_at'] ?? '',
+        role_id: user['data']['user']['role_id'] ?? 0,
+        role_name: user['data']['user']['role_name'] ?? '',
       );
   factory SignUpModel.fromJsonWithErrors(Map<String, dynamic> user) =>
-      SignUpModel(message: user['message'] ?? '');
+      SignUpModel(
+          message: user['message'] ?? '', statusCode: user['status'] ?? 0);
   //to convert data to json
   Map<String, dynamic> toJson() => {
         'f_name': f_name,

@@ -2,13 +2,14 @@ import 'dart:convert';
 
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/sign_up_model.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 class SignUpAPI {
   static Future<SignUpModel> createUser(SignUpModel user) async {
     try {
-      final http.Response response = await http.post(Uri.parse('$base_URL/'),
+      final Response response = await post(Uri.parse('$base_URL/reg'),
           headers: <String, String>{
+            "Access-Control-Allow-Origin": "*",
             // 'Content-Type': 'application/json;charset=UTF-8'
             'Accept': 'application/json',
             'apikey': apiKey,
@@ -16,21 +17,13 @@ class SignUpAPI {
             'timeZone': 'Asia/Damascus'
           },
           body: user.toJson());
-
       print(response.statusCode);
+      print(response.body);
       if (response.statusCode == 201) {
-        print('respoooooooooooooooooooooooooooooooonse');
-        print(response.body);
         return SignUpModel.fromJson(json.decode(response.body));
       } else {
-        print((response.statusCode.toInt() / 100).toInt());
-        print('dddddddddddddddddddddddddddddddddddd');
-        print(response.statusCode);
         print(response.body);
         return SignUpModel.fromJsonWithErrors(json.decode(response.body));
-        // print(response.m)
-        // throw "can't do sign up";
-        // return SignUpModel(email: '', password: '', token: '',message:'');
       }
     } catch (e) {
       print(e);
@@ -48,7 +41,7 @@ class SignUpAPI {
       String weightUnit) async {
     try {
       print(height);
-      final response = await http.post(
+      final response = await post(
         Uri.parse('$base_URL/user/info'),
         headers: {
           'apikey': apiKey,
@@ -82,7 +75,7 @@ class SignUpAPI {
 
   Future<List> getDiseases(String lang) async {
     try {
-      final response = await http.get(
+      final response = await get(
         Uri.parse('$base_URL/diseases'),
         headers: {
           'apikey': apiKey,
