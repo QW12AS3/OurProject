@@ -1,13 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
-import 'package:home_workout_app/Api%20services/sign_in_api.dart';
+
 import 'package:home_workout_app/Api%20services/sign_up_api.dart';
 import 'package:home_workout_app/main.dart';
-import 'package:home_workout_app/models/sign_in_model.dart';
 import 'package:home_workout_app/models/sign_up_model.dart';
 import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpViewModel with ChangeNotifier {
   bool obscurePassword = true;

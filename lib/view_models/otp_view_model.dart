@@ -20,13 +20,10 @@ class otpViewModel with ChangeNotifier {
                 verification_code: otpVal,
                 c_name: c_nameVal,
                 mac: '',
-                // message: '',
               ),
               addedURL)
           .then((value) {
         print(value);
-        // print("toooooooooooooken:   " + value.access_token!);
-        // print("messaaaaaaaaaaaaaage:${value.}")
 
         result = value;
       });

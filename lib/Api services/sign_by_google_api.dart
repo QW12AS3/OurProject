@@ -20,26 +20,19 @@ class SignByGoogleAPI {
               },
               body: user.toJson());
       print('ssssssssssssssssssssssssssssssssssssssssssssss');
-      print(user.toJson());
-      print(response.statusCode);
+      print(response.body);
       if (response.statusCode == 201) {
-        SignByGoogleViewModel().setStatusCode(response.statusCode);
-        print(response.body);
         SignByGoogleViewModel().signOut();
         return SignByGoogleModel.fromJson(json.decode(response.body));
       } else {
-        print(response.statusCode);
         print(response.body);
         SignByGoogleViewModel().signOut();
         return SignByGoogleModel.fromJsonWithErrors(json.decode(response.body));
-        // print(response.m)
-        // throw "can't do sign in";
-        // return SignByGoogleModel(email: '', password: '', token: '',message:'');
       }
     } catch (e) {
       print(e);
     }
     SignByGoogleViewModel().signOut();
-    return SignByGoogleModel(message: '');
+    return SignByGoogleModel(message: '', statusCode: 0);
   }
 }

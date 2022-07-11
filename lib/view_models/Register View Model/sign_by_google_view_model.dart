@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:home_workout_app/Api%20services/sign_by_google_api.dart';
+import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/sign_by_google_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +10,9 @@ class SignByGoogleViewModel with ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   GoogleSignInAccount? _currentUser;
   String accessToken = '';
-  var statusCode = 0;
+  late SignByGoogleModel BackEndMessage;
+  String c_name = '';
+
   userIsSignedIn() {
     // to make user signedin if the user signein before
     // maybe don't need it
@@ -25,16 +28,11 @@ class SignByGoogleViewModel with ChangeNotifier {
     _googleSignIn.disconnect();
   }
 
-  setStatusCode(var statusCodeValue) {
-    statusCode = statusCodeValue;
-    notifyListeners();
-    print("staaaaaaaaaaaaaaaaattttttuuuuuuuuus" + "$statusCode");
-  }
-
-  Future<void> signIn() async {
+  Future<SignByGoogleModel?> signIn() async {
+    SignByGoogleModel? resultModel = new SignByGoogleModel();
     try {
       _googleSignIn.signIn().then((result) {
-        result?.authentication.then((googleKey) {
+        result?.authentication.then((googleKey) async {
           if (googleKey.accessToken != null)
             accessToken = googleKey.accessToken.toString();
 
@@ -43,7 +41,7 @@ class SignByGoogleViewModel with ChangeNotifier {
           print("Name: ${_googleSignIn.currentUser?.displayName}");
           if (accessToken != null && accessToken != '') {
             print('fffffffffffffffffffff');
-            final BackEndMessage = postUserInfo(accessToken, '');
+            resultModel = await postUserInfo(accessToken, '', '', '');
           }
         }).catchError((err) {
           print('inner error');
@@ -57,22 +55,26 @@ class SignByGoogleViewModel with ChangeNotifier {
       print('Google Sign in Error: $e');
     }
     print('fzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
+    return resultModel;
   }
 
-  postUserInfo(String access_provider_tokenVal, String c_nameVal) async {
+  setBackEndMessage(SignByGoogleModel BackEndMessageValue) {
+    BackEndMessage = BackEndMessageValue;
+    notifyListeners();
+  }
+
+  postUserInfo(String access_provider_tokenVal, String m_tokenVal,
+      String macVal, String c_nameVal) async {
     SignByGoogleModel? result;
     print(access_provider_tokenVal);
     try {
       await SignByGoogleAPI.createUser(SignByGoogleModel(
         access_provider_token: access_provider_tokenVal,
         c_name: c_nameVal,
-        m_token: '',
-        mac: '',
-        // message: '',
+        m_token: m_tokenVal,
+        mac: macVal,
       )).then((value) {
         print(value);
-        // print("toooooooooooooken:   " + value.access_token!);
-        // print("messaaaaaaaaaaaaaage:${value.}")
 
         result = value;
       });
@@ -80,19 +82,19 @@ class SignByGoogleViewModel with ChangeNotifier {
       print(e);
     }
 
-    if (result!.access_token != null && result!.refresh_token != null)
+    if ((result!.access_token != null && result!.access_token != '') &&
+        (result!.statusCode == 201)) {
       setData(result!);
+    }
     return result;
   }
 
   setData(SignByGoogleModel Data) async {
-    SharedPreferences _pref = await SharedPreferences.getInstance();
-    // _pref.setString("f_name", Data.f_name!);
-    // _pref.setString("l_name", Data.l_name!);
-    // _pref.setString("email", Data.email!);
-    // _pref.setString("profile_img", Data.profile_img!);
-    _pref.setString("access_token", Data.access_token!);
-    _pref.setString("refresh_token", Data.refresh_token!);
+    sharedPreferences.setString("access_token", Data.access_token!);
+    sharedPreferences.setString("refresh_token", Data.refresh_token!);
+    sharedPreferences.setString("token_expiration", Data.token_expiration!);
+    sharedPreferences.setInt("role_id", Data.role_id!);
+    sharedPreferences.setString("role_name", Data.role_name!);
   }
 
   // Future<void> signIn() async {
@@ -105,7 +107,7 @@ class SignByGoogleViewModel with ChangeNotifier {
 }
 
 
-
+//  flutter run -d chrome --web-hostname localhost --web-port 5000
 
 
 /*
