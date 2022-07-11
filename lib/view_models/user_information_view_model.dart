@@ -13,10 +13,14 @@ class UserInformationViewModel with ChangeNotifier {
   Units heightUnit = Units.cm;
   String _country = '';
   List _diseases = [];
-
+  bool _addDescription = false;
   String _searchValue = '';
-
   bool _isLoading = false;
+
+  void setAddDesc() {
+    _addDescription = !_addDescription;
+    notifyListeners();
+  }
 
   void setSearchValue(String value) {
     _searchValue = value;
@@ -176,4 +180,5 @@ class UserInformationViewModel with ChangeNotifier {
   List get getDiseases => _diseases;
   String get getSearchValue => _searchValue;
   bool get getIsLoading => _isLoading;
+  bool get getAddDesc => _addDescription;
 }

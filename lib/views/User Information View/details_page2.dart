@@ -26,6 +26,7 @@ class _Details2PageState extends State<Details2Page> {
   }
 
   TextEditingController searchController = TextEditingController();
+  TextEditingController descController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,15 +43,35 @@ class _Details2PageState extends State<Details2Page> {
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          toolbarHeight: 150,
+          toolbarHeight:
+              Provider.of<UserInformationViewModel>(context, listen: true)
+                      .getAddDesc
+                  ? 320
+                  : 190,
           title: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: UserInfoCustomText(
-                  text: 'Do you suffer any of this diseases ?',
-                  padding: false,
-                  color: orangeColor,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: UserInfoCustomText(
+                        text: 'Do you suffer any of this diseases ?',
+                        padding: false,
+                        color: orangeColor,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/home');
+                      },
+                      child: Text(
+                        'Skip',
+                        style: theme.textTheme.bodySmall!.copyWith(
+                            color: blueColor, fontWeight: FontWeight.w200),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
@@ -105,6 +126,76 @@ class _Details2PageState extends State<Details2Page> {
                   ),
                 ),
               ),
+              Consumer<UserInformationViewModel>(
+                builder: (context, consumer, child) => consumer.getAddDesc
+                    ? Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              onChanged: (value) {
+                                Provider.of<UserInformationViewModel>(context,
+                                        listen: false)
+                                    .setSearchValue(value);
+                              },
+                              maxLength: 200,
+                              maxLines: 5,
+                              controller: descController,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                label: FittedBox(
+                                    child: const Text('Description').tr()),
+                                floatingLabelStyle: theme.textTheme.bodySmall,
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: orangeColor, width: 1.5),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(15),
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: greyColor, width: 1.5),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(15),
+                                  ),
+                                ),
+                                errorBorder: const OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.red, width: 1.5),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15),
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: orangeColor, width: 1.5),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(15),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              consumer.setAddDesc();
+                            },
+                            icon: Icon(Icons.close),
+                            color: blueColor,
+                          )
+                        ],
+                      )
+                    : TextButton(
+                        onPressed: () {
+                          consumer.setAddDesc();
+                        },
+                        child: Text(
+                          'Add description',
+                          style: theme.textTheme.bodySmall!.copyWith(
+                              color: blueColor, fontWeight: FontWeight.w200),
+                        ),
+                      ),
+              ),
             ],
           )),
       body: Scrollbar(
@@ -113,39 +204,30 @@ class _Details2PageState extends State<Details2Page> {
             children: [
               Consumer<UserInformationViewModel>(
                 builder: (context, consumer, child) => Scrollbar(
-                  child: consumer.getDiseases.isEmpty
-                      ? Center(
-                          child: Text(
-                            'Something went wrong',
-                            style: theme.textTheme.bodySmall!
-                                .copyWith(color: greyColor),
+                  child: Column(
+                    children: consumer.getDiseases
+                        .where((element) {
+                          return element['name']
+                              .toString()
+                              .toLowerCase()
+                              .contains(
+                                  consumer.getSearchValue.toLowerCase().trim());
+                        })
+                        .map(
+                          (e) => CheckboxListTile(
+                            title: UserInfoCustomText(
+                              text: e['name'].toString(),
+                              color: blueColor,
+                              fontsize: 15,
+                            ),
+                            value: e['selected'],
+                            onChanged: (value) {
+                              consumer.changeDiseasesValue(e['id'], value);
+                            },
                           ),
                         )
-                      : Column(
-                          children: consumer.getDiseases
-                              .where(
-                                (element) => consumer.getSearchValue.isEmpty
-                                    ? element
-                                    : consumer.getSearchValue.contains(
-                                        element['name'],
-                                      ),
-                              )
-                              .map(
-                                (e) => CheckboxListTile(
-                                  title: UserInfoCustomText(
-                                    text: e['name'].toString(),
-                                    color: blueColor,
-                                    fontsize: 15,
-                                  ),
-                                  value: e['selected'],
-                                  onChanged: (value) {
-                                    consumer.changeDiseasesValue(
-                                        e['id'], value);
-                                  },
-                                ),
-                              )
-                              .toList(),
-                        ),
+                        .toList(),
+                  ),
                 ),
               ),
             ],
@@ -155,8 +237,3 @@ class _Details2PageState extends State<Details2Page> {
     );
   }
 }
-  // padding: EdgeInsets.only(
-  //                                 bottom: e['id'] ==
-  //                                         consumer.diseases.entries.last.key
-  //                                     ? 40
-  //                                     : 0),

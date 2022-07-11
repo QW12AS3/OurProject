@@ -195,7 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                           'Are you sure to delete your account ?',
                                                           style: theme.textTheme
                                                               .bodySmall,
-                                                        ),
+                                                        ).tr(),
                                                         content: SizedBox(
                                                           height: sharedPreferences
                                                                       .getBool(
@@ -215,7 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                             greyColor,
                                                                         fontSize:
                                                                             12),
-                                                              ),
+                                                              ).tr(),
                                                               const SizedBox(
                                                                 height: 5,
                                                               ),
@@ -320,7 +320,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                               style: theme
                                                                   .textTheme
                                                                   .bodySmall,
-                                                            ),
+                                                            ).tr(),
                                                           ),
                                                           TextButton(
                                                               onPressed: () {
@@ -335,7 +335,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                     .copyWith(
                                                                         color:
                                                                             blueColor),
-                                                              ))
+                                                              ).tr())
                                                         ],
                                                       ));
                                           break;
@@ -560,6 +560,45 @@ class _ProfilePageState extends State<ProfilePage> {
                                         user.getUserData.enteredWorkouts,
                                   ),
                                 ),
+                              ],
+                            )
+                          ],
+                        ),
+                        ExpansionTile(
+                          iconColor: blueColor,
+                          title: Text(
+                            'Health record',
+                            style: theme.textTheme.bodySmall,
+                          ).tr(),
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, '/addHealthRecord');
+                                  },
+                                  icon: const Icon(
+                                    Icons.add,
+                                    size: 15,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    size: 15,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                    size: 15,
+                                  ),
+                                )
                               ],
                             )
                           ],

@@ -52,5 +52,9 @@
     "Password": "Password",
     "Old password": "Old password",
     "New password": "New password",
-    "Confirm new password": "Confirm new password"
+    "Confirm new password": "Confirm new password",
+    "Are you sure to delete your account ?": "Are you sure to delete your account ?",
+    "Note: You can reactive your account in 30 days.": "Note: You can reactive your account in 30 days.",
+    "Yes": "Yes",
+    "Cancel": "Cancel"
 }

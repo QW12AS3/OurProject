@@ -8,9 +8,11 @@ import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_vie
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
 import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
+import 'package:home_workout_app/view_models/health_record_view_model.dart';
 import 'package:home_workout_app/view_models/otp_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
+import 'package:home_workout_app/views/Add%20Health%20Record%20View/add_health_record_view.dart';
 import 'package:home_workout_app/views/Another%20User%20Profile%20View/another_user_profile_view.dart';
 import 'package:home_workout_app/views/Change%20Email%20View/change_email_view.dart';
 import 'package:home_workout_app/views/Change%20Password%20View/change_password_view.dart';
@@ -66,7 +68,8 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => AnotherUserProfileViewModel(),
         ),
-        ChangeNotifierProvider(create: (context) => otpViewModel())
+        ChangeNotifierProvider(create: (context) => otpViewModel()),
+        ChangeNotifierProvider(create: (context) => HealthRecordViewModel())
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -89,7 +92,7 @@ class Vigor extends StatelessWidget {
         //       return null;
         //   }
         // },
-        initialRoute: '/signup',
+        initialRoute: '/userinfo',
         routes: {
           '/signup': (context) => SignUp(),
           '/signin': (context) => SignIn(),
@@ -100,7 +103,9 @@ class Vigor extends StatelessWidget {
           'changeEmail': (context) => ChangeEmailView(),
           'changePassword': (context) => ChangePasswordView(),
           'anotherUserProfile': (context) => AnotherUserProfileView(),
-          'home': (context) => MobileHomeView(),
+          '/home': (context) => MobileHomeView(),
+          '/userinfo': (context) => UserInformationView(),
+          '/addHealthRecord': (context) => AddHealthRecordView()
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,
