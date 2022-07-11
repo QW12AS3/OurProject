@@ -167,10 +167,6 @@ class _OTPViewState extends State<OTPView> {
                                   maxLength: 5,
                                   textAlign: TextAlign.center,
                                   cursorHeight: 30,
-                                  // inputFormatters: [
-                                  // LengthLimitingTextInputFormatter(5),
-                                  // FilteringTextInputFormatter.digitsOnly,
-                                  // ],
                                   showCursor: false,
                                   // readOnly: false,
                                 )),
@@ -195,7 +191,7 @@ class _OTPViewState extends State<OTPView> {
                         // use the email provided here
                         print('rrrrrrrrrrrrrrrrrrrr');
                         print(otpController.text);
-                        //   print(c_nameController.text);
+
                         final BackEndMessage = await otpViewModel()
                             .postUserInfo(
                                 otpController.text,

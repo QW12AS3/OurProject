@@ -28,7 +28,7 @@ class SignUpAPI {
     } catch (e) {
       print(e);
     }
-    return SignUpModel(message: '');
+    return SignUpModel(message: '', statusCode: 0);
   }
 
   Future<Map<String, dynamic>> sendUserInfo(

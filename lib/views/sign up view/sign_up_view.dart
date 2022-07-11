@@ -395,6 +395,13 @@ class SignUp extends StatelessWidget {
                                                       .obscurePassword,
                                               textInputAction:
                                                   TextInputAction.next,
+                                              onEditingComplete: () {
+                                                // Move the focus to the next node explicitly.
+                                                FocusScope.of(context)
+                                                    .nextFocus();
+                                                FocusScope.of(context)
+                                                    .nextFocus();
+                                              },
                                             )))),
                                 SizedBox(
                                   height: mq.size.height * 0.02,

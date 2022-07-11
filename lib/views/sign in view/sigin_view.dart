@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/models/sign_by_google_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/models/sign_in_model.dart';
@@ -339,9 +340,7 @@ class SignIn extends StatelessWidget {
                                   BackEndMessage.statusCode == 450) {
                                 emailController.clear();
                                 passwordController.clear();
-                                if (c_nameController != null) {
-                                  c_nameController.clear();
-                                }
+                                c_nameController.clear();
                                 try {
                                   Navigator.of(context).pushReplacementNamed(
                                     '/otp',
@@ -426,13 +425,68 @@ class SignIn extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        IconButton(
-                            onPressed: () {
-                              Provider.of<SignByGoogleViewModel>(context,
-                                      listen: false)
-                                  .signIn();
-                            },
-                            icon: Image.asset('assets/images/google.png')),
+                        Consumer<SignByGoogleViewModel>(
+                            builder: ((context, value, _) => IconButton(
+                                onPressed: () async {
+                                  final SignByGoogleModel? BackEndMessage =
+                                      await SignByGoogleViewModel().signIn();
+                                  print('vvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+                                  print(BackEndMessage!.refresh_token);
+
+                                  // SignByGoogleViewModel().signIn();
+
+                                  //    final String googleAccessToken = value.;
+                                  //    await SignByGoogleViewModel().signIn();
+                                  // String googleAccessToken =
+                                  //     Provider.of<SignByGoogleViewModel>(context,
+                                  //             listen: false)
+                                  //         .accessToken;
+
+                                  // print(
+                                  //     'googleAccessToken: ${value.BackEndMessage.message}');
+                                  // if (value.BackEndMessage. != null &&
+                                  //     googleAccessToken != '') {
+                                  //   final SignByGoogleModel BackEndMessage =
+                                  //       await SignByGoogleViewModel().postUserInfo(
+                                  //           googleAccessToken,
+                                  //           '',
+                                  //           '',
+                                  //           c_nameController.text);
+
+                                  // final sBar = SnackBar(
+                                  //     // margin: EdgeInsets.all(8.0),
+                                  //     padding: EdgeInsets.all(8.0),
+                                  //     shape: RoundedRectangleBorder(
+                                  //         borderRadius:
+                                  //             BorderRadius.circular(33)),
+                                  //     content: Padding(
+                                  //         padding: const EdgeInsets.all(8.0),
+                                  //         child: Text(
+                                  //             value.BackEndMessage.message ??
+                                  //                 '')));
+                                  // if (value.BackEndMessage.message != null &&
+                                  //     value.BackEndMessage.message != '') {
+                                  //   ScaffoldMessenger.of(context)
+                                  //       .showSnackBar(sBar);
+                                  // }
+                                  // if (value.BackEndMessage.statusCode == 201 ||
+                                  //     value.BackEndMessage.statusCode == 450) {
+                                  //   if (c_nameController != null) {
+                                  //     c_nameController.clear();
+                                  //   }
+                                  //   try {
+                                  //     Navigator.of(context)
+                                  //         .pushReplacementNamed(
+                                  //       '/otp',
+                                  //     );
+                                  //   } catch (e) {
+                                  //     print('navigate to otp error: $e');
+                                  //   }
+                                  // }
+                                },
+                                // },
+                                icon:
+                                    Image.asset('assets/images/google.png')))),
                         IconButton(
                           onPressed: () {
                             //TODO:

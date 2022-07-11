@@ -30,6 +30,6 @@ class SignInAPI {
     } catch (e) {
       print(e);
     }
-    return SignInModel(message: '');
+    return SignInModel(message: '', statusCode: 0);
   }
 }

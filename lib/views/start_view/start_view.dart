@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
@@ -8,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class StartView extends StatefulWidget {
-  const StartView({Key? key}) : super(key: key);
+  StartView({Key? key}) : super(key: key);
 
   @override
   State<StartView> createState() => _StartViewState();
@@ -16,7 +17,7 @@ class StartView extends StatefulWidget {
 
 class _StartViewState extends State<StartView> {
   late VideoPlayerController videoController;
-
+  TextEditingController c_nameController = TextEditingController(text: '');
   @override
   void initState() {
     // TODO: implement initState
@@ -30,7 +31,7 @@ class _StartViewState extends State<StartView> {
       videoController.setVolume(0);
       videoController.setLooping(true);
       videoController.addListener(() {
-        setState(() {});
+        // setState(() {});  //TODO://if you face some problem in it add it
       });
       videoController.play();
     } catch (e) {
@@ -180,7 +181,7 @@ class _StartViewState extends State<StartView> {
                                 fontWeight: FontWeight.bold),
                           ),
                           TextSpan(
-                            text: ' TO WHICH OUR WILLS ARE OUR GARDENERS"\n',
+                            text: 'TO WHICH OUR WILLS ARE OUR GARDENERS"\n',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'JosefinSans',
@@ -239,6 +240,16 @@ class _StartViewState extends State<StartView> {
                         ),
                       ),
                       SizedBox(height: mq.size.height * 0.05),
+                      Container(
+                        height: 0,
+                        width: 0,
+                        child: TextFormField(
+                          controller: c_nameController,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(5),
+                          ],
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -302,28 +313,28 @@ class _StartViewState extends State<StartView> {
                           children: [
                             IconButton(
                                 onPressed: () async {
-                                  //TODO: HANDLE AL OF THIS WORKING AND DELETE STATUSCODE FROM VIEWMODEL (PROVIDER)
-                                  try {
-                                    Provider.of<SignByGoogleViewModel>(context,
-                                            listen: false)
-                                        .signIn();
-                                    print("stsrsdfsdssssssss" +
-                                        "${Provider.of<SignByGoogleViewModel>(context, listen: false).statusCode}");
-                                    if (Provider.of<SignByGoogleViewModel>(
-                                                context,
-                                                listen: false)
-                                            .statusCode ==
-                                        201) {
-                                      print("stsrsdfsdssssssss" + ////////////////////////////////////////////////////////////////TODO:
-                                          "${Provider.of<SignByGoogleViewModel>(context, listen: false).statusCode}");
-                                      // Navigator.of(context)
-                                      //     .pushReplacementNamed(
-                                      //   '/otp',
-                                      // );
-                                    }
-                                  } catch (e) {
-                                    print('sign by google error : $e');
-                                  }
+                                  // //TODO: HANDLE AL OF THIS WORKING AND DELETE STATUSCODE FROM VIEWMODEL (PROVIDER)
+                                  // try {
+                                  //   Provider.of<SignByGoogleViewModel>(context,
+                                  //           listen: false)
+                                  //       .signIn();
+                                  //   print("stsrsdfsdssssssss" +
+                                  //       "${Provider.of<SignByGoogleViewModel>(context, listen: false).statusCode}");
+                                  //   if (Provider.of<SignByGoogleViewModel>(
+                                  //               context,
+                                  //               listen: false)
+                                  //           .statusCode ==
+                                  //       201) {
+                                  //     print("stsrsdfsdssssssss" + ////////////////////////////////////////////////////////////////TODO:
+                                  //         "${Provider.of<SignByGoogleViewModel>(context, listen: false).statusCode}");
+                                  //     // Navigator.of(context)
+                                  //     //     .pushReplacementNamed(
+                                  //     //   '/otp',
+                                  //     // );
+                                  //   }
+                                  // } catch (e) {
+                                  //   print('sign by google error : $e');
+                                  // }
                                 },
                                 icon: Image.asset('assets/images/google.png')),
                             IconButton(
