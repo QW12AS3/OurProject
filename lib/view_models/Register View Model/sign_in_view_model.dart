@@ -39,6 +39,7 @@ class signInViewModel with ChangeNotifier {
   }
 
   setData(SignInModel Data) async {
+    print(Data.access_token!);
     sharedPreferences.setString("access_token", Data.access_token!);
     sharedPreferences.setString("refresh_token", Data.refresh_token!);
     sharedPreferences.setString("token_expiration", Data.token_expiration!);

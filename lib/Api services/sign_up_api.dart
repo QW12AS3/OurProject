@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/sign_up_model.dart';
 import 'package:http/http.dart';
 
@@ -40,14 +41,15 @@ class SignUpAPI {
       String heightUnit,
       String weightUnit) async {
     try {
-      print(height);
+      print(sharedPreferences.getString('access_token'));
       final response = await post(
         Uri.parse('$base_URL/user/info'),
         headers: {
           'apikey': apiKey,
           'lang': 'en',
           'accept': 'application/json',
-          'authorization': token
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}'
         },
         body: {
           'height': height,
@@ -73,6 +75,38 @@ class SignUpAPI {
     }
   }
 
+  Future<Map<String, dynamic>> sendHealthRecord(
+      List<int> dis, String lang, String desc) async {
+    try {
+      //print(sharedPreferences.getString('access_token'));
+      final response = await post(
+        Uri.parse('$base_URL/hRecord'),
+        headers: {
+          'apikey': apiKey,
+          'lang': 'en',
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}'
+        },
+        body: {
+          'dis': dis,
+          'desc': desc,
+        },
+      );
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return {'success': true, 'message': data['message']};
+      } else {
+        print(jsonDecode(response.body));
+        return {'success': false, 'message': data['message']};
+      }
+    } catch (e) {
+      print('Sending health record error: $e');
+      return {'success': false, 'message': e.toString()};
+    }
+  }
+
   Future<List> getDiseases(String lang) async {
     try {
       final response = await get(
@@ -81,7 +115,8 @@ class SignUpAPI {
           'apikey': apiKey,
           'lang': lang,
           'accept': 'application/json',
-          'authorization': token,
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
           'timeZone': getTimezone()
         },
       );

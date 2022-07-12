@@ -36,7 +36,11 @@ class _Details2PageState extends State<Details2Page> {
       floatingActionButton: SizedBox(
         width: 90,
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Provider.of<UserInformationViewModel>(context, listen: false)
+                .sendHealthRecord(descController.text.trim(),
+                    context.locale == Locale('en') ? 'en' : 'ar', context);
+          },
           child: const Text('Save').tr(),
         ),
       ),
@@ -132,11 +136,6 @@ class _Details2PageState extends State<Details2Page> {
                         children: [
                           Expanded(
                             child: TextField(
-                              onChanged: (value) {
-                                Provider.of<UserInformationViewModel>(context,
-                                        listen: false)
-                                    .setSearchValue(value);
-                              },
                               maxLength: 200,
                               maxLines: 5,
                               controller: descController,
