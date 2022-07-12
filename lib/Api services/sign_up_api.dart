@@ -7,7 +7,7 @@ import 'package:http/http.dart';
 class SignUpAPI {
   static Future<SignUpModel> createUser(SignUpModel user) async {
     try {
-      final Response response = await post(Uri.parse('$base_URL/reg'),
+      final Response response = await post(Uri.parse('$base_URL/register'),
           headers: <String, String>{
             "Access-Control-Allow-Origin": "*",
             // 'Content-Type': 'application/json;charset=UTF-8'

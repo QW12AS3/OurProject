@@ -18,6 +18,9 @@ class _OTPViewState extends State<OTPView> {
       TextEditingController(text: ''); //TODO: add cname
   @override
   Widget build(BuildContext context) {
+    final routeArg =
+        ModalRoute.of(context)?.settings.arguments as Map<String, Object>;
+
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
     return SafeArea(
@@ -185,44 +188,50 @@ class _OTPViewState extends State<OTPView> {
                   width: 110,
                   child: ElevatedButton(
                     onPressed: () async {
-                      print('chaaaaaaaange urrrrrrrrrrrl');
                       if (formGlobalKey.currentState!.validate()) {
                         formGlobalKey.currentState!.save();
                         // use the email provided here
-                        print('rrrrrrrrrrrrrrrrrrrr');
-                        print(otpController.text);
 
                         final BackEndMessage = await otpViewModel()
-                        
                             .postUserInfo(
                                 otpController.text,
                                 c_nameController.text == null
                                     ? ''
                                     : c_nameController.text,
-                                '/emailVerfiy/');
+                                (routeArg['state'] == 'sign 201' ||
+                                        routeArg['state'] == 'update email')
+                                    ? '/emailVerfiy/'
+                                    : '/user/recover');
                         print(BackEndMessage);
-
                         final sBar = SnackBar(
-                            content: Container(
-                          child: Text(
-                              "${BackEndMessage.f_name != null ? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message != null ? BackEndMessage.message : ''}"),
-                          // "${BackEndMessage.message == null ?BackEndMessage.message != null? "Welcome! ${BackEndMessage.f_name}" : BackEndMessage.message:''}"), ///////////////////////////////
-                        ));
-                        if ((BackEndMessage.f_name != null &&
-                                BackEndMessage.f_name != '') ||
-                            (BackEndMessage.message != null &&
-                                BackEndMessage.message != '')) {
+                            // margin: EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(33)),
+                            content: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(BackEndMessage.message ?? '')));
+                        if (BackEndMessage.message != null &&
+                            BackEndMessage.message != '') {
                           ScaffoldMessenger.of(context).showSnackBar(sBar);
                         }
-                        if (BackEndMessage.access_token != null &&
-                            BackEndMessage.access_token != '') {
-                          if (c_nameController != null)
-                            c_nameController.clear();
-                          //Navigate
+                        if (BackEndMessage.statusCode == 201) {
+                          otpController.clear();
+                          c_nameController.clear();
+                          try {
+                            Navigator.of(context).pushReplacementNamed(
+                              (routeArg['state'] == 'sign 201' ||
+                                      routeArg['state'] == 'sign 250')
+                                  ? '/userinfo'
+                                  : '/home',
+                            );
+                          } catch (e) {
+                            print('navigate from otp error: $e');
+                          }
                         }
                       }
                     },
-                    child: Text('Verify'),
+                    child: const Text('Verify'),
                   ),
                 ),
                 const SizedBox(
@@ -246,7 +255,10 @@ class _OTPViewState extends State<OTPView> {
                                   c_nameController.text == null
                                       ? ''
                                       : c_nameController.text,
-                                  '/emailVerfiy/reget');
+                                  (routeArg['state'] == 'sign 201' ||
+                                          routeArg['state'] == 'update email')
+                                      ? '/emailVerfiy/reget'
+                                      : '/user/recover/reget');
                         },
                         child: Text(
                           'Resend again',

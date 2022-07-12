@@ -16,6 +16,7 @@ class SignUpModel {
   int? role_id;
   String? role_name;
   String? message;
+  bool? googleProvider;
   SignUpModel({
     this.id,
     this.f_name,
@@ -34,6 +35,7 @@ class SignUpModel {
     this.statusCode,
     this.role_id,
     this.role_name,
+    this.googleProvider,
 
     /*  required this.email,
     required this.password,
@@ -54,6 +56,7 @@ class SignUpModel {
         token_expiration: user['data']['expire_at'] ?? '',
         role_id: user['data']['user']['role_id'] ?? 0,
         role_name: user['data']['user']['role_name'] ?? '',
+        googleProvider: user['data']['provider'] ?? false,
       );
   factory SignUpModel.fromJsonWithErrors(Map<String, dynamic> user) =>
       SignUpModel(
@@ -65,8 +68,8 @@ class SignUpModel {
         'email': email,
         'password': password,
         'password_confirmation': password_confirmation,
-        'm_token': m_token,
-        'mac': mac,
+        //    'm_token': m_token,
+        // 'mac': mac,
         'c_name': c_name
       };
 }
