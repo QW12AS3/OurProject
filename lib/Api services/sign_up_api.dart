@@ -7,14 +7,14 @@ import 'package:http/http.dart';
 class SignUpAPI {
   static Future<SignUpModel> createUser(SignUpModel user) async {
     try {
-      final Response response = await post(Uri.parse('$base_URL/register'),
+      final Response response = await post(Uri.parse('$base_URL'),
           headers: <String, String>{
-            "Access-Control-Allow-Origin": "*",
+            //  "Access-Control-Allow-Origin": "*",
             // 'Content-Type': 'application/json;charset=UTF-8'
             'Accept': 'application/json',
             'apikey': apiKey,
             'lang': 'en',
-            'timeZone': 'Asia/Damascus'
+            'timeZone': getTimezone()
           },
           body: user.toJson());
       print(response.statusCode);

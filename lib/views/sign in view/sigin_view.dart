@@ -442,10 +442,16 @@ class SignIn extends StatelessWidget {
                         Consumer<SignByGoogleViewModel>(
                             builder: ((context, value, _) => IconButton(
                                 onPressed: () async {
-                                  final SignByGoogleModel? BackEndMessage =
+                                  final String? access =
                                       await SignByGoogleViewModel().signIn();
-                                  print('vvvvvvvvvvvvvvvvvvvvvvvvvvvv');
-                                  print(BackEndMessage!.refresh_token);
+                                  print('ssssssssssssss: $access');
+                                  if (access != null && access != '') {
+                                    final SignByGoogleModel? BackEndMessage =
+                                        await SignByGoogleViewModel()
+                                            .postUserInfo(access, '', '', '');
+                                    print('vvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+                                    print(BackEndMessage?.refresh_token);
+                                  }
 
                                   // SignByGoogleViewModel().signIn();
 

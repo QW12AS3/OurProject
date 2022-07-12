@@ -136,6 +136,9 @@ class SignUp extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(15)),
                                       child: TextFormField(
+                                         inputFormatters: [
+                                          LengthLimitingTextInputFormatter(15),
+                                        ],
                                         controller: firstNameController,
                                         validator: (value) {
                                           return SignUpViewModel()
@@ -195,6 +198,9 @@ class SignUp extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(15)),
                                       child: TextFormField(
+                                          inputFormatters: [
+                                          LengthLimitingTextInputFormatter(15),
+                                        ],
                                         controller: lastNameController,
                                         validator: (value) {
                                           return SignUpViewModel()
@@ -254,6 +260,9 @@ class SignUp extends StatelessWidget {
                                       color: Colors.white70.withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: TextFormField(
+                                      inputFormatters: [
+                                          LengthLimitingTextInputFormatter(30),
+                                        ],
                                     controller: emailController,
                                     validator: (value) {
                                       return SignUpViewModel()
@@ -312,6 +321,9 @@ class SignUp extends StatelessWidget {
                                     child: Consumer<SignUpViewModel>(
                                         builder: ((context, value, _) =>
                                             TextFormField(
+                                               inputFormatters: [
+                                          LengthLimitingTextInputFormatter(30),
+                                        ],
                                               controller: passwordController,
                                               validator: (value) {
                                                 return SignUpViewModel()
@@ -415,6 +427,9 @@ class SignUp extends StatelessWidget {
                                     child: Consumer<SignUpViewModel>(
                                         builder: ((context, value, _) =>
                                             TextFormField(
+                                               inputFormatters: [
+                                          LengthLimitingTextInputFormatter(30),
+                                        ],
                                               controller:
                                                   confimPasswordController,
                                               validator: (value) {
