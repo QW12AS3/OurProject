@@ -570,8 +570,8 @@ class SignUp extends StatelessWidget {
                               if (BackEndMessage.statusCode == 201 ||
                                   BackEndMessage.statusCode == 450) {
                                 Navigator.of(context).pushReplacementNamed(
-                                  '/otp',
-                                );
+                                    '/otp',
+                                    arguments: {'state': 'sign 201'});
                                 firstNameController.clear();
                                 lastNameController.clear();
                                 emailController.clear();

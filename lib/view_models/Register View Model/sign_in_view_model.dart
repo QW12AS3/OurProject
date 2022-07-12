@@ -44,6 +44,7 @@ class signInViewModel with ChangeNotifier {
     sharedPreferences.setString("token_expiration", Data.token_expiration!);
     sharedPreferences.setInt("role_id", Data.role_id!);
     sharedPreferences.setString("role_name", Data.role_name!);
+    sharedPreferences.setBool("googleProvider", Data.googleProvider!);
   }
 
   String? checkEmail(String email) {

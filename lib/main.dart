@@ -92,11 +92,11 @@ class Vigor extends StatelessWidget {
         //       return null;
         //   }
         // },
-        initialRoute: '/userinfo',
+        initialRoute: '/',
         routes: {
           '/signup': (context) => SignUp(),
           '/signin': (context) => SignIn(),
-          // '/': (context) => StartView(),
+          '/': (context) => StartView(),
           '/otp': (context) => OTPView(),
           'comments': (context) => CommentsView(),
           'editProfile': (context) => EditProfileView(),

@@ -337,14 +337,28 @@ class SignIn extends StatelessWidget {
                                     .showSnackBar(sBar);
                               }
                               if (BackEndMessage.statusCode == 201 ||
-                                  BackEndMessage.statusCode == 450) {
+                                  BackEndMessage.statusCode == 450 ||
+                                  BackEndMessage.statusCode == 250) {
                                 emailController.clear();
                                 passwordController.clear();
                                 c_nameController.clear();
                                 try {
-                                  Navigator.of(context).pushReplacementNamed(
-                                    '/otp',
-                                  );
+                                  if (BackEndMessage.statusCode == 201 &&
+                                      BackEndMessage.is_verified == true) {
+                                    Navigator.of(context)
+                                        .pushReplacementNamed('/userinfo');
+                                  } else {
+                                    Navigator.of(context).pushReplacementNamed(
+                                        '/otp',
+                                        arguments: {
+                                          'state': (BackEndMessage.statusCode ==
+                                                      201 ||
+                                                  BackEndMessage.statusCode ==
+                                                      450)
+                                              ? 'sign 201'
+                                              : 'sign 250'
+                                        });
+                                  }
                                 } catch (e) {
                                   print('navigate to otp error: $e');
                                 }

@@ -19,7 +19,6 @@ class otpViewModel with ChangeNotifier {
               OTPModel(
                 verification_code: otpVal,
                 c_name: c_nameVal,
-                mac: '',
               ),
               addedURL)
           .then((value) {
@@ -31,8 +30,6 @@ class otpViewModel with ChangeNotifier {
       print(e);
     }
 
-    // if (result!.access_token != null && result!.refresh_token != null)
-    //   setData(result!);
     return result;
   }
 
