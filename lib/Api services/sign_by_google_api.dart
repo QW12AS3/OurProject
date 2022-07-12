@@ -13,10 +13,9 @@ class SignByGoogleAPI {
               headers: <String, String>{
                 // 'Content-Type': 'application/json;charset=UTF-8'
                 'Accept': 'application/json',
-                'apikey':
-                    'THSzx8cmJny4DFmjvjX2calOKSduaJxb3YKC9sCuoCdEiF4J9w6qul5kRFwt1mUR',
+                'apikey': apiKey,
                 'lang': 'en',
-                'timeZone': 'Asia/Damascus'
+                'timeZone': ''
               },
               body: user.toJson());
       print('ssssssssssssssssssssssssssssssssssssssssssssss');

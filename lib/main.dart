@@ -92,6 +92,7 @@ class Vigor extends StatelessWidget {
         //       return null;
         //   }
         // },
+
         initialRoute: '/',
         routes: {
           '/signup': (context) => SignUp(),

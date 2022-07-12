@@ -15,7 +15,7 @@ class SignInAPI {
             'Accept': 'application/json',
             'apikey': apiKey,
             'lang': 'en',
-            'timeZone': 'Asia/Damascus'
+            'timeZone': ''
           },
           body: user.toJson());
 

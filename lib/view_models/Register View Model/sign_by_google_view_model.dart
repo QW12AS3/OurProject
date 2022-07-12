@@ -28,35 +28,54 @@ class SignByGoogleViewModel with ChangeNotifier {
     _googleSignIn.disconnect();
   }
 
-  Future<SignByGoogleModel?> signIn() async {
-    SignByGoogleModel? resultModel = new SignByGoogleModel();
+  Future<String> signIn() async {
     try {
-      _googleSignIn.signIn().then((result) {
-        result?.authentication.then((googleKey) async {
-          if (googleKey.accessToken != null)
-            accessToken = googleKey.accessToken.toString();
-
-          print("ACCESS TOKEN:${googleKey.accessToken.toString()}");
-          //   print(googleKey.idToken);
-          print("Name: ${_googleSignIn.currentUser?.displayName}");
-          if (accessToken != null && accessToken != '') {
-            print('fffffffffffffffffffff');
-            resultModel = await postUserInfo(accessToken, '', '', '');
-          }
-        }).catchError((err) {
-          print('inner error');
-          print(err);
-        });
-      }).catchError((err) {
-        print('error occured');
-        print(err);
-      });
+      final access = await _googleSignIn.signIn();
+      final accessValue = await access?.authentication;
+      return accessValue!.accessToken.toString();
     } catch (e) {
-      print('Google Sign in Error: $e');
+      print('Google Sign in Errooor: $e');
     }
-    print('fzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
-    return resultModel;
+    return '';
   }
+
+  // // Future<String?>
+  // signIn() async {
+  //   SignByGoogleModel? resultModel = new SignByGoogleModel();
+  //   try {
+  //     _googleSignIn.signIn().then((result) {
+  //       result?.authentication.then((googleKey) {
+  //         if (googleKey.accessToken != null) {
+  //           print("ACCESS TOKEN:${googleKey.accessToken.toString()}");
+  //           return googleKey.accessToken.toString();
+  //         }
+
+  //         accessToken = googleKey.accessToken.toString();
+
+  //         //   print(googleKey.idToken);
+  //         print("Name: ${_googleSignIn.currentUser?.displayName}");
+  //         if (accessToken != null && accessToken != '') {
+  //           print('fffffffffffffffffffff');
+
+  //           return accessToken;
+  //           // resultModel = await postUserInfo(accessToken, '', '', '');
+  //           // return await postUserInfo(accessToken, '', '', '');
+  //         }
+  //       }).catchError((err) {
+  //         print('inner error');
+  //         print(err);
+  //       });
+  //     }).catchError((err) {
+  //       print('error occured');
+  //       print(err);
+  //     });
+  //   } catch (e) {
+  //     print('Google Sign in Error: $e');
+  //   }
+  //   print('fzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
+
+  //   //   return await resultModel;
+  // }
 
   setBackEndMessage(SignByGoogleModel BackEndMessageValue) {
     BackEndMessage = BackEndMessageValue;
@@ -95,15 +114,8 @@ class SignByGoogleViewModel with ChangeNotifier {
     sharedPreferences.setString("token_expiration", Data.token_expiration!);
     sharedPreferences.setInt("role_id", Data.role_id!);
     sharedPreferences.setString("role_name", Data.role_name!);
+    sharedPreferences.setBool("googleProvider", Data.googleProvider!);
   }
-
-  // Future<void> signIn() async {
-  //   try {
-  //     await _googleSignIn.signIn();
-  //   } catch (e) {
-  //     print('Google Sign in Errooor: $e');
-  //   }
-  // }
 }
 
 

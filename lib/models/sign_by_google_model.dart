@@ -16,6 +16,7 @@ class SignByGoogleModel {
   int? role_id;
   String? role_name;
   String? access_provider_token;
+    bool? googleProvider;
 
   String? message;
   SignByGoogleModel(
@@ -36,7 +37,9 @@ class SignByGoogleModel {
       this.statusCode,
       this.role_id,
       this.role_name,
-      this.access_provider_token});
+      this.access_provider_token,
+          this.googleProvider,
+      });
   // to convert data from json to dart object
   factory SignByGoogleModel.fromJson(Map<String, dynamic> user) =>
       SignByGoogleModel(
@@ -51,7 +54,8 @@ class SignByGoogleModel {
           refresh_token: user['data']['refresh_token'] ?? '',
           token_expiration: user['data']['expire_at'] ?? '',
           role_id: user['data']['user']['role_id'] ?? 0,
-          role_name: user['data']['user']['role_name'] ?? '');
+          role_name: user['data']['user']['role_name'] ?? '',
+           googleProvider: user['data']['provider'] ?? false,);
   factory SignByGoogleModel.fromJsonWithErrors(Map<String, dynamic> user) =>
       SignByGoogleModel(
           message: user['message'], statusCode: user['status'] ?? 0);
