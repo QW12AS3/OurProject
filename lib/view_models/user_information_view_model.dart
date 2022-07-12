@@ -172,6 +172,24 @@ class UserInformationViewModel with ChangeNotifier {
     }
   }
 
+  Future<void> sendHealthRecord(
+      String desc, String lang, BuildContext context) async {
+    List<int> dis = [];
+    List selectedDis =
+        _diseases.where((element) => element['selected'] == true).toList();
+    selectedDis.forEach((element) {
+      dis.add(element['id']);
+    });
+    print(dis);
+    final response = await SignUpAPI().sendHealthRecord(dis, lang, desc);
+    if (response['success']) {
+      print('done');
+      //Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      showSnackbar(Text(response['message'].toString()), context);
+    }
+  }
+
   String get getCountryName => _country;
   get getGender => gender;
   DateTime get getBirthdate => birthdate;

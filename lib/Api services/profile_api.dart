@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 import '../constants.dart';
+import '../main.dart';
 
 class ProfileApi {
   Future<UserModel> getUserProfile(String lang, BuildContext context) async {
@@ -19,7 +20,8 @@ class ProfileApi {
         'apikey': apiKey,
         'lang': lang,
         'accept': 'application/json',
-        'authorization': token,
+        'authorization':
+            'Bearer ${sharedPreferences.getString('access_token')}',
         'timeZone': getTimezone()
       });
 
@@ -46,7 +48,8 @@ class ProfileApi {
         'apikey': apiKey,
         'lang': lang,
         'accept': 'application/json',
-        'authorization': token,
+        'authorization':
+            'Bearer ${sharedPreferences.getString('access_token')}',
         'timeZone': getTimezone()
       });
       final data = jsonDecode(response.body);
@@ -82,7 +85,8 @@ class ProfileApi {
       request.headers['accept'] = 'application/json';
       request.headers['apikey'] = apiKey;
       request.headers['timeZone'] = getTimezone();
-      request.headers['authorization'] = token;
+      request.headers['authorization'] =
+          'Bearer ${sharedPreferences.getString('access_token')}';
       request.fields['fname'] = fname;
       request.fields['lname'] = lname;
       request.fields['bio'] = bio;
@@ -122,7 +126,8 @@ class ProfileApi {
           'apikey': apiKey,
           'lang': 'en',
           'accept': 'application/json',
-          'authorization': token,
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
           'timeZone': getTimezone()
         },
         body: {
@@ -154,7 +159,8 @@ class ProfileApi {
           'apikey': apiKey,
           'lang': 'en',
           'accept': 'application/json',
-          'authorization': token,
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
           'timeZone': getTimezone()
         },
         body: {
@@ -186,7 +192,8 @@ class ProfileApi {
           'apikey': apiKey,
           'lang': lang,
           'accept': 'application/json',
-          'authorization': token,
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
           'timeZone': getTimezone()
         },
       );
@@ -212,7 +219,8 @@ class ProfileApi {
           'apikey': apiKey,
           'lang': lang,
           'accept': 'application/json',
-          'authorization': token,
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
           'timeZone': getTimezone()
         },
       );
@@ -237,7 +245,8 @@ class ProfileApi {
           'apikey': apiKey,
           'lang': lang,
           'accept': 'application/json',
-          'authorization': token,
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
           'timeZone': getTimezone()
         },
       );
@@ -267,7 +276,8 @@ class ProfileApi {
           'apikey': apiKey,
           'lang': lang,
           'accept': 'application/json',
-          'authorization': token,
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
           'timeZone': getTimezone()
         },
       );
@@ -297,7 +307,8 @@ class ProfileApi {
           'apikey': apiKey,
           'lang': lang,
           'accept': 'application/json',
-          'authorization': token,
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
           'timeZone': getTimezone()
         },
       );
@@ -324,7 +335,8 @@ class ProfileApi {
           'apikey': apiKey,
           'lang': lang,
           'accept': 'application/json',
-          'authorization': token,
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
           'timeZone': getTimezone()
         },
       );
@@ -351,7 +363,8 @@ class ProfileApi {
           'apikey': apiKey,
           'lang': lang,
           'accept': 'application/json',
-          'authorization': token,
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
           'timeZone': getTimezone()
         },
       );
@@ -376,7 +389,8 @@ class ProfileApi {
           'apikey': apiKey,
           'lang': lang,
           'accept': 'application/json',
-          'authorization': token,
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
           'timeZone': getTimezone()
         },
       );
@@ -402,7 +416,8 @@ class ProfileApi {
           'apikey': apiKey,
           'lang': lang,
           'accept': 'application/json',
-          'authorization': token,
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
           'timeZone': getTimezone()
         },
       );
@@ -433,7 +448,8 @@ class ProfileApi {
           'apikey': apiKey,
           'lang': lang,
           'accept': 'application/json',
-          'authorization': token,
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
           'timeZone': getTimezone()
         },
       );
