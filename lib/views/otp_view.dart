@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/view_models/otp_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -219,6 +220,10 @@ class _OTPViewState extends State<OTPView> {
                           otpController.clear();
                           c_nameController.clear();
                           try {
+                            if (routeArg['state'] == 'sign 201' ||
+                                routeArg['state'] == 'sign 250') {
+                              sharedPreferences.setBool("registered", true);
+                            }
                             Navigator.of(context).pushReplacementNamed(
                               (routeArg['state'] == 'sign 201' ||
                                       routeArg['state'] == 'sign 250')

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,13 +23,18 @@ class _StartViewState extends State<StartView> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    // FirebaseMessaging.instance   //TODO: delete
+    //     .getToken()
+    //     .then((value) => print("firebae tooooooooken: $value"));
+    // firebaseTrigger();
     try {
       videoController = VideoPlayerController.asset("assets/videos/intro.mp4")
         ..initialize().then((value) {
           setState(() {});
         });
 
-      videoController.setVolume(0);
+      // videoController.setVolume(0);
       videoController.setLooping(true);
       videoController.addListener(() {
         // setState(() {});  //TODO://if you face some problem in it add it
@@ -37,6 +43,38 @@ class _StartViewState extends State<StartView> {
     } catch (e) {
       print('intial video player errooor: $e');
     }
+  }
+
+  FirebaseMessaging _firebaseMessage =
+      FirebaseMessaging.instance; //TODO: delete
+
+  void firebaseTrigger() async {
+    //TODO: delete
+    // _firebaseMessage.configure(
+    //   onLaunch:
+    // )
+    print(
+        'objeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeect');
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(
+          'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
+
+      print(event.notification!.body);
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print(message.data);
+      if (message.data['page'] == 'Second Screen') print('wooooooooorking');
+      //navigate
+      print('Message clicked!');
+      // Map<String, dynamic> mm = message.;
+      print(message.data);
+      print(
+          'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
+    });
+    FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
+      print("onBackgroundMessage: $message");
+    });
   }
 
   @override
@@ -50,7 +88,7 @@ class _StartViewState extends State<StartView> {
     }
   }
 
-//TODO: video not working after out and reopen app
+//TODO: video not working after out and reopen app (solved)
   // @override
   // void didUpdateWidget(covariant StartView oldWidget) {
   //   super.didUpdateWidget(oldWidget);

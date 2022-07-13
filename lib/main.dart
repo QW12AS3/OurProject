@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
@@ -30,8 +31,9 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late SharedPreferences sharedPreferences;
-void main() async {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
 
   sharedPreferences = await SharedPreferences.getInstance();
@@ -93,11 +95,11 @@ class Vigor extends StatelessWidget {
         //   }
         // },
 
-        initialRoute: '/',
+        initialRoute: '/signin',
         routes: {
           '/signup': (context) => SignUp(),
           '/signin': (context) => SignIn(),
-          '/': (context) => StartView(),
+          // '/': (context) => StartView(),
           '/otp': (context) => OTPView(),
           'comments': (context) => CommentsView(),
           'editProfile': (context) => EditProfileView(),

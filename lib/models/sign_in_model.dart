@@ -72,3 +72,30 @@ class SignInModel {
         'm_token': m_token
       };
 }
+
+
+
+/*
+notifications 
+
+in ourproject\android\app\src\main\AndroidManifist.xml
+
+add 
+         <meta-data
+   android:name="com.google.firebase.messaging.default_notification_channel_id"
+   android:value="@string/notification_channel_id" />
+
+ before comment    <!-- Don't delete the meta-data below.
+             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+
+
+             then create file string.xml or strings.xml but maybe strings.xml in the route ourproject\android\app\src\main\res\values
+             and put in it 
+             <?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+</resources>
+
+
+
+*/
