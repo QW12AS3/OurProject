@@ -48,7 +48,8 @@ dependencies:
   page_transition: ^2.0.9
   easy_localization: ^3.0.1
   google_sign_in: ^5.3.3
-
+  firebase_core: ^1.19.1
+  firebase_messaging: ^11.4.4
 
 dev_dependencies:
   flutter_test:

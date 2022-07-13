@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_workout_app/constants.dart';
@@ -9,12 +10,62 @@ import 'package:home_workout_app/views/otp_view.dart';
 
 import 'package:provider/provider.dart';
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
   SignIn({Key? key}) : super(key: key);
+
+  @override
+  State<SignIn> createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
   final formGlobalKey = GlobalKey<FormState>();
+
   TextEditingController emailController = TextEditingController();
+
   TextEditingController passwordController = TextEditingController();
+
   TextEditingController c_nameController = TextEditingController(text: '');
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseMessaging.instance
+        .getToken()
+        .then((value) => print("firebase tooooooooken: $value"));
+    firebaseTrigger();
+  }
+
+  FirebaseMessaging _firebaseMessage = FirebaseMessaging.instance;
+
+  void firebaseTrigger() async {
+    print(
+        'objeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeect');
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(
+          'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
+
+      print(event.notification!.body);
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print(message.data);
+      print(message);
+      if (message.data['page'] == 'Home Screen') {
+        print('wooooooooorking');
+        print(message.data['page']);
+        Navigator.of(context).pushNamed('/home');
+        //navigate
+
+      }
+      print('Message clicked!');
+      print(message.data);
+      print(
+          'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
+    });
+    // FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
+    //   print("onBackgroundMessage: $message");
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
