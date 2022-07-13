@@ -40,6 +40,7 @@ class CustomLoading extends StatelessWidget {
 }
 
 String getTimezone() {
+  print('Timezone: ${DateTime.now().timeZoneOffset.inMinutes}');
   return DateTime.now().timeZoneOffset.inMinutes.toString();
 }
 

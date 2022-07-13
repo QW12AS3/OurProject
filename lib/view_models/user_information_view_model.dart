@@ -5,6 +5,8 @@ import 'package:home_workout_app/Api%20services/sign_up_api.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 
+import '../Api services/health_record_api.dart';
+
 class UserInformationViewModel with ChangeNotifier {
   var gender;
   DateTime birthdate = DateTime.now();
@@ -174,17 +176,16 @@ class UserInformationViewModel with ChangeNotifier {
 
   Future<void> sendHealthRecord(
       String desc, String lang, BuildContext context) async {
-    List<int> dis = [];
+    List dis = [];
     List selectedDis =
         _diseases.where((element) => element['selected'] == true).toList();
     selectedDis.forEach((element) {
       dis.add(element['id']);
     });
-    print(dis);
-    final response = await SignUpAPI().sendHealthRecord(dis, lang, desc);
+    //print(dis);
+    final response = await HealthRecordApi().sendHealthRecord(dis, lang, desc);
     if (response['success']) {
-      print('done');
-      //Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/home');
     } else {
       showSnackbar(Text(response['message'].toString()), context);
     }

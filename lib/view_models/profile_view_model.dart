@@ -3,35 +3,59 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/Api%20services/health_record_api.dart';
 import 'package:home_workout_app/Api%20services/profile_api.dart';
 import 'package:home_workout_app/components.dart';
+import 'package:home_workout_app/models/health_record_model.dart';
 import 'package:home_workout_app/models/user_model.dart';
-import 'package:home_workout_app/views/start_view/start_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileViewModel with ChangeNotifier {
   UserModel _userData = UserModel();
+  HealthRecordModel _healthRecord = HealthRecordModel();
   bool _isLoading = false;
+  bool _iseditLoading = false;
 
   bool _infoWidgetVisible = false;
   List _followers = [];
   List _followings = [];
   List _blocklist = [];
 
-  //bool _PasswordObsecure = false;
+  void setIsLoading(value) {
+    _isLoading = value;
+    notifyListeners();
+  }
 
-  // void setPasswordObsecure() {
-  //   _PasswordObsecure = !_PasswordObsecure;
-  //   notifyListeners();
-  // }
+  void seteditIsLoading(value) {
+    _iseditLoading = value;
+    notifyListeners();
+  }
 
   Future<void> setFollowers(int id, String lang) async {
     _followers = await ProfileApi().getFollowers(lang, id);
     notifyListeners();
   }
 
+  Future<void> deleteHealthRecord(String lang, BuildContext context) async {
+    seteditIsLoading(true);
+
+    final response = await HealthRecordApi().deleteHealthRecord(lang);
+    if (response['success']) {
+      showSnackbar(Text(response['message']), context);
+      await setHealthRecord(lang);
+    } else {
+      showSnackbar(Text(response['message']), context);
+    }
+    seteditIsLoading(false);
+  }
+
+  Future<void> setHealthRecord(String lang) async {
+    _healthRecord = await HealthRecordApi().getHealthRecord(lang);
+
+    notifyListeners();
+  }
+
   Future<void> setFollowings(int id, String lang) async {
-    _followers = await ProfileApi().getFollowings(lang, id);
+    _followings = await ProfileApi().getFollowings(lang, id);
     notifyListeners();
   }
 
@@ -61,9 +85,9 @@ class ProfileViewModel with ChangeNotifier {
   // };
 
   Future<void> setCurrentUserData(BuildContext context) async {
-    _isLoading = true;
+    setIsLoading(true);
     _userData = await ProfileApi().getUserProfile('en', context);
-    _isLoading = false;
+    setIsLoading(false);
     notifyListeners();
   }
 
@@ -116,8 +140,11 @@ class ProfileViewModel with ChangeNotifier {
   }
 
   UserModel get getUserData => _userData;
+  HealthRecordModel get getHealthRecord => _healthRecord;
   bool get getInfoWidgetVisible => _infoWidgetVisible;
   bool get getIsLoading => _isLoading;
+  bool get getIseditLoading => _iseditLoading;
+
   List get getFollowers => _followers;
   List get getFollowings => _followings;
   List get getBlocklist => _blocklist;

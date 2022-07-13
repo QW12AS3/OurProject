@@ -1,4 +1,5 @@
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/main.dart';
 import 'package:intl/intl.dart';
 
 class UserModel {
@@ -47,6 +48,7 @@ class UserModel {
     if (imageUrl.substring(0, 4) != 'http') {
       imageUrl = '$ip/$imageUrl';
     }
+    print(imageUrl);
 
     role = json['data']['user']['role_name'] ?? '';
 
