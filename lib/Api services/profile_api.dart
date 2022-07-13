@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/components.dart';
+import 'package:home_workout_app/models/health_record_model.dart';
 import 'package:home_workout_app/models/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';

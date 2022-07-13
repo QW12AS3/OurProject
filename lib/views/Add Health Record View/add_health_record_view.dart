@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/view_models/health_record_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:provider/provider.dart';
@@ -33,13 +34,28 @@ class _AddHealthRecordViewState extends State<AddHealthRecordView> {
     final theme = Theme.of(context);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: SizedBox(
-        width: 90,
-        child: ElevatedButton(
-          onPressed: () {},
-          child: const Text('Save').tr(),
-        ),
-      ),
+      floatingActionButton:
+          Provider.of<HealthRecordViewModel>(context, listen: true).getIsLoading
+              ? CircularProgressIndicator(
+                  color: orangeColor,
+                  strokeWidth: 1,
+                )
+              : SizedBox(
+                  width: 90,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await Provider.of<HealthRecordViewModel>(context,
+                              listen: false)
+                          .sendHealthRecord(
+                              descController.text.trim(),
+                              context.locale == const Locale('en')
+                                  ? 'en'
+                                  : 'ar',
+                              context);
+                    },
+                    child: const Text('Save').tr(),
+                  ),
+                ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -53,7 +69,7 @@ class _AddHealthRecordViewState extends State<AddHealthRecordView> {
               child: TextField(
                 onChanged: (value) {
                   Provider.of<HealthRecordViewModel>(context, listen: false)
-                      .setSearchVal(value);
+                      .setSearchVal(value.trim());
                 },
                 controller: searchController,
                 keyboardType: TextInputType.text,
@@ -93,46 +109,44 @@ class _AddHealthRecordViewState extends State<AddHealthRecordView> {
                 ? Row(
                     children: [
                       Expanded(
-                        child: TextField(
-                          onChanged: (value) {
-                            Provider.of<HealthRecordViewModel>(context,
-                                    listen: false)
-                                .setSearchVal(value);
-                          },
-                          maxLength: 200,
-                          maxLines: 5,
-                          controller: descController,
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            label: FittedBox(
-                                child: const Text('Description').tr()),
-                            floatingLabelStyle: theme.textTheme.bodySmall,
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: orangeColor, width: 1.5),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(15),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: TextField(
+                            maxLength: 200,
+                            maxLines: 5,
+                            controller: descController,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              label: FittedBox(
+                                  child: const Text('Description').tr()),
+                              floatingLabelStyle: theme.textTheme.bodySmall,
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: orangeColor, width: 1.5),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
                               ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: greyColor, width: 1.5),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(15),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: greyColor, width: 1.5),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
                               ),
-                            ),
-                            errorBorder: const OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.red, width: 1.5),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15),
+                              errorBorder: const OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.red, width: 1.5),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
                               ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: orangeColor, width: 1.5),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(15),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: orangeColor, width: 1.5),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
                               ),
                             ),
                           ),
@@ -140,6 +154,7 @@ class _AddHealthRecordViewState extends State<AddHealthRecordView> {
                       ),
                       IconButton(
                         onPressed: () {
+                          descController.clear();
                           consumer.setAddDesc();
                         },
                         icon: Icon(Icons.close),

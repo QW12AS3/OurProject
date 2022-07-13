@@ -15,7 +15,7 @@ class SignUpAPI {
             'Accept': 'application/json',
             'apikey': apiKey,
             'lang': 'en',
-            'timeZone': getTimezone()
+            'timeZone': getTimezone(),
           },
           body: user.toJson());
       print(response.statusCode);
@@ -49,7 +49,8 @@ class SignUpAPI {
           'lang': 'en',
           'accept': 'application/json',
           'authorization':
-              'Bearer ${sharedPreferences.getString('access_token')}'
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
         },
         body: {
           'height': height,
@@ -71,38 +72,6 @@ class SignUpAPI {
       }
     } catch (e) {
       print('Sending info error: $e');
-      return {'success': false, 'message': e.toString()};
-    }
-  }
-
-  Future<Map<String, dynamic>> sendHealthRecord(
-      List<int> dis, String lang, String desc) async {
-    try {
-      //print(sharedPreferences.getString('access_token'));
-      final response = await post(
-        Uri.parse('$base_URL/hRecord'),
-        headers: {
-          'apikey': apiKey,
-          'lang': 'en',
-          'accept': 'application/json',
-          'authorization':
-              'Bearer ${sharedPreferences.getString('access_token')}'
-        },
-        body: {
-          'dis': dis,
-          'desc': desc,
-        },
-      );
-      final data = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        return {'success': true, 'message': data['message']};
-      } else {
-        print(jsonDecode(response.body));
-        return {'success': false, 'message': data['message']};
-      }
-    } catch (e) {
-      print('Sending health record error: $e');
       return {'success': false, 'message': e.toString()};
     }
   }

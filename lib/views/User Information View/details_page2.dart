@@ -38,8 +38,10 @@ class _Details2PageState extends State<Details2Page> {
         child: ElevatedButton(
           onPressed: () {
             Provider.of<UserInformationViewModel>(context, listen: false)
-                .sendHealthRecord(descController.text.trim(),
-                    context.locale == Locale('en') ? 'en' : 'ar', context);
+                .sendHealthRecord(
+                    descController.text.trim(),
+                    context.locale == const Locale('en') ? 'en' : 'ar',
+                    context);
           },
           child: const Text('Save').tr(),
         ),
@@ -177,6 +179,7 @@ class _Details2PageState extends State<Details2Page> {
                           ),
                           IconButton(
                             onPressed: () {
+                              descController.clear();
                               consumer.setAddDesc();
                             },
                             icon: Icon(Icons.close),

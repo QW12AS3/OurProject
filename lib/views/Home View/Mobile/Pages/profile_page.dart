@@ -2,6 +2,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
@@ -28,6 +29,8 @@ class _ProfilePageState extends State<ProfilePage> {
     Future.delayed(Duration.zero).then((value) {
       Provider.of<ProfileViewModel>(context, listen: false)
           .setInfoWidgetVisible(false);
+      Provider.of<ProfileViewModel>(context, listen: false)
+          .setHealthRecord(context.locale == Locale('en') ? 'en' : 'ar');
     });
   }
 
@@ -44,6 +47,9 @@ class _ProfilePageState extends State<ProfilePage> {
             onRefresh: () async {
               await Provider.of<ProfileViewModel>(context, listen: false)
                   .setCurrentUserData(context);
+              await Provider.of<ProfileViewModel>(context, listen: false)
+                  .setHealthRecord(
+                      context.locale == const Locale('en') ? 'en' : 'ar');
             },
             child: Column(
               children: [
@@ -574,32 +580,188 @@ class _ProfilePageState extends State<ProfilePage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                IconButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, '/addHealthRecord');
-                                  },
-                                  icon: const Icon(
-                                    Icons.add,
-                                    size: 15,
+                                if (Provider.of<ProfileViewModel>(context,
+                                            listen: true)
+                                        .getHealthRecord
+                                        .desc
+                                        .isNotEmpty ||
+                                    Provider.of<ProfileViewModel>(context,
+                                            listen: true)
+                                        .getHealthRecord
+                                        .diseases
+                                        .isNotEmpty)
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      size: 15,
+                                    ),
                                   ),
-                                ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.edit,
-                                    size: 15,
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                    size: 15,
-                                  ),
-                                )
+                                if (Provider.of<ProfileViewModel>(context,
+                                            listen: true)
+                                        .getHealthRecord
+                                        .desc
+                                        .isNotEmpty ||
+                                    Provider.of<ProfileViewModel>(context,
+                                            listen: true)
+                                        .getHealthRecord
+                                        .diseases
+                                        .isNotEmpty)
+                                  Consumer<ProfileViewModel>(
+                                    builder: (context, user, child) => user
+                                            .getIseditLoading
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: smallLoader(
+                                              color: Colors.red,
+                                            ),
+                                          )
+                                        : IconButton(
+                                            onPressed: () async {
+                                              await Provider.of<
+                                                          ProfileViewModel>(
+                                                      context,
+                                                      listen: false)
+                                                  .deleteHealthRecord(
+                                                      context.locale ==
+                                                              const Locale('en')
+                                                          ? 'en'
+                                                          : 'ar',
+                                                      context);
+                                            },
+                                            icon: const Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
+                                              size: 15,
+                                            ),
+                                          ),
+                                  )
                               ],
+                            ),
+                            if (Provider.of<ProfileViewModel>(context,
+                                        listen: true)
+                                    .getHealthRecord
+                                    .desc
+                                    .isEmpty &&
+                                Provider.of<ProfileViewModel>(context,
+                                        listen: true)
+                                    .getHealthRecord
+                                    .diseases
+                                    .isEmpty)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "You don't have an health record ",
+                                    style: theme.textTheme.bodySmall!.copyWith(
+                                        color: greyColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                            context, '/addHealthRecord');
+                                      },
+                                      child: Text(
+                                        'add now +',
+                                        style: theme.textTheme.bodySmall!
+                                            .copyWith(
+                                                color: orangeColor,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w300,
+                                                decoration:
+                                                    TextDecoration.underline),
+                                      )),
+                                ],
+                              ),
+                            if (Provider.of<ProfileViewModel>(context,
+                                    listen: true)
+                                .getHealthRecord
+                                .desc
+                                .isNotEmpty)
+                              Align(
+                                alignment: context.locale == Locale('en')
+                                    ? Alignment.centerLeft
+                                    : Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 2),
+                                  child: Text(
+                                    'Description',
+                                    style: theme.textTheme.bodySmall!
+                                        .copyWith(fontWeight: FontWeight.w300),
+                                  ).tr(),
+                                ),
+                              ),
+                            Consumer<ProfileViewModel>(
+                              builder: (context, user, child) => user
+                                      .getHealthRecord.desc.isEmpty
+                                  ? const Text('')
+                                  : Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        width: mq.size.width * 0.95,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          border: Border.all(color: blueColor),
+                                        ),
+                                        child: Text(
+                                          user.getHealthRecord.desc,
+                                          style: theme.textTheme.bodySmall!
+                                              .copyWith(
+                                            color: Colors.black,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                            ),
+                            if (Provider.of<ProfileViewModel>(context,
+                                    listen: true)
+                                .getHealthRecord
+                                .diseases
+                                .isNotEmpty)
+                              Align(
+                                alignment: context.locale == Locale('en')
+                                    ? Alignment.centerLeft
+                                    : Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 2),
+                                  child: Text(
+                                    'Diseases',
+                                    style: theme.textTheme.bodySmall!
+                                        .copyWith(fontWeight: FontWeight.w300),
+                                  ).tr(),
+                                ),
+                              ),
+                            Consumer<ProfileViewModel>(
+                              builder: (context, user, child) => user
+                                      .getHealthRecord.diseases.isEmpty
+                                  ? const Text('')
+                                  : ListBody(
+                                      children: user.getHealthRecord.diseases
+                                          .map(
+                                            (e) => Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 5),
+                                              child: Text(
+                                                  e['dis_name'].toString(),
+                                                  style: theme
+                                                      .textTheme.bodySmall!
+                                                      .copyWith(
+                                                          color: blueColor)),
+                                            ),
+                                          )
+                                          .toList(),
+                                    ),
                             )
                           ],
                         ),
