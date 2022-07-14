@@ -12,6 +12,7 @@ class HealthRecordViewModel with ChangeNotifier {
   bool _addDesc = false;
   String _searchVal = '';
   List _diseases = [];
+  //List _selectedDis = [];
   bool _isLoading = false;
 
   void setIsLoading(value) {
@@ -22,7 +23,7 @@ class HealthRecordViewModel with ChangeNotifier {
   Future<void> setDiseases(String lang) async {
     final resp = await SignUpAPI().getDiseases(lang);
     print('called');
-
+    _diseases.clear();
     resp.forEach(
       (element) {
         _diseases.add(
@@ -43,6 +44,12 @@ class HealthRecordViewModel with ChangeNotifier {
         changedValue;
     notifyListeners();
   }
+
+  // void changeSelectedDiseasesValue(key, changedValue) {
+  //   _selectedDis.firstWhere((element) => element['id'] == key)['selected'] =
+  //       changedValue;
+  //   notifyListeners();
+  // }
 
   void setSearchVal(String value) {
     _searchVal = value;
@@ -81,5 +88,6 @@ class HealthRecordViewModel with ChangeNotifier {
   bool get getAddDesc => _addDesc;
   String get getSearchVal => _searchVal;
   List get getDiseases => _diseases;
+  //List get getSselectedDiseases => _selectedDis;
   bool get getIsLoading => _isLoading;
 }

@@ -52,8 +52,8 @@ class _Details2PageState extends State<Details2Page> {
           toolbarHeight:
               Provider.of<UserInformationViewModel>(context, listen: true)
                       .getAddDesc
-                  ? 320
-                  : 190,
+                  ? 325
+                  : 205,
           title: Column(
             children: [
               Padding(
@@ -75,7 +75,7 @@ class _Details2PageState extends State<Details2Page> {
                         'Skip',
                         style: theme.textTheme.bodySmall!.copyWith(
                             color: blueColor, fontWeight: FontWeight.w200),
-                      ),
+                      ).tr(),
                     ),
                   ],
                 ),

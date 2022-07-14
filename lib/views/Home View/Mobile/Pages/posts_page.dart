@@ -49,7 +49,48 @@ class PostsPage extends StatelessWidget {
                 }
               }.map((e) => CommentsModel.fromJson(e)).toList(),
               ctx: context,
-              currentReact: Reacts.like,
+              currentReact: 'type1',
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: NormalPostCard(
+              coachImageUrl:
+                  'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
+              postImages: const [
+                'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
+                'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
+                'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg'
+              ],
+              coachName: 'Omar',
+              title:
+                  'This is a test This is a test This is a test This is a test This is a test This is a test',
+              likes: const {'Like': 50, 'Dislike': 10, 'Clap': 15, 'Strong': 5},
+              comments: {
+                {
+                  'owner': 'Omar',
+                  'comment': 'Nice Workout!',
+                  'date': '29/6/2022',
+                  'ownerImageUrl':
+                      'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg'
+                },
+                {
+                  'owner': 'Fadi',
+                  'comment': 'Good',
+                  'date': '29/6/2022',
+                  'ownerImageUrl':
+                      'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg'
+                },
+                {
+                  'owner': 'Philip',
+                  'comment': 'thanks',
+                  'date': '29/6/2022',
+                  'ownerImageUrl':
+                      'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg'
+                }
+              }.map((e) => CommentsModel.fromJson(e)).toList(),
+              ctx: context,
+              currentReact: 'type1',
             ),
           ),
           Padding(

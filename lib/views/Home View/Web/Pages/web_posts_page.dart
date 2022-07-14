@@ -25,7 +25,7 @@ class WebPostsPage extends StatelessWidget {
                 'This is a test This is a test This is a test This is a test This is a test This is a test',
             likes: const {'Like': 50, 'DisLike': 10, 'Clap': 15, 'Strong': 5},
             comments: const ['Nice', 'Good Workout', 'Thanks'],
-            currentReact: Reacts.clap,
+            currentReactID: 'type1',
           ),
         ),
         Padding(

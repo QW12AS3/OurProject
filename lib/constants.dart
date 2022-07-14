@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/my_flutter_app_icons.dart';
 
 Color orangeColor = const Color(0xFFFB8500);
 Color blueColor = const Color(0xff126782);
@@ -23,7 +24,35 @@ enum Gender { male, female }
 
 enum Units { kg, lb, cm, ft }
 
-enum Reacts { like, dislike, clap, strong, none }
+// enum Reacts { like, dislike, clap, strong, none }
+const reacts = [
+  {
+    'id': 'type1',
+    'name': 'like',
+    'icon': Icons.thumb_up_alt_outlined,
+  },
+  {
+    'id': 'type2',
+    'name': 'unlike',
+    'icon': Icons.thumb_down_alt_outlined,
+  },
+  {
+    'id': 'type3',
+    'name': 'clap',
+    'icon': MyFlutterApp.clapping_svgrepo_com,
+  },
+  {
+    'id': 'type4',
+    'name': 'strong',
+    'icon': MyFlutterApp.muscle_svgrepo_com__1_
+  },
+];
+
+enum PostTypes {
+  Normal,
+  NormalPoll,
+  TipPoll,
+}
 
 class CustomLoading extends StatelessWidget {
   const CustomLoading({Key? key}) : super(key: key);

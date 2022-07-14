@@ -56,5 +56,22 @@
     "Are you sure to delete your account ?": "Are you sure to delete your account ?",
     "Note: You can reactive your account in 30 days.": "Note: You can reactive your account in 30 days.",
     "Yes": "Yes",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "You don't have an health record ": "You don't have an health record ",
+    "add now +": "add now +",
+    "Description": "Description",
+    "Search": "Search",
+    "Health record": "Health record",
+    "Diseases": "Diseases",
+    "Followers": "Followers",
+    "Followings": "Followings",
+    "Delete account": "Delete account",
+    "Tell others something about you!": "Tell others something about you!",
+    "Logout": "Logout",
+    "From this device": "From this device",
+    "From all devices": "From all devices",
+    "Skip": "Skip",
+    "Blocklist": "Blocklist",
+    "+ Follow": "+ Follow",
+    "Unfollow": "Unfollow"
 }

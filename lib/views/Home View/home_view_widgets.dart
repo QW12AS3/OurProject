@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/user_model.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
@@ -34,7 +35,7 @@ class workoutCard extends StatelessWidget {
       children: [
         InkWell(
           onTap: () {
-            Navigator.pushNamed(context, 'anotherUserProfile',
+            Navigator.pushNamed(context, '/anotherUserProfile',
                 arguments: {'id': 1});
           },
           child: Row(
@@ -263,43 +264,49 @@ class myDrawer extends StatelessWidget {
               ),
             ),
           ),
-          ExpansionTile(
-            trailing: Icon(
-              Icons.logout_rounded,
-              color: blueColor,
-            ),
-            title: Text(
-              'Logout',
-              style: theme.textTheme.bodySmall,
-            ),
-            iconColor: blueColor,
-            children: [
-              InkWell(
-                onTap: () async {
-                  Provider.of<ProfileViewModel>(context, listen: false)
-                      .logout(context);
-                },
-                child: ListTile(
-                  title: Text(
-                    'From this device',
-                    style: theme.textTheme.bodySmall,
-                  ).tr(),
-                ),
+          if (!Provider.of<ProfileViewModel>(context, listen: true)
+              .getIsLogoutLoading)
+            ExpansionTile(
+              trailing: Icon(
+                Icons.logout_rounded,
+                color: blueColor,
               ),
-              InkWell(
-                onTap: () async {
-                  Provider.of<ProfileViewModel>(context, listen: false)
-                      .logoutFromAll(context);
-                },
-                child: ListTile(
-                  title: Text(
-                    'From all devices',
-                    style: theme.textTheme.bodySmall,
-                  ).tr(),
+              title: Text(
+                'Logout',
+                style: theme.textTheme.bodySmall,
+              ).tr(),
+              iconColor: blueColor,
+              children: [
+                InkWell(
+                  onTap: () async {
+                    await Provider.of<ProfileViewModel>(context, listen: false)
+                        .logout(context);
+                  },
+                  child: ListTile(
+                    title: Text(
+                      'From this device',
+                      style: theme.textTheme.bodySmall,
+                    ).tr(),
+                  ),
                 ),
-              ),
-            ],
-          )
+                InkWell(
+                  onTap: () async {
+                    await Provider.of<ProfileViewModel>(context, listen: false)
+                        .logoutFromAll(context);
+                  },
+                  child: ListTile(
+                    title: Text(
+                      'From all devices',
+                      style: theme.textTheme.bodySmall,
+                    ).tr(),
+                  ),
+                ),
+              ],
+            )
+          else
+            bigLoader(
+              color: orangeColor,
+            )
         ],
       ),
     );

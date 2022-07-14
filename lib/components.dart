@@ -33,3 +33,20 @@ class smallLoader extends StatelessWidget {
     );
   }
 }
+
+class bigLoader extends StatelessWidget {
+  bigLoader({
+    required this.color,
+    Key? key,
+  }) : super(key: key);
+  Color color = Colors.white;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: CircularProgressIndicator(
+        color: color,
+        strokeWidth: 1,
+      ),
+    );
+  }
+}

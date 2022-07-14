@@ -163,7 +163,7 @@ class webNormalPostCard extends StatefulWidget {
       required this.postImages,
       required this.comments,
       required this.likes,
-      required this.currentReact,
+      required this.currentReactID,
       Key? key})
       : super(key: key);
 
@@ -173,7 +173,7 @@ class webNormalPostCard extends StatefulWidget {
   String title;
   Map<String, int> likes;
   List<String> comments;
-  Reacts currentReact;
+  String currentReactID;
 
   @override
   State<webNormalPostCard> createState() => _webNormalPostCardState();
@@ -334,155 +334,155 @@ class _webNormalPostCardState extends State<webNormalPostCard> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              if (widget.currentReact == Reacts.like)
-                                widget.currentReact = Reacts.none;
-                              else
-                                widget.currentReact = Reacts.like;
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: widget.currentReact == Reacts.like
-                                  ? Border.all(color: blueColor, width: 2)
-                                  : null,
-                            ),
-                            child: Icon(
-                              MyFlutterApp.thumbs_up,
-                              color: orangeColor,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          widget.likes['Like'].toString(),
-                          style: theme.textTheme.bodySmall!
-                              .copyWith(color: Colors.black, fontSize: 15),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              if (widget.currentReact == Reacts.dislike)
-                                widget.currentReact = Reacts.none;
-                              else
-                                widget.currentReact = Reacts.dislike;
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: widget.currentReact == Reacts.dislike
-                                  ? Border.all(color: blueColor, width: 2)
-                                  : null,
-                            ),
-                            child: Icon(
-                              MyFlutterApp.thumbs_down,
-                              color: orangeColor,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          widget.likes['Dislike'].toString(),
-                          style: theme.textTheme.bodySmall!
-                              .copyWith(color: Colors.black, fontSize: 15),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              if (widget.currentReact == Reacts.clap)
-                                widget.currentReact = Reacts.none;
-                              else
-                                widget.currentReact = Reacts.clap;
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: widget.currentReact == Reacts.clap
-                                  ? Border.all(color: blueColor, width: 2)
-                                  : null,
-                            ),
-                            child: Icon(
-                              MyFlutterApp.clapping_svgrepo_com,
-                              color: orangeColor,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          widget.likes['Clap'].toString(),
-                          style: theme.textTheme.bodySmall!
-                              .copyWith(color: Colors.black, fontSize: 15),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              if (widget.currentReact == Reacts.strong)
-                                widget.currentReact = Reacts.none;
-                              else
-                                widget.currentReact = Reacts.strong;
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: widget.currentReact == Reacts.strong
-                                  ? Border.all(color: blueColor, width: 2)
-                                  : null,
-                            ),
-                            child: Icon(
-                              MyFlutterApp.muscle_svgrepo_com__1_,
-                              color: orangeColor,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          widget.likes['Strong'].toString(),
-                          style: theme.textTheme.bodySmall!
-                              .copyWith(color: Colors.black, fontSize: 15),
-                        )
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     InkWell(
+                    //       onTap: () {
+                    //         setState(() {
+                    //           if (widget.currentReact == Reacts.like)
+                    //             widget.currentReact = Reacts.none;
+                    //           else
+                    //             widget.currentReact = Reacts.like;
+                    //         });
+                    //       },
+                    //       child: Container(
+                    //         padding: const EdgeInsets.all(2),
+                    //         decoration: BoxDecoration(
+                    //           shape: BoxShape.circle,
+                    //           border: widget.currentReact == Reacts.like
+                    //               ? Border.all(color: blueColor, width: 2)
+                    //               : null,
+                    //         ),
+                    //         child: Icon(
+                    //           MyFlutterApp.thumbs_up,
+                    //           color: orangeColor,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     const SizedBox(
+                    //       width: 5,
+                    //     ),
+                    //     Text(
+                    //       widget.likes['Like'].toString(),
+                    //       style: theme.textTheme.bodySmall!
+                    //           .copyWith(color: Colors.black, fontSize: 15),
+                    //     ),
+                    //   ],
+                    // ),
+                    // const SizedBox(
+                    //   width: 5,
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     InkWell(
+                    //       onTap: () {
+                    //         setState(() {
+                    //           if (widget.currentReact == Reacts.dislike)
+                    //             widget.currentReact = Reacts.none;
+                    //           else
+                    //             widget.currentReact = Reacts.dislike;
+                    //         });
+                    //       },
+                    //       child: Container(
+                    //         padding: const EdgeInsets.all(2),
+                    //         decoration: BoxDecoration(
+                    //           shape: BoxShape.circle,
+                    //           border: widget.currentReact == Reacts.dislike
+                    //               ? Border.all(color: blueColor, width: 2)
+                    //               : null,
+                    //         ),
+                    //         child: Icon(
+                    //           MyFlutterApp.thumbs_down,
+                    //           color: orangeColor,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     const SizedBox(
+                    //       width: 5,
+                    //     ),
+                    //     Text(
+                    //       widget.likes['Dislike'].toString(),
+                    //       style: theme.textTheme.bodySmall!
+                    //           .copyWith(color: Colors.black, fontSize: 15),
+                    //     )
+                    //   ],
+                    // ),
+                    // const SizedBox(
+                    //   width: 5,
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     InkWell(
+                    //       onTap: () {
+                    //         setState(() {
+                    //           if (widget.currentReact == Reacts.clap)
+                    //             widget.currentReact = Reacts.none;
+                    //           else
+                    //             widget.currentReact = Reacts.clap;
+                    //         });
+                    //       },
+                    //       child: Container(
+                    //         padding: const EdgeInsets.all(2),
+                    //         decoration: BoxDecoration(
+                    //           shape: BoxShape.circle,
+                    //           border: widget.currentReact == Reacts.clap
+                    //               ? Border.all(color: blueColor, width: 2)
+                    //               : null,
+                    //         ),
+                    //         child: Icon(
+                    //           MyFlutterApp.clapping_svgrepo_com,
+                    //           color: orangeColor,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     const SizedBox(
+                    //       width: 5,
+                    //     ),
+                    //     Text(
+                    //       widget.likes['Clap'].toString(),
+                    //       style: theme.textTheme.bodySmall!
+                    //           .copyWith(color: Colors.black, fontSize: 15),
+                    //     )
+                    //   ],
+                    // ),
+                    // const SizedBox(
+                    //   width: 5,
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     InkWell(
+                    //       onTap: () {
+                    //         setState(() {
+                    //           if (widget.currentReact == Reacts.strong)
+                    //             widget.currentReact = Reacts.none;
+                    //           else
+                    //             widget.currentReact = Reacts.strong;
+                    //         });
+                    //       },
+                    //       child: Container(
+                    //         padding: const EdgeInsets.all(2),
+                    //         decoration: BoxDecoration(
+                    //           shape: BoxShape.circle,
+                    //           border: widget.currentReact == Reacts.strong
+                    //               ? Border.all(color: blueColor, width: 2)
+                    //               : null,
+                    //         ),
+                    //         child: Icon(
+                    //           MyFlutterApp.muscle_svgrepo_com__1_,
+                    //           color: orangeColor,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     const SizedBox(
+                    //       width: 5,
+                    //     ),
+                    //     Text(
+                    //       widget.likes['Strong'].toString(),
+                    //       style: theme.textTheme.bodySmall!
+                    //           .copyWith(color: Colors.black, fontSize: 15),
+                    //     )
+                    //   ],
+                    // ),
                     TextButton(
                       onPressed: () {
                         // showBottomSheet(
