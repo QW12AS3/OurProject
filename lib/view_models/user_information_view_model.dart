@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/sign_up_api.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/main.dart';
 
 import '../Api services/health_record_api.dart';
 
@@ -97,6 +98,8 @@ class UserInformationViewModel with ChangeNotifier {
               context);
           _isLoading = false;
           if (response) {
+            sharedPreferences.setBool('info', true);
+            resetValue();
             _pageController.animateToPage(1,
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.linear);
@@ -189,6 +192,19 @@ class UserInformationViewModel with ChangeNotifier {
     } else {
       showSnackbar(Text(response['message'].toString()), context);
     }
+  }
+
+  void resetValue() {
+    gender = '';
+    birthdate = DateTime.now();
+    dateIsSelected = false;
+    weightUnit = Units.kg;
+    heightUnit = Units.cm;
+    _country = '';
+    _diseases = [];
+    _addDescription = false;
+    _searchValue = '';
+    _isLoading = false;
   }
 
   String get getCountryName => _country;

@@ -285,7 +285,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                                       fontWeight:
                                                           FontWeight.w100,
                                                       fontSize: 12),
-                                            ),
+                                            ).tr(),
                                           ),
                                   ),
                                 if (user.getUserData.roleId == 2 ||
@@ -311,7 +311,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                                   color: blueColor,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 15),
-                                        ),
+                                        ).tr(),
                                         const SizedBox(
                                           height: 5,
                                         ),
@@ -345,7 +345,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                                 color: blueColor,
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 15),
-                                      ),
+                                      ).tr(),
                                       const SizedBox(
                                         height: 5,
                                       ),

@@ -27,7 +27,7 @@ class ProfileApi {
       });
 
       final data = jsonDecode(response.body);
-
+      print(data);
       if (response.statusCode == 200) {
         UserModel userModel = UserModel.fromJson(jsonDecode(response.body));
         return userModel;

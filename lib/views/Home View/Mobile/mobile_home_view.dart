@@ -68,6 +68,31 @@ class _MobileHomeViewState extends State<MobileHomeView>
             return false;
           },
           child: Scaffold(
+            // floatingActionButtonLocation:
+            //     FloatingActionButtonLocation.centerDocked,
+            floatingActionButton:
+                Provider.of<MobileHomeViewModel>(context, listen: true)
+                            .getCurrentTab ==
+                        1
+                    ? InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/createPost');
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: orangeColor,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Add a post +',
+                                style: theme.textTheme.bodySmall!
+                                    .copyWith(color: Colors.white),
+                              ),
+                            )),
+                      )
+                    : null,
             drawer: SafeArea(
               child: myDrawer(
                 user: Provider.of<ProfileViewModel>(context, listen: true)

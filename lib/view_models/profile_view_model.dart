@@ -8,17 +8,40 @@ import 'package:home_workout_app/Api%20services/profile_api.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/health_record_model.dart';
 import 'package:home_workout_app/models/user_model.dart';
+import 'package:provider/provider.dart';
+
+import '../Api services/sign_up_api.dart';
+import '../main.dart';
 
 class ProfileViewModel with ChangeNotifier {
   UserModel _userData = UserModel();
   HealthRecordModel _healthRecord = HealthRecordModel();
   bool _isLoading = false;
   bool _iseditLoading = false;
+  bool _islogoutLoading = false;
+  List _selectedDis = [];
+  String _searchValue = '';
+  bool _addDesc = false;
 
   bool _infoWidgetVisible = false;
   List _followers = [];
   List _followings = [];
   List _blocklist = [];
+
+  void setAddDesc() {
+    _addDesc = !_addDesc;
+    notifyListeners();
+  }
+
+  void setSearchValue(value) {
+    _searchValue = value;
+    notifyListeners();
+  }
+
+  void setIslogoutLoading(value) {
+    _islogoutLoading = value;
+    notifyListeners();
+  }
 
   void setIsLoading(value) {
     _isLoading = value;
@@ -50,7 +73,6 @@ class ProfileViewModel with ChangeNotifier {
 
   Future<void> setHealthRecord(String lang) async {
     _healthRecord = await HealthRecordApi().getHealthRecord(lang);
-
     notifyListeners();
   }
 
@@ -85,6 +107,7 @@ class ProfileViewModel with ChangeNotifier {
   // };
 
   Future<void> setCurrentUserData(BuildContext context) async {
+    if (_userData.email.isNotEmpty) return;
     setIsLoading(true);
     _userData = await ProfileApi().getUserProfile('en', context);
     setIsLoading(false);
@@ -92,25 +115,111 @@ class ProfileViewModel with ChangeNotifier {
   }
 
   Future<void> logout(BuildContext context) async {
+    setIslogoutLoading(true);
     final response = await ProfileApi().logout('en');
     if (response) {
-      Navigator.pushNamed(context, 'startView');
+      sharedPreferences.remove("access_token");
+      sharedPreferences.remove("refresh_token");
+      sharedPreferences.remove("token_expiration");
+      sharedPreferences.remove("role_id");
+      sharedPreferences.remove("role_name");
+      sharedPreferences.remove("googleProvider");
+      sharedPreferences.remove('registered');
+      sharedPreferences.remove('info');
+      setIslogoutLoading(false);
+
+      Navigator.pushNamed(context, '/');
     } else {
+      setIslogoutLoading(false);
       showSnackbar(const Text('Logout failed'), context);
       Navigator.pop(context);
     }
+    setIslogoutLoading(false);
   }
 
   Future<void> logoutFromAll(BuildContext context) async {
+    setIslogoutLoading(true);
     final response = await ProfileApi().logoutFromAll('en');
     if (response) {
-      Navigator.pushReplacementNamed(context, 'startView');
+      sharedPreferences.remove("access_token");
+      sharedPreferences.remove("refresh_token");
+      sharedPreferences.remove("token_expiration");
+      sharedPreferences.remove("role_id");
+      sharedPreferences.remove("role_name");
+      sharedPreferences.remove("googleProvider");
+      sharedPreferences.remove('registered');
+      sharedPreferences.remove('info');
+      setIslogoutLoading(false);
+
+      Navigator.pushReplacementNamed(context, '/');
     } else {
+      setIslogoutLoading(false);
       showSnackbar(const Text('Logout failed'), context);
       Navigator.pop(context);
     }
+    setIslogoutLoading(false);
   }
 
+  Future<void> setSelectedDiseases(String lang) async {
+    final resp = await SignUpAPI().getDiseases(lang);
+    print('called');
+    _selectedDis.clear();
+
+    resp.forEach(
+      (element) {
+        _selectedDis.add(
+          {
+            'id': element['id'],
+            'name': element['name'],
+            'selected': false,
+          },
+        );
+      },
+    );
+    List<int> ids = [];
+    _healthRecord.diseases.forEach((element) {
+      ids.add(element['dis_id']);
+    });
+    print(_selectedDis);
+    _selectedDis.forEach((element) {
+      print(element['id']);
+      if (ids.contains(element['id'])) {
+        print('yesssss');
+        element['selected'] = true;
+      }
+    });
+    notifyListeners();
+  }
+
+  void changeDiseasesValue(key, changedValue) {
+    _selectedDis.firstWhere((element) => element['id'] == key)['selected'] =
+        changedValue;
+    notifyListeners();
+  }
+
+  Future<void> sendHealthRecord(
+      String desc, String lang, BuildContext context) async {
+    setIsLoading(true);
+    List dis = [];
+    List selectedDis =
+        _selectedDis.where((element) => element['selected'] == true).toList();
+    selectedDis.forEach((element) {
+      dis.add(element['id']);
+    });
+    print('Arrayyyyyyyyyyyyyyyyyyyyyyyyyy $dis');
+    final response = await HealthRecordApi().sendHealthRecord(dis, lang, desc);
+    if (response['success']) {
+      setIsLoading(false);
+      await Provider.of<ProfileViewModel>(context, listen: false)
+          .setHealthRecord(lang);
+      _selectedDis.clear();
+      Navigator.pop(context);
+    } else {
+      setIsLoading(false);
+
+      showSnackbar(Text(response['message'].toString()), context);
+    }
+  }
   // Future<void> followUser() async {
   //   await ProfileApi().followUser(1, 'en');
   // }
@@ -148,5 +257,10 @@ class ProfileViewModel with ChangeNotifier {
   List get getFollowers => _followers;
   List get getFollowings => _followings;
   List get getBlocklist => _blocklist;
+  List get getSelectedDis => _selectedDis;
+  String get getSearchValue => _searchValue;
+  bool get getAddDesc => _addDesc;
+  bool get getIsLogoutLoading => _islogoutLoading;
+
   //bool get getPasswordObsecure => _PasswordObsecure;
 }

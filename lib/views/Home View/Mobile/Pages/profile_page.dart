@@ -183,7 +183,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       switch (result) {
                                         case 'edit':
                                           Navigator.pushNamed(context,
-                                              'editProfile', arguments: {
+                                              '/editProfile', arguments: {
                                             'userData':
                                                 Provider.of<ProfileViewModel>(
                                                         context,
@@ -365,7 +365,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           'Edit profile',
                                           style: theme.textTheme.bodySmall!
                                               .copyWith(color: blueColor),
-                                        ),
+                                        ).tr(),
                                       ),
                                       if (user.getUserData.roleId != 1)
                                         PopupMenuItem<String>(
@@ -374,7 +374,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             'Blocklist',
                                             style: theme.textTheme.bodySmall!
                                                 .copyWith(color: blueColor),
-                                          ),
+                                          ).tr(),
                                         ),
                                       PopupMenuItem<String>(
                                         value: 'delete',
@@ -382,7 +382,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           'Delete account',
                                           style: theme.textTheme.bodySmall!
                                               .copyWith(color: Colors.red),
-                                        ),
+                                        ).tr(),
                                       ),
                                     ],
                                   ),
@@ -417,7 +417,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 color: blueColor,
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 15),
-                                      ),
+                                      ).tr(),
                                       const SizedBox(
                                         height: 5,
                                       ),
@@ -451,7 +451,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               color: blueColor,
                                               fontWeight: FontWeight.w500,
                                               fontSize: 15),
-                                    ),
+                                    ).tr(),
                                     const SizedBox(
                                       height: 5,
                                     ),
@@ -490,7 +490,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   'Tell others something about you!',
                                   style: theme.textTheme.bodySmall!
                                       .copyWith(color: greyColor, fontSize: 15),
-                                )
+                                ).tr()
                               : Container(
                                   width: mq.size.width * 0.95,
                                   margin: const EdgeInsets.symmetric(
@@ -591,7 +591,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                         .diseases
                                         .isNotEmpty)
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, '/editHealthRecord');
+                                    },
                                     icon: const Icon(
                                       Icons.edit,
                                       size: 15,
@@ -657,7 +660,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         color: greyColor,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w300),
-                                  ),
+                                  ).tr(),
                                   TextButton(
                                       onPressed: () {
                                         Navigator.pushNamed(
@@ -672,7 +675,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 fontWeight: FontWeight.w300,
                                                 decoration:
                                                     TextDecoration.underline),
-                                      )),
+                                      ).tr()),
                                 ],
                               ),
                             if (Provider.of<ProfileViewModel>(context,

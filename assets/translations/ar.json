@@ -56,5 +56,22 @@
     "Are you sure to delete your account ?": "هل أنت متأكد من حذف حسابك ؟",
     "Note: You can reactive your account in 30 days.": "ملاحظة: يمكنك استرجاع حسابك خلال 30 يوم",
     "Yes": "نعم",
-    "Cancel": "الغاء"
+    "Cancel": "الغاء",
+    "You don't have an health record ": "ليس لديك سجل صحي ",
+    "add now +": "أنشأ الان +",
+    "Description": "وصف",
+    "Search": "بحث",
+    "Health record": "السجل الصحي",
+    "Diseases": "الأمراض",
+    "Followers": "المتابعين",
+    "Followings": "المتابعون",
+    "Delete account": "حذف الحساب",
+    "Tell others something about you!": "أخبر الاخرين المزيد عنك !",
+    "Logout": "تسجيل الخروج",
+    "From this device": "من هذا الجهاز",
+    "From all devices": "من جميع الاجهزة",
+    "Skip": "تخطي",
+    "Blocklist": "قائمة المحظورين",
+    "+ Follow": "متابعة +",
+    "الغاء المتابعة": "الغاء المتابعة"
 }
