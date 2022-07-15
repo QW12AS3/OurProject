@@ -308,97 +308,86 @@ class pollPostCard extends StatelessWidget {
       {required this.coachName,
       required this.coachImageUrl,
       required this.title,
+      required this.votes,
+      required this.role,
       required this.ctx,
       Key? key})
       : super(key: key);
 
+  String role;
   String coachName;
   String coachImageUrl;
   String title;
+  List votes = [];
   BuildContext ctx;
 
   @override
   Widget build(BuildContext context) {
+    print(votes);
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: blueColor, width: 1.5),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(coachImageUrl),
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Coach $coachName',
-                    style:
-                        theme.textTheme.bodySmall!.copyWith(color: blueColor),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: blueColor, width: 1.5),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(coachImageUrl),
                   ),
-                  Text(
-                    '6/3/2022 - 5:33 PM',
-                    style: theme.textTheme.displaySmall!
-                        .copyWith(color: greyColor, fontSize: 10),
-                  )
-                ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$role $coachName',
+                      style:
+                          theme.textTheme.bodySmall!.copyWith(color: blueColor),
+                    ),
+                    Text(
+                      '6/3/2022 - 5:33 PM',
+                      style: theme.textTheme.displaySmall!
+                          .copyWith(color: greyColor, fontSize: 10),
+                    )
+                  ],
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                title,
+                style:
+                    theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
               ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              title,
-              style:
-                  theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
             ),
-          ),
-          Consumer<MobileHomeViewModel>(
-            builder: (context, value, child) => RadioListTile<String>(
-              title: const Text('Agree').tr(),
-              secondary: value.getRadioValue != ''
-                  ? Text(
-                      '79%',
-                      style: theme.textTheme.bodySmall,
-                    )
-                  : null,
-              activeColor: orangeColor,
-              value: 'Agree',
-              groupValue: value.getRadioValue,
-              toggleable: true,
-              onChanged: (String? radioValue) {
-                value.setRadioValue(radioValue ?? '');
-              },
-            ),
-          ),
-          Consumer<MobileHomeViewModel>(
-            builder: (context, value, child) => RadioListTile<String>(
-              title: const Text('Disagree').tr(),
-              secondary: value.getRadioValue != ''
-                  ? Text(
-                      '21%',
-                      style: theme.textTheme.bodySmall,
-                    )
-                  : null,
-              activeColor: orangeColor,
-              value: 'Disagree',
-              groupValue: value.getRadioValue,
-              toggleable: true,
-              onChanged: (String? radioValue) {
-                value.setRadioValue(radioValue ?? '');
-              },
-            ),
-          ),
-        ],
+            ListBody(
+              children: votes
+                  .map(
+                    (e) => Consumer<MobileHomeViewModel>(
+                      builder: (context, value, child) => RadioListTile<int>(
+                        value: e['vote_id'],
+                        groupValue: value.getRadioValue,
+                        onChanged: (selectedvalue) {
+                          value.setRadioValue(selectedvalue ?? 0);
+                        },
+                        title: Text(e['vote']),
+                        secondary: Text(e['rate']),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            )
+          ],
+        ),
       ),
     );
   }

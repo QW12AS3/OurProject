@@ -74,24 +74,29 @@ class _MobileHomeViewState extends State<MobileHomeView>
                 Provider.of<MobileHomeViewModel>(context, listen: true)
                             .getCurrentTab ==
                         1
-                    ? InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/createPost');
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: orangeColor,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Add a post +',
-                                style: theme.textTheme.bodySmall!
-                                    .copyWith(color: Colors.white),
-                              ),
-                            )),
-                      )
+                    ? (Provider.of<ProfileViewModel>(context, listen: true)
+                                .getUserData
+                                .roleId !=
+                            1
+                        ? InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/createPost');
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: orangeColor,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Add a post +',
+                                    style: theme.textTheme.bodySmall!
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                )),
+                          )
+                        : null)
                     : null,
             drawer: SafeArea(
               child: myDrawer(

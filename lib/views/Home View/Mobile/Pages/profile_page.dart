@@ -73,6 +73,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               radius: 20,
                               backgroundImage:
                                   NetworkImage(user.getUserData.imageUrl),
+                              onForegroundImageError: (child, stacktrace) =>
+                                  const LoadingContainer(),
                               onBackgroundImageError: (child, stacktrace) =>
                                   const LoadingContainer(),
                               child: Container(

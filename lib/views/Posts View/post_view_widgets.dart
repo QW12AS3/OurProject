@@ -1,9 +1,12 @@
+// ignore_for_file: curly_braces_in_flow_control_structures, avoid_single_cascade_in_expression_statements
+
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/create_post_view_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -49,54 +52,35 @@ class TypeContainer extends StatelessWidget {
 
 class CreateNormalPostSpace extends StatefulWidget {
   CreateNormalPostSpace({Key? key}) : super(key: key);
-
+  TextEditingController normaltitleController = TextEditingController();
   @override
   State<CreateNormalPostSpace> createState() => _CreateNormalPostSpaceState();
 }
 
 class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
-  TextEditingController titleController = TextEditingController();
+  List<VideoPlayerController> _videos = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero).then((value) {
+      Provider.of<CreatePostViewModel>(context, listen: false).resetPicked();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final mq = MediaQuery.of(context);
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: TextField(
+          child: CustomTextField(
             maxLines: 15,
-            controller: titleController,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              label: FittedBox(child: const Text('Type here...').tr()),
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              floatingLabelStyle: theme.textTheme.bodySmall,
-              focusedErrorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: orangeColor, width: 1.5),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(15),
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: greyColor, width: 1.5),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(15),
-                ),
-              ),
-              errorBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.red, width: 1.5),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: orangeColor, width: 1.5),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(15),
-                ),
-              ),
-            ),
+            controller: widget.normaltitleController,
+            title: 'Type here...',
           ),
         ),
         const SizedBox(
@@ -160,11 +144,19 @@ class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
                       Provider.of<CreatePostViewModel>(context, listen: true)
                           .getPickedImages!
                           .map(
-                            (e) => Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image(
-                                image: FileImage(
-                                  File(e.path),
+                            (e) => Dismissible(
+                              onDismissed: (_) {
+                                Provider.of<CreatePostViewModel>(context,
+                                        listen: false)
+                                    .removePhoto(e.path);
+                              },
+                              key: Key(e.path),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image(
+                                  image: FileImage(
+                                    File(e.path),
+                                  ),
                                 ),
                               ),
                             ),
@@ -197,22 +189,362 @@ class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
                       Provider.of<CreatePostViewModel>(context, listen: true)
                           .getPickedVideo!
                           .map((e) {
-                    return ListTile(
-                      leading: const Text('-'),
-                      title: Text(
-                        e.path,
-                        style: theme.textTheme.bodyMedium!.copyWith(
-                          color: blueColor,
-                          fontWeight: FontWeight.w200,
+                    _videos.add(VideoPlayerController.file(File(e.path)));
+                    _videos.last.value = _videos.last.value.copyWith(
+                        caption: Caption(
+                            number: _videos.last.value.caption.number,
+                            start: _videos.last.value.caption.start,
+                            end: _videos.last.value.caption.end,
+                            text: e.path));
+
+                    return Column(
+                      children: [
+                        Dismissible(
+                          onDismissed: (_) {
+                            Provider.of<CreatePostViewModel>(context,
+                                    listen: false)
+                                .removeVideo(e.path);
+                          },
+                          key: Key(e.path),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: blueColor)),
+                              width: mq.size.width * 0.9,
+                              height: 500,
+                              child: AspectRatio(
+                                aspectRatio: _videos
+                                    .firstWhere((element) =>
+                                        element.value.caption.text == e.path)
+                                    .value
+                                    .aspectRatio,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    VideoPlayer(_videos.firstWhere((element) =>
+                                        element.value.caption.text == e.path)),
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          if (_videos
+                                              .firstWhere((element) =>
+                                                  element.value.caption.text ==
+                                                  e.path)
+                                              .value
+                                              .isInitialized) {
+                                            if (_videos
+                                                .firstWhere((element) =>
+                                                    element
+                                                        .value.caption.text ==
+                                                    e.path)
+                                                .value
+                                                .isPlaying)
+                                              _videos
+                                                  .firstWhere((element) =>
+                                                      element
+                                                          .value.caption.text ==
+                                                      e.path)
+                                                  .pause();
+                                            else
+                                              _videos
+                                                  .firstWhere((element) =>
+                                                      element
+                                                          .value.caption.text ==
+                                                      e.path)
+                                                  .play();
+                                            setState(() {});
+                                          } else {
+                                            _videos.firstWhere((element) =>
+                                                element.value.caption.text ==
+                                                e.path)
+                                              ..initialize().then((value) {
+                                                setState(() {});
+                                              });
+                                          }
+                                        },
+                                        child: _videos
+                                                .firstWhere((element) =>
+                                                    element
+                                                        .value.caption.text ==
+                                                    e.path)
+                                                .value
+                                                .isPlaying
+                                            ? const Icon(Icons.pause_outlined)
+                                            : const Icon(
+                                                Icons.play_arrow_rounded))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        Divider(
+                          thickness: 1,
+                          color: blueColor,
+                          endIndent: 50,
+                          indent: 50,
+                        ),
+                      ],
                     );
                   }).toList(),
                 ),
               ],
             ),
-          )
+          ),
+        Consumer<CreatePostViewModel>(
+            builder: (context, post, child) => CustomPostButtonn(
+                  toDo: () async {},
+                  createPostViewModel: post,
+                )),
       ],
+    );
+  }
+}
+
+class CreateNormalPollSpace extends StatelessWidget {
+  CreateNormalPollSpace({Key? key}) : super(key: key);
+  TextEditingController polltitleController = TextEditingController();
+  TextEditingController choiceController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final mq = MediaQuery.of(context);
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CustomTextField(
+              maxLines: 15,
+              controller: polltitleController,
+              title: 'Type here...',
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Consumer<CreatePostViewModel>(
+            builder: (context, post, child) => TextButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext ctx) => AlertDialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    content: Container(
+                      height: 125,
+                      child: Column(
+                        children: [
+                          CustomTextField(
+                              maxLines: 2,
+                              controller: choiceController,
+                              title: 'Enter the choice'),
+                          TextButton(
+                              onPressed: () {
+                                post.addChoice(
+                                    choiceController.text.trim(), context);
+                                Navigator.pop(ctx);
+                                choiceController.clear();
+                              },
+                              child: const Text('Add'))
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+              child: Text(
+                'Add a choice +',
+                style: theme.textTheme.bodySmall,
+              ),
+            ),
+          ),
+          Consumer<CreatePostViewModel>(
+            builder: (context, post, child) => ListBody(
+              children: post.getChoices
+                  .map(
+                    (e) => Dismissible(
+                      onDismissed: (direction) {
+                        post.removeChoice(e);
+                      },
+                      key: Key(e),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: orangeColor,
+                                child: Text(
+                                  (post.getChoices.indexOf(e) + 1).toString(),
+                                  style: theme.textTheme.bodySmall!
+                                      .copyWith(color: Colors.white),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                e,
+                                style: theme.textTheme.bodySmall!
+                                    .copyWith(color: blueColor),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+          Consumer<CreatePostViewModel>(
+            builder: (context, post, child) => CustomPostButtonn(
+              createPostViewModel: post,
+              toDo: () async {
+                String lang =
+                    context.locale == const Locale('en') ? 'en' : 'ar';
+                await post.postPoll(
+                    title: polltitleController.text.trim(),
+                    lang: lang,
+                    ctx: context,
+                    type: 3);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CreateTipPollSpace extends StatelessWidget {
+  CreateTipPollSpace({Key? key}) : super(key: key);
+
+  TextEditingController tipPollController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CustomTextField(
+              maxLines: 15,
+              controller: tipPollController,
+              title: 'Type here...',
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.red),
+                  borderRadius: BorderRadius.circular(15)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Note: This type of poll have only two choices : Agree and disagree',
+                  style: theme.textTheme.bodySmall!.copyWith(color: greyColor),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          Consumer<CreatePostViewModel>(
+            builder: (context, post, child) => CustomPostButtonn(
+              createPostViewModel: post,
+              toDo: () async {
+                String lang =
+                    context.locale == const Locale('en') ? 'en' : 'ar';
+                await post.postPoll(
+                    title: tipPollController.text.trim(),
+                    lang: lang,
+                    ctx: context,
+                    type: 2);
+              },
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CustomPostButtonn extends StatelessWidget {
+  CustomPostButtonn(
+      {required this.createPostViewModel, required this.toDo, Key? key})
+      : super(key: key);
+
+  Function toDo;
+  CreatePostViewModel createPostViewModel;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 40, bottom: 20),
+      child: createPostViewModel.getIsLoading
+          ? bigLoader(color: orangeColor)
+          : ElevatedButton(
+              onPressed: () async {
+                await toDo();
+              },
+              child: const Text('Post'),
+            ),
+    );
+  }
+}
+
+class CustomTextField extends StatelessWidget {
+  CustomTextField(
+      {required this.maxLines,
+      required this.controller,
+      required this.title,
+      Key? key})
+      : super(key: key);
+  TextEditingController controller;
+  String title;
+  int maxLines;
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return TextField(
+      maxLines: maxLines,
+      controller: controller,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        label: FittedBox(child: Text(title).tr()),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        floatingLabelStyle: theme.textTheme.bodySmall,
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: orangeColor, width: 1.5),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(15),
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: greyColor, width: 1.5),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(15),
+          ),
+        ),
+        errorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red, width: 1.5),
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: orangeColor, width: 1.5),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(15),
+          ),
+        ),
+      ),
     );
   }
 }
