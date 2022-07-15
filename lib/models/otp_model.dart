@@ -18,11 +18,13 @@ class OTPModel {
 
   int? statusCode;
   String? message;
+  String? forgetPasswordCode;
   OTPModel({
     this.verification_code,
     this.c_name,
     this.message,
     this.statusCode,
+    this.forgetPasswordCode,
   });
   // to convert data from json to dart object
   factory OTPModel.fromJson(Map<String, dynamic> user) => OTPModel(
@@ -36,6 +38,7 @@ class OTPModel {
 
         message: user['message'] ?? '',
         statusCode: user['status'] ?? 0,
+        forgetPasswordCode: user['code'] ?? '',
       );
   factory OTPModel.fromJsonWithErrors(Map<String, dynamic> user) =>
       OTPModel(message: user['message'], statusCode: user['status'] ?? 0);

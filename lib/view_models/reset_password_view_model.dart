@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:home_workout_app/Api%20services/sign_up_api.dart';
+import 'package:home_workout_app/Api%20services/reset_password_api.dart';
 import 'package:home_workout_app/main.dart';
-import 'package:home_workout_app/models/sign_up_model.dart';
+import 'package:home_workout_app/models/Reset_password_model.dart';
 import 'package:http/http.dart';
 
-class SignUpViewModel with ChangeNotifier {
+class ResetPasswordViewModel with ChangeNotifier {
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
 
@@ -22,25 +21,23 @@ class SignUpViewModel with ChangeNotifier {
   }
 
   postUserInfo(
-      String f_nameVal,
-      String l_nameVal,
       String emailVal,
       String passwordVal,
       String ConfirmPasswordVal,
       String m_tokenVal,
       String macVal,
-      String c_nameVal) async {
-    SignUpModel? result;
+      String c_nameVal,
+      String forgetPasswordCodeVal) async {
+    ResetPasswordModel? result;
     try {
-      await SignUpAPI.createUser(SignUpModel(
-              f_name: f_nameVal,
-              l_name: l_nameVal,
+      await ResetPasswordAPI.createUser(ResetPasswordModel(
               email: emailVal,
               password: passwordVal,
               password_confirmation: ConfirmPasswordVal,
               m_token: m_tokenVal,
               mac: macVal,
-              c_name: c_nameVal))
+              c_name: c_nameVal,
+              forgetPasswordCode: forgetPasswordCodeVal))
           .then((value) {
         print(value);
 
@@ -57,27 +54,13 @@ class SignUpViewModel with ChangeNotifier {
     return result;
   }
 
-  setData(SignUpModel Data) async {
+  setData(ResetPasswordModel Data) async {
     sharedPreferences.setString("access_token", Data.access_token!);
     sharedPreferences.setString("refresh_token", Data.refresh_token!);
     sharedPreferences.setString("token_expiration", Data.token_expiration!);
     sharedPreferences.setInt("role_id", Data.role_id!);
     sharedPreferences.setString("role_name", Data.role_name!);
     sharedPreferences.setBool("googleProvider", Data.googleProvider!);
-  }
-
-  String? checkFirstName(String name) {
-    if (name.isEmpty) {
-      return ' Please enter first name';
-    } else
-      return null;
-  }
-
-  String? checkLastName(String name) {
-    if (name.isEmpty) {
-      return ' Please enter last name';
-    } else
-      return null;
   }
 
   String? checkEmail(String email) {

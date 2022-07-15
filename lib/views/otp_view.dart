@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
+import 'package:home_workout_app/models/otp_model.dart';
 import 'package:home_workout_app/view_models/otp_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -192,46 +193,81 @@ class _OTPViewState extends State<OTPView> {
                       if (formGlobalKey.currentState!.validate()) {
                         formGlobalKey.currentState!.save();
                         // use the email provided here
-
-                        final BackEndMessage = await otpViewModel()
-                            .postUserInfo(
-                                otpController.text,
-                                c_nameController.text == null
-                                    ? ''
-                                    : c_nameController.text,
-                                (routeArg['state'] == 'sign 201' ||
-                                        routeArg['state'] == 'update email')
-                                    ? '/emailVerfiy/'
-                                    : '/user/recover');
-                        print(BackEndMessage);
-                        final sBar = SnackBar(
-                            // margin: EdgeInsets.all(8.0),
-                            padding: EdgeInsets.all(8.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(33)),
-                            content: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(BackEndMessage.message ?? '')));
-                        if (BackEndMessage.message != null &&
-                            BackEndMessage.message != '') {
-                          ScaffoldMessenger.of(context).showSnackBar(sBar);
-                        }
-                        if (BackEndMessage.statusCode == 201) {
-                          otpController.clear();
-                          c_nameController.clear();
-                          try {
-                            if (routeArg['state'] == 'sign 201' ||
-                                routeArg['state'] == 'sign 250') {
-                              sharedPreferences.setBool("registered", true);
+                        if (routeArg['state'] == 'forget password') {
+                          final OTPModel BackEndMessage = await otpViewModel()
+                              .postUserInfo(
+                                  otpController.text,
+                                  c_nameController.text == null
+                                      ? ''
+                                      : c_nameController.text,
+                                  'forgetpassword/verify');
+                          print(BackEndMessage);
+                          final sBar = SnackBar(
+                              // margin: EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(8.0),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(33)),
+                              content: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(BackEndMessage.message ?? '')));
+                          if (BackEndMessage.message != null &&
+                              BackEndMessage.message != '') {
+                            ScaffoldMessenger.of(context).showSnackBar(sBar);
+                          }
+                          if (BackEndMessage.statusCode == 201) {
+                            otpController.clear();
+                            c_nameController.clear();
+                            try {
+                              Navigator.of(context).pushReplacementNamed(
+                                  '/resetPassword',
+                                  arguments: {
+                                    'code': BackEndMessage.forgetPasswordCode
+                                  });
+                            } catch (e) {
+                              print('navigate from otp error: $e');
                             }
-                            Navigator.of(context).pushReplacementNamed(
-                              (routeArg['state'] == 'sign 201' ||
-                                      routeArg['state'] == 'sign 250')
-                                  ? '/userinfo'
-                                  : '/home',
-                            );
-                          } catch (e) {
-                            print('navigate from otp error: $e');
+                          }
+                        } else {
+                          final BackEndMessage = await otpViewModel()
+                              .postUserInfo(
+                                  otpController.text,
+                                  c_nameController.text == null
+                                      ? ''
+                                      : c_nameController.text,
+                                  (routeArg['state'] == 'sign 201' ||
+                                          routeArg['state'] == 'update email')
+                                      ? '/emailVerfiy/'
+                                      : '/user/recover');
+                          print(BackEndMessage);
+                          final sBar = SnackBar(
+                              // margin: EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(8.0),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(33)),
+                              content: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(BackEndMessage.message ?? '')));
+                          if (BackEndMessage.message != null &&
+                              BackEndMessage.message != '') {
+                            ScaffoldMessenger.of(context).showSnackBar(sBar);
+                          }
+                          if (BackEndMessage.statusCode == 201) {
+                            otpController.clear();
+                            c_nameController.clear();
+                            try {
+                              if (routeArg['state'] == 'sign 201' ||
+                                  routeArg['state'] == 'sign 250') {
+                                sharedPreferences.setBool("registered", true);
+                              }
+                              Navigator.of(context).pushReplacementNamed(
+                                (routeArg['state'] == 'sign 201' ||
+                                        routeArg['state'] == 'sign 250')
+                                    ? '/userinfo'
+                                    : '/home',
+                              );
+                            } catch (e) {
+                              print('navigate from otp error: $e');
+                            }
                           }
                         }
                       }
@@ -254,16 +290,38 @@ class _OTPViewState extends State<OTPView> {
                     ),
                     TextButton(
                         onPressed: () async {
-                          final BackEndMessage = await otpViewModel()
-                              .postUserInfo(
-                                  otpController.text,
-                                  c_nameController.text == null
-                                      ? ''
-                                      : c_nameController.text,
-                                  (routeArg['state'] == 'sign 201' ||
-                                          routeArg['state'] == 'update email')
-                                      ? '/emailVerfiy/reget'
-                                      : '/user/recover/reget');
+                          final OTPModel BackEndMessage;
+                          if (routeArg['state'] == 'forget password') {
+                            BackEndMessage = await otpViewModel().postUserInfo(
+                                otpController.text,
+                                c_nameController.text == null
+                                    ? ''
+                                    : c_nameController.text,
+                                'forgetpassword/verify/reget');
+                          } else {
+                            BackEndMessage = await otpViewModel().postUserInfo(
+                                otpController.text,
+                                c_nameController.text == null
+                                    ? ''
+                                    : c_nameController.text,
+                                (routeArg['state'] == 'sign 201' ||
+                                        routeArg['state'] == 'update email')
+                                    ? '/emailVerfiy/reget'
+                                    : '/user/recover/reget');
+                          }
+
+                          final sBar = SnackBar(
+                              // margin: EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(8.0),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(33)),
+                              content: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(BackEndMessage.message ?? '')));
+                          if (BackEndMessage.message != null &&
+                              BackEndMessage.message != '') {
+                            ScaffoldMessenger.of(context).showSnackBar(sBar);
+                          }
                         },
                         child: Text(
                           'Resend again',

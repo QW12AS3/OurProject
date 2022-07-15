@@ -32,6 +32,8 @@ class SignByGoogleAPI {
       print(e);
     }
     SignByGoogleViewModel().signOut();
-    return SignByGoogleModel(message: '', statusCode: 0);
+    return SignByGoogleModel(
+        message: 'There is a problem connecting to the internet',
+        statusCode: 0);
   }
 }
