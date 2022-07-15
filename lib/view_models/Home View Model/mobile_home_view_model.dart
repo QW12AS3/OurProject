@@ -5,9 +5,9 @@ import 'package:home_workout_app/models/workout_model.dart';
 class MobileHomeViewModel with ChangeNotifier {
   int _currentTab = 0;
 
-  String _radioValue = '';
+  int _radioValue = 0;
 
-  void setRadioValue(String value) {
+  void setRadioValue(int value) {
     _radioValue = value;
     notifyListeners();
   }
@@ -130,5 +130,5 @@ class MobileHomeViewModel with ChangeNotifier {
   }
 
   int get getCurrentTab => _currentTab;
-  String get getRadioValue => _radioValue;
+  int get getRadioValue => _radioValue;
 }
