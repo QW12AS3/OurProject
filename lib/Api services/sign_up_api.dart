@@ -29,7 +29,9 @@ class SignUpAPI {
     } catch (e) {
       print(e);
     }
-    return SignUpModel(message: '', statusCode: 0);
+    return SignUpModel(
+        message: 'There is a problem connecting to the internet',
+        statusCode: 0);
   }
 
   Future<Map<String, dynamic>> sendUserInfo(

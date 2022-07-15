@@ -136,7 +136,7 @@ class SignUp extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(15)),
                                       child: TextFormField(
-                                         inputFormatters: [
+                                        inputFormatters: [
                                           LengthLimitingTextInputFormatter(15),
                                         ],
                                         controller: firstNameController,
@@ -198,7 +198,7 @@ class SignUp extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(15)),
                                       child: TextFormField(
-                                          inputFormatters: [
+                                        inputFormatters: [
                                           LengthLimitingTextInputFormatter(15),
                                         ],
                                         controller: lastNameController,
@@ -260,9 +260,9 @@ class SignUp extends StatelessWidget {
                                       color: Colors.white70.withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: TextFormField(
-                                      inputFormatters: [
-                                          LengthLimitingTextInputFormatter(30),
-                                        ],
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(30),
+                                    ],
                                     controller: emailController,
                                     validator: (value) {
                                       return SignUpViewModel()
@@ -321,9 +321,10 @@ class SignUp extends StatelessWidget {
                                     child: Consumer<SignUpViewModel>(
                                         builder: ((context, value, _) =>
                                             TextFormField(
-                                               inputFormatters: [
-                                          LengthLimitingTextInputFormatter(30),
-                                        ],
+                                              inputFormatters: [
+                                                LengthLimitingTextInputFormatter(
+                                                    30),
+                                              ],
                                               controller: passwordController,
                                               validator: (value) {
                                                 return SignUpViewModel()
@@ -427,9 +428,10 @@ class SignUp extends StatelessWidget {
                                     child: Consumer<SignUpViewModel>(
                                         builder: ((context, value, _) =>
                                             TextFormField(
-                                               inputFormatters: [
-                                          LengthLimitingTextInputFormatter(30),
-                                        ],
+                                              inputFormatters: [
+                                                LengthLimitingTextInputFormatter(
+                                                    30),
+                                              ],
                                               controller:
                                                   confimPasswordController,
                                               validator: (value) {
@@ -580,7 +582,6 @@ class SignUp extends StatelessWidget {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(sBar);
                               }
-                              print("ffffffffffffxsxxxxxxxxxxxxxxxxx");
                               print(BackEndMessage.statusCode);
                               if (BackEndMessage.statusCode == 201 ||
                                   BackEndMessage.statusCode == 450) {
@@ -683,7 +684,13 @@ class SignUp extends StatelessWidget {
                             },
                             icon: Image.asset('assets/images/google.png')),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushReplacementNamed(
+                                '/resetPassword',
+                                arguments: {
+                                  'code': 'BackEndMessage.forgetPasswordCode'
+                                });
+                          },
                           icon: Image.asset(
                             'assets/images/facebook.png',
                           ),

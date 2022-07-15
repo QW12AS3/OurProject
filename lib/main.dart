@@ -10,9 +10,11 @@ import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_vie
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
 import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
+import 'package:home_workout_app/view_models/forget_password_view_model.dart';
 import 'package:home_workout_app/view_models/health_record_view_model.dart';
 import 'package:home_workout_app/view_models/otp_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
+import 'package:home_workout_app/view_models/reset_password_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/Add%20Health%20Record%20View/add_health_record_view.dart';
 import 'package:home_workout_app/views/Another%20User%20Profile%20View/another_user_profile_view.dart';
@@ -24,7 +26,9 @@ import 'package:home_workout_app/views/Edit%20Profile%20View/edit_profile_view.d
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
 import 'package:home_workout_app/views/Posts%20View/create_post_view.dart';
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
+import 'package:home_workout_app/views/forget_password_view.dart';
 import 'package:home_workout_app/views/otp_view.dart';
+import 'package:home_workout_app/views/reset_password_view.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:home_workout_app/views/sign%20up%20view/sign_up_view.dart';
 import 'package:home_workout_app/views/splash_view.dart';
@@ -77,6 +81,8 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => otpViewModel()),
         ChangeNotifierProvider(create: (context) => HealthRecordViewModel()),
         ChangeNotifierProvider(create: (context) => CreatePostViewModel()),
+        ChangeNotifierProvider(create: (context) => ForgetPasswordViewModel()),
+        ChangeNotifierProvider(create: (context) => ResetPasswordViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -117,6 +123,8 @@ class Vigor extends StatelessWidget {
           '/splashView': (context) => SplashView(),
           '/editHealthRecord': (context) => EditHealthRecordView(),
           '/createPost': (context) => CreatePostView(),
+          '/forgetPassword': (context) => ForgetPasswordView(),
+          '/resetPassword': (context) => ResetPasswordView(),
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,

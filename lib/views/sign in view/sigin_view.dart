@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/sign_by_google_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
@@ -29,43 +30,43 @@ class _SignInState extends State<SignIn> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseMessaging.instance
-        .getToken()
-        .then((value) => print("firebase tooooooooken: $value"));
-    firebaseTrigger();
+    // FirebaseMessaging.instance
+    //     .getToken()
+    //     .then((value) => print("firebase tooooooooken: $value"));
+    // firebaseTrigger();
   }
 
-  FirebaseMessaging _firebaseMessage = FirebaseMessaging.instance;
+  // FirebaseMessaging _firebaseMessage = FirebaseMessaging.instance;
 
-  void firebaseTrigger() async {
-    print(
-        'objeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeect');
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
-      print(
-          'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
+  // void firebaseTrigger() async {
+  //   print(
+  //       'objeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeect');
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+  //     print("message recieved");
+  //     print(
+  //         'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
 
-      print(event.notification!.body);
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print(message.data);
-      print(message);
-      if (message.data['page'] == 'Home Screen') {
-        print('wooooooooorking');
-        print(message.data['page']);
-        Navigator.of(context).pushNamed('/home');
-        //navigate
+  //     print(event.notification!.body);
+  //   });
+  //   FirebaseMessaging.onMessageOpenedApp.listen((message) {
+  //     print(message.data);
+  //     print(message);
+  //     if (message.data['page'] == 'Home Screen') {
+  //       print('wooooooooorking');
+  //       print(message.data['page']);
+  //       Navigator.of(context).pushNamed('/home');
+  //       //navigate
 
-      }
-      print('Message clicked!');
-      print(message.data);
-      print(
-          'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
-    });
-    // FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
-    //   print("onBackgroundMessage: $message");
-    // });
-  }
+  //     }
+  //     print('Message clicked!');
+  //     print(message.data);
+  //     print(
+  //         'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
+  //   });
+  //   // FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
+  //   //   print("onBackgroundMessage: $message");
+  //   // });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -331,7 +332,16 @@ class _SignInState extends State<SignIn> {
                             ),
                             TextButton(
                                 //TODO:
-                                onPressed: () {},
+                                onPressed: () {
+                                  try {
+                                    Navigator.of(context).pushNamed(
+                                      '/forgetPassword',
+                                    );
+                                  } catch (e) {
+                                    print(
+                                        'navigate to forget password   error: $e');
+                                  }
+                                },
                                 child: Text(
                                   'Forgot password ?',
                                   style: theme.textTheme.bodySmall,
@@ -396,6 +406,8 @@ class _SignInState extends State<SignIn> {
                                 try {
                                   if (BackEndMessage.statusCode == 201 &&
                                       BackEndMessage.is_verified == true) {
+                                    sharedPreferences.setBool(
+                                        "registered", true);
                                     Navigator.of(context)
                                         .pushReplacementNamed('/userinfo');
                                   } else {
@@ -564,9 +576,6 @@ class _SignInState extends State<SignIn> {
                             DateTime dateTime = DateTime.now();
                             print(dateTime.timeZoneName);
                             print(dateTime.timeZoneOffset);
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => OTPView()));
                           },
                           icon: Image.asset(
                             'assets/images/facebook.png',

@@ -30,6 +30,8 @@ class SignInAPI {
     } catch (e) {
       print(e);
     }
-    return SignInModel(message: '', statusCode: 0);
+    return SignInModel(
+        message: 'There is a problem connecting to the internet',
+        statusCode: 0);
   }
 }
