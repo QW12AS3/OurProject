@@ -589,42 +589,42 @@ class webpollPostCard extends StatelessWidget {
                   theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
             ),
           ),
-          Consumer<MobileHomeViewModel>(
-            builder: (context, value, child) => RadioListTile<String>(
-              title: const Text('Agree').tr(),
-              secondary: value.getRadioValue != ''
-                  ? Text(
-                      '79%',
-                      style: theme.textTheme.bodySmall,
-                    )
-                  : null,
-              activeColor: orangeColor,
-              value: 'Agree',
-              groupValue: value.getRadioValue,
-              toggleable: true,
-              onChanged: (String? radioValue) {
-                value.setRadioValue(radioValue ?? '');
-              },
-            ),
-          ),
-          Consumer<MobileHomeViewModel>(
-            builder: (context, value, child) => RadioListTile<String>(
-              title: const Text('Disagree').tr(),
-              secondary: value.getRadioValue != ''
-                  ? Text(
-                      '21%',
-                      style: theme.textTheme.bodySmall,
-                    )
-                  : null,
-              activeColor: orangeColor,
-              value: 'Disagree',
-              groupValue: value.getRadioValue,
-              toggleable: true,
-              onChanged: (String? radioValue) {
-                value.setRadioValue(radioValue ?? '');
-              },
-            ),
-          ),
+          // Consumer<MobileHomeViewModel>(
+          //   builder: (context, value, child) => RadioListTile<String>(
+          //     title: const Text('Agree').tr(),
+          //     secondary: value.getRadioValue != ''
+          //         ? Text(
+          //             '79%',
+          //             style: theme.textTheme.bodySmall,
+          //           )
+          //         : null,
+          //     activeColor: orangeColor,
+          //     value: 'Agree',
+          //     groupValue: value.getRadioValue,
+          //     toggleable: true,
+          //     onChanged: (String? radioValue) {
+          //       value.setRadioValue(radioValue ?? '');
+          //     },
+          //   ),
+          // ),
+          // Consumer<MobileHomeViewModel>(
+          //   builder: (context, value, child) => RadioListTile<String>(
+          //     title: const Text('Disagree').tr(),
+          //     secondary: value.getRadioValue != ''
+          //         ? Text(
+          //             '21%',
+          //             style: theme.textTheme.bodySmall,
+          //           )
+          //         : null,
+          //     activeColor: orangeColor,
+          //     value: 'Disagree',
+          //     groupValue: value.getRadioValue,
+          //     toggleable: true,
+          //     onChanged: (String? radioValue) {
+          //       value.setRadioValue(radioValue ?? '');
+          //     },
+          //   ),
+          // ),
         ],
       ),
     );

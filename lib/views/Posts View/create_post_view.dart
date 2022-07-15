@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/create_post_view_model.dart';
@@ -106,7 +107,15 @@ class _CreatePostViewState extends State<CreatePostView> {
               if (Provider.of<CreatePostViewModel>(context, listen: true)
                       .getSelectedPostType ==
                   PostTypes.Normal)
-                CreateNormalPostSpace()
+                CreateNormalPostSpace(),
+              if (Provider.of<CreatePostViewModel>(context, listen: true)
+                      .getSelectedPostType ==
+                  PostTypes.NormalPoll)
+                CreateNormalPollSpace(),
+              if (Provider.of<CreatePostViewModel>(context, listen: true)
+                      .getSelectedPostType ==
+                  PostTypes.TipPoll)
+                CreateTipPollSpace(),
             ],
           ),
         ),

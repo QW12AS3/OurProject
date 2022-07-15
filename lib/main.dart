@@ -5,6 +5,7 @@ import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/web_home_view_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/create_post_view_model.dart';
+import 'package:home_workout_app/view_models/Posts%20View%20Model/posts_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
@@ -76,13 +77,13 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => EditProfileViewModel()),
         ChangeNotifierProvider(create: (context) => SignByGoogleViewModel()),
         ChangeNotifierProvider(
-          create: (context) => AnotherUserProfileViewModel(),
-        ),
+            create: (context) => AnotherUserProfileViewModel()),
         ChangeNotifierProvider(create: (context) => otpViewModel()),
         ChangeNotifierProvider(create: (context) => HealthRecordViewModel()),
         ChangeNotifierProvider(create: (context) => CreatePostViewModel()),
         ChangeNotifierProvider(create: (context) => ForgetPasswordViewModel()),
         ChangeNotifierProvider(create: (context) => ResetPasswordViewModel()),
+        ChangeNotifierProvider(create: (context) => PostsViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
