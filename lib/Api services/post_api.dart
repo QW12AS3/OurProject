@@ -1,12 +1,68 @@
 import 'dart:convert';
 
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/models/comments_model.dart';
 import 'package:home_workout_app/models/post_models.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:video_compress/video_compress.dart';
 
 import '../main.dart';
 
 class PostAPI {
+  Future<Map> postNormalPost(
+      {required String title,
+      required List<XFile> images,
+      required List<XFile> videos}) async {
+    try {
+      var request = http.MultipartRequest("Post", Uri.parse('$base_URL/posts'));
+      request.headers['accept'] = 'application/json';
+      request.headers['apikey'] = apiKey;
+      request.headers['timeZone'] = getTimezone();
+      request.headers['authorization'] =
+          'Bearer ${sharedPreferences.getString('access_token')}';
+
+      request.fields['text'] = title;
+
+      List<http.MultipartFile> media = [];
+      // media.addAll(videos);
+      // media.addAll(images);
+
+      for (int i = 0; i < images.length; i++) {
+        var pic =
+            await http.MultipartFile.fromPath('media[$i]', images[i].path);
+        print(i);
+        media.add(pic);
+      }
+      for (int i = 0; i < videos.length; i++) {
+        var pic = await http.MultipartFile.fromPath(
+            'media[${i + images.length}]', videos[i].path);
+        print(i);
+
+        media.add(pic);
+      }
+
+      request.files.addAll(media);
+      request.files.forEach((element) {
+        print('field: ' + element.field);
+      });
+
+      var response = await request.send();
+      var responseData = await response.stream.toBytes();
+      var responseString = String.fromCharCodes(responseData);
+      if (response.statusCode == 200) {
+        return {'success': true, 'message': responseString};
+      } else {
+        return {'success': false, 'message': responseString};
+      }
+      return {};
+    } catch (e) {
+      print('Create Normal Post error: $e');
+
+      return {'success': false, 'message': e.toString()};
+    }
+  }
+
   Future<Map> postPoll(
       {required int type,
       required String title,
@@ -61,7 +117,7 @@ class PostAPI {
       );
       if (response.statusCode == 200) {
         List<PostModel> posts = [];
-        print(jsonDecode(response.body)['data']);
+
         List data = jsonDecode(response.body)['data'] ?? [];
         data.forEach((element) {
           posts.add(PostModel.fromJson(element));

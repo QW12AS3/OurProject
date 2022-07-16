@@ -1,14 +1,23 @@
-class CommentsModel {
-  late String owner;
-  late String ownerImageUrl;
-  late String comment;
-  late String date;
+import '../constants.dart';
 
-  CommentsModel(this.owner, this.comment, this.date, this.ownerImageUrl);
+class CommentsModel {
+  String owner = '';
+  String ownerImageUrl = '';
+  String comment = '';
+  String createdAt = '';
+  int id = 0;
+  int ownerId = 0;
+
+  CommentsModel();
   CommentsModel.fromJson(Map<String, dynamic> json) {
-    owner = json['owner'];
+    owner = json['name'];
     comment = json['comment'];
-    date = json['date'];
-    ownerImageUrl = json['ownerImageUrl'];
+    createdAt = json['created_at'];
+    id = json['comment_id'];
+    ownerId = json['user_id'];
+    ownerImageUrl = json['img'];
+    if (ownerImageUrl.substring(0, 4) != 'http') {
+      ownerImageUrl = '$ip/$ownerImageUrl';
+    }
   }
 }

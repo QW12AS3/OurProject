@@ -5,6 +5,7 @@ import 'package:home_workout_app/Api%20services/post_api.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:video_compress/video_compress.dart';
 
 class CreatePostViewModel with ChangeNotifier {
   PostTypes _selectedPostType = PostTypes.Normal;
@@ -78,27 +79,58 @@ class CreatePostViewModel with ChangeNotifier {
     _pickedImages!.clear();
     _pickedVideo!.clear();
     _choices.clear();
+    setIsLoading(false);
     notifyListeners();
   }
 
-  Future<void> postNormal() async {}
+  Future<void> postNormal(
+      String title, BuildContext context, String lang) async {
+    setIsLoading(true);
+    if (title.isEmpty) {
+      setIsLoading(false);
+      showSnackbar(const Text('You have to add a text'), context);
+      notifyListeners();
+
+      return;
+    }
+    List<MediaInfo> compressedVideos = [];
+    try {
+      // _pickedVideo!.forEach((element) async {
+      //   final video = await VideoCompress.compressVideo(element.path) ??
+      //       MediaInfo(path: element.path);
+      //   compressedVideos.add(video);
+      // });
+    } catch (e) {
+      print('Compressing Videos Error: $e');
+    }
+    final response = await PostAPI().postNormalPost(
+        title: title, images: _pickedImages ?? [], videos: _pickedVideo ?? []);
+    if (response['success']) {
+      showSnackbar(Text(response['message']), context);
+      Navigator.pop(context);
+    } else {
+      showSnackbar(Text(response['message']), context);
+    }
+    setIsLoading(false);
+    notifyListeners();
+  }
 
   Future<void> postPoll(
       {required String title,
       required String lang,
-      required BuildContext ctx,
+      required BuildContext context,
       required int type}) async {
     setIsLoading(true);
     if (getChoices.length < 2 && type == 3) {
       setIsLoading(false);
-      showSnackbar(const Text('You have to add at least two choices'), ctx);
+      showSnackbar(const Text('You have to add at least two choices'), context);
       notifyListeners();
 
       return;
     }
     if (title.isEmpty) {
       setIsLoading(false);
-      showSnackbar(const Text('You have to add a text'), ctx);
+      showSnackbar(const Text('You have to add a text'), context);
       notifyListeners();
 
       return;
@@ -106,10 +138,10 @@ class CreatePostViewModel with ChangeNotifier {
     final response = await PostAPI()
         .postPoll(type: type, title: title, choices: getChoices, lang: lang);
     if (response['success']) {
-      showSnackbar(Text(response['message']), ctx);
-      Navigator.pop(ctx);
+      showSnackbar(Text(response['message']), context);
+      Navigator.pop(context);
     } else {
-      showSnackbar(Text(response['message']), ctx);
+      showSnackbar(Text(response['message']), context);
     }
     setIsLoading(false);
     notifyListeners();

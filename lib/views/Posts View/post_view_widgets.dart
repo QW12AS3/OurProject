@@ -293,7 +293,12 @@ class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
           ),
         Consumer<CreatePostViewModel>(
             builder: (context, post, child) => CustomPostButtonn(
-                  toDo: () async {},
+                  toDo: () async {
+                    await post.postNormal(
+                        widget.normaltitleController.text.trim(),
+                        context,
+                        context.locale == Locale('en') ? 'en' : 'ar');
+                  },
                   createPostViewModel: post,
                 )),
       ],
@@ -407,7 +412,7 @@ class CreateNormalPollSpace extends StatelessWidget {
                 await post.postPoll(
                     title: polltitleController.text.trim(),
                     lang: lang,
-                    ctx: context,
+                    context: context,
                     type: 3);
               },
             ),
@@ -465,7 +470,7 @@ class CreateTipPollSpace extends StatelessWidget {
                 await post.postPoll(
                     title: tipPollController.text.trim(),
                     lang: lang,
-                    ctx: context,
+                    context: context,
                     type: 2);
               },
             ),

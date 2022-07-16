@@ -1,13 +1,15 @@
-// ignore_for_file: curly_braces_in_flow_control_structures, must_be_immutable
+// ignore_for_file: curly_braces_in_flow_control_structures, must_be_immutable, avoid_single_cascade_in_expression_statements
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/comments_model.dart';
+import 'package:home_workout_app/models/post_models.dart';
 import 'package:home_workout_app/my_flutter_app_icons.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../view_models/Home View Model/mobile_home_view_model.dart';
 
@@ -29,26 +31,93 @@ class buildSummaryRow extends StatelessWidget {
   }
 }
 
+class VideoCard extends StatefulWidget {
+  VideoCard({required this.videoUrl, Key? key}) : super(key: key);
+  String videoUrl;
+
+  @override
+  State<VideoCard> createState() => _VideoCardState();
+}
+
+class _VideoCardState extends State<VideoCard> {
+  VideoPlayerController _video = VideoPlayerController.network('');
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _video = VideoPlayerController.network(widget.videoUrl);
+  }
+
+  bool playButtonisShown = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
+
+    return InkWell(
+      onTap: () {
+        setState(() {
+          playButtonisShown = !playButtonisShown;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          height: double.maxFinite,
+          //decoration: BoxDecoration(border: Border.all(color: blueColor)),
+          child: AspectRatio(
+            aspectRatio: _video.value.aspectRatio,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                VideoPlayer(_video),
+                AnimatedOpacity(
+                  opacity: playButtonisShown ? 1 : 0,
+                  duration: const Duration(milliseconds: 300),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      print(widget.videoUrl);
+
+                      if (_video.value.isInitialized) {
+                        setState(() {
+                          if (_video.value.isPlaying)
+                            _video.pause();
+                          else {
+                            _video.play();
+                            playButtonisShown = !playButtonisShown;
+                          }
+                        });
+                      } else {
+                        _video
+                          ..initialize().then((value) {
+                            setState(() {});
+                          });
+                      }
+                    },
+                    child: _video.value.isPlaying
+                        ? const Icon(
+                            Icons.pause,
+                          )
+                        : const Icon(
+                            Icons.play_arrow_rounded,
+                          ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class NormalPostCard extends StatefulWidget {
-  NormalPostCard(
-      {required this.coachName,
-      required this.coachImageUrl,
-      required this.title,
-      required this.postImages,
-      required this.comments,
-      required this.likes,
-      required this.currentReact,
-      required this.ctx,
-      Key? key})
+  NormalPostCard({required this.post, required this.ctx, Key? key})
       : super(key: key);
 
-  String coachName;
-  String currentReact;
-  String coachImageUrl;
-  List<String> postImages;
-  String title;
-  Map<String, int> likes;
-  List<CommentsModel> comments;
+  PostModel post;
   BuildContext ctx;
 
   @override
@@ -73,257 +142,275 @@ class _NormalPostCardState extends State<NormalPostCard> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.post.title + widget.post.videosUrl.toString());
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
-    return Container(
-      height: 500,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: blueColor, width: 1.5),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(widget.coachImageUrl),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: widget.post.imagesUrl.isEmpty ? 200 : 650,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: blueColor, width: 1.5),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(widget.post.pubImageUrl),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${widget.post.pubRole} ${widget.post.pubName}',
+                          style: theme.textTheme.bodySmall!
+                              .copyWith(color: blueColor),
+                        ),
+                        Text(
+                          widget.post.createdAt,
+                          style: theme.textTheme.displaySmall!
+                              .copyWith(color: greyColor, fontSize: 10),
+                        )
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Coach ${widget.coachName}',
-                    style:
-                        theme.textTheme.bodySmall!.copyWith(color: blueColor),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/postView',
+                        arguments: {'post': widget.post});
+                  },
+                  child: Text(
+                    'See more >',
+                    style: theme.textTheme.bodySmall!
+                        .copyWith(fontWeight: FontWeight.w200),
                   ),
-                  Text(
-                    '6/3/2022 - 5:33 PM',
-                    style: theme.textTheme.displaySmall!
-                        .copyWith(color: greyColor, fontSize: 10),
-                  )
-                ],
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.title,
-              style:
-                  theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
+                )
+              ],
             ),
-          ),
-          if (widget.postImages.length == 1)
-            Image(
-              image: NetworkImage(
-                widget.postImages[0],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                widget.post.title,
+                style:
+                    theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
               ),
             ),
-          if (widget.postImages.length > 1)
             Expanded(
               child: PageView(
                 controller: _pageController,
-                children: widget.postImages
-                    .map(
-                      (e) => Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 5),
-                        child: Image(
-                          loadingBuilder: (context, child, loadingProgress) =>
-                              loadingProgress != null
-                                  ? const LoadingContainer()
-                                  : child,
-                          width: mq.size.width * 0.95,
-                          height: 250,
-                          fit: BoxFit.cover,
-                          image: NetworkImage(e),
-                        ),
-                      ),
-                    )
-                    .toList(),
+                children: [
+                  if (widget.post.imagesUrl.isNotEmpty)
+                    Builder(
+                      builder: (BuildContext context) {
+                        try {
+                          return Image(
+                            errorBuilder: (context, error, stackTrace) =>
+                                const LoadingContainer(),
+                            loadingBuilder: (context, child, loadingProgress) =>
+                                loadingProgress != null
+                                    ? const LoadingContainer()
+                                    : child,
+                            width: mq.size.width * 0.95,
+                            height: 250,
+                            fit: BoxFit.cover,
+                            image:
+                                NetworkImage(widget.post.imagesUrl[0]['url']),
+                          );
+                        } catch (e) {
+                          return const LoadingContainer();
+                        }
+                      },
+                    ),
+                  if (widget.post.videosUrl.isNotEmpty)
+                    Builder(
+                      builder: (BuildContext context) {
+                        try {
+                          return VideoCard(
+                              videoUrl: widget.post.videosUrl[0]['url']);
+                        } catch (e) {
+                          return const LoadingContainer();
+                        }
+                      },
+                    ),
+                ],
               ),
             ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Text(
-                widget.postImages.length > 1
-                    ? '${currentPhotoIndex + 1}/${widget.postImages.length} Photos'
-                    : '${currentPhotoIndex + 1}/${widget.postImages.length} Photo',
-                style: theme.textTheme.bodySmall!.copyWith(
-                    color: greyColor,
-                    fontWeight: FontWeight.w200,
-                    fontSize: 12),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                InkWell(
-                  onTap: () {
-                    if (openContainer)
-                      setState(() {
-                        openContainer = false;
-                      });
-                  },
-                  onLongPress: () {
-                    setState(() {
-                      openContainer = !openContainer;
-                    });
-                  },
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    width: openContainer ? 200 : 75,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: greyColor, width: 1),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              openContainer = false;
-                            });
-                          },
-                          child: Icon(
-                            reacts.firstWhere((element) =>
-                                element['id'] ==
-                                widget.currentReact)['icon'] as IconData,
-                            color: orangeColor,
-                          ),
-                        ),
-                        if (openContainer)
-                          const SizedBox(
-                            width: 20,
-                          ),
-                        if (openContainer)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: reacts
-                                .where((element) =>
-                                    element['id'] != widget.currentReact)
-                                .map(
-                                  (e) => InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        openContainer = !openContainer;
-                                        widget.currentReact =
-                                            e['id'].toString();
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        e['icon'] as IconData,
-                                        color: greyColor,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          )
-                      ],
-                    ),
+            if (widget.post.imagesUrl.length + widget.post.videosUrl.length !=
+                0)
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                  child: Text(
+                    '${currentPhotoIndex + 1}/${widget.post.imagesUrl.length + widget.post.videosUrl.length} Media',
+                    style: theme.textTheme.bodySmall!.copyWith(
+                        color: greyColor,
+                        fontWeight: FontWeight.w200,
+                        fontSize: 12),
                   ),
                 ),
-                // Align(
-                //   alignment: Alignment.topCenter,
-                //   child: AnimatedOpacity(
-                //     opacity: openContainer ? 1 : 0,
-                //     duration: const Duration(milliseconds: 300),
-                //     child: Container(
-                //       decoration: BoxDecoration(
-                //         color: Colors.transparent,
-                //         borderRadius: BorderRadius.circular(15),
-                //         border: Border.all(color: greyColor, width: 1),
-                //       ),
-                //       child: Icon(
-                //         Icons.thumb_up_alt_rounded,
-                //         color: greyColor,
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                TextButton(
-                    onPressed: () {
-                      // showBottomSheet(
-                      //     context: context,
-                      //     builder: (ctx) => BottomSheet(
-                      //           shape: const RoundedRectangleBorder(
-                      //               borderRadius: BorderRadius.only(
-                      //                   topLeft: Radius.circular(15),
-                      //                   topRight: Radius.circular(15))),
-                      //           onClosing: () {},
-                      //           builder: (BuildContext context) => SizedBox(
-                      //             width: double.infinity,
-                      //             height: mq.size.height * 0.75,
-                      //             child: Column(
-                      //               children:
-                      //                   comments.map((e) => Text(e)).toList(),
-                      //             ),
-                      //           ),
-                      //         ));
+              ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      if (openContainer)
+                        setState(() {
+                          openContainer = false;
+                        });
                     },
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/comments',
-                            arguments: {'comments': widget.comments});
-                      },
+                    onLongPress: () {
+                      setState(() {
+                        openContainer = !openContainer;
+                      });
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      width: openContainer ? 200 : 75,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(color: greyColor, width: 1),
+                      ),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Comments',
-                            style: theme.textTheme.bodySmall,
-                          ).tr(),
-                          Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            size: 15,
-                            color: orangeColor,
-                          )
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                openContainer = false;
+                                widget.post.myLike =
+                                    widget.post.myLike == -1 ? 1 : -1;
+                              });
+                            },
+                            child: Icon(
+                              widget.post.myLike == -1
+                                  ? reacts[0]['icon'] as IconData
+                                  : reacts.firstWhere((element) =>
+                                          element['id'] ==
+                                          'type${widget.post.myLike}')['icon']
+                                      as IconData,
+                              color: widget.post.myLike == -1
+                                  ? greyColor
+                                  : orangeColor,
+                            ),
+                          ),
+                          if (openContainer)
+                            const SizedBox(
+                              width: 20,
+                            ),
+                          if (openContainer)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: reacts
+                                  .where((element) => widget.post.myLike != -1
+                                      ? element['id'] !=
+                                          'type${widget.post.myLike}'
+                                      : element['id'] != 'type1')
+                                  .map(
+                                    (e) => InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          openContainer = !openContainer;
+                                          if (widget.post.myLike ==
+                                              int.parse(e['id']
+                                                  .toString()
+                                                  .replaceAll('type', ''))) {
+                                            widget.post.myLike = -1;
+                                          } else {
+                                            widget.post.myLike = int.parse(
+                                                e['id']
+                                                    .toString()
+                                                    .replaceAll('type', ''));
+                                          }
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Icon(
+                                          e['icon'] as IconData,
+                                          color: greyColor,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            )
                         ],
                       ),
-                    ))
-              ],
-            ),
-          )
-        ],
+                    ),
+                  ),
+                  TextButton(
+                      onPressed: () {},
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/comments',
+                              arguments: {'id': widget.post.postId});
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              '${widget.post.commentsCount} Comments',
+                              style: theme.textTheme.bodySmall,
+                            ).tr(),
+                            Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 15,
+                              color: orangeColor,
+                            )
+                          ],
+                        ),
+                      ))
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
-class pollPostCard extends StatelessWidget {
-  pollPostCard(
-      {required this.coachName,
-      required this.coachImageUrl,
-      required this.title,
-      required this.votes,
-      required this.role,
-      required this.ctx,
-      Key? key})
+class pollPostCard extends StatefulWidget {
+  pollPostCard({required this.post, required this.ctx, Key? key})
       : super(key: key);
 
-  String role;
-  String coachName;
-  String coachImageUrl;
-  String title;
-  List votes = [];
+  PostModel post;
   BuildContext ctx;
 
   @override
+  State<pollPostCard> createState() => _pollPostCardState();
+}
+
+class _pollPostCardState extends State<pollPostCard> {
+  int groupValue = -1;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    groupValue = widget.post.myVote;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print(votes);
+    print(widget.post.choices);
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
 
@@ -335,25 +422,26 @@ class pollPostCard extends StatelessWidget {
           border: Border.all(color: blueColor, width: 1.5),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage(coachImageUrl),
+                    backgroundImage: NetworkImage(widget.post.pubImageUrl),
                   ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '$role $coachName',
+                      '${widget.post.pubRole} ${widget.post.pubName}',
                       style:
                           theme.textTheme.bodySmall!.copyWith(color: blueColor),
                     ),
                     Text(
-                      '6/3/2022 - 5:33 PM',
+                      widget.post.createdAt,
                       style: theme.textTheme.displaySmall!
                           .copyWith(color: greyColor, fontSize: 10),
                     )
@@ -364,23 +452,33 @@ class pollPostCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                title,
+                widget.post.title,
                 style:
                     theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
               ),
             ),
             ListBody(
-              children: votes
+              children: widget.post.choices
                   .map(
                     (e) => Consumer<MobileHomeViewModel>(
                       builder: (context, value, child) => RadioListTile<int>(
                         value: e['vote_id'],
-                        groupValue: value.getRadioValue,
+                        groupValue: groupValue,
                         onChanged: (selectedvalue) {
-                          value.setRadioValue(selectedvalue ?? 0);
+                          setState(() {
+                            groupValue = selectedvalue ?? 0;
+                          });
                         },
                         title: Text(e['vote']),
-                        secondary: Text(e['rate']),
+                        secondary: groupValue == -1
+                            ? null
+                            : Text(
+                                e['rate'] + '%',
+                                style: theme.textTheme.bodySmall!
+                                    .copyWith(color: blueColor),
+                              ),
                       ),
                     ),
                   )

@@ -10,6 +10,7 @@ import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_goo
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
 import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
+import 'package:home_workout_app/view_models/comments_view_model.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
 import 'package:home_workout_app/view_models/forget_password_view_model.dart';
 import 'package:home_workout_app/view_models/health_record_view_model.dart';
@@ -26,6 +27,7 @@ import 'package:home_workout_app/views/Edit%20Health%20Record%20View/edit_health
 import 'package:home_workout_app/views/Edit%20Profile%20View/edit_profile_view.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
 import 'package:home_workout_app/views/Posts%20View/create_post_view.dart';
+import 'package:home_workout_app/views/Posts%20View/post_view.dart';
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
 import 'package:home_workout_app/views/forget_password_view.dart';
 import 'package:home_workout_app/views/otp_view.dart';
@@ -84,6 +86,7 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ForgetPasswordViewModel()),
         ChangeNotifierProvider(create: (context) => ResetPasswordViewModel()),
         ChangeNotifierProvider(create: (context) => PostsViewModel()),
+        ChangeNotifierProvider(create: (context) => CommentsViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -126,6 +129,7 @@ class Vigor extends StatelessWidget {
           '/createPost': (context) => CreatePostView(),
           '/forgetPassword': (context) => ForgetPasswordView(),
           '/resetPassword': (context) => ResetPasswordView(),
+          '/postView': (context) => PostView(),
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,
