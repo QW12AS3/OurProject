@@ -2,6 +2,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/comments_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/posts_view_model.dart';
@@ -22,28 +23,31 @@ class _PostsPageState extends State<PostsPage> {
     super.initState();
     Future.delayed(Duration.zero).then((value) {
       Provider.of<PostsViewModel>(context, listen: false)
-          .setPosts(context.locale == Locale('en') ? 'en' : 'ar');
+          .setPosts(context.locale == const Locale('en') ? 'en' : 'ar');
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return RefreshIndicator(
+      onRefresh: () async {
+        await Provider.of<PostsViewModel>(context, listen: false)
+            .setPosts(context.locale == const Locale('en') ? 'en' : 'ar');
+      },
+      color: orangeColor,
       child: Consumer<PostsViewModel>(
-        builder: (context, posts, child) => Column(
-          children: posts.getPosts.map((e) {
-            if (e.type == 2)
-              return pollPostCard(
-                  role: e.pubRole,
-                  coachName: e.pubName,
-                  coachImageUrl: e.pubImageUrl,
-                  title: e.title,
-                  votes: e.choices,
-                  ctx: context);
-            else
-              return Text('');
-          }).toList(),
-        ),
+        builder: (context, posts, child) => posts.getIsLoading
+            ? Center(child: bigLoader(color: orangeColor))
+            : SingleChildScrollView(
+                child: Column(
+                  children: posts.getPosts.map((e) {
+                    if (e.type == 2 || e.type == 3)
+                      return pollPostCard(post: e, ctx: context);
+                    else
+                      return NormalPostCard(post: e, ctx: context);
+                  }).toList(),
+                ),
+              ),
       ),
     );
   }

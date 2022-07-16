@@ -21,6 +21,12 @@ class PostModel {
     'type5': 0,
   };
   List choices = [];
+
+  int myVote = -1;
+  int myLike = -1;
+  bool on_hold = false;
+  bool is_saved = false;
+
   PostModel();
 
   PostModel.fromJson(Map json) {
@@ -33,6 +39,10 @@ class PostModel {
 
     pubName = json['user_data']['name'] ?? '';
     pubImageUrl = json['user_data']['img'] ?? '';
+
+    if (pubImageUrl.substring(0, 4) != 'http') {
+      pubImageUrl = '$ip/$pubImageUrl';
+    }
     pubRole = json['user_data']['role'] ?? '';
 
     reacts = json['posts_likes'] ??
@@ -52,7 +62,12 @@ class PostModel {
     videosUrl.forEach((element) {
       element['url'] = '$ip/${element['url']}';
     });
-    print('urlsssssss: $videosUrl');
+
+    is_saved = json['post_main_data']['is_saved'] ?? false;
+    on_hold = json['post_main_data']['on_hold'] ?? false;
+    myVote = json['post_main_data']['my_vote'] ?? -1;
+    myLike = json['post_main_data']['my_like'] ?? -1;
+
     choices = json['votes'] ?? [];
   }
 }
