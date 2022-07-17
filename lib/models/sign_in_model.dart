@@ -19,6 +19,8 @@ class SignInModel {
   String? message;
   bool? googleProvider;
   bool? is_verified;
+  bool? is_info;
+
   SignInModel({
     this.id,
     this.f_name,
@@ -39,6 +41,7 @@ class SignInModel {
     this.role_name,
     this.googleProvider,
     this.is_verified,
+    this.is_info,
     /*  required this.email,
     required this.password,
     required this.token,
@@ -60,6 +63,7 @@ class SignInModel {
         role_name: user['data']['user']['role_name'] ?? '',
         googleProvider: user['data']['provider'] ?? false,
         is_verified: user['data']['is_verified'] ?? false,
+        is_info: user['data']['is_info'] ?? false,
       );
   factory SignInModel.fromJsonWithErrors(Map<String, dynamic> user) =>
       SignInModel(message: user['message'], statusCode: user['status'] ?? 0);

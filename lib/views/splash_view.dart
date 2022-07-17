@@ -15,9 +15,10 @@ class _SplashViewState extends State<SplashView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseMessaging.instance
-        .getToken()
-        .then((value) => print("firebase tooooooooken: $value"));
+    print(
+        'uuuuugggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
+    getFirebaseNotificationToken();
+    print(getFirebaseNotificationToken());
     Future.delayed(const Duration(seconds: 1)).then((value) {
       firebaseTrigger();
 
@@ -28,7 +29,7 @@ class _SplashViewState extends State<SplashView> {
           sharedPreferences.getBool('info') != true) {
         Navigator.pushReplacementNamed(context, '/userinfo');
       } else {
-        Navigator.pushReplacementNamed(context, '/');
+        Navigator.pushReplacementNamed(context, '/start');
       }
     });
   }
@@ -55,9 +56,6 @@ class _SplashViewState extends State<SplashView> {
             sharedPreferences.getBool('info') == true) {
           Navigator.pushReplacementNamed(context, '/home');
         }
-        // Navigator.of(context).pushNamed('/home');
-        //navigate
-
       }
       print('Message clicked!');
       print(message.data);

@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/my_flutter_app_icons.dart';
 
@@ -7,7 +8,7 @@ Color orangeColor = const Color(0xFFFB8500);
 Color blueColor = const Color(0xff126782);
 Color greyColor = Colors.grey;
 
-const String base_URL = 'http://192.168.1.107:8000/api';
+const String base_URL = 'http://192.168.1.105:8000/api';
 
 final String ip = base_URL.replaceAll('/api', '');
 
@@ -72,6 +73,21 @@ String getTimezone() {
   print('Timezone: ${DateTime.now().timeZoneOffset.inMinutes}');
   return DateTime.now().timeZoneOffset.inMinutes.toString();
 }
+
+String firebaseNotificationToken = '';
+getFirebaseNotificationToken() {
+  if (firebaseNotificationToken != '' && firebaseNotificationToken != null) {
+    print('sssd$firebaseNotificationToken');
+    return firebaseNotificationToken;
+  } else {
+    FirebaseMessaging.instance.getToken().then((value) {
+      firebaseNotificationToken = value.toString();
+      print('sssd$firebaseNotificationToken');
+    });
+    return firebaseNotificationToken;
+  }
+}
+ 
 
 //temporary
 

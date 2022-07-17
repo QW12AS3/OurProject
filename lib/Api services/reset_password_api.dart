@@ -6,16 +6,17 @@ import 'package:http/http.dart';
 class ResetPasswordAPI {
   static Future<ResetPasswordModel> createUser(ResetPasswordModel user) async {
     try {
-      final Response response = await post(Uri.parse('$base_URL'),
-          headers: <String, String>{
-            //  "Access-Control-Allow-Origin": "*",
-            // 'Content-Type': 'application/json;charset=UTF-8'
-            'Accept': 'application/json',
-            'apikey': apiKey,
-            'lang': 'en',
-            'timeZone': getTimezone(),
-          },
-          body: user.toJson());
+      final Response response =
+          await post(Uri.parse('$base_URL/forgetpassword/reset'),
+              headers: <String, String>{
+                //  "Access-Control-Allow-Origin": "*",
+                // 'Content-Type': 'application/json;charset=UTF-8'
+                'Accept': 'application/json',
+                'apikey': apiKey,
+                'lang': 'en',
+                'timeZone': getTimezone(),
+              },
+              body: user.toJson());
       print(response.statusCode);
       print(response.body);
       if (response.statusCode == 201) {
