@@ -46,6 +46,8 @@ class signInViewModel with ChangeNotifier {
     sharedPreferences.setInt("role_id", Data.role_id!);
     sharedPreferences.setString("role_name", Data.role_name!);
     sharedPreferences.setBool("googleProvider", Data.googleProvider!);
+    sharedPreferences.setBool("is_verified", Data.is_verified!);
+    sharedPreferences.setBool("is_info", Data.is_info!);
   }
 
   String? checkEmail(String email) {

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/main.dart';
+import 'package:home_workout_app/models/sign_by_google_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:provider/provider.dart';
@@ -351,28 +353,49 @@ class _StartViewState extends State<StartView> {
                           children: [
                             IconButton(
                                 onPressed: () async {
-                                  // //TODO: HANDLE AL OF THIS WORKING AND DELETE STATUSCODE FROM VIEWMODEL (PROVIDER)
-                                  // try {
-                                  //   Provider.of<SignByGoogleViewModel>(context,
-                                  //           listen: false)
-                                  //       .signIn();
-                                  //   print("stsrsdfsdssssssss" +
-                                  //       "${Provider.of<SignByGoogleViewModel>(context, listen: false).statusCode}");
-                                  //   if (Provider.of<SignByGoogleViewModel>(
-                                  //               context,
-                                  //               listen: false)
-                                  //           .statusCode ==
-                                  //       201) {
-                                  //     print("stsrsdfsdssssssss" + ////////////////////////////////////////////////////////////////TODO:
-                                  //         "${Provider.of<SignByGoogleViewModel>(context, listen: false).statusCode}");
-                                  //     // Navigator.of(context)
-                                  //     //     .pushReplacementNamed(
-                                  //     //   '/otp',
-                                  //     // );
-                                  //   }
-                                  // } catch (e) {
-                                  //   print('sign by google error : $e');
-                                  // }
+                                  final String? access =
+                                      await SignByGoogleViewModel().signIn();
+                                  print('ssssssssssssss: $access');
+                                  if (access != null && access != '') {
+                                    final SignByGoogleModel? BackEndMessage =
+                                        await SignByGoogleViewModel()
+                                            .postUserInfo(
+                                                access,
+                                                getFirebaseNotificationToken(),
+                                                '',
+                                                c_nameController.text);
+                                    print('vvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+                                    print(BackEndMessage?.refresh_token);
+                                    final sBar = SnackBar(
+                                        // margin: EdgeInsets.all(8.0),
+                                        padding: EdgeInsets.all(8.0),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(33)),
+                                        content: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                                BackEndMessage?.message ??
+                                                    '')));
+                                    if (BackEndMessage?.message != null &&
+                                        BackEndMessage?.message != '') {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(sBar);
+                                    }
+                                    if (BackEndMessage?.statusCode == 201 ||
+                                        BackEndMessage?.statusCode == 450 ||
+                                        BackEndMessage?.statusCode == 250) {
+                                      c_nameController.clear();
+                                      try {
+                                        sharedPreferences.setBool(
+                                            "registered", true);
+                                        Navigator.of(context)
+                                            .pushReplacementNamed('/userinfo');
+                                      } catch (e) {
+                                        print('navigate to userinfo error: $e');
+                                      }
+                                    }
+                                  }
                                 },
                                 icon: Image.asset('assets/images/google.png')),
                             IconButton(

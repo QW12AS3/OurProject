@@ -23,9 +23,9 @@ class SignByGoogleViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  printDetails() {}
   void signOut() {
     _googleSignIn.disconnect();
+    print('signed out from Google ');
   }
 
   Future<String> signIn() async {
@@ -115,6 +115,9 @@ class SignByGoogleViewModel with ChangeNotifier {
     sharedPreferences.setInt("role_id", Data.role_id!);
     sharedPreferences.setString("role_name", Data.role_name!);
     sharedPreferences.setBool("googleProvider", Data.googleProvider!);
+    sharedPreferences.setBool("is_verified", Data.is_verified!);
+    sharedPreferences.setBool("is_info", Data.is_info!);
+    print(sharedPreferences.getBool("googleProvider"));
   }
 }
 

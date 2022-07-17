@@ -372,13 +372,13 @@ class _SignInState extends State<SignIn> {
                             if (formGlobalKey.currentState!.validate()) {
                               formGlobalKey.currentState!.save();
                               // use the email provided here
-
+                              print('fff : ${getFirebaseNotificationToken()}');
                               final SignInModel BackEndMessage =
                                   await signInViewModel().postUserInfo(
                                       //TODO:
                                       emailController.text,
                                       passwordController.text,
-                                      '',
+                                      getFirebaseNotificationToken(),
                                       '',
                                       c_nameController.text);
                               print(BackEndMessage);
@@ -400,8 +400,6 @@ class _SignInState extends State<SignIn> {
                               if (BackEndMessage.statusCode == 201 ||
                                   BackEndMessage.statusCode == 450 ||
                                   BackEndMessage.statusCode == 250) {
-                                emailController.clear();
-                                passwordController.clear();
                                 c_nameController.clear();
                                 try {
                                   if (BackEndMessage.statusCode == 201 &&
@@ -502,74 +500,53 @@ class _SignInState extends State<SignIn> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Consumer<SignByGoogleViewModel>(
-                            builder: ((context, value, _) => IconButton(
-                                onPressed: () async {
-                                  final String? access =
-                                      await SignByGoogleViewModel().signIn();
-                                  print('ssssssssssssss: $access');
-                                  if (access != null && access != '') {
-                                    final SignByGoogleModel? BackEndMessage =
-                                        await SignByGoogleViewModel()
-                                            .postUserInfo(access, '', '', '');
-                                    print('vvvvvvvvvvvvvvvvvvvvvvvvvvvv');
-                                    print(BackEndMessage?.refresh_token);
+                        IconButton(
+                            onPressed: () async {
+                              final String? access =
+                                  await SignByGoogleViewModel().signIn();
+                              print('ssssssssssssss: $access');
+                              if (access != null && access != '') {
+                                final SignByGoogleModel? BackEndMessage =
+                                    await SignByGoogleViewModel().postUserInfo(
+                                        access,
+                                        getFirebaseNotificationToken(),
+                                        '',
+                                        c_nameController.text);
+                                print('vvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+                                print(BackEndMessage?.refresh_token);
+                                final sBar = SnackBar(
+                                    // margin: EdgeInsets.all(8.0),
+                                    padding: EdgeInsets.all(8.0),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(33)),
+                                    content: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                            BackEndMessage?.message ?? '')));
+                                if (BackEndMessage?.message != null &&
+                                    BackEndMessage?.message != '') {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(sBar);
+                                }
+                                if (BackEndMessage?.statusCode == 201 ||
+                                    BackEndMessage?.statusCode == 450 ||
+                                    BackEndMessage?.statusCode == 250) {
+                                  emailController.clear();
+                                  passwordController.clear();
+                                  c_nameController.clear();
+                                  try {
+                                    sharedPreferences.setBool(
+                                        "registered", true);
+                                    Navigator.of(context)
+                                        .pushReplacementNamed('/userinfo');
+                                  } catch (e) {
+                                    print('navigate to userinfo error: $e');
                                   }
-
-                                  // SignByGoogleViewModel().signIn();
-
-                                  //    final String googleAccessToken = value.;
-                                  //    await SignByGoogleViewModel().signIn();
-                                  // String googleAccessToken =
-                                  //     Provider.of<SignByGoogleViewModel>(context,
-                                  //             listen: false)
-                                  //         .accessToken;
-
-                                  // print(
-                                  //     'googleAccessToken: ${value.BackEndMessage.message}');
-                                  // if (value.BackEndMessage. != null &&
-                                  //     googleAccessToken != '') {
-                                  //   final SignByGoogleModel BackEndMessage =
-                                  //       await SignByGoogleViewModel().postUserInfo(
-                                  //           googleAccessToken,
-                                  //           '',
-                                  //           '',
-                                  //           c_nameController.text);
-
-                                  // final sBar = SnackBar(
-                                  //     // margin: EdgeInsets.all(8.0),
-                                  //     padding: EdgeInsets.all(8.0),
-                                  //     shape: RoundedRectangleBorder(
-                                  //         borderRadius:
-                                  //             BorderRadius.circular(33)),
-                                  //     content: Padding(
-                                  //         padding: const EdgeInsets.all(8.0),
-                                  //         child: Text(
-                                  //             value.BackEndMessage.message ??
-                                  //                 '')));
-                                  // if (value.BackEndMessage.message != null &&
-                                  //     value.BackEndMessage.message != '') {
-                                  //   ScaffoldMessenger.of(context)
-                                  //       .showSnackBar(sBar);
-                                  // }
-                                  // if (value.BackEndMessage.statusCode == 201 ||
-                                  //     value.BackEndMessage.statusCode == 450) {
-                                  //   if (c_nameController != null) {
-                                  //     c_nameController.clear();
-                                  //   }
-                                  //   try {
-                                  //     Navigator.of(context)
-                                  //         .pushReplacementNamed(
-                                  //       '/otp',
-                                  //     );
-                                  //   } catch (e) {
-                                  //     print('navigate to otp error: $e');
-                                  //   }
-                                  // }
-                                },
-                                // },
-                                icon:
-                                    Image.asset('assets/images/google.png')))),
+                                }
+                              }
+                            },
+                            icon: Image.asset('assets/images/google.png')),
                         IconButton(
                           onPressed: () {
                             //TODO:
