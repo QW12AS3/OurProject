@@ -107,17 +107,25 @@ class _SavedPostsViewState extends State<SavedPostsView> {
                                   : 'ar',
                               context: context);
                     },
-                    child: SingleChildScrollView(
-                      controller: _scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        children: savedPosts.getSavedPosts.map((e) {
-                          if (e.type == 2 || e.type == 3)
-                            return pollPostCard(post: e, ctx: context);
-                          else
-                            return NormalPostCard(post: e, ctx: context);
-                        }).toList(),
-                      ),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                            controller: _scrollController,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              children: savedPosts.getSavedPosts.map((e) {
+                                if (e.type == 2 || e.type == 3)
+                                  return pollPostCard(post: e, ctx: context);
+                                else
+                                  return NormalPostCard(post: e, ctx: context);
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                        if (savedPosts.getIsMoreLoading)
+                          bigLoader(color: orangeColor)
+                      ],
                     ),
                   )),
       ),

@@ -8,10 +8,10 @@ import '../models/comments_model.dart';
 
 class CommentsApi {
   Future<List<CommentsModel>> getComments(
-      {required int id, required String lang}) async {
+      {required int id, required String lang, required int page}) async {
     try {
       final response = await http.get(
-        Uri.parse('$base_URL/posts/comment/$id'),
+        Uri.parse('$base_URL/posts/comment/$id?page=$page'),
         headers: {
           'apikey': apiKey,
           'lang': lang,
@@ -62,7 +62,8 @@ class CommentsApi {
         print(jsonDecode(response.body));
         return {
           'success': true,
-          'message': jsonDecode(response.body)['message']
+          'message': jsonDecode(response.body)['message'],
+          'data': jsonDecode(response.body)['data'][0] ?? {}
         };
       } else {
         print(jsonDecode(response.body));

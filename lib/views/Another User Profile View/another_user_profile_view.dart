@@ -32,6 +32,14 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
     ).then((value) {
       final args = ModalRoute.of(context)!.settings.arguments as Map;
 
+      if (Provider.of<ProfileViewModel>(context, listen: false)
+              .getUserData
+              .id
+              .toString() ==
+          args['id'].toString()) {
+        Navigator.pushNamed(context, '/home', arguments: {'page': 2});
+      }
+
       Provider.of<AnotherUserProfileViewModel>(context, listen: false)
           .setUserData(args['id'], context);
       Provider.of<ProfileViewModel>(context, listen: false)
@@ -81,39 +89,51 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                         duration: const Duration(milliseconds: 300),
                         //height: user.getInfoWidgetVisible ? 100 : 0,
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Consumer<AnotherUserProfileViewModel>(
-                              builder: (context, user, child) => CircleAvatar(
-                                radius: 20,
-                                backgroundImage:
-                                    NetworkImage(user.getUserData.imageUrl),
-                                onBackgroundImageError: (child, stacktrace) =>
-                                    const LoadingContainer(),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: user.getUserData.roleId == 2
-                                            ? orangeColor
-                                            : (user.getUserData.roleId == 3
-                                                ? blueColor
-                                                : Colors.transparent),
-                                        width: 2),
+                            Row(
+                              children: [
+                                Consumer<AnotherUserProfileViewModel>(
+                                  builder: (context, user, child) =>
+                                      CircleAvatar(
+                                    radius: 20,
+                                    backgroundImage:
+                                        NetworkImage(user.getUserData.imageUrl),
+                                    onBackgroundImageError:
+                                        (child, stacktrace) =>
+                                            const LoadingContainer(),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: user.getUserData.roleId == 2
+                                                ? orangeColor
+                                                : (user.getUserData.roleId == 3
+                                                    ? blueColor
+                                                    : Colors.transparent),
+                                            width: 2),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Consumer<AnotherUserProfileViewModel>(
-                                builder: (context, user, child) => Text(
-                                  '${user.getUserData.fname} ${user.getUserData.lname}',
-                                  style: theme.textTheme.bodyMedium!
-                                      .copyWith(color: Colors.black),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Consumer<AnotherUserProfileViewModel>(
+                                    builder: (context, user, child) => Text(
+                                      '${user.getUserData.fname} ${user.getUserData.lname}',
+                                      style: theme.textTheme.bodyMedium!
+                                          .copyWith(color: Colors.black),
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
+                            if (Provider.of<AnotherUserProfileViewModel>(
+                                    context,
+                                    listen: true)
+                                .getMoreLoading)
+                              bigLoader(color: orangeColor)
                           ],
                         ),
                       ),
