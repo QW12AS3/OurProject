@@ -20,6 +20,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     // TODO: implement initState
@@ -31,6 +32,16 @@ class _ProfilePageState extends State<ProfilePage> {
           .setInfoWidgetVisible(false);
       Provider.of<ProfileViewModel>(context, listen: false)
           .setHealthRecord(context.locale == Locale('en') ? 'en' : 'ar');
+
+      _scrollController.addListener(() {
+        if (_scrollController.offset ==
+                _scrollController.position.maxScrollExtent &&
+            Provider.of<ProfileViewModel>(context, listen: false)
+                .getPostIsOpened) {
+          Provider.of<ProfileViewModel>(context, listen: false)
+              .setUserPosts(context.locale == const Locale('en') ? 'en' : 'ar');
+        }
+      });
     });
   }
 
@@ -45,6 +56,9 @@ class _ProfilePageState extends State<ProfilePage> {
         : RefreshIndicator(
             color: orangeColor,
             onRefresh: () async {
+              Provider.of<ProfileViewModel>(context, listen: false).setPage(0);
+              Provider.of<ProfileViewModel>(context, listen: false)
+                  .clearPosts();
               await Provider.of<ProfileViewModel>(context, listen: false)
                   .setCurrentUserData(context);
               await Provider.of<ProfileViewModel>(context, listen: false)
@@ -73,8 +87,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               radius: 20,
                               backgroundImage:
                                   NetworkImage(user.getUserData.imageUrl),
-                              onForegroundImageError: (child, stacktrace) =>
-                                  const LoadingContainer(),
                               onBackgroundImageError: (child, stacktrace) =>
                                   const LoadingContainer(),
                               child: Container(
@@ -108,6 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
+                    controller: _scrollController,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -171,7 +184,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ),
                               Align(
-                                alignment: context.locale == Locale('en')
+                                alignment: context.locale == const Locale('en')
                                     ? Alignment.topRight
                                     : Alignment.topLeft,
                                 child: Consumer<ProfileViewModel>(
@@ -513,12 +526,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         if (Provider.of<ProfileViewModel>(context, listen: true)
                                     .getUserData
-                                    .role ==
-                                'coach' ||
+                                    .roleId ==
+                                2 ||
                             Provider.of<ProfileViewModel>(context, listen: true)
                                     .getUserData
-                                    .role ==
-                                'dietitian')
+                                    .roleId ==
+                                3)
                           ExpansionTile(
                             iconColor: blueColor,
                             title: Text(
@@ -528,18 +541,53 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         if (Provider.of<ProfileViewModel>(context, listen: true)
                                     .getUserData
-                                    .role ==
-                                'coach' ||
+                                    .roleId ==
+                                2 ||
                             Provider.of<ProfileViewModel>(context, listen: true)
                                     .getUserData
-                                    .role ==
-                                'dietitian')
-                          ExpansionTile(
-                            iconColor: blueColor,
-                            title: Text(
-                              'Shared posts',
-                              style: theme.textTheme.bodySmall,
-                            ).tr(),
+                                    .roleId ==
+                                3)
+                          Consumer<ProfileViewModel>(
+                            builder: (context, user, child) => ExpansionTile(
+                              onExpansionChanged: (change) async {
+                                if (change) {
+                                  user.setPostIsOpened(true);
+                                  user.setPage(0);
+                                  user.clearPosts();
+                                  await user.setUserPosts(
+                                      context.locale == Locale('en')
+                                          ? 'en'
+                                          : 'ar');
+                                } else {
+                                  user.setPostIsOpened(false);
+
+                                  user.clearPosts();
+                                }
+                              },
+                              iconColor: blueColor,
+                              title: Text(
+                                'Shared posts',
+                                style: theme.textTheme.bodySmall,
+                              ).tr(),
+                              children: (user.getIsPostLogoutLoading &&
+                                      user.getUserPosts.isEmpty)
+                                  ? [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                            child:
+                                                bigLoader(color: orangeColor)),
+                                      ),
+                                    ]
+                                  : user.getUserPosts.map((e) {
+                                      if (e.type == 2 || e.type == 3)
+                                        return pollPostCard(
+                                            post: e, ctx: context);
+                                      else
+                                        return NormalPostCard(
+                                            post: e, ctx: context);
+                                    }).toList(),
+                            ),
                           ),
                         ExpansionTile(
                           iconColor: blueColor,

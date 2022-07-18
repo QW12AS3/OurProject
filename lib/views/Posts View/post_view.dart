@@ -39,6 +39,7 @@ class _PostViewState extends State<PostView> {
 
   bool openContainer = false;
 
+  String commentText = 'Comments'.tr();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -145,7 +146,7 @@ class _PostViewState extends State<PostView> {
                 child: Row(
                   children: [
                     Text(
-                      '${post.commentsCount} Comments',
+                      '${post.commentsCount} $commentText',
                       style: theme.textTheme.bodySmall,
                     ).tr(),
                     Icon(
@@ -207,7 +208,7 @@ class _PostViewState extends State<PostView> {
                   child: Text(
                     'Photos:',
                     style: theme.textTheme.bodySmall,
-                  ),
+                  ).tr(),
                 ),
               ),
             if (post.imagesUrl.isNotEmpty)
@@ -289,7 +290,7 @@ class _PostViewState extends State<PostView> {
                   child: Text(
                     'Videos:',
                     style: theme.textTheme.bodySmall,
-                  ),
+                  ).tr(),
                 ),
               ),
             if (post.videosUrl.isNotEmpty)

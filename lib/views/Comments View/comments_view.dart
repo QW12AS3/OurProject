@@ -50,7 +50,7 @@ class _CommentsViewState extends State<CommentsView> {
               child: CustomTextField(
                   maxLines: 1,
                   controller: commentsController,
-                  title: 'Type a comments'),
+                  title: 'Type a comment...'),
             ),
             Consumer<CommentsViewModel>(
               builder: (context, comments, child) => comments.getIsLoading
@@ -70,7 +70,9 @@ class _CommentsViewState extends State<CommentsView> {
                         commentsController.clear();
                       },
                       icon: Icon(
-                        Icons.arrow_circle_right_outlined,
+                        context.locale == const Locale('en')
+                            ? Icons.arrow_circle_right_outlined
+                            : Icons.arrow_circle_left_outlined,
                         size: 30,
                         color: orangeColor,
                       ),
@@ -85,7 +87,7 @@ class _CommentsViewState extends State<CommentsView> {
         title: Text(
           'Comments',
           style: theme.textTheme.bodyMedium!,
-        ),
+        ).tr(),
       ),
       body: Consumer<CommentsViewModel>(
         builder: (context, comments, child) => comments.getIsLoading
@@ -178,7 +180,7 @@ class _CommentsViewState extends State<CommentsView> {
                                                               .copyWith(
                                                                   color:
                                                                       greyColor),
-                                                        ),
+                                                        ).tr(),
                                                       ),
                                                       TextButton(
                                                         onPressed: () async {
@@ -216,7 +218,7 @@ class _CommentsViewState extends State<CommentsView> {
                                                               .copyWith(
                                                                   color:
                                                                       orangeColor),
-                                                        ),
+                                                        ).tr(),
                                                       ),
                                                     ],
                                                     content: CustomTextField(
