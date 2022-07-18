@@ -51,16 +51,23 @@ class _PostsPageState extends State<PostsPage> {
         builder: (context, posts, child) =>
             (posts.getIsLoading && posts.getPosts.isEmpty)
                 ? Center(child: bigLoader(color: orangeColor))
-                : SingleChildScrollView(
-                    controller: _scrollController,
-                    child: Column(
-                      children: posts.getPosts.map((e) {
-                        if (e.type == 2 || e.type == 3)
-                          return pollPostCard(post: e, ctx: context);
-                        else
-                          return NormalPostCard(post: e, ctx: context);
-                      }).toList(),
-                    ),
+                : Column(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          child: Column(
+                            children: posts.getPosts.map((e) {
+                              if (e.type == 2 || e.type == 3)
+                                return pollPostCard(post: e, ctx: context);
+                              else
+                                return NormalPostCard(post: e, ctx: context);
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                      if (posts.getMoreIsLoading) bigLoader(color: orangeColor)
+                    ],
                   ),
       ),
     );

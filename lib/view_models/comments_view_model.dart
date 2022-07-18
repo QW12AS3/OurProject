@@ -5,12 +5,25 @@ import 'package:home_workout_app/Api%20services/comments_api.dart';
 import 'package:home_workout_app/Api%20services/post_api.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/comments_model.dart';
+import 'package:home_workout_app/view_models/Posts%20View%20Model/posts_view_model.dart';
+import 'package:provider/provider.dart';
 
 class CommentsViewModel with ChangeNotifier {
   List<CommentsModel> _comments = [];
-
+  int _page = 0;
+  bool _getMoreLoading = false;
   bool _isLoading = false;
   bool _isdeleteLoading = false;
+
+  void setMoreLoading(value) {
+    _getMoreLoading = value;
+    notifyListeners();
+  }
+
+  void setPage(int i) {
+    _page = i;
+    notifyListeners();
+  }
 
   void setIsLoading(value) {
     _isLoading = value;
@@ -22,11 +35,23 @@ class CommentsViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setComments({required int id, required String lang}) async {
-    setIsLoading(true);
-    _comments = await CommentsApi().getComments(id: id, lang: lang);
-    setIsLoading(false);
+  void resetComments() {
+    _comments.clear();
+    notifyListeners();
+  }
 
+  Future<void> setComments({required int id, required String lang}) async {
+    if (_comments.isEmpty) setIsLoading(true);
+    setPage(getPage + 1);
+    if (_comments.isNotEmpty) setMoreLoading(true);
+    print('Page: ${getPage.toString()}');
+    final newComments =
+        await CommentsApi().getComments(id: id, lang: lang, page: getPage);
+    _comments.addAll(newComments);
+    print('Comments Count: ${newComments.length}');
+    if (newComments.isEmpty) setPage(getPage - 1);
+    setIsLoading(false);
+    setMoreLoading(false);
     notifyListeners();
   }
 
@@ -38,9 +63,12 @@ class CommentsViewModel with ChangeNotifier {
     setIsLoading(true);
     final response = await CommentsApi()
         .sendCommet(comment: comment, postId: id, lang: lang);
-    if (response['success'])
-      await setComments(id: id, lang: lang);
-    else
+    if (response['success']) {
+      _comments.add(CommentsModel.fromJson(response['data']));
+      Provider.of<PostsViewModel>(context, listen: false)
+          .updatePostCommentsCount(response['data']['total'], id);
+      notifyListeners();
+    } else
       showSnackbar(Text(response['message']), context);
     setIsLoading(false);
   }
@@ -77,4 +105,6 @@ class CommentsViewModel with ChangeNotifier {
   List<CommentsModel> get getComments => _comments;
   bool get getIsLoading => _isLoading;
   bool get getdeleteIsLoading => _isdeleteLoading;
+  int get getPage => _page;
+  bool get getMoreLoading => _getMoreLoading;
 }

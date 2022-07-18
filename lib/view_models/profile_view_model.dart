@@ -25,6 +25,7 @@ class ProfileViewModel with ChangeNotifier {
   List _selectedDis = [];
   String _searchValue = '';
   bool _addDesc = false;
+  bool _getMoreLoading = false;
 
   bool _infoWidgetVisible = false;
   List _followers = [];
@@ -35,6 +36,11 @@ class ProfileViewModel with ChangeNotifier {
   int _page = 0;
 
   bool _postsIsOpened = false;
+
+  void setGetMoreLoading(value) {
+    _getMoreLoading = value;
+    notifyListeners();
+  }
 
   void setPostIsOpened(value) {
     _postsIsOpened = value;
@@ -49,11 +55,13 @@ class ProfileViewModel with ChangeNotifier {
   Future<void> setUserPosts(String lang) async {
     print('getting');
     setPage(getPage + 1);
+    if (_userPosts.isNotEmpty) setGetMoreLoading(true);
     setIsPostLoading(true);
     List<PostModel> newPosts = await PostAPI().getUserPosts(lang, getPage);
     _userPosts.addAll(newPosts);
     if (newPosts.isEmpty) setPage(getPage - 1);
     setIsPostLoading(false);
+    setGetMoreLoading(false);
     notifyListeners();
   }
 
@@ -305,5 +313,6 @@ class ProfileViewModel with ChangeNotifier {
 
   int get getPage => _page;
   List<PostModel> get getUserPosts => _userPosts;
+  bool get getMoreLoading => _getMoreLoading;
   //bool get getPasswordObsecure => _PasswordObsecure;
 }

@@ -23,6 +23,13 @@ class AnotherUserProfileViewModel with ChangeNotifier {
 
   bool _postsIsOpened = false;
 
+  bool _getMoreLoading = false;
+
+  void setMoreLoading(value) {
+    _getMoreLoading = value;
+    notifyListeners();
+  }
+
   void setPostIsOpened(value) {
     _postsIsOpened = value;
     notifyListeners();
@@ -41,12 +48,14 @@ class AnotherUserProfileViewModel with ChangeNotifier {
   Future<void> setAnotherUserPosts(String lang, int userId) async {
     print('getting');
     setPage(getPage + 1);
+    if (_userPosts.isNotEmpty) setMoreLoading(true);
     setIsPostLoading(true);
     List<PostModel> newPosts =
         await PostAPI().getAnotherUserPosts(lang, getPage, userId);
     _userPosts.addAll(newPosts);
     if (newPosts.isEmpty) setPage(getPage - 1);
     setIsPostLoading(false);
+    setMoreLoading(false);
     notifyListeners();
   }
 
@@ -159,4 +168,5 @@ class AnotherUserProfileViewModel with ChangeNotifier {
 
   int get getPage => _page;
   List<PostModel> get getUserPosts => _userPosts;
+  bool get getMoreLoading => _getMoreLoading;
 }

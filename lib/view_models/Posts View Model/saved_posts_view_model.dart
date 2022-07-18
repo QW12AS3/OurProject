@@ -6,6 +6,12 @@ class SavedPostsViewModel with ChangeNotifier {
   List<PostModel> _savedPosts = [];
   bool _isLoading = false;
   int _page = 0;
+  bool _getMoreLoading = false;
+
+  void setMoreIsLoading(value) {
+    _getMoreLoading = value;
+    notifyListeners();
+  }
 
   void setPage(int i) {
     _page = i;
@@ -25,15 +31,18 @@ class SavedPostsViewModel with ChangeNotifier {
   Future<void> setSavedPosts(
       {required String lang, required BuildContext context}) async {
     setPage(getPage + 1);
+    if (_savedPosts.isNotEmpty) setMoreIsLoading(true);
     setIsLoading(true);
     List<PostModel> newPosts = await PostAPI().getSavedPosts(lang, getPage);
     _savedPosts.addAll(newPosts);
     if (newPosts.isEmpty) setPage(getPage - 1);
     print(_savedPosts);
+    setMoreIsLoading(false);
     setIsLoading(false);
   }
 
   List<PostModel> get getSavedPosts => _savedPosts;
   bool get getIsLoading => _isLoading;
   int get getPage => _page;
+  bool get getIsMoreLoading => _getMoreLoading;
 }

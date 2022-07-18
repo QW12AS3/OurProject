@@ -10,6 +10,12 @@ class PostsViewModel with ChangeNotifier {
   List<PostModel> _posts = [];
   int _page = 0;
   bool _isLoading = false;
+  bool _getMoreLoading = false;
+
+  void updatePostCommentsCount(int count, int id) {
+    _posts.firstWhere((element) => element.postId == id).commentsCount = count;
+    notifyListeners();
+  }
 
   void setPage(int i) {
     _page = i;
@@ -18,6 +24,12 @@ class PostsViewModel with ChangeNotifier {
 
   void setIsLoading(value) {
     _isLoading = value;
+    notifyListeners();
+  }
+
+  void setMoreIsLoading(value) {
+    _getMoreLoading = value;
+    notifyListeners();
   }
 
   void removePost(int id) {
@@ -28,11 +40,13 @@ class PostsViewModel with ChangeNotifier {
   Future<void> setPosts(String lang) async {
     print('getting');
     setPage(getPage + 1);
+    if (_posts.isNotEmpty) setMoreIsLoading(true);
     setIsLoading(true);
     List<PostModel> newPosts = await PostAPI().getPosts(lang, getPage);
     _posts.addAll(newPosts);
     if (newPosts.isEmpty) setPage(getPage - 1);
     setIsLoading(false);
+    setMoreIsLoading(false);
     notifyListeners();
   }
 
@@ -115,4 +129,5 @@ class PostsViewModel with ChangeNotifier {
   List<PostModel> get getPosts => _posts;
   bool get getIsLoading => _isLoading;
   int get getPage => _page;
+  bool get getMoreIsLoading => _getMoreLoading;
 }
