@@ -31,7 +31,7 @@ class _CreatePostViewState extends State<CreatePostView> {
         title: Text(
           'Add a post',
           style: theme.textTheme.bodyMedium,
-        ),
+        ).tr(),
         elevation: 0,
       ),
       body: SafeArea(
@@ -46,56 +46,64 @@ class _CreatePostViewState extends State<CreatePostView> {
                     child: SingleChildScrollView(
                       child: Row(
                         children: [
-                          Text(
-                            'Post Type: ',
-                            style: theme.textTheme.bodySmall,
+                          Expanded(
+                            child: Text(
+                              'Post Type: ',
+                              style: theme.textTheme.bodySmall,
+                            ).tr(),
                           ),
-                          InkWell(
-                            onTap: () {
-                              post.setSelectedPostType(PostTypes.Normal);
-                            },
-                            child: TypeContainer(
-                              title: 'Text/Media',
-                              backgroundColor:
-                                  post.getSelectedPostType == PostTypes.Normal
-                                      ? blueColor
-                                      : Colors.white,
-                              textColor:
-                                  post.getSelectedPostType == PostTypes.Normal
-                                      ? Colors.white
-                                      : blueColor,
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                post.setSelectedPostType(PostTypes.Normal);
+                              },
+                              child: TypeContainer(
+                                title: 'Text/Media',
+                                backgroundColor:
+                                    post.getSelectedPostType == PostTypes.Normal
+                                        ? blueColor
+                                        : Colors.white,
+                                textColor:
+                                    post.getSelectedPostType == PostTypes.Normal
+                                        ? Colors.white
+                                        : blueColor,
+                              ),
                             ),
                           ),
-                          InkWell(
-                            onTap: () {
-                              post.setSelectedPostType(PostTypes.NormalPoll);
-                            },
-                            child: TypeContainer(
-                              title: 'Normal poll',
-                              backgroundColor: post.getSelectedPostType ==
-                                      PostTypes.NormalPoll
-                                  ? blueColor
-                                  : Colors.white,
-                              textColor: post.getSelectedPostType ==
-                                      PostTypes.NormalPoll
-                                  ? Colors.white
-                                  : blueColor,
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                post.setSelectedPostType(PostTypes.NormalPoll);
+                              },
+                              child: TypeContainer(
+                                title: 'Custom poll',
+                                backgroundColor: post.getSelectedPostType ==
+                                        PostTypes.NormalPoll
+                                    ? blueColor
+                                    : Colors.white,
+                                textColor: post.getSelectedPostType ==
+                                        PostTypes.NormalPoll
+                                    ? Colors.white
+                                    : blueColor,
+                              ),
                             ),
                           ),
-                          InkWell(
-                            onTap: () {
-                              post.setSelectedPostType(PostTypes.TipPoll);
-                            },
-                            child: TypeContainer(
-                              title: 'Tip poll',
-                              backgroundColor:
-                                  post.getSelectedPostType == PostTypes.TipPoll
-                                      ? blueColor
-                                      : Colors.white,
-                              textColor:
-                                  post.getSelectedPostType == PostTypes.TipPoll
-                                      ? Colors.white
-                                      : blueColor,
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                post.setSelectedPostType(PostTypes.TipPoll);
+                              },
+                              child: TypeContainer(
+                                title: 'Tip poll',
+                                backgroundColor: post.getSelectedPostType ==
+                                        PostTypes.TipPoll
+                                    ? blueColor
+                                    : Colors.white,
+                                textColor: post.getSelectedPostType ==
+                                        PostTypes.TipPoll
+                                    ? Colors.white
+                                    : blueColor,
+                              ),
                             ),
                           ),
                         ],

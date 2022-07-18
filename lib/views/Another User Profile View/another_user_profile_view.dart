@@ -8,6 +8,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../components.dart';
 import '../../constants.dart';
 import '../../view_models/profile_view_model.dart';
 import '../Home View/Mobile/mobile_home_view_widgets.dart';
@@ -21,6 +22,7 @@ class AnotherUserProfileView extends StatefulWidget {
 }
 
 class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
+  ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     // TODO: implement initState
@@ -34,6 +36,21 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
           .setUserData(args['id'], context);
       Provider.of<ProfileViewModel>(context, listen: false)
           .setInfoWidgetVisible(false);
+
+      _scrollController.addListener(() {
+        if (_scrollController.offset ==
+                _scrollController.position.maxScrollExtent &&
+            Provider.of<AnotherUserProfileViewModel>(context, listen: false)
+                .getPostIsOpened) {
+          Provider.of<AnotherUserProfileViewModel>(context, listen: false)
+              .setAnotherUserPosts(
+                  context.locale == const Locale('en') ? 'en' : 'ar',
+                  Provider.of<AnotherUserProfileViewModel>(context,
+                          listen: false)
+                      .getUserData
+                      .id);
+        }
+      });
     });
   }
 
@@ -104,6 +121,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                   ),
                   Expanded(
                     child: SingleChildScrollView(
+                      controller: _scrollController,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -427,12 +445,48 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                       .getUserData
                                       .roleId ==
                                   3)
-                            ExpansionTile(
-                              iconColor: blueColor,
-                              title: Text(
-                                'Shared posts',
-                                style: theme.textTheme.bodySmall,
-                              ).tr(),
+                            Consumer<AnotherUserProfileViewModel>(
+                              builder: (context, user, child) => ExpansionTile(
+                                onExpansionChanged: (change) async {
+                                  if (change) {
+                                    user.setPostIsOpened(true);
+                                    user.setPage(0);
+                                    user.clearPosts();
+                                    await user.setAnotherUserPosts(
+                                        context.locale == const Locale('en')
+                                            ? 'en'
+                                            : 'ar',
+                                        user.getUserData.id);
+                                  } else {
+                                    user.setPostIsOpened(false);
+
+                                    user.clearPosts();
+                                  }
+                                },
+                                iconColor: blueColor,
+                                title: Text(
+                                  'Shared posts',
+                                  style: theme.textTheme.bodySmall,
+                                ).tr(),
+                                children: (user.getIsPostLoading &&
+                                        user.getUserPosts.isEmpty)
+                                    ? [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Center(
+                                              child: bigLoader(
+                                                  color: orangeColor)),
+                                        ),
+                                      ]
+                                    : user.getUserPosts.map((e) {
+                                        if (e.type == 2 || e.type == 3)
+                                          return pollPostCard(
+                                              post: e, ctx: context);
+                                        else
+                                          return NormalPostCard(
+                                              post: e, ctx: context);
+                                      }).toList(),
+                              ),
                             ),
                           ExpansionTile(
                             iconColor: blueColor,
