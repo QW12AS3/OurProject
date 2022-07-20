@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_workout_app/constants.dart';
@@ -89,7 +90,11 @@ class ResetPasswordView extends StatelessWidget {
                                       controller: emailController,
                                       validator: (value) {
                                         return ResetPasswordViewModel()
-                                            .checkEmail(value.toString());
+                                            .checkEmail(
+                                                value.toString(),
+                                                context.locale == Locale('en')
+                                                    ? 'en'
+                                                    : 'ar');
                                       },
                                       decoration: InputDecoration(
                                         enabledBorder: OutlineInputBorder(
@@ -113,7 +118,7 @@ class ResetPasswordView extends StatelessWidget {
                                             Radius.circular(15),
                                           ),
                                         ),
-                                        labelText: 'Email',
+                                        labelText: 'Email'.tr(),
                                         labelStyle: TextStyle(
                                             color: orangeColor,
                                             fontSize: 15,
@@ -153,7 +158,11 @@ class ResetPasswordView extends StatelessWidget {
                                                 validator: (value) {
                                                   return ResetPasswordViewModel()
                                                       .checkPassword(
-                                                          value.toString());
+                                                          value.toString(),
+                                                          context.locale ==
+                                                                  Locale('en')
+                                                              ? 'en'
+                                                              : 'ar');
                                                 },
                                                 decoration: InputDecoration(
                                                     enabledBorder:
@@ -188,7 +197,7 @@ class ResetPasswordView extends StatelessWidget {
                                                         Radius.circular(15),
                                                       ),
                                                     ),
-                                                    labelText: 'Password',
+                                                    labelText: 'Password'.tr(),
                                                     labelStyle: TextStyle(
                                                         color: orangeColor,
                                                         fontSize: 15,
@@ -269,7 +278,11 @@ class ResetPasswordView extends StatelessWidget {
                                                       .checkConfirmPassword(
                                                           value.toString(),
                                                           passwordController
-                                                              .text);
+                                                              .text,
+                                                          context.locale ==
+                                                                  Locale('en')
+                                                              ? 'en'
+                                                              : 'ar');
                                                 },
                                                 decoration: InputDecoration(
                                                     enabledBorder:
@@ -305,7 +318,7 @@ class ResetPasswordView extends StatelessWidget {
                                                       ),
                                                     ),
                                                     labelText:
-                                                        'Confirm password',
+                                                        'Confirm password'.tr(),
                                                     labelStyle: TextStyle(
                                                         color: orangeColor,
                                                         fontSize: 15,
@@ -392,7 +405,10 @@ class ResetPasswordView extends StatelessWidget {
                                       passwordController.text,
                                       confimPasswordController.text,
                                       c_nameController.text,
-                                      routeArg['code'].toString());
+                                      routeArg['code'].toString(),
+                                      context.locale == Locale('en')
+                                          ? 'en'
+                                          : 'ar');
                               print(routeArg['code'].toString());
                               print(BackEndMessage);
                               final sBar = SnackBar(
@@ -413,10 +429,8 @@ class ResetPasswordView extends StatelessWidget {
                               print(BackEndMessage.statusCode);
                               if (BackEndMessage.statusCode == 201 ||
                                   BackEndMessage.statusCode == 450) {
-                                // Navigator.of(context).pushNamedAndRemoveUntil( '/home', (route) => false);
-                                Navigator.of(context).pushReplacementNamed(
-                                  '/signin',
-                                );
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/signin', (route) => false);
 
                                 emailController.clear();
                                 passwordController.clear();
@@ -427,7 +441,7 @@ class ResetPasswordView extends StatelessWidget {
                             }
                           },
                           child: Text(
-                            'Save',
+                            'Save'.tr(),
                             style: TextStyle(
                                 color: orangeColor,
                                 //Colors.white,

@@ -23,6 +23,7 @@ class _SplashViewState extends State<SplashView> {
       firebaseTrigger();
 
       if (sharedPreferences.getBool('registered') == true &&
+          sharedPreferences.getBool('is_verified') == true &&
           sharedPreferences.getBool('is_info') == true) {
         print(sharedPreferences.getBool('is_info'));
         Navigator.pushReplacementNamed(context, '/home');
@@ -57,7 +58,7 @@ class _SplashViewState extends State<SplashView> {
         print('wooooooooorking');
         print(message.data['page']);
         if (sharedPreferences.getBool('registered') == true &&
-            sharedPreferences.getBool('info') == true) {
+            sharedPreferences.getBool('is_info') == true) {
           Navigator.pushReplacementNamed(context, '/home');
         }
       }

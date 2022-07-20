@@ -11,7 +11,8 @@ class otpViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  postUserInfo(String otpVal, String c_nameVal, String addedURL) async {
+  postUserInfo(
+      String otpVal, String c_nameVal, String addedURL, String lang) async {
     OTPModel? result;
     try {
       await OTPAPI
@@ -20,7 +21,8 @@ class otpViewModel with ChangeNotifier {
                 verification_code: otpVal,
                 c_name: c_nameVal,
               ),
-              addedURL)
+              addedURL,
+              lang)
           .then((value) {
         print(value);
 
@@ -33,11 +35,13 @@ class otpViewModel with ChangeNotifier {
     return result;
   }
 
-  String? checkCode(String code) {
+  String? checkCode(String code, String lang) {
     if (code.isEmpty) {
-      return ' Please enter code';
+      return lang == 'en' ? ' Enter code' : 'ادخل الرمز ';
     } else if (code.length < 5) {
-      return ' Code should be 5 characters';
+      return lang == 'en'
+          ? ' Code should be 5 characters'
+          : "يجب أن يكون الرمز خمس أحرف";
     } else {
       return null;
     }

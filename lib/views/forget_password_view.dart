@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_workout_app/constants.dart';
@@ -53,7 +54,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                 ),
                 Container(
                   child: Text(
-                    ' Forgot your password? ',
+                    ' Forgot your password? '.tr(),
                     style: theme.textTheme.bodyMedium,
                   ),
                 ),
@@ -101,8 +102,11 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                               // maxLength: 25,
                               controller: emailController,
                               validator: (value) {
-                                return ForgetPasswordViewModel()
-                                    .checkEmail(value.toString());
+                                return ForgetPasswordViewModel().checkEmail(
+                                    value.toString(),
+                                    context.locale == Locale('en')
+                                        ? 'en'
+                                        : 'ar');
                               },
                               decoration: InputDecoration(
                                 focusedErrorBorder: OutlineInputBorder(
@@ -133,7 +137,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                                     Radius.circular(15),
                                   ),
                                 ),
-                                labelText: 'Email',
+                                labelText: 'Email'.tr(),
                                 labelStyle: TextStyle(
                                     color: orangeColor,
                                     fontSize: 15,
@@ -179,7 +183,8 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                                 emailController.text,
                                 c_nameController.text == null
                                     ? ''
-                                    : c_nameController.text);
+                                    : c_nameController.text,
+                                context.locale == Locale('en') ? 'en' : 'ar');
                         print(BackEndMessage);
                         final sBar = SnackBar(
                             // margin: EdgeInsets.all(8.0),
@@ -198,11 +203,10 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                           emailController.clear();
                           c_nameController.clear();
                           try {
-                            Navigator.of(context).pushReplacementNamed('/otp',
-                                arguments: {
-                                  'state': 'forget password',
-                                  'email': email
-                                });
+                            Navigator.of(context).pushNamed('/otp', arguments: {
+                              'state': 'forget password',
+                              'email': email
+                            });
                           } catch (e) {
                             print(
                                 'navigate from forget password to otp error: $e');
@@ -210,7 +214,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                         }
                       }
                     },
-                    child: const Text('Send'),
+                    child: Text('Send'.tr()),
                   ),
                 ),
                 const SizedBox(

@@ -6,7 +6,7 @@ import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_vie
 import 'package:http/http.dart';
 
 class SignInAPI {
-  static Future<SignInModel> createUser(SignInModel user) async {
+  static Future<SignInModel> createUser(SignInModel user, String lang) async {
     try {
       final Response response = await post(Uri.parse('$base_URL/login'),
           headers: <String, String>{
@@ -14,7 +14,7 @@ class SignInAPI {
             // 'Content-Type': 'application/json;charset=UTF-8'
             'Accept': 'application/json',
             'apikey': apiKey,
-            'lang': 'en',
+            'lang': lang,
             'timeZone': getTimezone()
           },
           body: user.toJson());

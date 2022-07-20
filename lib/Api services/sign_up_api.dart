@@ -6,7 +6,7 @@ import 'package:home_workout_app/models/sign_up_model.dart';
 import 'package:http/http.dart';
 
 class SignUpAPI {
-  static Future<SignUpModel> createUser(SignUpModel user) async {
+  static Future<SignUpModel> createUser(SignUpModel user, String lang) async {
     try {
       final Response response = await post(Uri.parse('$base_URL'),
           headers: <String, String>{
@@ -14,7 +14,7 @@ class SignUpAPI {
             // 'Content-Type': 'application/json;charset=UTF-8'
             'Accept': 'application/json',
             'apikey': apiKey,
-            'lang': 'en',
+            'lang': lang,
             'timeZone': getTimezone(),
           },
           body: user.toJson());
