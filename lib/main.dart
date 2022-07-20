@@ -119,7 +119,7 @@ class Vigor extends StatelessWidget {
         //   }
         // },
 
-        initialRoute: '/signup',
+        initialRoute: '/',
         routes: {
           '/signup': (context) => SignUp(),
           '/signin': (context) => SignIn(),
@@ -141,7 +141,7 @@ class Vigor extends StatelessWidget {
           '/postView': (context) => PostView(),
           '/savedPosts': (context) => SavedPostsView(),
           '/editPostView': (context) => EditPostView(),
-          // '/': (context) => IPView()
+          '/': (context) => IPView()
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,
