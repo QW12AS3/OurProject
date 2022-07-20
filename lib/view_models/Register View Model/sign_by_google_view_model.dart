@@ -28,11 +28,12 @@ class SignByGoogleViewModel with ChangeNotifier {
     print('signed out from Google ');
   }
 
-  Future<String> signIn() async {
+  Future<String?> signIn() async {
     try {
       final access = await _googleSignIn.signIn();
       final accessValue = await access?.authentication;
-      return accessValue!.accessToken.toString();
+      // if(accessValue)
+      return accessValue?.accessToken.toString();
     } catch (e) {
       print('Google Sign in Errooor: $e');
     }

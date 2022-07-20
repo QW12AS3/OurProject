@@ -20,7 +20,9 @@ class SignInAPI {
           body: user.toJson());
 
       print(response.body);
-      if (response.statusCode == 201) {
+      if (response.statusCode == 201 ||
+          response.statusCode == 250 ||
+          response.statusCode == 450) {
         return SignInModel.fromJson(json.decode(response.body));
       } else {
         print(response.statusCode);

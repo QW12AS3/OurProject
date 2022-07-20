@@ -32,7 +32,9 @@ class signInViewModel with ChangeNotifier {
     }
 
     if ((result!.access_token != null && result!.access_token != '') &&
-        (result!.statusCode == 201)) {
+        (result!.statusCode == 201 ||
+            result!.statusCode == 250 ||
+            result!.statusCode == 450)) {
       setData(result!);
     }
     return result;

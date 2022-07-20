@@ -400,7 +400,14 @@ class _StartViewState extends State<StartView> {
                                 icon: Image.asset('assets/images/google.png')),
                             IconButton(
                               //TODO: DELETE OR ADD
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).pushReplacementNamed(
+                                  '/home',
+                                  // arguments: {
+                                  //   'code': 'BackEndMessage.forgetPasswordCode'
+                                  // }
+                                );
+                              },
                               icon: Image.asset(
                                 'assets/images/facebook.png',
                               ),

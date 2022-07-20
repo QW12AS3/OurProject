@@ -194,14 +194,18 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                           ScaffoldMessenger.of(context).showSnackBar(sBar);
                         }
                         if (BackEndMessage.statusCode == 201) {
+                          String email = emailController.text;
                           emailController.clear();
                           c_nameController.clear();
                           try {
                             Navigator.of(context).pushReplacementNamed('/otp',
-                                arguments: {'state': 'forget password'});
+                                arguments: {
+                                  'state': 'forget password',
+                                  'email': email
+                                });
                           } catch (e) {
                             print(
-                                'navigatefrom forget password to otp error: $e');
+                                'navigate from forget password to otp error: $e');
                           }
                         }
                       }

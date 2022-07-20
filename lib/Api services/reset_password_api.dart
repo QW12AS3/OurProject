@@ -17,6 +17,7 @@ class ResetPasswordAPI {
                 'timeZone': getTimezone(),
               },
               body: user.toJson());
+      print(user.toJson());
       print(response.statusCode);
       print(response.body);
       if (response.statusCode == 201) {
