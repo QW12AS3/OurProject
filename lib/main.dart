@@ -33,6 +33,7 @@ import 'package:home_workout_app/views/Posts%20View/edit_post_view.dart';
 import 'package:home_workout_app/views/Posts%20View/post_view.dart';
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
 import 'package:home_workout_app/views/forget_password_view.dart';
+import 'package:home_workout_app/views/ip_view.dart';
 import 'package:home_workout_app/views/otp_view.dart';
 import 'package:home_workout_app/views/reset_password_view.dart';
 import 'package:home_workout_app/views/saved_posts_view.dart';
@@ -130,7 +131,7 @@ class Vigor extends StatelessWidget {
           '/home': (context) => MobileHomeView(),
           '/userinfo': (context) => UserInformationView(),
           '/addHealthRecord': (context) => AddHealthRecordView(),
-          '/': (context) => SplashView(),
+          '/splash': (context) => SplashView(),
           '/editHealthRecord': (context) => EditHealthRecordView(),
           '/createPost': (context) => CreatePostView(),
           '/forgetPassword': (context) => ForgetPasswordView(),
@@ -138,6 +139,7 @@ class Vigor extends StatelessWidget {
           '/postView': (context) => PostView(),
           '/savedPosts': (context) => SavedPostsView(),
           '/editPostView': (context) => EditPostView(),
+          '/': (context) => IPView()
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,

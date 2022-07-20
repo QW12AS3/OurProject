@@ -606,7 +606,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               alignment: Alignment.centerLeft,
               child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, 'changeEmail');
+                    Navigator.pushNamed(context, '/changeEmail');
                   },
                   child: ListTile(
                     title: Text(
@@ -624,7 +624,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               alignment: Alignment.centerLeft,
               child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, 'changePassword');
+                    Navigator.pushNamed(context, '/changePassword');
                   },
                   child: ListTile(
                     title: Text(

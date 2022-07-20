@@ -175,7 +175,8 @@ class ChangeEmailView extends StatelessWidget {
                       .changeEmail(
                           oldEmailController.text.trim(),
                           newEmailController.text.trim(),
-                          passwordController.text.trim());
+                          passwordController.text.trim(),
+                          context);
                 },
                 child: const Text('Save changes').tr())
           ],
