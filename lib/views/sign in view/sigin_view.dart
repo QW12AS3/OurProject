@@ -406,8 +406,12 @@ class _SignInState extends State<SignIn> {
                                       BackEndMessage.is_verified == true) {
                                     sharedPreferences.setBool(
                                         "registered", true);
-                                    Navigator.of(context)
-                                        .pushReplacementNamed('/userinfo');
+                                    if (BackEndMessage.is_verified == true)
+                                      Navigator.of(context)
+                                          .pushReplacementNamed('/home');
+                                    else
+                                      Navigator.of(context)
+                                          .pushReplacementNamed('/userinfo');
                                   } else {
                                     Navigator.of(context).pushReplacementNamed(
                                         '/otp',
@@ -530,19 +534,24 @@ class _SignInState extends State<SignIn> {
                                       .showSnackBar(sBar);
                                 }
                                 if (BackEndMessage?.statusCode == 201 ||
-                                    BackEndMessage?.statusCode == 450 ||
-                                    BackEndMessage?.statusCode == 250) {
+                                    BackEndMessage?.statusCode == 450) {
                                   emailController.clear();
                                   passwordController.clear();
                                   c_nameController.clear();
                                   try {
                                     sharedPreferences.setBool(
                                         "registered", true);
-                                    Navigator.of(context)
-                                        .pushReplacementNamed('/userinfo');
+                                    Navigator.of(context).pushReplacementNamed(
+                                        BackEndMessage!.is_info == false
+                                            ? '/userinfo'
+                                            : '/home');
                                   } catch (e) {
                                     print('navigate to userinfo error: $e');
                                   }
+                                } else if (BackEndMessage?.statusCode == 250) {
+                                  Navigator.of(context).pushReplacementNamed(
+                                      '/otp',
+                                      arguments: {'state': 'sign 250'});
                                 }
                               }
                             },

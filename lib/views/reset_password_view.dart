@@ -391,10 +391,9 @@ class ResetPasswordView extends StatelessWidget {
                                       emailController.text,
                                       passwordController.text,
                                       confimPasswordController.text,
-                                      '',
-                                      '',
                                       c_nameController.text,
                                       routeArg['code'].toString());
+                              print(routeArg['code'].toString());
                               print(BackEndMessage);
                               final sBar = SnackBar(
                                   // margin: EdgeInsets.all(8.0),
@@ -416,7 +415,7 @@ class ResetPasswordView extends StatelessWidget {
                                   BackEndMessage.statusCode == 450) {
                                 // Navigator.of(context).pushNamedAndRemoveUntil( '/home', (route) => false);
                                 Navigator.of(context).pushReplacementNamed(
-                                  '/home',
+                                  '/signin',
                                 );
 
                                 emailController.clear();

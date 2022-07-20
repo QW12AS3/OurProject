@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/user_model.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:provider/provider.dart';
@@ -296,6 +297,17 @@ class myDrawer extends StatelessWidget {
                   onTap: () async {
                     await Provider.of<ProfileViewModel>(context, listen: false)
                         .logout(context);
+
+                    sharedPreferences.remove("access_token");
+                    sharedPreferences.remove("refresh_token");
+                    sharedPreferences.remove("token_expiration");
+                    sharedPreferences.remove("role_id");
+                    sharedPreferences.remove("role_name");
+                    sharedPreferences.remove("googleProvider");
+                    sharedPreferences.remove("is_verified");
+                    sharedPreferences.remove("is_info");
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/start', (route) => false);
                   },
                   child: ListTile(
                     title: Text(

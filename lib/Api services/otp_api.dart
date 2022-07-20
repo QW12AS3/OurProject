@@ -17,7 +17,6 @@ class OTPAPI {
             'Accept': 'application/json',
             'apikey': apiKey,
             'lang': 'en',
-            'timeZone': getTimezone(),
             'authorization': 'Bearer $access_Token'
           },
           body: user.toJson());

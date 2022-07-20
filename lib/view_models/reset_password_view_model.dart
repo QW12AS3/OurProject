@@ -20,22 +20,14 @@ class ResetPasswordViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  postUserInfo(
-      String emailVal,
-      String passwordVal,
-      String ConfirmPasswordVal,
-      String m_tokenVal,
-      String macVal,
-      String c_nameVal,
-      String forgetPasswordCodeVal) async {
+  postUserInfo(String emailVal, String passwordVal, String ConfirmPasswordVal,
+      String c_nameVal, String forgetPasswordCodeVal) async {
     ResetPasswordModel? result;
     try {
       await ResetPasswordAPI.createUser(ResetPasswordModel(
               email: emailVal,
               password: passwordVal,
               password_confirmation: ConfirmPasswordVal,
-              m_token: m_tokenVal,
-              mac: macVal,
               c_name: c_nameVal,
               forgetPasswordCode: forgetPasswordCodeVal))
           .then((value) {
@@ -47,21 +39,21 @@ class ResetPasswordViewModel with ChangeNotifier {
       print("postUserInfo in SignUpViewModel error: $e");
     }
 
-    if ((result!.access_token != null && result!.access_token != '') &&
-        (result!.statusCode == 201)) {
-      setData(result!);
-    }
+    // if ((result!.access_token != null && result!.access_token != '') &&
+    //     (result!.statusCode == 201)) {
+    //   setData(result!);
+    // }
     return result;
   }
 
-  setData(ResetPasswordModel Data) async {
-    sharedPreferences.setString("access_token", Data.access_token!);
-    sharedPreferences.setString("refresh_token", Data.refresh_token!);
-    sharedPreferences.setString("token_expiration", Data.token_expiration!);
-    sharedPreferences.setInt("role_id", Data.role_id!);
-    sharedPreferences.setString("role_name", Data.role_name!);
-    sharedPreferences.setBool("googleProvider", Data.googleProvider!);
-  }
+  // setData(ResetPasswordModel Data) async {
+  //   sharedPreferences.setString("access_token", Data.access_token!);
+  //   sharedPreferences.setString("refresh_token", Data.refresh_token!);
+  //   sharedPreferences.setString("token_expiration", Data.token_expiration!);
+  //   sharedPreferences.setInt("role_id", Data.role_id!);
+  //   sharedPreferences.setString("role_name", Data.role_name!);
+  //   sharedPreferences.setBool("googleProvider", Data.googleProvider!);
+  // }
 
   String? checkEmail(String email) {
     bool emailValid = RegExp(

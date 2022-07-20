@@ -527,12 +527,12 @@ class SignUp extends StatelessWidget {
                           SizedBox(
                             height: mq.size.height * 0.01,
                           ),
-                          TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Forgot password ?',
-                                style: theme.textTheme.bodySmall,
-                              ))
+                          // TextButton(
+                          //     onPressed: () {},
+                          //     child: Text(
+                          //       'Forgot password ?',
+                          //       style: theme.textTheme.bodySmall,
+                          //     ))
                         ],
                       ),
                     ),
