@@ -117,15 +117,23 @@ class EditProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> changeEmail(
-      String oldEmail, String newEmail, String password) async {
-    bool response =
+  Future<void> changeEmail(String oldEmail, String newEmail, String password,
+      BuildContext context) async {
+    final response =
         await ProfileApi().changeEmail(oldEmail, newEmail, password);
-    if (response) {
+    if (response['success']) {
+      Navigator.pushNamed(
+        context,
+        '/otp',
+        arguments: {
+          'state': 'changeEmail',
+          'newToken': response['newToken'],
+        },
+      );
       //Navigate to confirmation page
 
     } else {
-      //drop
+      showSnackbar(Text(response['message']), context);
     }
   }
 

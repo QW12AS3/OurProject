@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_workout_app/constants.dart';
@@ -5,6 +8,9 @@ import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/otp_model.dart';
 import 'package:home_workout_app/view_models/otp_view_model.dart';
 import 'package:provider/provider.dart';
+
+import '../Api services/otp_api.dart';
+import '../components.dart';
 
 class OTPView extends StatefulWidget {
   const OTPView({Key? key}) : super(key: key);
@@ -21,7 +27,7 @@ class _OTPViewState extends State<OTPView> {
   @override
   Widget build(BuildContext context) {
     final routeArg =
-        ModalRoute.of(context)?.settings.arguments as Map<String, Object>;
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
 
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
@@ -192,6 +198,26 @@ class _OTPViewState extends State<OTPView> {
                     onPressed: () async {
                       if (formGlobalKey.currentState!.validate()) {
                         formGlobalKey.currentState!.save();
+
+                        if (routeArg['state'] != null &&
+                            routeArg['state'] == 'changeEmail') {
+                          final resposne = await OTPAPI().changeEmailOTP(
+                              otpCode: otpController.text.trim(),
+                              token: routeArg['newToken'].toString(),
+                              lang: context.locale == const Locale('en')
+                                  ? 'en'
+                                  : 'ar');
+
+                          if (resposne['success']) {
+                            showSnackbar(Text(resposne['message']), context);
+                            Navigator.pushReplacementNamed(
+                                context, '/editProfile');
+                          } else {
+                            otpController.clear();
+                            showSnackbar(Text(resposne['message']), context);
+                          }
+                          return;
+                        }
                         // use the email provided here
                         if (routeArg['state'] == 'forget password') {
                           final OTPModel BackEndMessage = await otpViewModel()
@@ -291,6 +317,18 @@ class _OTPViewState extends State<OTPView> {
                     TextButton(
                         onPressed: () async {
                           final OTPModel BackEndMessage;
+
+                          if (routeArg['state'] != null &&
+                              routeArg['state'] == 'changeEmail') {
+                            final response = await OTPAPI()
+                                .changeEmailResendCode(
+                                    cname: c_nameController.text.trim(),
+                                    lang: context.locale == Locale('en')
+                                        ? 'en'
+                                        : 'ar');
+                            showSnackbar(Text(response['message']), context);
+                            return;
+                          }
                           if (routeArg['state'] == 'forget password') {
                             BackEndMessage = await otpViewModel().postUserInfo(
                                 otpController.text,

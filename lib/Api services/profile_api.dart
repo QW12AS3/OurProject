@@ -117,7 +117,7 @@ class ProfileApi {
     }
   }
 
-  Future<bool> changeEmail(
+  Future<Map> changeEmail(
       String oldEmail, String newEmail, String password) async {
     //const String url = '';
     try {
@@ -137,18 +137,27 @@ class ProfileApi {
           'password': password
         },
       );
-      if (response.statusCode == 200) {
+      print(jsonDecode(response.body));
+
+      if (response.statusCode == 201) {
         print('Change email success');
-        return true;
+        return {
+          'success': true,
+          'newToken': jsonDecode(response.body)['data']['token']
+        };
       } else {
         print('Change email failed');
         print(jsonDecode(response.body));
-        return false;
+        return {
+          'success': false,
+          'newToken': '',
+          'message': jsonDecode(response.body)['message']
+        };
       }
     } catch (e) {
       print('Change Email Error: $e');
+      return {'success': false, 'newToken': '', 'message': e.toString()};
     }
-    return false;
   }
 
   Future<bool> changePassword(
