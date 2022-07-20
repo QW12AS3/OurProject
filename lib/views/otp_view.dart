@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/otp_model.dart';
+import 'package:home_workout_app/view_models/forget_password_view_model.dart';
 import 'package:home_workout_app/view_models/otp_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -200,7 +201,7 @@ class _OTPViewState extends State<OTPView> {
                                   c_nameController.text == null
                                       ? ''
                                       : c_nameController.text,
-                                  'forgetpassword/verify');
+                                  '/forgetpassword/verify');
                           print(BackEndMessage);
                           final sBar = SnackBar(
                               // margin: EdgeInsets.all(8.0),
@@ -218,10 +219,12 @@ class _OTPViewState extends State<OTPView> {
                             otpController.clear();
                             c_nameController.clear();
                             try {
+                              print(BackEndMessage.forgetPasswordCode);
                               Navigator.of(context).pushReplacementNamed(
                                   '/resetPassword',
                                   arguments: {
                                     'code': BackEndMessage.forgetPasswordCode
+                                        .toString()
                                   });
                             } catch (e) {
                               print('navigate from otp error: $e');
@@ -258,6 +261,7 @@ class _OTPViewState extends State<OTPView> {
                               if (routeArg['state'] == 'sign 201' ||
                                   routeArg['state'] == 'sign 250') {
                                 sharedPreferences.setBool("registered", true);
+                                sharedPreferences.setBool("is_verified", true);
                               }
                               Navigator.of(context).pushReplacementNamed(
                                 (routeArg['state'] == 'sign 201' ||
@@ -290,15 +294,28 @@ class _OTPViewState extends State<OTPView> {
                     ),
                     TextButton(
                         onPressed: () async {
-                          final OTPModel BackEndMessage;
                           if (routeArg['state'] == 'forget password') {
-                            BackEndMessage = await otpViewModel().postUserInfo(
-                                otpController.text,
-                                c_nameController.text == null
-                                    ? ''
-                                    : c_nameController.text,
-                                'forgetpassword/verify/reget');
+                            final BackEndMessage =
+                                await ForgetPasswordViewModel().postEmail(
+                                    routeArg['email'].toString(),
+                                    c_nameController.text == null
+                                        ? ''
+                                        : c_nameController.text);
+                            print(BackEndMessage);
+                            final sBar = SnackBar(
+                                // margin: EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(33)),
+                                content: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(BackEndMessage.message ?? '')));
+                            if (BackEndMessage.message != null &&
+                                BackEndMessage.message != '') {
+                              ScaffoldMessenger.of(context).showSnackBar(sBar);
+                            }
                           } else {
+                            final OTPModel BackEndMessage;
                             BackEndMessage = await otpViewModel().postUserInfo(
                                 otpController.text,
                                 c_nameController.text == null
@@ -308,19 +325,19 @@ class _OTPViewState extends State<OTPView> {
                                         routeArg['state'] == 'update email')
                                     ? '/emailVerfiy/reget'
                                     : '/user/recover/reget');
-                          }
 
-                          final sBar = SnackBar(
-                              // margin: EdgeInsets.all(8.0),
-                              padding: EdgeInsets.all(8.0),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(33)),
-                              content: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(BackEndMessage.message ?? '')));
-                          if (BackEndMessage.message != null &&
-                              BackEndMessage.message != '') {
-                            ScaffoldMessenger.of(context).showSnackBar(sBar);
+                            final sBar = SnackBar(
+                                // margin: EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(33)),
+                                content: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(BackEndMessage.message ?? '')));
+                            if (BackEndMessage.message != null &&
+                                BackEndMessage.message != '') {
+                              ScaffoldMessenger.of(context).showSnackBar(sBar);
+                            }
                           }
                         },
                         child: Text(

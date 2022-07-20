@@ -10,6 +10,7 @@ Color greyColor = Colors.grey;
 
 const String base_URL = 'http://192.168.1.107:8000/api';
 
+
 final String ip = base_URL.replaceAll('/api', '');
 
 const String apiKey =
@@ -77,12 +78,12 @@ String getTimezone() {
 String firebaseNotificationToken = '';
 getFirebaseNotificationToken() {
   if (firebaseNotificationToken != '' && firebaseNotificationToken != null) {
-    print('sssd$firebaseNotificationToken');
+    print('firbase token: $firebaseNotificationToken');
     return firebaseNotificationToken;
   } else {
     FirebaseMessaging.instance.getToken().then((value) {
       firebaseNotificationToken = value.toString();
-      print('sssd$firebaseNotificationToken');
+      print('firbase token: $firebaseNotificationToken');
     });
     return firebaseNotificationToken;
   }
