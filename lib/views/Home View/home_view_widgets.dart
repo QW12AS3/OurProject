@@ -265,12 +265,27 @@ class myDrawer extends StatelessWidget {
               ),
             ),
           ),
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, '/savedPosts');
+            },
+            child: ListTile(
+              title: Text(
+                'Saved posts',
+                style: theme.textTheme.bodySmall,
+              ).tr(),
+              trailing: Icon(
+                Icons.star_rate_rounded,
+                color: blueColor,
+              ),
+            ),
+          ),
           if (!Provider.of<ProfileViewModel>(context, listen: true)
               .getIsLogoutLoading)
             ExpansionTile(
-              trailing: Icon(
+              trailing: const Icon(
                 Icons.logout_rounded,
-                color: blueColor,
+                color: Colors.red,
               ),
               title: Text(
                 'Logout',
@@ -318,7 +333,7 @@ class myDrawer extends StatelessWidget {
           else
             bigLoader(
               color: orangeColor,
-            )
+            ),
         ],
       ),
     );

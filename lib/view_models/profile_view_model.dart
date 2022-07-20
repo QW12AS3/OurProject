@@ -7,9 +7,11 @@ import 'package:home_workout_app/Api%20services/health_record_api.dart';
 import 'package:home_workout_app/Api%20services/profile_api.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/health_record_model.dart';
+import 'package:home_workout_app/models/post_models.dart';
 import 'package:home_workout_app/models/user_model.dart';
 import 'package:provider/provider.dart';
 
+import '../Api services/post_api.dart';
 import '../Api services/sign_up_api.dart';
 import '../main.dart';
 
@@ -17,16 +19,56 @@ class ProfileViewModel with ChangeNotifier {
   UserModel _userData = UserModel();
   HealthRecordModel _healthRecord = HealthRecordModel();
   bool _isLoading = false;
+  bool _isPostLoading = false;
   bool _iseditLoading = false;
   bool _islogoutLoading = false;
   List _selectedDis = [];
   String _searchValue = '';
   bool _addDesc = false;
+  bool _getMoreLoading = false;
 
   bool _infoWidgetVisible = false;
   List _followers = [];
   List _followings = [];
   List _blocklist = [];
+
+  List<PostModel> _userPosts = [];
+  int _page = 0;
+
+  bool _postsIsOpened = false;
+
+  void setGetMoreLoading(value) {
+    _getMoreLoading = value;
+    notifyListeners();
+  }
+
+  void setPostIsOpened(value) {
+    _postsIsOpened = value;
+    notifyListeners();
+  }
+
+  void setPage(int i) {
+    _page = i;
+    notifyListeners();
+  }
+
+  Future<void> setUserPosts(String lang) async {
+    print('getting');
+    setPage(getPage + 1);
+    if (_userPosts.isNotEmpty) setGetMoreLoading(true);
+    setIsPostLoading(true);
+    List<PostModel> newPosts = await PostAPI().getUserPosts(lang, getPage);
+    _userPosts.addAll(newPosts);
+    if (newPosts.isEmpty) setPage(getPage - 1);
+    setIsPostLoading(false);
+    setGetMoreLoading(false);
+    notifyListeners();
+  }
+
+  void clearPosts() {
+    _userPosts.clear();
+    notifyListeners();
+  }
 
   void setAddDesc() {
     _addDesc = !_addDesc;
@@ -45,6 +87,11 @@ class ProfileViewModel with ChangeNotifier {
 
   void setIsLoading(value) {
     _isLoading = value;
+    notifyListeners();
+  }
+
+  void setIsPostLoading(value) {
+    _isPostLoading = value;
     notifyListeners();
   }
 
@@ -261,6 +308,11 @@ class ProfileViewModel with ChangeNotifier {
   String get getSearchValue => _searchValue;
   bool get getAddDesc => _addDesc;
   bool get getIsLogoutLoading => _islogoutLoading;
+  bool get getIsPostLogoutLoading => _isPostLoading;
+  bool get getPostIsOpened => _postsIsOpened;
 
+  int get getPage => _page;
+  List<PostModel> get getUserPosts => _userPosts;
+  bool get getMoreLoading => _getMoreLoading;
   //bool get getPasswordObsecure => _PasswordObsecure;
 }

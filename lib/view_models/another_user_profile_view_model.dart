@@ -3,7 +3,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:home_workout_app/Api%20services/profile_api.dart';
 import 'package:home_workout_app/components.dart';
+import 'package:home_workout_app/models/post_models.dart';
 import 'package:home_workout_app/models/user_model.dart';
+
+import '../Api services/post_api.dart';
 
 class AnotherUserProfileViewModel with ChangeNotifier {
   UserModel _anotherUserData = UserModel();
@@ -12,6 +15,54 @@ class AnotherUserProfileViewModel with ChangeNotifier {
 
   List _followers = [];
   List _followings = [];
+
+  bool _isPostLoading = false;
+
+  List<PostModel> _userPosts = [];
+  int _page = 0;
+
+  bool _postsIsOpened = false;
+
+  bool _getMoreLoading = false;
+
+  void setMoreLoading(value) {
+    _getMoreLoading = value;
+    notifyListeners();
+  }
+
+  void setPostIsOpened(value) {
+    _postsIsOpened = value;
+    notifyListeners();
+  }
+
+  void setIsPostLoading(value) {
+    _isPostLoading = value;
+    notifyListeners();
+  }
+
+  void setPage(int i) {
+    _page = i;
+    notifyListeners();
+  }
+
+  Future<void> setAnotherUserPosts(String lang, int userId) async {
+    print('getting');
+    setPage(getPage + 1);
+    if (_userPosts.isNotEmpty) setMoreLoading(true);
+    setIsPostLoading(true);
+    List<PostModel> newPosts =
+        await PostAPI().getAnotherUserPosts(lang, getPage, userId);
+    _userPosts.addAll(newPosts);
+    if (newPosts.isEmpty) setPage(getPage - 1);
+    setIsPostLoading(false);
+    setMoreLoading(false);
+    notifyListeners();
+  }
+
+  void clearPosts() {
+    _userPosts.clear();
+    notifyListeners();
+  }
 
   setInfoWidgetVisible(bool value) {
     _infoWidgetVisible = value;
@@ -112,4 +163,10 @@ class AnotherUserProfileViewModel with ChangeNotifier {
   bool get getInfoWidgetVisible => _infoWidgetVisible;
   List get getFollowers => _followers;
   List get getFollowings => _followings;
+  bool get getPostIsOpened => _postsIsOpened;
+  bool get getIsPostLoading => _isPostLoading;
+
+  int get getPage => _page;
+  List<PostModel> get getUserPosts => _userPosts;
+  bool get getMoreLoading => _getMoreLoading;
 }

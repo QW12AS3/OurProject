@@ -5,6 +5,7 @@ import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/web_home_view_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/create_post_view_model.dart';
+import 'package:home_workout_app/view_models/Posts%20View%20Model/edit_post_view_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/posts_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
@@ -17,6 +18,7 @@ import 'package:home_workout_app/view_models/health_record_view_model.dart';
 import 'package:home_workout_app/view_models/otp_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/view_models/reset_password_view_model.dart';
+import 'package:home_workout_app/view_models/Posts%20View%20Model/saved_posts_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/Add%20Health%20Record%20View/add_health_record_view.dart';
 import 'package:home_workout_app/views/Another%20User%20Profile%20View/another_user_profile_view.dart';
@@ -27,11 +29,13 @@ import 'package:home_workout_app/views/Edit%20Health%20Record%20View/edit_health
 import 'package:home_workout_app/views/Edit%20Profile%20View/edit_profile_view.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
 import 'package:home_workout_app/views/Posts%20View/create_post_view.dart';
+import 'package:home_workout_app/views/Posts%20View/edit_post_view.dart';
 import 'package:home_workout_app/views/Posts%20View/post_view.dart';
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
 import 'package:home_workout_app/views/forget_password_view.dart';
 import 'package:home_workout_app/views/otp_view.dart';
 import 'package:home_workout_app/views/reset_password_view.dart';
+import 'package:home_workout_app/views/saved_posts_view.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:home_workout_app/views/sign%20up%20view/sign_up_view.dart';
 import 'package:home_workout_app/views/splash_view.dart';
@@ -67,7 +71,7 @@ class Vigor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //context.setLocale(const Locale('en'));
+    context.setLocale(const Locale('ar'));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserInformationViewModel()),
@@ -87,6 +91,8 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ResetPasswordViewModel()),
         ChangeNotifierProvider(create: (context) => PostsViewModel()),
         ChangeNotifierProvider(create: (context) => CommentsViewModel()),
+        ChangeNotifierProvider(create: (context) => SavedPostsViewModel()),
+        ChangeNotifierProvider(create: (context) => EditPostViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -130,6 +136,8 @@ class Vigor extends StatelessWidget {
           '/forgetPassword': (context) => ForgetPasswordView(),
           '/resetPassword': (context) => ResetPasswordView(),
           '/postView': (context) => PostView(),
+          '/savedPosts': (context) => SavedPostsView(),
+          '/editPostView': (context) => EditPostView(),
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,
@@ -142,14 +150,11 @@ class Vigor extends StatelessWidget {
             indicatorSize: TabBarIndicatorSize.tab,
           ),
           appBarTheme: AppBarTheme(
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.transparent,
               elevation: 0,
               iconTheme: IconThemeData(color: orangeColor)),
           snackBarTheme: SnackBarThemeData(
-            contentTextStyle: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(color: Colors.white),
+            contentTextStyle: Theme.of(context).textTheme.bodyMedium!,
             backgroundColor: orangeColor.withOpacity(0.9),
             elevation: 2,
             shape: RoundedRectangleBorder(

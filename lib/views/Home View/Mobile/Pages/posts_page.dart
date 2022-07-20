@@ -17,13 +17,24 @@ class PostsPage extends StatefulWidget {
 }
 
 class _PostsPageState extends State<PostsPage> {
+  ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero).then((value) {
+      Provider.of<PostsViewModel>(context, listen: false).clearPosts();
+      Provider.of<PostsViewModel>(context, listen: false).setPage(0);
       Provider.of<PostsViewModel>(context, listen: false)
           .setPosts(context.locale == const Locale('en') ? 'en' : 'ar');
+
+      _scrollController.addListener(() {
+        if (_scrollController.offset ==
+            _scrollController.position.maxScrollExtent) {
+          Provider.of<PostsViewModel>(context, listen: false)
+              .setPosts(context.locale == const Locale('en') ? 'en' : 'ar');
+        }
+      });
     });
   }
 
@@ -31,23 +42,33 @@ class _PostsPageState extends State<PostsPage> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
+        Provider.of<PostsViewModel>(context, listen: false).clearPosts();
+        Provider.of<PostsViewModel>(context, listen: false).setPage(0);
         await Provider.of<PostsViewModel>(context, listen: false)
             .setPosts(context.locale == const Locale('en') ? 'en' : 'ar');
       },
-      color: orangeColor,
       child: Consumer<PostsViewModel>(
-        builder: (context, posts, child) => posts.getIsLoading
-            ? Center(child: bigLoader(color: orangeColor))
-            : SingleChildScrollView(
-                child: Column(
-                  children: posts.getPosts.map((e) {
-                    if (e.type == 2 || e.type == 3)
-                      return pollPostCard(post: e, ctx: context);
-                    else
-                      return NormalPostCard(post: e, ctx: context);
-                  }).toList(),
-                ),
-              ),
+        builder: (context, posts, child) =>
+            (posts.getIsLoading && posts.getPosts.isEmpty)
+                ? Center(child: bigLoader(color: orangeColor))
+                : Column(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          child: Column(
+                            children: posts.getPosts.map((e) {
+                              if (e.type == 2 || e.type == 3)
+                                return pollPostCard(post: e, ctx: context);
+                              else
+                                return NormalPostCard(post: e, ctx: context);
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                      if (posts.getMoreIsLoading) bigLoader(color: orangeColor)
+                    ],
+                  ),
       ),
     );
   }

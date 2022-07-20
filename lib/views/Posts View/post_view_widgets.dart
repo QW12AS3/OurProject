@@ -36,13 +36,13 @@ class TypeContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(2.5),
           child: Center(
             child: Text(
               title,
               style: theme.textTheme.bodySmall!
-                  .copyWith(color: textColor, fontSize: 15),
-            ),
+                  .copyWith(color: textColor, fontSize: 12),
+            ).tr(),
           ),
         ),
       ),
@@ -52,7 +52,6 @@ class TypeContainer extends StatelessWidget {
 
 class CreateNormalPostSpace extends StatefulWidget {
   CreateNormalPostSpace({Key? key}) : super(key: key);
-  TextEditingController normaltitleController = TextEditingController();
   @override
   State<CreateNormalPostSpace> createState() => _CreateNormalPostSpaceState();
 }
@@ -69,6 +68,8 @@ class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
     });
   }
 
+  TextEditingController normaltitleController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -79,7 +80,7 @@ class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
           padding: const EdgeInsets.all(8.0),
           child: CustomTextField(
             maxLines: 15,
-            controller: widget.normaltitleController,
+            controller: normaltitleController,
             title: 'Type here...',
           ),
         ),
@@ -101,9 +102,9 @@ class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
                     color: blueColor,
                   ),
                   Text(
-                    ' + Add photos',
+                    '+ Add photos',
                     style: theme.textTheme.bodySmall,
-                  )
+                  ).tr()
                 ],
               ),
             ),
@@ -119,9 +120,9 @@ class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
                     color: blueColor,
                   ),
                   Text(
-                    ' + Add videos',
+                    '+ Add videos',
                     style: theme.textTheme.bodySmall,
-                  )
+                  ).tr()
                 ],
               ),
             )
@@ -134,10 +135,13 @@ class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Align(
-                      alignment: Alignment.centerLeft, child: Text('Photos:')),
+                      alignment: context.locale == const Locale('en')
+                          ? Alignment.centerLeft
+                          : Alignment.centerRight,
+                      child: const Text('Photos:').tr()),
                 ),
                 ListBody(
                   children:
@@ -179,10 +183,13 @@ class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Align(
-                      alignment: Alignment.centerLeft, child: Text('Videos:')),
+                      alignment: context.locale == const Locale('en')
+                          ? Alignment.centerLeft
+                          : Alignment.centerRight,
+                      child: const Text('Videos:').tr()),
                 ),
                 ListBody(
                   children:
@@ -294,10 +301,8 @@ class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
         Consumer<CreatePostViewModel>(
             builder: (context, post, child) => CustomPostButtonn(
                   toDo: () async {
-                    await post.postNormal(
-                        widget.normaltitleController.text.trim(),
-                        context,
-                        context.locale == Locale('en') ? 'en' : 'ar');
+                    await post.postNormal(normaltitleController.text.trim(),
+                        context, context.locale == Locale('en') ? 'en' : 'ar');
                   },
                   createPostViewModel: post,
                 )),
@@ -306,10 +311,18 @@ class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
   }
 }
 
-class CreateNormalPollSpace extends StatelessWidget {
+class CreateNormalPollSpace extends StatefulWidget {
   CreateNormalPollSpace({Key? key}) : super(key: key);
+
+  @override
+  State<CreateNormalPollSpace> createState() => _CreateNormalPollSpaceState();
+}
+
+class _CreateNormalPollSpaceState extends State<CreateNormalPollSpace> {
   TextEditingController polltitleController = TextEditingController();
+
   TextEditingController choiceController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -343,7 +356,7 @@ class CreateNormalPollSpace extends StatelessWidget {
                           CustomTextField(
                               maxLines: 2,
                               controller: choiceController,
-                              title: 'Enter the choice'),
+                              title: 'Enter the vote'),
                           TextButton(
                               onPressed: () {
                                 post.addChoice(
@@ -351,7 +364,7 @@ class CreateNormalPollSpace extends StatelessWidget {
                                 Navigator.pop(ctx);
                                 choiceController.clear();
                               },
-                              child: const Text('Add'))
+                              child: const Text('Add').tr())
                         ],
                       ),
                     ),
@@ -359,9 +372,9 @@ class CreateNormalPollSpace extends StatelessWidget {
                 );
               },
               child: Text(
-                'Add a choice +',
+                'Add a vote +',
                 style: theme.textTheme.bodySmall,
-              ),
+              ).tr(),
             ),
           ),
           Consumer<CreatePostViewModel>(
@@ -457,7 +470,7 @@ class CreateTipPollSpace extends StatelessWidget {
                   'Note: This type of poll have only two choices : Agree and disagree',
                   style: theme.textTheme.bodySmall!.copyWith(color: greyColor),
                   textAlign: TextAlign.center,
-                ),
+                ).tr(),
               ),
             ),
           ),
@@ -498,7 +511,7 @@ class CustomPostButtonn extends StatelessWidget {
               onPressed: () async {
                 await toDo();
               },
-              child: const Text('Post'),
+              child: const Text('Post').tr(),
             ),
     );
   }
