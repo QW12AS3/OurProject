@@ -175,7 +175,7 @@ class ProfileViewModel with ChangeNotifier {
       sharedPreferences.remove('info');
       setIslogoutLoading(false);
 
-      Navigator.pushNamed(context, '/');
+      Navigator.pushNamed(context, '/start');
     } else {
       setIslogoutLoading(false);
       showSnackbar(const Text('Logout failed'), context);

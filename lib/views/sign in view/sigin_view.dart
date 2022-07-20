@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/sign_by_google_model.dart';
@@ -154,8 +156,11 @@ class _SignInState extends State<SignIn> {
                                       // maxLength: 25,
                                       controller: emailController,
                                       validator: (value) {
-                                        return signInViewModel()
-                                            .checkEmail(value.toString());
+                                        return signInViewModel().checkEmail(
+                                            value.toString(),
+                                            context.locale == Locale('en')
+                                                ? 'en'
+                                                : 'ar');
                                       },
                                       decoration: InputDecoration(
                                         // focusedErrorBorder:  OutlineInputBorder(
@@ -187,7 +192,7 @@ class _SignInState extends State<SignIn> {
                                             Radius.circular(15),
                                           ),
                                         ),
-                                        labelText: 'Email',
+                                        labelText: 'Email'.tr(),
                                         labelStyle: TextStyle(
                                             color: orangeColor,
                                             fontSize: 15,
@@ -227,7 +232,11 @@ class _SignInState extends State<SignIn> {
                                                 validator: (value) {
                                                   return signInViewModel()
                                                       .checkPassword(
-                                                          value.toString());
+                                                          value.toString(),
+                                                          context.locale ==
+                                                                  Locale('en')
+                                                              ? 'en'
+                                                              : 'ar');
                                                 },
                                                 decoration: InputDecoration(
                                                     // focusedErrorBorder:  OutlineInputBorder(
@@ -270,7 +279,7 @@ class _SignInState extends State<SignIn> {
                                                         Radius.circular(15),
                                                       ),
                                                     ),
-                                                    labelText: 'Password',
+                                                    labelText: 'Password'.tr(),
                                                     labelStyle: TextStyle(
                                                         color: orangeColor,
                                                         fontSize: 15,
@@ -343,7 +352,7 @@ class _SignInState extends State<SignIn> {
                                   }
                                 },
                                 child: Text(
-                                  'Forgot password ?',
+                                  'Forgot password?'.tr(),
                                   style: theme.textTheme.bodySmall,
                                 ))
                           ],
@@ -354,98 +363,145 @@ class _SignInState extends State<SignIn> {
                   Column(
                     children: [
                       SizedBox(height: mq.size.height * 0.05),
-                      Container(
-                        height: 40,
-                        width: 110,
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            // shape: StadiumBorder(),
-                            side: BorderSide(width: 1, color: orangeColor),
-                            // elevation: 55,
-                            backgroundColor: Colors.white.withOpacity(0.01),
-                            //orangeColor.withOpacity(0.7),
-                            primary: orangeColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25)),
-                          ),
-                          onPressed: () async {
-                            if (formGlobalKey.currentState!.validate()) {
-                              formGlobalKey.currentState!.save();
-                              // use the email provided here
-                              print('fff : ${getFirebaseNotificationToken()}');
-                              final SignInModel BackEndMessage =
-                                  await signInViewModel().postUserInfo(
-                                      //TODO:
-                                      emailController.text,
-                                      passwordController.text,
-                                      getFirebaseNotificationToken(),
-                                      '',
-                                      c_nameController.text);
-                              print(BackEndMessage);
-                              print(BackEndMessage.refresh_token);
-                              final sBar = SnackBar(
-                                  // margin: EdgeInsets.all(8.0),
-                                  padding: EdgeInsets.all(8.0),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(33)),
-                                  content: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child:
-                                          Text(BackEndMessage.message ?? '')));
-                              if (BackEndMessage.message != null &&
-                                  BackEndMessage.message != '') {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(sBar);
-                              }
-                              if (BackEndMessage.statusCode == 201 ||
-                                  BackEndMessage.statusCode == 450 ||
-                                  BackEndMessage.statusCode == 250) {
-                                c_nameController.clear();
-                                try {
-                                  if (BackEndMessage.statusCode == 201 &&
-                                      BackEndMessage.is_verified == true) {
-                                    sharedPreferences.setBool(
-                                        "registered", true);
-                                    if (BackEndMessage.is_verified == true)
-                                      Navigator.of(context)
-                                          .pushReplacementNamed('/home');
-                                    else
-                                      Navigator.of(context)
-                                          .pushReplacementNamed('/userinfo');
-                                  } else {
-                                    Navigator.of(context).pushReplacementNamed(
-                                        '/otp',
-                                        arguments: {
-                                          'state': (BackEndMessage.statusCode ==
-                                                      201 ||
-                                                  BackEndMessage.statusCode ==
-                                                      450)
-                                              ? 'sign 201'
-                                              : 'sign 250'
-                                        });
-                                  }
-                                } catch (e) {
-                                  print('navigate to otp error: $e');
-                                }
-                              }
-                            }
-                          },
-                          child: Text(
-                            'Log in',
-                            style: TextStyle(
-                                color: orangeColor,
-                                //Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
+                      Consumer<signInViewModel>(
+                          builder: ((context, value, _) => Container(
+                                height: 40,
+                                width: 110,
+                                child: value.logButton
+                                    ? OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          // shape: StadiumBorder(),
+                                          side: BorderSide(
+                                              width: 1, color: orangeColor),
+                                          // elevation: 55,
+                                          backgroundColor:
+                                              Colors.white.withOpacity(0.01),
+                                          //orangeColor.withOpacity(0.7),
+                                          primary: orangeColor,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(25)),
+                                        ),
+                                        onPressed: () async {
+                                          if (formGlobalKey.currentState!
+                                              .validate()) {
+                                            formGlobalKey.currentState!.save();
+                                            // use the email provided here
+                                            value.changeLogButtonState();
+                                            print(
+                                                'firebase token : ${getFirebaseNotificationToken()}');
+                                            final SignInModel BackEndMessage =
+                                                await signInViewModel()
+                                                    .postUserInfo(
+                                                        //TODO:
+                                                        emailController.text,
+                                                        passwordController.text,
+                                                        getFirebaseNotificationToken(),
+                                                        '',
+                                                        c_nameController.text,
+                                                        context.locale ==
+                                                                Locale('en')
+                                                            ? 'en'
+                                                            : 'ar');
+                                            print(BackEndMessage);
+                                            print(BackEndMessage.refresh_token);
+                                            // if (BackEndMessage.message !=
+                                            //         null &&
+                                            //     BackEndMessage.message != '') {
+                                            //   showSnackbar(
+                                            //       Text(BackEndMessage.message
+                                            //           .toString()),
+                                            //       context);
+                                            // }
+                                            final sBar = SnackBar(
+                                                // margin: EdgeInsets.all(8.0),
+                                                padding: EdgeInsets.all(8.0),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            33)),
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                content: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(BackEndMessage
+                                                            .message ??
+                                                        '')));
+                                            if (BackEndMessage.message !=
+                                                    null &&
+                                                BackEndMessage.message != '') {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(sBar);
+                                            }
+                                            if (BackEndMessage.statusCode !=
+                                                null) {
+                                              value.changeLogButtonState();
+                                            }
+
+                                            if (BackEndMessage.statusCode == 201 ||
+                                                BackEndMessage.statusCode ==
+                                                    450 ||
+                                                BackEndMessage.statusCode ==
+                                                    250) {
+                                              c_nameController.clear();
+                                              try {
+                                                if (BackEndMessage.statusCode ==
+                                                        201 &&
+                                                    BackEndMessage
+                                                            .is_verified ==
+                                                        true) {
+                                                  sharedPreferences.setBool(
+                                                      "registered", true);
+                                                  if (BackEndMessage.is_info ==
+                                                      true) {
+                                                    Navigator.of(context)
+                                                        .pushNamedAndRemoveUntil(
+                                                            '/home',
+                                                            (route) => false);
+                                                  } else {
+                                                    Navigator.of(context)
+                                                        .pushNamed('/userinfo');
+                                                  }
+                                                } else {
+                                                  Navigator.of(context)
+                                                      .pushNamed('/otp',
+                                                          arguments: {
+                                                        'state': (BackEndMessage
+                                                                        .statusCode ==
+                                                                    201 ||
+                                                                BackEndMessage
+                                                                        .statusCode ==
+                                                                    450)
+                                                            ? 'sign 201'
+                                                            : 'sign 250'
+                                                      });
+                                                }
+                                              } catch (e) {
+                                                print(
+                                                    'navigate to otp error: $e');
+                                              }
+                                            }
+                                          }
+                                        },
+                                        child: Text(
+                                          'Log in'.tr(),
+                                          style: TextStyle(
+                                              color: orangeColor,
+                                              //Colors.white,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )
+                                    : bigLoader(color: orangeColor),
+                              ))),
                       SizedBox(height: mq.size.height * 0.05),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text(
-                            'Don\'t have an account?',
+                          Text(
+                            'Don\'t have an account?'.tr(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 17,
@@ -453,12 +509,12 @@ class _SignInState extends State<SignIn> {
                           ),
                           TextButton(
                               onPressed: () {
-                                Navigator.of(context).pushReplacementNamed(
+                                Navigator.of(context).pushNamed(
                                   '/signup',
                                 );
                               },
                               child: Text(
-                                'Sign up here',
+                                'Sign up here'.tr(),
                                 style: theme.textTheme.bodySmall,
                               )),
                         ],
@@ -466,7 +522,7 @@ class _SignInState extends State<SignIn> {
                     ],
                   ),
                   Row(
-                    children: const [
+                    children: [
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
@@ -481,7 +537,7 @@ class _SignInState extends State<SignIn> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text('or'),
+                        child: Text('or'.tr()),
                       ),
                       Expanded(
                         child: Padding(
@@ -504,58 +560,100 @@ class _SignInState extends State<SignIn> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        IconButton(
-                            onPressed: () async {
-                              final String? access =
-                                  await SignByGoogleViewModel().signIn();
-                              print('ssssssssssssss: $access');
-                              if (access != null && access != '') {
-                                final SignByGoogleModel? BackEndMessage =
-                                    await SignByGoogleViewModel().postUserInfo(
-                                        access,
-                                        getFirebaseNotificationToken(),
-                                        '',
-                                        c_nameController.text);
-                                print('vvvvvvvvvvvvvvvvvvvvvvvvvvvv');
-                                print(BackEndMessage?.refresh_token);
-                                final sBar = SnackBar(
-                                    // margin: EdgeInsets.all(8.0),
-                                    padding: EdgeInsets.all(8.0),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(33)),
-                                    content: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                            BackEndMessage?.message ?? '')));
-                                if (BackEndMessage?.message != null &&
-                                    BackEndMessage?.message != '') {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(sBar);
-                                }
-                                if (BackEndMessage?.statusCode == 201 ||
-                                    BackEndMessage?.statusCode == 450) {
-                                  emailController.clear();
-                                  passwordController.clear();
-                                  c_nameController.clear();
-                                  try {
-                                    sharedPreferences.setBool(
-                                        "registered", true);
-                                    Navigator.of(context).pushReplacementNamed(
-                                        BackEndMessage!.is_info == false
-                                            ? '/userinfo'
-                                            : '/home');
-                                  } catch (e) {
-                                    print('navigate to userinfo error: $e');
-                                  }
-                                } else if (BackEndMessage?.statusCode == 250) {
-                                  Navigator.of(context).pushReplacementNamed(
-                                      '/otp',
-                                      arguments: {'state': 'sign 250'});
-                                }
-                              }
-                            },
-                            icon: Image.asset('assets/images/google.png')),
+                        Consumer<signInViewModel>(
+                            builder: ((context, value, _) => Container(
+                                  child: value.googleButton
+                                      ? IconButton(
+                                          onPressed: () async {
+                                            final String? access =
+                                                await SignByGoogleViewModel()
+                                                    .signIn();
+                                            print('ssssssssssssss: $access');
+                                            if (access != null &&
+                                                access != '') {
+                                              value.changeGoogleButtonState();
+                                              final SignByGoogleModel?
+                                                  BackEndMessage =
+                                                  await SignByGoogleViewModel()
+                                                      .postUserInfo(
+                                                          access,
+                                                          getFirebaseNotificationToken(),
+                                                          '',
+                                                          c_nameController.text,
+                                                          context.locale ==
+                                                                  Locale('en')
+                                                              ? 'en'
+                                                              : 'ar');
+                                              print(
+                                                  'vvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+                                              print(BackEndMessage
+                                                  ?.refresh_token);
+                                              final sBar = SnackBar(
+                                                  // margin: EdgeInsets.all(8.0),
+                                                  padding: EdgeInsets.all(8.0),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              33)),
+                                                  content: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Text(BackEndMessage
+                                                              ?.message ??
+                                                          '')));
+                                              if (BackEndMessage?.message !=
+                                                      null &&
+                                                  BackEndMessage?.message !=
+                                                      '') {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(sBar);
+                                              }
+                                              if (BackEndMessage?.statusCode !=
+                                                  null) {
+                                                value.changeGoogleButtonState();
+                                              }
+                                              if (BackEndMessage?.statusCode ==
+                                                      201 ||
+                                                  BackEndMessage?.statusCode ==
+                                                      450) {
+                                                emailController.clear();
+                                                passwordController.clear();
+                                                c_nameController.clear();
+                                                try {
+                                                  sharedPreferences.setBool(
+                                                      "registered", true);
+                                                  sharedPreferences.setBool(
+                                                      "is_verified", true);
+                                                  if (BackEndMessage!.is_info ==
+                                                      false) {
+                                                    Navigator.of(context)
+                                                        .pushNamed('/userinfo');
+                                                  } else {
+                                                    Navigator.of(context)
+                                                        .pushNamedAndRemoveUntil(
+                                                            '/home',
+                                                            (route) => false);
+                                                  }
+                                                } catch (e) {
+                                                  print(
+                                                      'navigate to userinfo error: $e');
+                                                }
+                                              } else if (BackEndMessage
+                                                      ?.statusCode ==
+                                                  250) {
+                                                Navigator.of(context).pushNamed(
+                                                    '/otp',
+                                                    arguments: {
+                                                      'state': 'sign 250'
+                                                    });
+                                              }
+                                            }
+                                          },
+                                          icon: Image.asset(
+                                              'assets/images/google.png'))
+                                      : mediumLoader(color: orangeColor),
+                                ))),
                         IconButton(
                           onPressed: () {
                             //TODO:
@@ -579,7 +677,7 @@ class _SignInState extends State<SignIn> {
                         TextButton(
                             onPressed: () {}, //TODO:
                             child: Text(
-                              ' Skip > ',
+                              ' Skip > '.tr(),
                               style: theme.textTheme.bodySmall,
                             ))
                       ],

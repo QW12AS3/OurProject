@@ -4,7 +4,8 @@ import 'package:home_workout_app/models/Reset_password_model.dart';
 import 'package:http/http.dart';
 
 class ResetPasswordAPI {
-  static Future<ResetPasswordModel> createUser(ResetPasswordModel user) async {
+  static Future<ResetPasswordModel> createUser(
+      ResetPasswordModel user, String lang) async {
     try {
       final Response response =
           await post(Uri.parse('$base_URL/forgetpassword/reset'),
@@ -13,7 +14,7 @@ class ResetPasswordAPI {
                 // 'Content-Type': 'application/json;charset=UTF-8'
                 'Accept': 'application/json',
                 'apikey': apiKey,
-                'lang': 'en',
+                'lang': lang,
                 'timeZone': getTimezone(),
               },
               body: user.toJson());

@@ -73,7 +73,7 @@ class SignUpModel {
         'email': email,
         'password': password,
         'password_confirmation': password_confirmation,
-        //    'm_token': m_token,
+        'm_token': m_token,
         // 'mac': mac,
         'c_name': c_name
       };

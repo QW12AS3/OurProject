@@ -21,15 +21,17 @@ class ResetPasswordViewModel with ChangeNotifier {
   }
 
   postUserInfo(String emailVal, String passwordVal, String ConfirmPasswordVal,
-      String c_nameVal, String forgetPasswordCodeVal) async {
+      String c_nameVal, String forgetPasswordCodeVal, String lang) async {
     ResetPasswordModel? result;
     try {
-      await ResetPasswordAPI.createUser(ResetPasswordModel(
-              email: emailVal,
-              password: passwordVal,
-              password_confirmation: ConfirmPasswordVal,
-              c_name: c_nameVal,
-              forgetPasswordCode: forgetPasswordCodeVal))
+      await ResetPasswordAPI.createUser(
+              ResetPasswordModel(
+                  email: emailVal,
+                  password: passwordVal,
+                  password_confirmation: ConfirmPasswordVal,
+                  c_name: c_nameVal,
+                  forgetPasswordCode: forgetPasswordCodeVal),
+              lang)
           .then((value) {
         print(value);
 
@@ -55,35 +57,44 @@ class ResetPasswordViewModel with ChangeNotifier {
   //   sharedPreferences.setBool("googleProvider", Data.googleProvider!);
   // }
 
-  String? checkEmail(String email) {
+  String? checkEmail(String email, String lang) {
     bool emailValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email);
     if (email.isEmpty) {
-      return ' Please enter email';
+      return lang == 'en' ? ' Enter email' : " أدخل البريد الإلكتروني";
     } else if (!emailValid) {
-      return ' Invalid email';
+      return lang == 'en' ? ' Invalid email' : " بريد إلكتروني خاطئ ";
     } else
       return null;
   }
 
-  String? checkPassword(String password) {
+  String? checkPassword(String password, String lang) {
     if (password.isEmpty) {
-      return ' Please enter password';
+      return lang == 'en' ? ' Enter password' : " أدخل كلمة المرور ";
     } else if (password.length < 6) {
-      return ' Password should be at least 6 characters';
+      return lang == 'en'
+          ? ' Password should be at least 6 characters'
+          : " يجب أن تكون كلمة المرور ست أحرف على الأقل";
     } else {
       return null;
     }
   }
 
-  String? checkConfirmPassword(String confirmPassword, String password) {
+  String? checkConfirmPassword(
+      String confirmPassword, String password, String lang) {
     if (confirmPassword.isEmpty) {
-      return ' Please enter password';
+      return lang == 'en'
+          ? ' Enter password confirmation'
+          : " أدخل تأكيد كلمة المرور ";
     } else if (confirmPassword != password) {
-      return " This password is not the same as the previous one";
+      return lang == 'en'
+          ? " This password is not the same as the previous one"
+          : " كلمة المرور ليست نفسها السابقة";
     } else if (password.length < 6) {
-      return ' Password should be at least 6 characters';
+      return lang == 'en'
+          ? ' Password should be at least 6 characters'
+          : " يجب أن تكون كلمة المرور ست أحرف على الأقل";
     } else {
       return null;
     }

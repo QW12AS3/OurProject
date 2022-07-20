@@ -72,7 +72,7 @@ class SignInModel {
         'email': email,
         'password': password,
         'c_name': c_name,
-        'mac': mac,
+        'mac': 'mac',
         'm_token': m_token
       };
 }

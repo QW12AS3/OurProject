@@ -19,6 +19,7 @@ import 'package:home_workout_app/view_models/otp_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/view_models/reset_password_view_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/saved_posts_view_model.dart';
+import 'package:home_workout_app/view_models/start_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/Add%20Health%20Record%20View/add_health_record_view.dart';
 import 'package:home_workout_app/views/Another%20User%20Profile%20View/another_user_profile_view.dart';
@@ -61,7 +62,7 @@ Future main() async {
       supportedLocales: const [Locale('ar'), Locale('en')],
       path:
           'assets/translations', // <-- change the path of the translation files
-      fallbackLocale: const Locale('ar'),
+      fallbackLocale: const Locale('en'),
       child: const Vigor(),
     ),
   );
@@ -94,6 +95,7 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CommentsViewModel()),
         ChangeNotifierProvider(create: (context) => SavedPostsViewModel()),
         ChangeNotifierProvider(create: (context) => EditPostViewModel()),
+        ChangeNotifierProvider(create: (context) => StartViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -117,7 +119,7 @@ class Vigor extends StatelessWidget {
         //   }
         // },
 
-        initialRoute: '/',
+        initialRoute: '/signup',
         routes: {
           '/signup': (context) => SignUp(),
           '/signin': (context) => SignIn(),
@@ -139,7 +141,7 @@ class Vigor extends StatelessWidget {
           '/postView': (context) => PostView(),
           '/savedPosts': (context) => SavedPostsView(),
           '/editPostView': (context) => EditPostView(),
-          '/': (context) => IPView()
+          // '/': (context) => IPView()
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,

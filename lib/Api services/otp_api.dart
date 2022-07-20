@@ -7,7 +7,8 @@ import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 
 class OTPAPI {
-  static Future<OTPModel> createUser(OTPModel user, String addedURL) async {
+  static Future<OTPModel> createUser(
+      OTPModel user, String addedURL, String lang) async {
     try {
       String? access_Token = sharedPreferences.getString('access_token');
       print('aceeeeeeeeeeeeeess_token:   $access_Token');
@@ -16,7 +17,7 @@ class OTPAPI {
             // 'Content-Type': 'application/json;charset=UTF-8'
             'Accept': 'application/json',
             'apikey': apiKey,
-            'lang': 'en',
+            'lang': lang,
             'authorization': 'Bearer $access_Token'
           },
           body: user.toJson());
