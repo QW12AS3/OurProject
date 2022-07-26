@@ -1,4 +1,4 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: curly_braces_in_flow_control_structures, use_build_context_synchronously
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -130,6 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
                     controller: _scrollController,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -379,6 +380,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                               user.getBlocklist);
 
                                           break;
+
+                                        case 'apply':
+                                          Navigator.pushNamed(
+                                              context, '/apply');
+                                          break;
+                                        case 'editApply':
+                                          Navigator.pushNamed(context, '/cv');
+                                          break;
                                         default:
                                       }
                                     },
@@ -397,6 +406,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                           value: 'blocklist',
                                           child: Text(
                                             'Blocklist',
+                                            style: theme.textTheme.bodySmall!
+                                                .copyWith(color: blueColor),
+                                          ).tr(),
+                                        ),
+                                      if (user.getUserData.roleId == 1 &&
+                                          user.getUserData.cv == false)
+                                        PopupMenuItem<String>(
+                                          value: 'apply',
+                                          child: Text(
+                                            'Apply to be coach or dietitian',
+                                            style: theme.textTheme.bodySmall!
+                                                .copyWith(color: blueColor),
+                                          ).tr(),
+                                        ),
+                                      if (user.getUserData.cv == true)
+                                        PopupMenuItem<String>(
+                                          value: 'editApply',
+                                          child: Text(
+                                            'CV',
                                             style: theme.textTheme.bodySmall!
                                                 .copyWith(color: blueColor),
                                           ).tr(),

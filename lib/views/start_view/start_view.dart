@@ -45,6 +45,42 @@ class _StartViewState extends State<StartView> {
     }
   }
 
+
+  FirebaseMessaging _firebaseMessage =
+      FirebaseMessaging.instance; //TODO: delete
+
+  void firebaseTrigger() async {
+    //TODO: delete
+    // _firebaseMessage.configure(
+    //   onLaunch:
+    // )
+    print(
+        'objeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeect');
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(
+          'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
+
+      print(event.notification!.body);
+      print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+      print(event.notification!.body);
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print(message.data);
+      if (message.data['page'] == 'Second Screen') print('wooooooooorking');
+      //navigate
+      print('Message clicked!');
+      // Map<String, dynamic> mm = message.;
+      print(message.data);
+      print(
+          'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
+    });
+    FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
+      print("onBackgroundMessage: $message");
+    });
+  }
+
+
   @override
   void dispose() {
     super.dispose();

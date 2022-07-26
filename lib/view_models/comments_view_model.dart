@@ -14,6 +14,12 @@ class CommentsViewModel with ChangeNotifier {
   bool _getMoreLoading = false;
   bool _isLoading = false;
   bool _isdeleteLoading = false;
+  bool _isReportLoading = false;
+
+  void setIsReportLoading(value) {
+    _isReportLoading = value;
+    notifyListeners();
+  }
 
   void setMoreLoading(value) {
     _getMoreLoading = value;
@@ -41,6 +47,7 @@ class CommentsViewModel with ChangeNotifier {
   }
 
   Future<void> setComments({required int id, required String lang}) async {
+    print('called');
     if (_comments.isEmpty) setIsLoading(true);
     setPage(getPage + 1);
     if (_comments.isNotEmpty) setMoreLoading(true);
@@ -81,9 +88,9 @@ class CommentsViewModel with ChangeNotifier {
     setIsdeleteLoading(true);
     final response =
         await CommentsApi().deleteComment(lang: lang, commentId: commentId);
-    if (response['success'])
-      await setComments(id: postId, lang: lang);
-    else
+    if (response['success']) {
+      _comments.removeWhere((element) => element.id == commentId);
+    } else
       showSnackbar(Text(response['message']), context);
     setIsdeleteLoading(false);
   }
@@ -96,10 +103,26 @@ class CommentsViewModel with ChangeNotifier {
       required BuildContext context}) async {
     final response = await CommentsApi()
         .updateComment(lang: lang, commentId: commentId, comment: comment);
-    if (response['success'])
-      await setComments(id: postId, lang: lang);
-    else
+    if (response['success']) {
+      {
+        _comments.firstWhere((element) => element.id == commentId).comment =
+            comment;
+        notifyListeners();
+      }
+    } else
       showSnackbar(Text(response['message']), context);
+  }
+
+  Future<void> reportComment(
+      {required int commentId,
+      required String lang,
+      required BuildContext context}) async {
+    setIsReportLoading(true);
+    final response =
+        await CommentsApi().reportComment(lang: lang, commentId: commentId);
+    setIsReportLoading(false);
+
+    showSnackbar(Text(response['message']), context);
   }
 
   List<CommentsModel> get getComments => _comments;
@@ -107,4 +130,5 @@ class CommentsViewModel with ChangeNotifier {
   bool get getdeleteIsLoading => _isdeleteLoading;
   int get getPage => _page;
   bool get getMoreLoading => _getMoreLoading;
+  bool get getIsReportLoading => _isReportLoading;
 }

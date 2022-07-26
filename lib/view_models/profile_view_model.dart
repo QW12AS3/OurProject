@@ -37,6 +37,10 @@ class ProfileViewModel with ChangeNotifier {
 
   bool _postsIsOpened = false;
 
+  void changeIsCV(value) {
+    _userData.cv = value ?? false;
+  }
+
   void setGetMoreLoading(value) {
     _getMoreLoading = value;
     notifyListeners();
@@ -154,7 +158,6 @@ class ProfileViewModel with ChangeNotifier {
   // };
 
   Future<void> setCurrentUserData(BuildContext context) async {
-    if (_userData.email.isNotEmpty) return;
     setIsLoading(true);
     _userData = await ProfileApi().getUserProfile('en', context);
     setIsLoading(false);
@@ -172,8 +175,9 @@ class ProfileViewModel with ChangeNotifier {
       sharedPreferences.remove("role_name");
       sharedPreferences.remove("googleProvider");
       sharedPreferences.remove('registered');
-      sharedPreferences.remove('info');
+      sharedPreferences.remove('is_info');
       setIslogoutLoading(false);
+      _userData = UserModel();
 
       Navigator.pushNamed(context, '/start');
     } else {
@@ -195,8 +199,9 @@ class ProfileViewModel with ChangeNotifier {
       sharedPreferences.remove("role_name");
       sharedPreferences.remove("googleProvider");
       sharedPreferences.remove('registered');
-      sharedPreferences.remove('info');
+      sharedPreferences.remove('is_info');
       setIslogoutLoading(false);
+      _userData = UserModel();
 
       Navigator.pushReplacementNamed(context, '/');
     } else {
