@@ -3,10 +3,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/sign_by_google_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
+import 'package:home_workout_app/view_models/start_view_model.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -26,26 +28,23 @@ class _StartViewState extends State<StartView> {
     // TODO: implement initState
     super.initState();
 
-    // FirebaseMessaging.instance   //TODO: delete
-    //     .getToken()
-    //     .then((value) => print("firebae tooooooooken: $value"));
-    // firebaseTrigger();
     try {
       videoController = VideoPlayerController.asset("assets/videos/intro.mp4")
         ..initialize().then((value) {
           setState(() {});
         });
 
-      // videoController.setVolume(0);
-      videoController.setLooping(true);
-      videoController.addListener(() {
-        // setState(() {});  //TODO://if you face some problem in it add it
-      });
-      videoController.play();
+      // // videoController.setVolume(0);
+      // videoController.setLooping(true);
+      // videoController.addListener(() {
+      //   // setState(() {});  //TODO://if you face some problem in it add it
+      // });
+      // videoController.play();
     } catch (e) {
       print('intial video player errooor: $e');
     }
   }
+
 
   FirebaseMessaging _firebaseMessage =
       FirebaseMessaging.instance; //TODO: delete
@@ -80,6 +79,7 @@ class _StartViewState extends State<StartView> {
       print("onBackgroundMessage: $message");
     });
   }
+
 
   @override
   void dispose() {
@@ -171,7 +171,7 @@ class _StartViewState extends State<StartView> {
                       Container(
                         child: Center(
                           child: Text(
-                            'Vigor',
+                            'Vigor'.tr(),
                             style: TextStyle(
                                 color: orangeColor,
                                 fontSize: 55,
@@ -203,8 +203,8 @@ class _StartViewState extends State<StartView> {
                     child: RichText(
                       text: TextSpan(
                         children: [
-                          const TextSpan(
-                            text: '"OUR',
+                          TextSpan(
+                            text: '"OUR'.tr(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'JosefinSans',
@@ -212,10 +212,10 @@ class _StartViewState extends State<StartView> {
                                 fontWeight: FontWeight.bold),
                           ),
                           TextSpan(
-                              text: ' BODIES ',
+                              text: ' BODIES '.tr(),
                               style: theme.textTheme.bodyMedium),
-                          const TextSpan(
-                            text: 'ARE OUR GARDENS,\n',
+                          TextSpan(
+                            text: 'ARE OUR GARDENS,'.tr(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'JosefinSans',
@@ -223,21 +223,27 @@ class _StartViewState extends State<StartView> {
                                 fontWeight: FontWeight.bold),
                           ),
                           TextSpan(
-                            text: 'TO WHICH OUR WILLS ARE OUR GARDENERS"\n',
+                            text: '\n'.tr(),
+                          ),
+                          TextSpan(
+                            text: 'TO WHICH OUR WILLS ARE OUR GARDENERS"'.tr(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'JosefinSans',
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(
+                            text: '\n'.tr(),
                           ),
                           const TextSpan(text: ' '),
                           TextSpan(
-                            text: 'WILLIAM SHAKESPARE',
+                            text: 'WILLIAM SHAKESPARE'.tr(),
                             style: TextStyle(
                                 fontFamily: 'JosefinSans',
                                 color: orangeColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
                                 decoration: TextDecoration.underline),
                           ),
                         ],
@@ -272,11 +278,11 @@ class _StartViewState extends State<StartView> {
                             // videoController.play();
                           },
                           child: Text(
-                            'Sign in',
+                            'Sign in'.tr(),
                             style: TextStyle(
                                 color: orangeColor,
                                 //Colors.white,
-                                fontSize: 15,
+                                fontSize: 13,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -295,8 +301,8 @@ class _StartViewState extends State<StartView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text(
-                            'Don\'t have an account?',
+                          Text(
+                            'Don\'t have an account?'.tr(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 17,
@@ -309,13 +315,13 @@ class _StartViewState extends State<StartView> {
                                 );
                               },
                               child: Text(
-                                'Sign up here',
+                                'Sign up here'.tr(),
                                 style: theme.textTheme.bodySmall,
                               )),
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: [
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.all(8.0),
@@ -330,7 +336,7 @@ class _StartViewState extends State<StartView> {
                           ),
                           Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text('or'),
+                            child: Text('or'.tr()),
                           ),
                           Expanded(
                             child: Padding(
@@ -353,53 +359,115 @@ class _StartViewState extends State<StartView> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            IconButton(
-                                onPressed: () async {
-                                  final String? access =
-                                      await SignByGoogleViewModel().signIn();
-                                  print('ssssssssssssss: $access');
-                                  if (access != null && access != '') {
-                                    final SignByGoogleModel? BackEndMessage =
-                                        await SignByGoogleViewModel()
-                                            .postUserInfo(
-                                                access,
-                                                getFirebaseNotificationToken(),
-                                                '',
-                                                c_nameController.text);
-                                    print('vvvvvvvvvvvvvvvvvvvvvvvvvvvv');
-                                    print(BackEndMessage?.refresh_token);
-                                    final sBar = SnackBar(
-                                        // margin: EdgeInsets.all(8.0),
-                                        padding: EdgeInsets.all(8.0),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(33)),
-                                        content: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                                BackEndMessage?.message ??
-                                                    '')));
-                                    if (BackEndMessage?.message != null &&
-                                        BackEndMessage?.message != '') {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(sBar);
-                                    }
-                                    if (BackEndMessage?.statusCode == 201 ||
-                                        BackEndMessage?.statusCode == 450 ||
-                                        BackEndMessage?.statusCode == 250) {
-                                      c_nameController.clear();
-                                      try {
-                                        sharedPreferences.setBool(
-                                            "registered", true);
-                                        Navigator.of(context)
-                                            .pushReplacementNamed('/userinfo');
-                                      } catch (e) {
-                                        print('navigate to userinfo error: $e');
-                                      }
-                                    }
-                                  }
-                                },
-                                icon: Image.asset('assets/images/google.png')),
+                            Consumer<StartViewModel>(
+                                builder: ((context, value, _) => Container(
+                                      child: value.googleButton
+                                          ? IconButton(
+                                              onPressed: () async {
+                                                final String? access =
+                                                    await SignByGoogleViewModel()
+                                                        .signIn();
+                                                print(
+                                                    'ssssssssssssss: $access');
+                                                if (access != null &&
+                                                    access != '') {
+                                                  value
+                                                      .changeGoogleButtonState();
+                                                  final SignByGoogleModel?
+                                                      BackEndMessage =
+                                                      await SignByGoogleViewModel()
+                                                          .postUserInfo(
+                                                              access,
+                                                              getFirebaseNotificationToken(),
+                                                              '',
+                                                              c_nameController
+                                                                  .text,
+                                                              context.locale ==
+                                                                      Locale(
+                                                                          'en')
+                                                                  ? 'en'
+                                                                  : 'ar');
+                                                  print(
+                                                      'vvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+                                                  print(BackEndMessage
+                                                      ?.refresh_token);
+                                                  final sBar = SnackBar(
+                                                      // margin: EdgeInsets.all(8.0),
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          33)),
+                                                      content: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                              BackEndMessage
+                                                                      ?.message ??
+                                                                  '')));
+                                                  if (BackEndMessage?.message !=
+                                                          null &&
+                                                      BackEndMessage?.message !=
+                                                          '') {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(sBar);
+                                                  }
+                                                  if (BackEndMessage
+                                                          ?.statusCode !=
+                                                      null) {
+                                                    value
+                                                        .changeGoogleButtonState();
+                                                  }
+                                                  if (BackEndMessage
+                                                              ?.statusCode ==
+                                                          201 ||
+                                                      BackEndMessage
+                                                              ?.statusCode ==
+                                                          450) {
+                                                    c_nameController.clear();
+                                                    try {
+                                                      sharedPreferences.setBool(
+                                                          "registered", true);
+                                                      sharedPreferences.setBool(
+                                                          "is_verified", true);
+                                                      if (BackEndMessage!
+                                                              .is_info ==
+                                                          false) {
+                                                        Navigator.of(context)
+                                                            .pushNamed(
+                                                                '/userinfo');
+                                                      } else {
+                                                        Navigator.of(context)
+                                                            .pushNamedAndRemoveUntil(
+                                                                '/home',
+                                                                (route) =>
+                                                                    false);
+                                                      }
+                                                    } catch (e) {
+                                                      print(
+                                                          'navigate to userinfo error: $e');
+                                                    }
+                                                  } else if (BackEndMessage
+                                                          ?.statusCode ==
+                                                      250) {
+                                                    Navigator.of(context)
+                                                        .pushNamed(
+                                                            '/otp',
+                                                            arguments: {
+                                                          'state': 'sign 250'
+                                                        });
+                                                  }
+                                                }
+                                              },
+                                              icon: Image.asset(
+                                                  'assets/images/google.png'))
+                                          : mediumLoader(color: orangeColor),
+                                    ))),
                             IconButton(
                               //TODO: DELETE OR ADD
                               onPressed: () {
@@ -426,7 +494,7 @@ class _StartViewState extends State<StartView> {
                             TextButton(
                                 onPressed: () {}, //TODO:
                                 child: Text(
-                                  ' Skip > ',
+                                  ' Skip > '.tr(),
                                   style: theme.textTheme.bodySmall,
                                 ))
                           ],

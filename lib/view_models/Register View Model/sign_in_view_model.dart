@@ -7,6 +7,19 @@ class signInViewModel with ChangeNotifier {
   bool obscurePassword = true;
   var statusCode = 0;
   late BuildContext statusCodeContext;
+  bool logButton = true;
+  bool googleButton = true;
+
+  changeLogButtonState() {
+    logButton = !logButton;
+    notifyListeners();
+  }
+
+  changeGoogleButtonState() {
+    googleButton = !googleButton;
+    notifyListeners();
+  }
+
   changePasswordobscure() {
     obscurePassword = !obscurePassword;
     print(obscurePassword);
@@ -14,16 +27,19 @@ class signInViewModel with ChangeNotifier {
   }
 
   postUserInfo(String emailVal, String passwordVal, String m_tokenVal,
-      String macVal, String c_nameVal) async {
+      String macVal, String c_nameVal, String lang) async {
     SignInModel? result;
     try {
-      await SignInAPI.createUser(SignInModel(
-        email: emailVal,
-        password: passwordVal,
-        c_name: c_nameVal,
-        m_token: m_tokenVal,
-        mac: macVal,
-      )).then((value) {
+      await SignInAPI.createUser(
+              SignInModel(
+                email: emailVal,
+                password: passwordVal,
+                c_name: c_nameVal,
+                m_token: m_tokenVal,
+                mac: macVal,
+              ),
+              lang)
+          .then((value) {
         print(value);
         result = value;
       });
@@ -52,23 +68,25 @@ class signInViewModel with ChangeNotifier {
     sharedPreferences.setBool("is_info", Data.is_info!);
   }
 
-  String? checkEmail(String email) {
+  String? checkEmail(String email, String lang) {
     bool emailValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email);
     if (email.isEmpty) {
-      return ' Please enter email';
+      return lang == 'en' ? ' Enter email' : " أدخل البريد الإلكتروني";
     } else if (!emailValid) {
-      return ' Invalid email';
+      return lang == 'en' ? ' Invalid email' : " بريد إلكتروني خاطئ ";
     } else
       return null;
   }
 
-  String? checkPassword(String password) {
+  String? checkPassword(String password, String lang) {
     if (password.isEmpty) {
-      return ' Please enter password';
+      return lang == 'en' ? ' Enter password' : " أدخل كلمة المرور ";
     } else if (password.length < 6) {
-      return ' Password should be at least 6 characters';
+      return lang == 'en'
+          ? ' Password should be at least 6 characters'
+          : " يجب أن تكون كلمة المرور ست أحرف على الأقل";
     } else {
       return null;
     }

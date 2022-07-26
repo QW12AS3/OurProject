@@ -11,13 +11,16 @@ class ForgetPasswordViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  postEmail(String emailVal, String c_nameVal) async {
+  postEmail(String emailVal, String c_nameVal, String lang) async {
     ForgetPasswordModel? result;
     try {
-      await ForgetPasswordAPI.createEmail(ForgetPasswordModel(
-        email: emailVal,
-        c_name: c_nameVal,
-      )).then((value) {
+      await ForgetPasswordAPI.createEmail(
+              ForgetPasswordModel(
+                email: emailVal,
+                c_name: c_nameVal,
+              ),
+              lang)
+          .then((value) {
         print(value);
 
         result = value;
@@ -29,24 +32,14 @@ class ForgetPasswordViewModel with ChangeNotifier {
     return result;
   }
 
-  String? checkCode(String code) {
-    if (code.isEmpty) {
-      return ' Please enter code';
-    } else if (code.length < 5) {
-      return ' Code should be 5 characters';
-    } else {
-      return null;
-    }
-  }
-
-  String? checkEmail(String email) {
+  String? checkEmail(String email, String lang) {
     bool emailValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email);
     if (email.isEmpty) {
-      return ' Please enter email';
+      return lang == 'en' ? ' Enter email' : " أدخل البريد الإلكتروني";
     } else if (!emailValid) {
-      return ' Invalid email';
+      return lang == 'en' ? ' Invalid email' : " بريد إلكتروني خاطئ ";
     } else
       return null;
   }

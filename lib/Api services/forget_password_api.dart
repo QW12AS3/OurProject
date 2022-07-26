@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 
 class ForgetPasswordAPI {
   static Future<ForgetPasswordModel> createEmail(
-      ForgetPasswordModel user) async {
+      ForgetPasswordModel user, String lang) async {
     try {
       String? access_Token = sharedPreferences.getString('access_token');
       print('aceeeeeeeeeeeeeess_token:   $access_Token');
@@ -16,7 +16,7 @@ class ForgetPasswordAPI {
                 // 'Content-Type': 'application/json;charset=UTF-8'
                 'Accept': 'application/json',
                 'apikey': apiKey,
-                'lang': 'en',
+                'lang': lang,
                 'timeZone': getTimezone(),
                 'authorization': 'Bearer $access_Token'
               },

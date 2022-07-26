@@ -84,16 +84,19 @@ class SignByGoogleViewModel with ChangeNotifier {
   }
 
   postUserInfo(String access_provider_tokenVal, String m_tokenVal,
-      String macVal, String c_nameVal) async {
+      String macVal, String c_nameVal, String lang) async {
     SignByGoogleModel? result;
     print(access_provider_tokenVal);
     try {
-      await SignByGoogleAPI.createUser(SignByGoogleModel(
-        access_provider_token: access_provider_tokenVal,
-        c_name: c_nameVal,
-        m_token: m_tokenVal,
-        mac: macVal,
-      )).then((value) {
+      await SignByGoogleAPI.createUser(
+              SignByGoogleModel(
+                access_provider_token: access_provider_tokenVal,
+                c_name: c_nameVal,
+                m_token: m_tokenVal,
+                mac: macVal,
+              ),
+              lang)
+          .then((value) {
         print(value);
 
         result = value;

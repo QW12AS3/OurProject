@@ -179,7 +179,7 @@ class ProfileViewModel with ChangeNotifier {
       setIslogoutLoading(false);
       _userData = UserModel();
 
-      Navigator.pushNamed(context, '/');
+      Navigator.pushNamed(context, '/start');
     } else {
       setIslogoutLoading(false);
       showSnackbar(const Text('Logout failed'), context);

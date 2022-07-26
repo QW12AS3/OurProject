@@ -64,7 +64,7 @@ class _OTPViewState extends State<OTPView> {
                 // ),
                 Container(
                   child: Text(
-                    ' Please enter the code sent to your Email ',
+                    'Please enter the code sent to your Email'.tr(),
                     style: theme.textTheme.bodyMedium,
                   ),
                 ),
@@ -98,8 +98,11 @@ class _OTPViewState extends State<OTPView> {
                             builder: ((context, value, _) => TextFormField(
                                   controller: otpController,
                                   validator: (value) {
-                                    return otpViewModel()
-                                        .checkCode(value.toString());
+                                    return otpViewModel().checkCode(
+                                        value.toString(),
+                                        context.locale == Locale('en')
+                                            ? 'en'
+                                            : 'ar');
                                   },
                                   decoration: InputDecoration(
                                     focusedErrorBorder: OutlineInputBorder(
@@ -138,7 +141,7 @@ class _OTPViewState extends State<OTPView> {
                                         color: blueColor.withOpacity(0.7),
                                         fontSize: 25,
                                         fontWeight: FontWeight.w900),
-                                    labelText: 'Validation code',
+                                    labelText: 'Validation code'.tr(),
                                     labelStyle: TextStyle(
                                         color: orangeColor,
                                         fontSize: 15,
@@ -227,7 +230,8 @@ class _OTPViewState extends State<OTPView> {
                                   c_nameController.text == null
                                       ? ''
                                       : c_nameController.text,
-                                  '/forgetpassword/verify');
+                                  '/forgetpassword/verify',
+                                  context.locale == Locale('en') ? 'en' : 'ar');
                           print(BackEndMessage);
                           final sBar = SnackBar(
                               // margin: EdgeInsets.all(8.0),
@@ -266,7 +270,8 @@ class _OTPViewState extends State<OTPView> {
                                   (routeArg['state'] == 'sign 201' ||
                                           routeArg['state'] == 'update email')
                                       ? '/emailVerfiy/'
-                                      : '/user/recover');
+                                      : '/user/recover',
+                                  context.locale == Locale('en') ? 'en' : 'ar');
                           print(BackEndMessage);
                           final sBar = SnackBar(
                               // margin: EdgeInsets.all(8.0),
@@ -288,13 +293,14 @@ class _OTPViewState extends State<OTPView> {
                                   routeArg['state'] == 'sign 250') {
                                 sharedPreferences.setBool("registered", true);
                                 sharedPreferences.setBool("is_verified", true);
+                                Navigator.of(context).pushNamed('/userinfo');
+                              } else {
+                                sharedPreferences.setBool("registered", true);
+                                sharedPreferences.setBool("is_verified", true);
+                                sharedPreferences.setBool("is_info", true);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/home', (route) => false);
                               }
-                              Navigator.of(context).pushReplacementNamed(
-                                (routeArg['state'] == 'sign 201' ||
-                                        routeArg['state'] == 'sign 250')
-                                    ? '/userinfo'
-                                    : '/home',
-                              );
                             } catch (e) {
                               print('navigate from otp error: $e');
                             }
@@ -302,7 +308,7 @@ class _OTPViewState extends State<OTPView> {
                         }
                       }
                     },
-                    child: const Text('Verify'),
+                    child: Text('Verify'.tr()),
                   ),
                 ),
                 const SizedBox(
@@ -312,7 +318,7 @@ class _OTPViewState extends State<OTPView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Don\'t receive the code?',
+                      'Didn\'t receive the code?'.tr(),
                       style: TextStyle(
                           color: blueColor,
                           fontSize: 17,
@@ -320,7 +326,6 @@ class _OTPViewState extends State<OTPView> {
                     ),
                     TextButton(
                         onPressed: () async {
-
                           final OTPModel BackEndMessage;
 
                           if (routeArg['state'] != null &&
@@ -341,7 +346,10 @@ class _OTPViewState extends State<OTPView> {
                                     routeArg['email'].toString(),
                                     c_nameController.text == null
                                         ? ''
-                                        : c_nameController.text);
+                                        : c_nameController.text,
+                                    context.locale == Locale('en')
+                                        ? 'en'
+                                        : 'ar');
                             print(BackEndMessage);
                             final sBar = SnackBar(
                                 // margin: EdgeInsets.all(8.0),
@@ -365,7 +373,8 @@ class _OTPViewState extends State<OTPView> {
                                 (routeArg['state'] == 'sign 201' ||
                                         routeArg['state'] == 'update email')
                                     ? '/emailVerfiy/reget'
-                                    : '/user/recover/reget');
+                                    : '/user/recover/reget',
+                                context.locale == Locale('en') ? 'en' : 'ar');
 
                             final sBar = SnackBar(
                                 // margin: EdgeInsets.all(8.0),
@@ -382,7 +391,7 @@ class _OTPViewState extends State<OTPView> {
                           }
                         },
                         child: Text(
-                          'Resend again',
+                          'Resend again'.tr(),
                           style: theme.textTheme.bodySmall,
                         )),
                   ],

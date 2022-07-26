@@ -23,13 +23,17 @@ class _SplashViewState extends State<SplashView> {
       firebaseTrigger();
 
       if (sharedPreferences.getBool('registered') == true &&
-          sharedPreferences.getBool('is_info') == true) {
+          sharedPreferences.getBool('is_info') == true &&
+          ((sharedPreferences.getBool('is_verified') == true) ||
+              (sharedPreferences.getBool('googleProvider') == true))) {
         print(sharedPreferences.getBool('is_info'));
         Navigator.pushReplacementNamed(context, '/home');
       } else if (sharedPreferences.getBool('registered') == true &&
-          sharedPreferences.getBool('is_verified') != true) {
+          sharedPreferences.getBool('is_verified') != true &&
+          sharedPreferences.getBool('googleProvider') != true) {
         Navigator.pushReplacementNamed(context, '/signin');
-      } else if (sharedPreferences.getBool('registered') == true &&
+      } else if ((sharedPreferences.getBool('registered') == true ||
+              sharedPreferences.getBool('googleProvider') == true) &&
           sharedPreferences.getBool('is_info') != true) {
         Navigator.pushReplacementNamed(context, '/userinfo');
       } else {

@@ -6,7 +6,8 @@ import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 class SignByGoogleAPI {
-  static Future<SignByGoogleModel> createUser(SignByGoogleModel user) async {
+  static Future<SignByGoogleModel> createUser(
+      SignByGoogleModel user, String lang) async {
     try {
       final Response response =
           await post(Uri.parse('$base_URL/login/callback'),
@@ -14,7 +15,7 @@ class SignByGoogleAPI {
                 // 'Content-Type': 'application/json;charset=UTF-8'
                 'Accept': 'application/json',
                 'apikey': apiKey,
-                'lang': 'en',
+                'lang': lang,
                 'timeZone': getTimezone()
               },
               body: user.toJson());
