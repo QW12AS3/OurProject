@@ -63,6 +63,8 @@ class _StartViewState extends State<StartView> {
           'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
 
       print(event.notification!.body);
+      print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+      print(event.notification!.body);
     });
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print(message.data);

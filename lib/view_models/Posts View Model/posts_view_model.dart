@@ -68,7 +68,7 @@ class PostsViewModel with ChangeNotifier {
     }
   }
 
-  Future<bool> likePost(
+  Future<Map> likePost(
       {required String lang,
       required int postId,
       required BuildContext context,
@@ -76,10 +76,10 @@ class PostsViewModel with ChangeNotifier {
     final response =
         await PostAPI().likePost(lang: lang, postId: postId, likeId: likeId);
     if (response['success']) {
-      return true;
+      return {'success': true, 'data': response['data']};
     } else {
       showSnackbar(Text(response['message']), context);
-      return false;
+      return {'success': false, 'data': response['data']};
     }
   }
 

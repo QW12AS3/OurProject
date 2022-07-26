@@ -100,5 +100,14 @@
     "Report": "تبليغ",
     "See more >": "مشاهدة المزيد >",
     "Type a comment...": "اكتب تعليق...",
-    "Post Type: ": "نوع المنشور: "
+    "Post Type: ": "نوع المنشور: ",
+    "Type something about you here... (Optional)": "اكتب شيئا عنك... (اختياري)",
+    "Upload your CV": "ارفع سيرتك الذاتية",
+    "Apply to be coach or dietitian": "تقديم طلب لتصبح مدرب أو اخصائي تغذية",
+    "Choose the specialization": "اختر الاختصاص",
+    "Apply": "تقديم طلب",
+    "Open": "فتح",
+    "You have to add your CV": "يجب اضافة سيرتك الذاتية",
+    "You have to selete the specialization": "يجب اختيار الاختصاص",
+    "Edit your apply for specialization": "تعديل طلبك للاختصاص"
 }

@@ -68,7 +68,8 @@ class _VideoCardState extends State<VideoCard> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          height: double.maxFinite,
+          color: _video.value.isInitialized ? Colors.transparent : greyColor,
+          height: 250,
           //decoration: BoxDecoration(border: Border.all(color: blueColor)),
           child: AspectRatio(
             aspectRatio: _video.value.aspectRatio,
@@ -148,7 +149,8 @@ class _FileVideoCardState extends State<FileVideoCard> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          height: double.maxFinite,
+          color: _video.value.isInitialized ? Colors.transparent : greyColor,
+          height: 250,
           //decoration: BoxDecoration(border: Border.all(color: blueColor)),
           child: AspectRatio(
             aspectRatio: _video.value.aspectRatio,
@@ -228,6 +230,7 @@ class _NormalPostCardState extends State<NormalPostCard> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
+    print(widget.post.reacts);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -483,7 +486,7 @@ class _NormalPostCardState extends State<NormalPostCard> {
                       },
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
-                        width: openContainer ? 200 : 75,
+                        width: openContainer ? 250 : 75,
                         height: 40,
                         decoration: BoxDecoration(
                           color: Colors.transparent,
@@ -508,23 +511,40 @@ class _NormalPostCardState extends State<NormalPostCard> {
                                             postId: widget.post.postId,
                                             context: context,
                                             likeId: 1);
-                                if (response) {
+                                if (response['success']) {
                                   setState(() {
+                                    widget.post.reacts = response['data'];
                                     widget.post.myLike =
                                         widget.post.myLike == -1 ? 1 : -1;
                                   });
                                 }
                               },
-                              child: Icon(
-                                widget.post.myLike == -1
-                                    ? reacts[0]['icon'] as IconData
-                                    : reacts.firstWhere((element) =>
-                                            element['id'] ==
-                                            'type${widget.post.myLike}')['icon']
-                                        as IconData,
-                                color: widget.post.myLike == -1
-                                    ? greyColor
-                                    : orangeColor,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    widget.post.myLike == -1
+                                        ? reacts[0]['icon'] as IconData
+                                        : reacts.firstWhere((element) =>
+                                                element['id'] ==
+                                                'type${widget.post.myLike}')[
+                                            'icon'] as IconData,
+                                    color: widget.post.myLike == -1
+                                        ? greyColor
+                                        : orangeColor,
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    widget.post.myLike == -1
+                                        ? widget.post.reacts['type1'].toString()
+                                        : widget.post
+                                            .reacts['type${widget.post.myLike}']
+                                            .toString(),
+                                    style: theme.textTheme.bodySmall!
+                                        .copyWith(color: Colors.black),
+                                  ),
+                                ],
                               ),
                             ),
                             if (openContainer)
@@ -560,8 +580,10 @@ class _NormalPostCardState extends State<NormalPostCard> {
                                                       .toString()
                                                       .replaceAll('type', '')));
 
-                                          if (response) {
+                                          if (response['success']) {
                                             setState(() {
+                                              widget.post.reacts =
+                                                  response['data'];
                                               if (widget.post.myLike ==
                                                   int.parse(e['id']
                                                       .toString()
@@ -580,9 +602,23 @@ class _NormalPostCardState extends State<NormalPostCard> {
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Icon(
-                                            e['icon'] as IconData,
-                                            color: greyColor,
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                e['icon'] as IconData,
+                                                color: greyColor,
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(
+                                                0.toString(),
+                                                style: theme
+                                                    .textTheme.bodySmall!
+                                                    .copyWith(
+                                                        color: Colors.black),
+                                              )
+                                            ],
                                           ),
                                         ),
                                       ),

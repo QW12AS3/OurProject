@@ -52,6 +52,8 @@ dependencies:
   firebase_messaging: ^11.4.4
   flutter_native_splash: ^2.2.4
   video_compress: ^3.1.1
+  file_picker: ^4.6.1
+  syncfusion_flutter_pdfviewer: ^20.2.39-beta
 
 dev_dependencies:
   flutter_test:

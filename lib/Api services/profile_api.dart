@@ -32,7 +32,7 @@ class ProfileApi {
         UserModel userModel = UserModel.fromJson(jsonDecode(response.body));
         return userModel;
       } else {
-        showSnackbar(Text(data['message']), context);
+        showSnackbar(Text(data['message'].toString()), context);
       }
     } catch (e) {
       showSnackbar(Text(e.toString()), context);

@@ -341,7 +341,35 @@ class _CommentsViewState extends State<CommentsView> {
                                                               ),
                                                             ),
                                                     ],
-                                                  )
+                                                  ),
+                                                if (e.ownerId !=
+                                                    Provider.of<ProfileViewModel>(
+                                                            context,
+                                                            listen: false)
+                                                        .getUserData
+                                                        .id)
+                                                  (comments.getIsReportLoading
+                                                      ? smallLoader(
+                                                          color: orangeColor)
+                                                      : TextButton(
+                                                          onPressed: () {
+                                                            comments.reportComment(
+                                                                commentId: e.id,
+                                                                lang: getLang(
+                                                                    context),
+                                                                context:
+                                                                    context);
+                                                          },
+                                                          child: Text(
+                                                            'report',
+                                                            style: theme
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .copyWith(
+                                                                    color: Colors
+                                                                        .red),
+                                                          ),
+                                                        ))
                                               ],
                                             ),
                                             Align(

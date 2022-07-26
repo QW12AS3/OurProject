@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/view_models/CV%20View%20Model/edit_apply_view_model.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/web_home_view_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/create_post_view_model.dart';
@@ -11,6 +12,7 @@ import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_goo
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
 import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
+import 'package:home_workout_app/view_models/CV%20View%20Model/apply_view_model.dart';
 import 'package:home_workout_app/view_models/comments_view_model.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
 import 'package:home_workout_app/view_models/forget_password_view_model.dart';
@@ -22,6 +24,11 @@ import 'package:home_workout_app/view_models/Posts%20View%20Model/saved_posts_vi
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/Add%20Health%20Record%20View/add_health_record_view.dart';
 import 'package:home_workout_app/views/Another%20User%20Profile%20View/another_user_profile_view.dart';
+import 'package:home_workout_app/views/Apply%20CV%20View/apply_view.dart';
+import 'package:home_workout_app/views/Apply%20CV%20View/cv_view.dart';
+import 'package:home_workout_app/views/Apply%20CV%20View/edit_apply_view.dart';
+import 'package:home_workout_app/views/Apply%20CV%20View/pdf_view.dart';
+
 import 'package:home_workout_app/views/Change%20Email%20View/change_email_view.dart';
 import 'package:home_workout_app/views/Change%20Password%20View/change_password_view.dart';
 import 'package:home_workout_app/views/Comments%20View/comments_view.dart';
@@ -94,6 +101,8 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CommentsViewModel()),
         ChangeNotifierProvider(create: (context) => SavedPostsViewModel()),
         ChangeNotifierProvider(create: (context) => EditPostViewModel()),
+        ChangeNotifierProvider(create: (context) => ApplyViewModel()),
+        ChangeNotifierProvider(create: (context) => EditApplyViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -139,7 +148,11 @@ class Vigor extends StatelessWidget {
           '/postView': (context) => PostView(),
           '/savedPosts': (context) => SavedPostsView(),
           '/editPostView': (context) => EditPostView(),
-          '/': (context) => IPView()
+          '/': (context) => IPView(),
+          '/apply': (context) => ApplyView(),
+          '/pdf': (context) => PDFView(),
+          '/cv': (context) => CVView(),
+          '/editCV': (context) => EditApplyView(),
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,

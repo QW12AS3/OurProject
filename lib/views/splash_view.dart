@@ -57,7 +57,7 @@ class _SplashViewState extends State<SplashView> {
         print('wooooooooorking');
         print(message.data['page']);
         if (sharedPreferences.getBool('registered') == true &&
-            sharedPreferences.getBool('info') == true) {
+            sharedPreferences.getBool('is_info') == true) {
           Navigator.pushReplacementNamed(context, '/home');
         }
       }
