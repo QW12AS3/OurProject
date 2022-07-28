@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
-import 'package:home_workout_app/models/comments_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/posts_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view_widgets.dart';
 import 'package:provider/provider.dart';
@@ -55,6 +54,9 @@ class _PostsPageState extends State<PostsPage> {
                     children: [
                       Expanded(
                         child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(
+                              parent: BouncingScrollPhysics(
+                                  parent: AlwaysScrollableScrollPhysics())),
                           controller: _scrollController,
                           child: Column(
                             children: posts.getPosts.map((e) {
@@ -66,7 +68,11 @@ class _PostsPageState extends State<PostsPage> {
                           ),
                         ),
                       ),
-                      if (posts.getMoreIsLoading) bigLoader(color: orangeColor)
+                      if (posts.getMoreIsLoading)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: bigLoader(color: orangeColor),
+                        )
                     ],
                   ),
       ),

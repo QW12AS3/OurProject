@@ -50,7 +50,7 @@ class _SavedPostsViewState extends State<SavedPostsView> {
         title: Text(
           'Saved posts',
           style: theme.textTheme.bodyMedium!,
-        ),
+        ).tr(),
       ),
       body: Consumer<SavedPostsViewModel>(
         builder: (context, savedPosts, child) => (savedPosts.getIsLoading &&
@@ -112,7 +112,8 @@ class _SavedPostsViewState extends State<SavedPostsView> {
                         Expanded(
                           child: SingleChildScrollView(
                             controller: _scrollController,
-                            physics: const AlwaysScrollableScrollPhysics(),
+                            physics: const BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics()),
                             child: Column(
                               children: savedPosts.getSavedPosts.map((e) {
                                 if (e.type == 2 || e.type == 3)

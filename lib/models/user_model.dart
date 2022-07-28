@@ -68,7 +68,9 @@ class UserModel {
       birthdate = DateFormat('yyyy-MM-dd')
           .parse(json['data']['user']['birth_date'] ?? '');
     } catch (e) {
-      birthdate = DateFormat().parse(json['data']['user']['birth_date'] ?? '');
+      print('sssssssss');
+      // birthdate =
+      //     DateFormat('y-m-d').parse(json['data']['user']['birth_date'] ?? '');
     }
 
     countryName = json['data']['user']['country'] ?? '';

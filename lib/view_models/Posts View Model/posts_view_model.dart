@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:home_workout_app/Api%20services/post_api.dart';
@@ -73,9 +75,11 @@ class PostsViewModel with ChangeNotifier {
       required int postId,
       required BuildContext context,
       required int likeId}) async {
+    log('Like ID: $likeId');
     final response =
         await PostAPI().likePost(lang: lang, postId: postId, likeId: likeId);
     if (response['success']) {
+      print(response['data']);
       return {'success': true, 'data': response['data']};
     } else {
       showSnackbar(Text(response['message']), context);
@@ -91,7 +95,7 @@ class PostsViewModel with ChangeNotifier {
     final response =
         await PostAPI().votePost(lang: lang, postId: postId, voteId: voteId);
     if (response['success']) {
-      showSnackbar(Text(response['message']), context);
+      //showSnackbar(Text(response['message']), context);
       return {'update': true, 'newVotes': response['newVotes'] ?? []};
     } else {
       showSnackbar(Text(response['message']), context);

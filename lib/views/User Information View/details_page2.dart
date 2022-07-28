@@ -49,6 +49,7 @@ class _Details2PageState extends State<Details2Page> {
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          automaticallyImplyLeading: false,
           toolbarHeight:
               Provider.of<UserInformationViewModel>(context, listen: true)
                       .getAddDesc
@@ -195,8 +196,7 @@ class _Details2PageState extends State<Details2Page> {
                           'Add description',
                           style: theme.textTheme.bodySmall!.copyWith(
                               color: blueColor, fontWeight: FontWeight.w200),
-                        ),
-                      ),
+                        ).tr()),
               ),
             ],
           )),

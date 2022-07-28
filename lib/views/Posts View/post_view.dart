@@ -2,8 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view_widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/post_models.dart';
+import '../../view_models/Posts View Model/posts_view_model.dart';
 import '../Home View/home_view_widgets.dart';
 
 class PostView extends StatefulWidget {
@@ -46,121 +48,212 @@ class _PostViewState extends State<PostView> {
     final mq = MediaQuery.of(context);
     final args = ModalRoute.of(context)!.settings.arguments as Map;
     PostModel post = args['post'];
+    String commentsString = 'Comments'.tr();
 
     return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            InkWell(
-              onTap: () {
-                if (openContainer)
-                  setState(() {
-                    openContainer = false;
-                  });
-              },
-              onLongPress: () {
-                setState(() {
-                  openContainer = !openContainer;
-                });
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                width: openContainer ? 200 : 75,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: greyColor, width: 1),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+      bottomNavigationBar: !post.dash
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (post.on_hold == false)
                     InkWell(
                       onTap: () {
+                        if (openContainer)
+                          setState(() {
+                            openContainer = false;
+                          });
+                      },
+                      onLongPress: () {
                         setState(() {
-                          openContainer = false;
-                          post.myLike = post.myLike == -1 ? 1 : -1;
+                          openContainer = !openContainer;
                         });
                       },
-                      child: Icon(
-                        post.myLike == -1
-                            ? reacts[0]['icon'] as IconData
-                            : reacts.firstWhere((element) =>
-                                element['id'] ==
-                                'type${post.myLike}')['icon'] as IconData,
-                        color: post.myLike == -1 ? greyColor : orangeColor,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        width: openContainer ? 250 : 75,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: greyColor, width: 1),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                setState(() {
+                                  openContainer = false;
+                                });
+                                final response =
+                                    await Provider.of<PostsViewModel>(context,
+                                            listen: false)
+                                        .likePost(
+                                            lang: context.locale == Locale('en')
+                                                ? 'en'
+                                                : 'ar',
+                                            postId: post.postId,
+                                            context: context,
+                                            likeId: post.myLike == -1
+                                                ? 1
+                                                : post.myLike);
+                                if (response['success']) {
+                                  print(post.myLike);
+                                  setState(() {
+                                    post.reacts = response['data'];
+                                    post.myLike = post.myLike == -1 ? 1 : -1;
+                                  });
+                                  print(post.myLike);
+                                }
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    post.myLike == -1
+                                        ? reacts[0]['icon'] as IconData
+                                        : reacts.firstWhere((element) =>
+                                                element['id'] ==
+                                                'type${post.myLike}')['icon']
+                                            as IconData,
+                                    color: post.myLike == -1
+                                        ? greyColor
+                                        : orangeColor,
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    post.myLike == -1
+                                        ? post.reacts.entries
+                                            .firstWhere((element) =>
+                                                element.key == 'type1')
+                                            .value
+                                            .toString()
+                                        : post.reacts.entries
+                                            .firstWhere((element) =>
+                                                element.key ==
+                                                'type${post.myLike}')
+                                            .value
+                                            .toString(),
+                                    style: theme.textTheme.bodySmall!
+                                        .copyWith(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            if (openContainer)
+                              const SizedBox(
+                                width: 20,
+                              ),
+                            if (openContainer)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: reacts
+                                    .where((element) => post.myLike != -1
+                                        ? element['id'] != 'type${post.myLike}'
+                                        : element['id'] != 'type1')
+                                    .map(
+                                      (e) => InkWell(
+                                        onTap: () async {
+                                          setState(() {
+                                            openContainer = !openContainer;
+                                          });
+                                          final response =
+                                              await Provider.of<PostsViewModel>(
+                                                      context,
+                                                      listen: false)
+                                                  .likePost(
+                                                      lang: context.locale ==
+                                                              const Locale('en')
+                                                          ? 'en'
+                                                          : 'ar',
+                                                      postId: post.postId,
+                                                      context: context,
+                                                      likeId: int.parse(e['id']
+                                                          .toString()
+                                                          .replaceAll(
+                                                              'type', '')));
+
+                                          if (response['success']) {
+                                            setState(() {
+                                              post.reacts = response['data'];
+                                              if (post.myLike ==
+                                                  int.parse(e['id']
+                                                      .toString()
+                                                      .replaceAll(
+                                                          'type', ''))) {
+                                                post.myLike = -1;
+                                              } else {
+                                                post.myLike = int.parse(e['id']
+                                                    .toString()
+                                                    .replaceAll('type', ''));
+                                              }
+                                            });
+                                          }
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                e['icon'] as IconData,
+                                                color: greyColor,
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(
+                                                post.reacts.entries
+                                                    .firstWhere((element) =>
+                                                        element.key ==
+                                                        e['id'].toString())
+                                                    .value
+                                                    .toString(),
+                                                style: theme
+                                                    .textTheme.bodySmall!
+                                                    .copyWith(
+                                                        color: Colors.black),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              )
+                          ],
+                        ),
                       ),
                     ),
-                    if (openContainer)
-                      const SizedBox(
-                        width: 20,
-                      ),
-                    if (openContainer)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: reacts
-                            .where((element) => post.myLike != -1
-                                ? element['id'] != 'type${post.myLike}'
-                                : element['id'] != 'type1')
-                            .map(
-                              (e) => InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    openContainer = !openContainer;
-                                    if (post.myLike ==
-                                        int.parse(e['id']
-                                            .toString()
-                                            .replaceAll('type', ''))) {
-                                      post.myLike = -1;
-                                    } else {
-                                      post.myLike = int.parse(e['id']
-                                          .toString()
-                                          .replaceAll('type', ''));
-                                    }
-                                  });
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    e['icon'] as IconData,
-                                    color: greyColor,
-                                  ),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                      )
-                  ],
-                ),
+                  if (post.on_hold == false)
+                    TextButton(
+                        onPressed: () {},
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/comments',
+                                arguments: {'id': post.postId});
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                '${post.commentsCount} $commentsString',
+                                style: theme.textTheme.bodySmall,
+                              ).tr(),
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 15,
+                                color: orangeColor,
+                              )
+                            ],
+                          ),
+                        ))
+                ],
               ),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, '/comments',
-                      arguments: {'id': post.postId});
-                },
-                child: Row(
-                  children: [
-                    Text(
-                      '${post.commentsCount} $commentText',
-                      style: theme.textTheme.bodySmall,
-                    ).tr(),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 15,
-                      color: orangeColor,
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+            )
+          : null,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -193,8 +286,6 @@ class _PostViewState extends State<PostView> {
                   post.title,
                   style: theme.textTheme.bodyMedium!
                       .copyWith(color: Colors.black54),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
                 ),
               ),
             ),

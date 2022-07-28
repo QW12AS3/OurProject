@@ -6,6 +6,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
@@ -651,32 +652,30 @@ class _EditProfileViewState extends State<EditProfileView> {
                   )),
             ),
             Consumer<EditProfileViewModel>(
-              builder: (context, value, child) => ElevatedButton(
-                onPressed: () async {
-                  //nameKey.currentState!.validate();
-                  await Provider.of<EditProfileViewModel>(context,
-                          listen: false)
-                      .editProfile(
-                    fnameController.text.trim(),
-                    lnameController.text.trim(),
-                    value.getUserImage,
-                    bioController.text.trim(),
-                    heightController.text.trim(),
-                    weightController.text.trim(),
-                    value.getGender,
-                    value.getBirthdate,
-                    context,
-                    value.getCountry,
-                  );
-                },
-                child: value.getIsLoading
-                    ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
-                    : const Text(
+              builder: (context, value, child) => value.getIsLoading
+                  ? bigLoader(color: orangeColor)
+                  : ElevatedButton(
+                      onPressed: () async {
+                        //nameKey.currentState!.validate();
+                        await Provider.of<EditProfileViewModel>(context,
+                                listen: false)
+                            .editProfile(
+                          fnameController.text.trim(),
+                          lnameController.text.trim(),
+                          value.getUserImage,
+                          bioController.text.trim(),
+                          heightController.text.trim(),
+                          weightController.text.trim(),
+                          value.getGender,
+                          value.getBirthdate,
+                          context,
+                          value.getCountry,
+                        );
+                      },
+                      child: const Text(
                         'Save changes',
                       ).tr(),
-              ),
+                    ),
             ),
           ],
         ),

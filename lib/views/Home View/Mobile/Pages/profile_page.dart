@@ -130,7 +130,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
                     controller: _scrollController,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -579,12 +580,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         if (Provider.of<ProfileViewModel>(context, listen: true)
                                     .getUserData
-                                    .roleId ==
-                                2 ||
+                                    .roleId !=
+                                1 &&
                             Provider.of<ProfileViewModel>(context, listen: true)
                                     .getUserData
-                                    .roleId ==
-                                3)
+                                    .roleId !=
+                                0)
                           Consumer<ProfileViewModel>(
                             builder: (context, user, child) => ExpansionTile(
                               onExpansionChanged: (change) async {

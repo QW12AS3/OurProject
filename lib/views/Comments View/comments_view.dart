@@ -133,7 +133,8 @@ class _CommentsViewState extends State<CommentsView> {
                   children: [
                     Expanded(
                       child: SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
+                        physics: BouncingScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics()),
                         controller: _scrollController,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 110),

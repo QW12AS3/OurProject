@@ -148,6 +148,11 @@ class EditProfileViewModel with ChangeNotifier {
     }
   }
 
+  void setIsLoading(value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
   Future<void> editProfile(
       String fname,
       String lname,
@@ -159,7 +164,7 @@ class EditProfileViewModel with ChangeNotifier {
       DateTime birthdate,
       BuildContext context,
       String country) async {
-    _isLoading = true;
+    setIsLoading(true);
     final response = await ProfileApi().editProfile(fname, lname, image, bio,
         height, weight, gender, birthdate, country, context);
     _isLoading = false;
@@ -169,7 +174,7 @@ class EditProfileViewModel with ChangeNotifier {
     } else {
       showSnackbar(Text(response['message']), context);
     }
-    notifyListeners();
+    setIsLoading(false);
   }
 
   XFile get getUserImage => _userImage;

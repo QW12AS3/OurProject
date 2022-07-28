@@ -59,7 +59,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
               );
             } else {
               _tabController.animateTo(
-                _tabController.index >= 0 ? (_tabController.index - 1) : 0,
+                _tabController.index > 0 ? (_tabController.index - 1) : 0,
                 duration: const Duration(milliseconds: 100),
                 curve: Curves.linear,
               );

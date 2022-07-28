@@ -442,12 +442,12 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                           listen: true)
                                       .getUserData
                                       .roleId ==
-                                  2 ||
+                                  2 &&
                               Provider.of<AnotherUserProfileViewModel>(context,
                                           listen: true)
                                       .getUserData
-                                      .roleId ==
-                                  3)
+                                      .roleId !=
+                                  0)
                             ExpansionTile(
                               iconColor: blueColor,
                               title: Text(
@@ -458,13 +458,13 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                           if (Provider.of<AnotherUserProfileViewModel>(context,
                                           listen: true)
                                       .getUserData
-                                      .roleId ==
-                                  2 ||
+                                      .roleId !=
+                                  1 &&
                               Provider.of<AnotherUserProfileViewModel>(context,
                                           listen: true)
                                       .getUserData
-                                      .roleId ==
-                                  3)
+                                      .roleId !=
+                                  0)
                             Consumer<AnotherUserProfileViewModel>(
                               builder: (context, user, child) => ExpansionTile(
                                 onExpansionChanged: (change) async {
