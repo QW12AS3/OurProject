@@ -170,7 +170,7 @@ class _AddHealthRecordViewState extends State<AddHealthRecordView> {
                       'Add description',
                       style: theme.textTheme.bodySmall!.copyWith(
                           color: blueColor, fontWeight: FontWeight.w200),
-                    ),
+                    ).tr(),
                   ),
           ),
           Expanded(

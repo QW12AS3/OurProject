@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/components.dart';
@@ -280,6 +282,29 @@ class myDrawer extends StatelessWidget {
               ),
             ),
           ),
+          if (Provider.of<ProfileViewModel>(context, listen: true)
+                      .getUserData
+                      .roleId ==
+                  4 ||
+              Provider.of<ProfileViewModel>(context, listen: true)
+                      .getUserData
+                      .roleId ==
+                  5)
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/dashboard');
+              },
+              child: ListTile(
+                title: Text(
+                  'Dashboards',
+                  style: theme.textTheme.bodySmall,
+                ).tr(),
+                trailing: Icon(
+                  Icons.dashboard_rounded,
+                  color: blueColor,
+                ),
+              ),
+            ),
           if (!Provider.of<ProfileViewModel>(context, listen: true)
               .getIsLogoutLoading)
             ExpansionTile(

@@ -114,7 +114,6 @@ class ProfileViewModel with ChangeNotifier {
 
     final response = await HealthRecordApi().deleteHealthRecord(lang);
     if (response['success']) {
-      showSnackbar(Text(response['message']), context);
       await setHealthRecord(lang);
     } else {
       showSnackbar(Text(response['message']), context);

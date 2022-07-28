@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../view_models/CV View Model/apply_view_model.dart';
@@ -61,7 +62,8 @@ class _CVViewState extends State<CVView> {
                             .setCV(lang: getLang(context));
                       },
                       child: SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
+                        physics: const BouncingScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics()),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -171,8 +173,16 @@ class _CVViewState extends State<CVView> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  if (cv.getCV.roleId != 2 &&
-                                      cv.getCV.roleId != 3)
+                                  if (Provider.of<ProfileViewModel>(context,
+                                                  listen: true)
+                                              .getUserData
+                                              .roleId !=
+                                          2 &&
+                                      Provider.of<ProfileViewModel>(context,
+                                                  listen: true)
+                                              .getUserData
+                                              .roleId !=
+                                          3)
                                     ElevatedButton(
                                       onPressed: () {
                                         showDialog(

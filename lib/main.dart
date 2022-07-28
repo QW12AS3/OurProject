@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/CV%20View%20Model/edit_apply_view_model.dart';
+import 'package:home_workout_app/view_models/Dashboards%20View%20Model/dashboards_view_model.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/web_home_view_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/create_post_view_model.dart';
@@ -33,6 +34,11 @@ import 'package:home_workout_app/views/Apply%20CV%20View/pdf_view.dart';
 import 'package:home_workout_app/views/Change%20Email%20View/change_email_view.dart';
 import 'package:home_workout_app/views/Change%20Password%20View/change_password_view.dart';
 import 'package:home_workout_app/views/Comments%20View/comments_view.dart';
+import 'package:home_workout_app/views/Dashboards%20View/cvs_dashbaord.dart';
+import 'package:home_workout_app/views/Dashboards%20View/dashboard_view.dart';
+import 'package:home_workout_app/views/Dashboards%20View/posts_dashboard_view.dart';
+import 'package:home_workout_app/views/Dashboards%20View/reported_comments_dashbaord.dart';
+import 'package:home_workout_app/views/Dashboards%20View/reported_post_dashboard_view.dart';
 import 'package:home_workout_app/views/Edit%20Health%20Record%20View/edit_health_record_view.dart';
 import 'package:home_workout_app/views/Edit%20Profile%20View/edit_profile_view.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
@@ -105,7 +111,7 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ApplyViewModel()),
         ChangeNotifierProvider(create: (context) => EditApplyViewModel()),
         ChangeNotifierProvider(create: (context) => StartViewModel()),
-
+        ChangeNotifierProvider(create: (context) => DashboardsViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -156,6 +162,11 @@ class Vigor extends StatelessWidget {
           '/pdf': (context) => PDFView(),
           '/cv': (context) => CVView(),
           '/editCV': (context) => EditApplyView(),
+          '/dashboard': (context) => DashboardsView(),
+          '/postsDashboard': (context) => PostsDashbaordView(),
+          '/cvsDashboard': (context) => CVsDashboard(),
+          '/reportedPostDashboard': (context) => ReportedPostsDashbaordView(),
+          '/reportedCommentsDashboard': (context) => ReportedCommentsDashboard()
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,

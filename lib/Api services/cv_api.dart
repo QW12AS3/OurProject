@@ -104,4 +104,66 @@ class CVApi {
       return {'success': false, 'message': e.toString()};
     }
   }
+
+  Future<Map> AcceptCV({required String lang, required String id}) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/cv/acc/$id'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone(),
+        },
+      );
+      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        return {
+          'success': true,
+          'message': jsonDecode(response.body)['message']
+        };
+      } else {
+        return {
+          'success': false,
+          'message': jsonDecode(response.body)['message']
+        };
+      }
+    } catch (e) {
+      print('AR Posts Dashboards Error: $e');
+      return {'success': false, 'message': e.toString()};
+    }
+  }
+
+  Future<Map> RefuseCV({required String lang, required String id}) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/cv/ref/$id'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone(),
+        },
+      );
+      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        return {
+          'success': true,
+          'message': jsonDecode(response.body)['message']
+        };
+      } else {
+        return {
+          'success': false,
+          'message': jsonDecode(response.body)['message']
+        };
+      }
+    } catch (e) {
+      print('AR Posts Dashboards Error: $e');
+      return {'success': false, 'message': e.toString()};
+    }
+  }
 }
