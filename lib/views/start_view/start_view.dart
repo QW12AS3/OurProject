@@ -34,12 +34,12 @@ class _StartViewState extends State<StartView> {
           setState(() {});
         });
 
-      // // videoController.setVolume(0);
-      // videoController.setLooping(true);
-      // videoController.addListener(() {
-      //   // setState(() {});  //TODO://if you face some problem in it add it
-      // });
-      // videoController.play();
+      // videoController.setVolume(0);
+      videoController.setLooping(true);
+      videoController.addListener(() {
+        // setState(() {});  //TODO://if you face some problem in it add it
+      });
+      videoController.play();
     } catch (e) {
       print('intial video player errooor: $e');
     }
