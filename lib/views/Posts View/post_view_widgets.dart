@@ -9,6 +9,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/create_post_view_model.dart';
+import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view_widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -57,7 +58,7 @@ class CreateNormalPostSpace extends StatefulWidget {
 }
 
 class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
-  List<VideoPlayerController> _videos = [];
+  //List<VideoPlayerController> _videos = [];
 
   @override
   void initState() {
@@ -196,14 +197,6 @@ class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
                       Provider.of<CreatePostViewModel>(context, listen: true)
                           .getPickedVideo!
                           .map((e) {
-                    _videos.add(VideoPlayerController.file(File(e.path)));
-                    _videos.last.value = _videos.last.value.copyWith(
-                        caption: Caption(
-                            number: _videos.last.value.caption.number,
-                            start: _videos.last.value.caption.start,
-                            end: _videos.last.value.caption.end,
-                            text: e.path));
-
                     return Column(
                       children: [
                         Dismissible(
@@ -219,69 +212,7 @@ class _CreateNormalPostSpaceState extends State<CreateNormalPostSpace> {
                               decoration: BoxDecoration(
                                   border: Border.all(color: blueColor)),
                               width: mq.size.width * 0.9,
-                              height: 500,
-                              child: AspectRatio(
-                                aspectRatio: _videos
-                                    .firstWhere((element) =>
-                                        element.value.caption.text == e.path)
-                                    .value
-                                    .aspectRatio,
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    VideoPlayer(_videos.firstWhere((element) =>
-                                        element.value.caption.text == e.path)),
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          if (_videos
-                                              .firstWhere((element) =>
-                                                  element.value.caption.text ==
-                                                  e.path)
-                                              .value
-                                              .isInitialized) {
-                                            if (_videos
-                                                .firstWhere((element) =>
-                                                    element
-                                                        .value.caption.text ==
-                                                    e.path)
-                                                .value
-                                                .isPlaying)
-                                              _videos
-                                                  .firstWhere((element) =>
-                                                      element
-                                                          .value.caption.text ==
-                                                      e.path)
-                                                  .pause();
-                                            else
-                                              _videos
-                                                  .firstWhere((element) =>
-                                                      element
-                                                          .value.caption.text ==
-                                                      e.path)
-                                                  .play();
-                                            setState(() {});
-                                          } else {
-                                            _videos.firstWhere((element) =>
-                                                element.value.caption.text ==
-                                                e.path)
-                                              ..initialize().then((value) {
-                                                setState(() {});
-                                              });
-                                          }
-                                        },
-                                        child: _videos
-                                                .firstWhere((element) =>
-                                                    element
-                                                        .value.caption.text ==
-                                                    e.path)
-                                                .value
-                                                .isPlaying
-                                            ? const Icon(Icons.pause_outlined)
-                                            : const Icon(
-                                                Icons.play_arrow_rounded))
-                                  ],
-                                ),
-                              ),
+                              child: FileVideoCard(videoPath: e.path),
                             ),
                           ),
                         ),

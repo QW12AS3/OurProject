@@ -7,6 +7,7 @@ class CommentsModel {
   String createdAt = '';
   int id = 0;
   int ownerId = 0;
+  int reports = 0;
 
   CommentsModel();
   CommentsModel.fromJson(Map<String, dynamic> json) {
@@ -19,5 +20,6 @@ class CommentsModel {
     if (ownerImageUrl.substring(0, 4) != 'http') {
       ownerImageUrl = '$ip/$ownerImageUrl';
     }
+    reports = json['reports'] ?? 0;
   }
 }

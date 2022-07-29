@@ -98,7 +98,7 @@ class UserInformationViewModel with ChangeNotifier {
               context);
           _isLoading = false;
           if (response) {
-            sharedPreferences.setBool('info', true);
+            sharedPreferences.setBool('is_info', true);
             resetValue();
             _pageController.animateToPage(1,
                 duration: const Duration(milliseconds: 300),

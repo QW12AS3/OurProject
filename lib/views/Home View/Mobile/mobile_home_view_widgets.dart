@@ -1,9 +1,11 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, must_be_immutable, avoid_single_cascade_in_expression_statements, use_build_context_synchronously
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/comments_model.dart';
 import 'package:home_workout_app/models/post_models.dart';
@@ -51,9 +53,22 @@ class _VideoCardState extends State<VideoCard> {
     super.initState();
 
     _video = VideoPlayerController.network(widget.videoUrl);
+
+    // setState(() {
+    //   loading = true;
+    // });
+    // _video
+    //   ..initialize().then((value) {
+    //     setState(() {
+    //       loading = false;
+    //     });
+    //   });
   }
 
   bool playButtonisShown = true;
+  bool loading = false;
+  bool mute = false;
+  bool isPlaying = false;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +83,9 @@ class _VideoCardState extends State<VideoCard> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          height: double.maxFinite,
+          color: _video.value.isInitialized ? Colors.transparent : greyColor,
+          //height: 250,
+          width: mq.size.width * 0.95,
           //decoration: BoxDecoration(border: Border.all(color: blueColor)),
           child: AspectRatio(
             aspectRatio: _video.value.aspectRatio,
@@ -79,32 +96,81 @@ class _VideoCardState extends State<VideoCard> {
                 AnimatedOpacity(
                   opacity: playButtonisShown ? 1 : 0,
                   duration: const Duration(milliseconds: 300),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_video.value.isInitialized) {
+                  child: loading
+                      ? bigLoader(color: orangeColor)
+                      : ElevatedButton(
+                          onPressed: () {
+                            _video.addListener(() {
+                              if (_video.value.isPlaying != isPlaying) {
+                                setState(() {
+                                  isPlaying = _video.value.isPlaying;
+                                });
+                              }
+                            });
+                            print(_video.value.isLooping);
+                            if (_video.value.isInitialized) {
+                              setState(() {
+                                if (_video.value.isPlaying)
+                                  _video.pause();
+                                else {
+                                  _video.play();
+                                  playButtonisShown = !playButtonisShown;
+                                }
+                              });
+                            } else {
+                              setState(() {
+                                loading = true;
+                              });
+                              _video
+                                ..initialize().then((value) {
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                });
+                            }
+                          },
+                          child: isPlaying
+                              ? const Icon(
+                                  Icons.pause,
+                                )
+                              : (_video.value.isInitialized
+                                  ? const Icon(
+                                      Icons.play_arrow_rounded,
+                                    )
+                                  : const Icon(
+                                      Icons.download_rounded,
+                                    ))),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: IconButton(
+                      onPressed: () {
                         setState(() {
-                          if (_video.value.isPlaying)
-                            _video.pause();
-                          else {
-                            _video.play();
-                            playButtonisShown = !playButtonisShown;
+                          if (mute) {
+                            _video.setVolume(1);
+                            mute = !mute;
+                          } else {
+                            _video.setVolume(0);
+                            mute = !mute;
                           }
                         });
-                      } else {
-                        _video
-                          ..initialize().then((value) {
-                            setState(() {});
-                          });
-                      }
-                    },
-                    child: _video.value.isPlaying
-                        ? const Icon(
-                            Icons.pause,
-                          )
-                        : const Icon(
-                            Icons.play_arrow_rounded,
+                      },
+                      icon: CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Icon(
+                                mute
+                                    ? Icons.music_off_rounded
+                                    : Icons.music_note_rounded,
+                                color: Colors.black,
+                                size: 15),
                           ),
-                  ),
+                        ),
+                      ),
+                      color: blueColor),
                 )
               ],
             ),
@@ -124,16 +190,29 @@ class FileVideoCard extends StatefulWidget {
 }
 
 class _FileVideoCardState extends State<FileVideoCard> {
-  VideoPlayerController _video = VideoPlayerController.network('');
+  VideoPlayerController _video = VideoPlayerController.file(File(''));
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
     _video = VideoPlayerController.file(File(widget.videoPath));
+    // setState(() {
+    //   loading = true;
+    // });
+    // _video
+    //   ..initialize().then((value) {
+    //     setState(() {
+    //       loading = false;
+
+    //     });
+    //   });
   }
 
   bool playButtonisShown = true;
+  bool loading = false;
+  bool mute = false;
+  bool isPlaying = false;
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +227,9 @@ class _FileVideoCardState extends State<FileVideoCard> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          height: double.maxFinite,
+          color: _video.value.isInitialized ? Colors.transparent : greyColor,
+          //height: 250,
+          width: mq.size.width * 0.95,
           //decoration: BoxDecoration(border: Border.all(color: blueColor)),
           child: AspectRatio(
             aspectRatio: _video.value.aspectRatio,
@@ -159,32 +240,81 @@ class _FileVideoCardState extends State<FileVideoCard> {
                 AnimatedOpacity(
                   opacity: playButtonisShown ? 1 : 0,
                   duration: const Duration(milliseconds: 300),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_video.value.isInitialized) {
+                  child: loading
+                      ? bigLoader(color: orangeColor)
+                      : ElevatedButton(
+                          onPressed: () {
+                            _video.addListener(() {
+                              if (_video.value.isPlaying != isPlaying) {
+                                setState(() {
+                                  isPlaying = _video.value.isPlaying;
+                                });
+                              }
+                            });
+                            print(_video.value.isLooping);
+                            if (_video.value.isInitialized) {
+                              setState(() {
+                                if (_video.value.isPlaying)
+                                  _video.pause();
+                                else {
+                                  _video.play();
+                                  playButtonisShown = !playButtonisShown;
+                                }
+                              });
+                            } else {
+                              setState(() {
+                                loading = true;
+                              });
+                              _video
+                                ..initialize().then((value) {
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                });
+                            }
+                          },
+                          child: isPlaying
+                              ? const Icon(
+                                  Icons.pause,
+                                )
+                              : (_video.value.isInitialized
+                                  ? const Icon(
+                                      Icons.play_arrow_rounded,
+                                    )
+                                  : const Icon(
+                                      Icons.download_rounded,
+                                    ))),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: IconButton(
+                      onPressed: () {
                         setState(() {
-                          if (_video.value.isPlaying)
-                            _video.pause();
-                          else {
-                            _video.play();
-                            playButtonisShown = !playButtonisShown;
+                          if (mute) {
+                            _video.setVolume(1);
+                            mute = !mute;
+                          } else {
+                            _video.setVolume(0);
+                            mute = !mute;
                           }
                         });
-                      } else {
-                        _video
-                          ..initialize().then((value) {
-                            setState(() {});
-                          });
-                      }
-                    },
-                    child: _video.value.isPlaying
-                        ? const Icon(
-                            Icons.pause,
-                          )
-                        : const Icon(
-                            Icons.play_arrow_rounded,
+                      },
+                      icon: CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Icon(
+                                mute
+                                    ? Icons.music_off_rounded
+                                    : Icons.music_note_rounded,
+                                color: Colors.black,
+                                size: 15),
                           ),
-                  ),
+                        ),
+                      ),
+                      color: blueColor),
                 )
               ],
             ),
@@ -228,10 +358,11 @@ class _NormalPostCardState extends State<NormalPostCard> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        height: widget.post.imagesUrl.isEmpty ? 200 : 650,
+        height: widget.post.imagesUrl.isNotEmpty ? 650 : null,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           border: Border.all(color: blueColor, width: 1.5),
@@ -288,111 +419,110 @@ class _NormalPostCardState extends State<NormalPostCard> {
                             .copyWith(fontWeight: FontWeight.w200),
                       ).tr(),
                     ),
-                    PopupMenuButton<String>(
-                      icon: const Icon(Icons.more_vert_rounded),
-                      onSelected: (String result) async {
-                        switch (result) {
-                          case 'save':
-                            final response = await Provider.of<PostsViewModel>(
-                                    context,
-                                    listen: false)
-                                .savePost(
-                                    lang: context.locale == const Locale('en')
-                                        ? 'en'
-                                        : 'ar',
-                                    postId: widget.post.postId,
-                                    context: context);
-                            if (response) {
-                              setState(() {
-                                widget.post.is_saved = !widget.post.is_saved;
-                              });
-                            }
-                            break;
-                          case 'report':
-                            await Provider.of<PostsViewModel>(context,
-                                    listen: false)
-                                .reportPost(
-                                    lang: context.locale == const Locale('en')
-                                        ? 'en'
-                                        : 'ar',
-                                    postId: widget.post.postId,
-                                    context: context);
-                            break;
-                          case 'delete':
-                            final response = await Provider.of<PostsViewModel>(
-                                    context,
-                                    listen: false)
-                                .deletePost(
-                                    lang: context.locale == const Locale('en')
-                                        ? 'en'
-                                        : 'ar',
-                                    postId: widget.post.postId,
-                                    context: context);
-                            if (response) {
-                              Provider.of<PostsViewModel>(context,
+                    if (widget.post.dash == false)
+                      PopupMenuButton<String>(
+                        icon: const Icon(Icons.more_vert_rounded),
+                        onSelected: (String result) async {
+                          switch (result) {
+                            case 'save':
+                              final response = await Provider.of<
+                                      PostsViewModel>(context, listen: false)
+                                  .savePost(
+                                      lang: context.locale == const Locale('en')
+                                          ? 'en'
+                                          : 'ar',
+                                      postId: widget.post.postId,
+                                      context: context);
+                              if (response) {
+                                setState(() {
+                                  widget.post.is_saved = !widget.post.is_saved;
+                                });
+                              }
+                              break;
+                            case 'report':
+                              await Provider.of<PostsViewModel>(context,
                                       listen: false)
-                                  .removePost(widget.post.postId);
-                            }
-                            break;
-                          case 'edit':
-                            Navigator.pushNamed(context, '/editPostView',
-                                arguments: {'post': widget.post});
+                                  .reportPost(
+                                      lang: context.locale == const Locale('en')
+                                          ? 'en'
+                                          : 'ar',
+                                      postId: widget.post.postId,
+                                      context: context);
+                              break;
+                            case 'delete':
+                              final response = await Provider.of<
+                                      PostsViewModel>(context, listen: false)
+                                  .deletePost(
+                                      lang: context.locale == const Locale('en')
+                                          ? 'en'
+                                          : 'ar',
+                                      postId: widget.post.postId,
+                                      context: context);
+                              if (response) {
+                                Provider.of<PostsViewModel>(context,
+                                        listen: false)
+                                    .removePost(widget.post.postId);
+                              }
+                              break;
+                            case 'edit':
+                              Navigator.pushNamed(context, '/editPostView',
+                                  arguments: {'post': widget.post});
 
-                            break;
-                          default:
-                        }
-                      },
-                      itemBuilder: (BuildContext context) =>
-                          <PopupMenuEntry<String>>[
-                        if (widget.post.on_hold == false)
-                          PopupMenuItem(
-                              value: 'save',
+                              break;
+                            default:
+                          }
+                        },
+                        itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry<String>>[
+                          if (widget.post.on_hold == false)
+                            PopupMenuItem(
+                                value: 'save',
+                                child: Text(
+                                  widget.post.is_saved ? 'Saved' : 'Save',
+                                  style: theme.textTheme.bodySmall!.copyWith(
+                                      color: widget.post.is_saved
+                                          ? Colors.amber
+                                          : blueColor),
+                                ).tr()),
+                          if (widget.post.pubId ==
+                              Provider.of<ProfileViewModel>(context,
+                                      listen: false)
+                                  .getUserData
+                                  .id)
+                            PopupMenuItem(
+                                value: 'edit',
+                                child: Text(
+                                  'Edit',
+                                  style: theme.textTheme.bodySmall!
+                                      .copyWith(color: blueColor),
+                                ).tr()),
+                          if (widget.post.pubId ==
+                              Provider.of<ProfileViewModel>(context,
+                                      listen: false)
+                                  .getUserData
+                                  .id)
+                            PopupMenuItem(
+                                value: 'delete',
+                                child: Text(
+                                  'Delete',
+                                  style: theme.textTheme.bodySmall!
+                                      .copyWith(color: Colors.red),
+                                ).tr()),
+                          if (widget.post.pubId !=
+                              Provider.of<ProfileViewModel>(context,
+                                      listen: false)
+                                  .getUserData
+                                  .id)
+                            PopupMenuItem(
+                              value: 'report',
                               child: Text(
-                                widget.post.is_saved ? 'Saved' : 'Save',
-                                style: theme.textTheme.bodySmall!.copyWith(
-                                    color: widget.post.is_saved
-                                        ? Colors.amber
-                                        : blueColor),
-                              ).tr()),
-                        if (widget.post.pubId ==
-                            Provider.of<ProfileViewModel>(context,
-                                    listen: false)
-                                .getUserData
-                                .id)
-                          PopupMenuItem(
-                              value: 'edit',
-                              child: Text(
-                                'Edit',
-                                style: theme.textTheme.bodySmall!
-                                    .copyWith(color: blueColor),
-                              ).tr()),
-                        if (widget.post.pubId ==
-                            Provider.of<ProfileViewModel>(context,
-                                    listen: false)
-                                .getUserData
-                                .id)
-                          PopupMenuItem(
-                              value: 'delete',
-                              child: Text(
-                                'Delete',
+                                'Report',
                                 style: theme.textTheme.bodySmall!
                                     .copyWith(color: Colors.red),
-                              ).tr()),
-                        if (widget.post.pubId !=
-                            Provider.of<ProfileViewModel>(context,
-                                    listen: false)
-                                .getUserData
-                                .id)
-                          PopupMenuItem(
-                            value: 'report',
-                            child: Text(
-                              'Report',
-                              style: theme.textTheme.bodySmall!
-                                  .copyWith(color: Colors.red),
-                            ).tr(),
-                          ),
-                      ],
-                    ),
+                              ).tr(),
+                            ),
+                        ],
+                      ),
                   ],
                 )
               ],
@@ -407,46 +537,56 @@ class _NormalPostCardState extends State<NormalPostCard> {
                 maxLines: 3,
               ),
             ),
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                children: [
-                  if (widget.post.imagesUrl.isNotEmpty)
-                    Builder(
-                      builder: (BuildContext context) {
-                        try {
-                          return Image(
-                            errorBuilder: (context, error, stackTrace) =>
-                                const LoadingContainer(),
-                            loadingBuilder: (context, child, loadingProgress) =>
-                                loadingProgress != null
-                                    ? const LoadingContainer()
-                                    : child,
-                            width: mq.size.width * 0.95,
-                            height: 250,
-                            fit: BoxFit.cover,
-                            image:
-                                NetworkImage(widget.post.imagesUrl[0]['url']),
-                          );
-                        } catch (e) {
-                          return const LoadingContainer();
-                        }
-                      },
-                    ),
-                  if (widget.post.videosUrl.isNotEmpty)
-                    Builder(
-                      builder: (BuildContext context) {
-                        try {
-                          return VideoCard(
-                              videoUrl: widget.post.videosUrl[0]['url']);
-                        } catch (e) {
-                          return const LoadingContainer();
-                        }
-                      },
-                    ),
-                ],
+            if (widget.post.videosUrl.isNotEmpty &&
+                widget.post.imagesUrl.isEmpty)
+              Center(
+                child: Container(
+                    width: mq.size.width * 0.95,
+                    child:
+                        VideoCard(videoUrl: widget.post.videosUrl[0]['url'])),
               ),
-            ),
+            if (widget.post.imagesUrl.isNotEmpty)
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  children: [
+                    if (widget.post.imagesUrl.isNotEmpty)
+                      Builder(
+                        builder: (BuildContext context) {
+                          try {
+                            return Image(
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const LoadingContainer(),
+                              loadingBuilder:
+                                  (context, child, loadingProgress) =>
+                                      loadingProgress != null
+                                          ? const LoadingContainer()
+                                          : child,
+                              width: mq.size.width * 0.95,
+                              height: 250,
+                              fit: BoxFit.cover,
+                              image:
+                                  NetworkImage(widget.post.imagesUrl[0]['url']),
+                            );
+                          } catch (e) {
+                            return const LoadingContainer();
+                          }
+                        },
+                      ),
+                    if (widget.post.videosUrl.isNotEmpty)
+                      Builder(
+                        builder: (BuildContext context) {
+                          try {
+                            return VideoCard(
+                                videoUrl: widget.post.videosUrl[0]['url']);
+                          } catch (e) {
+                            return const LoadingContainer();
+                          }
+                        },
+                      ),
+                  ],
+                ),
+              ),
             if (widget.post.imagesUrl.length + widget.post.videosUrl.length !=
                 0)
               Align(
@@ -463,161 +603,215 @@ class _NormalPostCardState extends State<NormalPostCard> {
                   ),
                 ),
               ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (widget.post.on_hold == false)
-                    InkWell(
-                      onTap: () {
-                        if (openContainer)
+            if (widget.post.dash == false)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (widget.post.on_hold == false)
+                      InkWell(
+                        onTap: () {
+                          if (openContainer)
+                            setState(() {
+                              openContainer = false;
+                            });
+                        },
+                        onLongPress: () {
                           setState(() {
-                            openContainer = false;
+                            openContainer = !openContainer;
                           });
-                      },
-                      onLongPress: () {
-                        setState(() {
-                          openContainer = !openContainer;
-                        });
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        width: openContainer ? 200 : 75,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: greyColor, width: 1),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () async {
-                                setState(() {
-                                  openContainer = false;
-                                });
-                                final response =
-                                    await Provider.of<PostsViewModel>(context,
-                                            listen: false)
-                                        .likePost(
-                                            lang: context.locale == Locale('en')
-                                                ? 'en'
-                                                : 'ar',
-                                            postId: widget.post.postId,
-                                            context: context,
-                                            likeId: 1);
-                                if (response) {
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          width: openContainer ? 250 : 75,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(color: greyColor, width: 1),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              InkWell(
+                                onTap: () async {
                                   setState(() {
-                                    widget.post.myLike =
-                                        widget.post.myLike == -1 ? 1 : -1;
+                                    openContainer = false;
                                   });
-                                }
-                              },
-                              child: Icon(
-                                widget.post.myLike == -1
-                                    ? reacts[0]['icon'] as IconData
-                                    : reacts.firstWhere((element) =>
-                                            element['id'] ==
-                                            'type${widget.post.myLike}')['icon']
-                                        as IconData,
-                                color: widget.post.myLike == -1
-                                    ? greyColor
-                                    : orangeColor,
-                              ),
-                            ),
-                            if (openContainer)
-                              const SizedBox(
-                                width: 20,
-                              ),
-                            if (openContainer)
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: reacts
-                                    .where((element) => widget.post.myLike != -1
-                                        ? element['id'] !=
-                                            'type${widget.post.myLike}'
-                                        : element['id'] != 'type1')
-                                    .map(
-                                      (e) => InkWell(
-                                        onTap: () async {
-                                          setState(() {
-                                            openContainer = !openContainer;
-                                          });
-                                          final response = await Provider.of<
-                                                      PostsViewModel>(context,
-                                                  listen: false)
-                                              .likePost(
-                                                  lang: context.locale ==
-                                                          const Locale('en')
+                                  final response =
+                                      await Provider.of<PostsViewModel>(
+                                              context,
+                                              listen: false)
+                                          .likePost(
+                                              lang:
+                                                  context.locale == Locale('en')
                                                       ? 'en'
                                                       : 'ar',
-                                                  postId: widget.post.postId,
-                                                  context: context,
-                                                  likeId: int.parse(e['id']
-                                                      .toString()
-                                                      .replaceAll('type', '')));
-
-                                          if (response) {
+                                              postId: widget.post.postId,
+                                              context: context,
+                                              likeId: widget.post.myLike == -1
+                                                  ? 1
+                                                  : widget.post.myLike);
+                                  if (response['success']) {
+                                    print(widget.post.myLike);
+                                    setState(() {
+                                      widget.post.reacts = response['data'];
+                                      widget.post.myLike =
+                                          widget.post.myLike == -1 ? 1 : -1;
+                                    });
+                                    print(widget.post.myLike);
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      widget.post.myLike == -1
+                                          ? reacts[0]['icon'] as IconData
+                                          : reacts.firstWhere((element) =>
+                                                  element['id'] ==
+                                                  'type${widget.post.myLike}')[
+                                              'icon'] as IconData,
+                                      color: widget.post.myLike == -1
+                                          ? greyColor
+                                          : orangeColor,
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      widget.post.myLike == -1
+                                          ? widget.post.reacts.entries
+                                              .firstWhere((element) =>
+                                                  element.key == 'type1')
+                                              .value
+                                              .toString()
+                                          : widget.post.reacts.entries
+                                              .firstWhere((element) =>
+                                                  element.key ==
+                                                  'type${widget.post.myLike}')
+                                              .value
+                                              .toString(),
+                                      style: theme.textTheme.bodySmall!
+                                          .copyWith(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (openContainer)
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                              if (openContainer)
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: reacts
+                                      .where((element) =>
+                                          widget.post.myLike != -1
+                                              ? element['id'] !=
+                                                  'type${widget.post.myLike}'
+                                              : element['id'] != 'type1')
+                                      .map(
+                                        (e) => InkWell(
+                                          onTap: () async {
                                             setState(() {
-                                              if (widget.post.myLike ==
-                                                  int.parse(e['id']
-                                                      .toString()
-                                                      .replaceAll(
-                                                          'type', ''))) {
-                                                widget.post.myLike = -1;
-                                              } else {
-                                                widget.post.myLike = int.parse(
-                                                    e['id']
+                                              openContainer = !openContainer;
+                                            });
+                                            final response = await Provider.of<
+                                                        PostsViewModel>(context,
+                                                    listen: false)
+                                                .likePost(
+                                                    lang: context.locale ==
+                                                            const Locale('en')
+                                                        ? 'en'
+                                                        : 'ar',
+                                                    postId: widget.post.postId,
+                                                    context: context,
+                                                    likeId: int.parse(e['id']
                                                         .toString()
                                                         .replaceAll(
-                                                            'type', ''));
-                                              }
-                                            });
-                                          }
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Icon(
-                                            e['icon'] as IconData,
-                                            color: greyColor,
+                                                            'type', '')));
+
+                                            if (response['success']) {
+                                              setState(() {
+                                                widget.post.reacts =
+                                                    response['data'];
+                                                if (widget.post.myLike ==
+                                                    int.parse(e['id']
+                                                        .toString()
+                                                        .replaceAll(
+                                                            'type', ''))) {
+                                                  widget.post.myLike = -1;
+                                                } else {
+                                                  widget.post.myLike =
+                                                      int.parse(e['id']
+                                                          .toString()
+                                                          .replaceAll(
+                                                              'type', ''));
+                                                }
+                                              });
+                                            }
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  e['icon'] as IconData,
+                                                  color: greyColor,
+                                                ),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Text(
+                                                  widget.post.reacts.entries
+                                                      .firstWhere((element) =>
+                                                          element.key ==
+                                                          e['id'].toString())
+                                                      .value
+                                                      .toString(),
+                                                  style: theme
+                                                      .textTheme.bodySmall!
+                                                      .copyWith(
+                                                          color: Colors.black),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    )
-                                    .toList(),
-                              )
-                          ],
-                        ),
-                      ),
-                    ),
-                  if (widget.post.on_hold == false)
-                    TextButton(
-                        onPressed: () {},
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/comments',
-                                arguments: {'id': widget.post.postId});
-                          },
-                          child: Row(
-                            children: [
-                              Text(
-                                '${widget.post.commentsCount} $commentsString',
-                                style: theme.textTheme.bodySmall,
-                              ).tr(),
-                              Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                size: 15,
-                                color: orangeColor,
-                              )
+                                      )
+                                      .toList(),
+                                )
                             ],
                           ),
-                        ))
-                ],
-              ),
-            )
+                        ),
+                      ),
+                    if (widget.post.on_hold == false)
+                      TextButton(
+                          onPressed: () {},
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/comments',
+                                  arguments: {'id': widget.post.postId});
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  '${widget.post.commentsCount} $commentsString',
+                                  style: theme.textTheme.bodySmall,
+                                ).tr(),
+                                Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  size: 15,
+                                  color: orangeColor,
+                                )
+                              ],
+                            ),
+                          ))
+                  ],
+                ),
+              )
           ],
         ),
       ),
@@ -696,109 +890,111 @@ class _pollPostCardState extends State<pollPostCard> {
                     ],
                   ),
                 ),
-                PopupMenuButton<String>(
-                  icon: const Icon(Icons.more_vert_rounded),
-                  onSelected: (String result) async {
-                    switch (result) {
-                      case 'save':
-                        final response = await Provider.of<PostsViewModel>(
-                                context,
-                                listen: false)
-                            .savePost(
-                                lang: context.locale == const Locale('en')
-                                    ? 'en'
-                                    : 'ar',
-                                postId: widget.post.postId,
-                                context: context);
-                        if (response) {
-                          setState(() {
-                            widget.post.is_saved = !widget.post.is_saved;
-                          });
-                        }
-                        break;
-                      case 'report':
-                        await Provider.of<PostsViewModel>(context,
-                                listen: false)
-                            .reportPost(
-                                lang: context.locale == const Locale('en')
-                                    ? 'en'
-                                    : 'ar',
-                                postId: widget.post.postId,
-                                context: context);
-                        break;
+                if (widget.post.dash == false)
+                  PopupMenuButton<String>(
+                    icon: const Icon(Icons.more_vert_rounded),
+                    onSelected: (String result) async {
+                      switch (result) {
+                        case 'save':
+                          final response = await Provider.of<PostsViewModel>(
+                                  context,
+                                  listen: false)
+                              .savePost(
+                                  lang: context.locale == const Locale('en')
+                                      ? 'en'
+                                      : 'ar',
+                                  postId: widget.post.postId,
+                                  context: context);
+                          if (response) {
+                            setState(() {
+                              widget.post.is_saved = !widget.post.is_saved;
+                            });
+                          }
+                          break;
+                        case 'report':
+                          await Provider.of<PostsViewModel>(context,
+                                  listen: false)
+                              .reportPost(
+                                  lang: context.locale == const Locale('en')
+                                      ? 'en'
+                                      : 'ar',
+                                  postId: widget.post.postId,
+                                  context: context);
+                          break;
 
-                      case 'delete':
-                        final response = await Provider.of<PostsViewModel>(
-                                context,
-                                listen: false)
-                            .deletePost(
-                                lang: context.locale == const Locale('en')
-                                    ? 'en'
-                                    : 'ar',
-                                postId: widget.post.postId,
-                                context: context);
-                        if (response) {
-                          Provider.of<PostsViewModel>(context, listen: false)
-                              .removePost(widget.post.postId);
-                        }
-                        break;
-                      case 'edit':
-                        Navigator.pushNamed(context, '/editPostView',
-                            arguments: {'post': widget.post});
+                        case 'delete':
+                          final response = await Provider.of<PostsViewModel>(
+                                  context,
+                                  listen: false)
+                              .deletePost(
+                                  lang: context.locale == const Locale('en')
+                                      ? 'en'
+                                      : 'ar',
+                                  postId: widget.post.postId,
+                                  context: context);
+                          if (response) {
+                            Provider.of<PostsViewModel>(context, listen: false)
+                                .removePost(widget.post.postId);
+                          }
+                          break;
+                        case 'edit':
+                          Navigator.pushNamed(context, '/editPostView',
+                              arguments: {'post': widget.post});
 
-                        break;
-                      default:
-                    }
-                  },
-                  itemBuilder: (BuildContext context) =>
-                      <PopupMenuEntry<String>>[
-                    if (widget.post.on_hold == false)
-                      PopupMenuItem(
-                        value: 'save',
-                        child: Text(
-                          widget.post.is_saved ? 'Saved' : 'Save',
-                          style: theme.textTheme.bodySmall!.copyWith(
-                              color: widget.post.is_saved
-                                  ? Colors.amber
-                                  : blueColor),
-                        ).tr(),
-                      ),
-                    if (widget.post.pubId ==
-                        Provider.of<ProfileViewModel>(context, listen: false)
-                            .getUserData
-                            .id)
-                      PopupMenuItem(
-                          value: 'edit',
+                          break;
+                        default:
+                      }
+                    },
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<String>>[
+                      if (widget.post.on_hold == false)
+                        PopupMenuItem(
+                          value: 'save',
                           child: Text(
-                            'Edit',
-                            style: theme.textTheme.bodySmall!
-                                .copyWith(color: blueColor),
-                          ).tr()),
-                    if (widget.post.pubId ==
-                        Provider.of<ProfileViewModel>(context, listen: false)
-                            .getUserData
-                            .id)
-                      PopupMenuItem(
-                          value: 'delete',
-                          child: Text(
-                            'Delete',
-                            style: theme.textTheme.bodySmall!
-                                .copyWith(color: Colors.red),
-                          ).tr()),
-                    if (widget.post.pubId !=
-                        Provider.of<ProfileViewModel>(context, listen: false)
-                            .getUserData
-                            .id)
-                      PopupMenuItem(
-                        value: 'report',
-                        child: Text(
-                          'Report',
-                          style: theme.textTheme.bodySmall!
-                              .copyWith(color: Colors.red),
-                        ).tr(),
-                      ),
-                  ],
-                ),
+                            widget.post.is_saved ? 'Saved' : 'Save',
+                            style: theme.textTheme.bodySmall!.copyWith(
+                                color: widget.post.is_saved
+                                    ? Colors.amber
+                                    : blueColor),
+                          ).tr(),
+                        ),
+                      if (widget.post.pubId ==
+                          Provider.of<ProfileViewModel>(context, listen: false)
+                              .getUserData
+                              .id)
+                        PopupMenuItem(
+                            value: 'edit',
+                            child: Text(
+                              'Edit',
+                              style: theme.textTheme.bodySmall!
+                                  .copyWith(color: blueColor),
+                            ).tr()),
+                      if (widget.post.pubId ==
+                          Provider.of<ProfileViewModel>(context, listen: false)
+                              .getUserData
+                              .id)
+                        PopupMenuItem(
+                            value: 'delete',
+                            child: Text(
+                              'Delete',
+                              style: theme.textTheme.bodySmall!
+                                  .copyWith(color: Colors.red),
+                            ).tr()),
+                      if (widget.post.pubId !=
+                          Provider.of<ProfileViewModel>(context, listen: false)
+                              .getUserData
+                              .id)
+                        if (widget.post.on_hold == false)
+                          PopupMenuItem(
+                            value: 'report',
+                            child: Text(
+                              'Report',
+                              style: theme.textTheme.bodySmall!
+                                  .copyWith(color: Colors.red),
+                            ).tr(),
+                          ),
+                    ],
+                  ),
               ],
             ),
             Padding(
@@ -851,27 +1047,28 @@ class _pollPostCardState extends State<pollPostCard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
-                      onPressed: () {},
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/comments',
-                              arguments: {'id': widget.post.postId});
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              '${widget.post.commentsCount} $commentsString',
-                              style: theme.textTheme.bodySmall,
-                            ).tr(),
-                            Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: 15,
-                              color: orangeColor,
-                            )
-                          ],
-                        ),
-                      )),
+                  if (widget.post.dash == false)
+                    TextButton(
+                        onPressed: () {},
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/comments',
+                                arguments: {'id': widget.post.postId});
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                '${widget.post.commentsCount} $commentsString',
+                                style: theme.textTheme.bodySmall,
+                              ).tr(),
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 15,
+                                color: orangeColor,
+                              )
+                            ],
+                          ),
+                        )),
                 ],
               )
           ],

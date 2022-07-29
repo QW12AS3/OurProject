@@ -212,6 +212,7 @@ class PostAPI {
           'timeZone': getTimezone()
         },
       );
+      print(jsonDecode(response.body));
       if (response.statusCode == 200) {
         List<PostModel> posts = [];
 
@@ -380,19 +381,18 @@ class PostAPI {
         return {
           'success': true,
           'message': jsonDecode(response.body)['message'] ?? '',
+          'data': jsonDecode(response.body)['data'] ?? {}
         };
       } else {
         return {
           'success': false,
           'message': jsonDecode(response.body)['message'] ?? '',
+          'data': {}
         };
       }
     } catch (e) {
       print('Like Post Error: $e');
-      return {
-        'success': false,
-        'message': e.toString(),
-      };
+      return {'success': false, 'message': e.toString(), 'data': {}};
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -74,4 +75,8 @@ class bigLoader extends StatelessWidget {
       ),
     );
   }
+}
+
+String getLang(BuildContext context) {
+  return context.locale == Locale('en') ? 'en' : 'ar';
 }

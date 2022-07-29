@@ -128,6 +128,42 @@ class CommentsApi {
         'text': comment,
         '_method': 'PUT'
       });
+      print('Update' + jsonDecode(response.body).toString());
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
+        return {
+          'success': true,
+          'message': jsonDecode(response.body)['message']
+        };
+      } else {
+        print(jsonDecode(response.body));
+        return {
+          'success': false,
+          'message': jsonDecode(response.body)['message']
+        };
+      }
+    } catch (e) {
+      print('Create Poll Post Error: $e');
+      return {'success': false, 'message': e.toString()};
+    }
+  }
+
+  Future<Map> reportComment({
+    required String lang,
+    required int commentId,
+  }) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/posts/comment/report/$commentId'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
         return {

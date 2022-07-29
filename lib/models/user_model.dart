@@ -22,6 +22,11 @@ class UserModel {
   int followers = 0;
   int followings = 0;
   bool i_block = false;
+  bool cv = false;
+  String height = '0';
+  String weight = '0';
+  Units heightUnit = Units.cm;
+  Units weightUnit = Units.kg;
 
   UserModel(
       // this.fname,
@@ -41,14 +46,14 @@ class UserModel {
       );
 
   UserModel.fromJson(Map<dynamic, dynamic> json) {
+    print(json);
     fname = json['data']['user']['fname'] ?? '';
     lname = json['data']['user']['lname'] ?? '';
     imageUrl = json['data']['user']['profile_img'] ?? '';
-    print(json['data']['user']['profile_img']);
+
     if (imageUrl.substring(0, 4) != 'http') {
       imageUrl = '$ip/$imageUrl';
     }
-    print(imageUrl);
 
     role = json['data']['user']['role_name'] ?? '';
 
@@ -58,8 +63,15 @@ class UserModel {
     bio = json['data']['user']['bio'] ?? '';
     gender =
         json['data']['user']['gender'] == 'male' ? Gender.male : Gender.female;
-    birthdate = DateFormat('yyyy-MM-dd')
-        .parse(json['data']['user']['birth_date'] ?? '');
+
+    try {
+      birthdate = DateFormat('yyyy-MM-dd')
+          .parse(json['data']['user']['birth_date'] ?? '');
+    } catch (e) {
+      print('sssssssss');
+      // birthdate =
+      //     DateFormat('y-m-d').parse(json['data']['user']['birth_date'] ?? '');
+    }
 
     countryName = json['data']['user']['country'] ?? '';
     email = json['data']['user']['email'] ?? '';
@@ -70,5 +82,13 @@ class UserModel {
     followers = json['data']['followers'] ?? 0;
     followings = json['data']['following'] ?? 0;
     i_block = json['data']['I_block'] ?? false;
+    print(json['data']['user']['cv']);
+    cv = json['data']['user']['cv'] ?? false;
+    height = json['data']['user']['height'] ?? '0';
+    weight = json['data']['user']['weight'] ?? '0';
+    heightUnit =
+        json['data']['user']['height_unit'] == 'ft' ? Units.ft : Units.cm;
+    weightUnit =
+        json['data']['user']['weight_unit'] == 'lb' ? Units.lb : Units.kg;
   }
 }

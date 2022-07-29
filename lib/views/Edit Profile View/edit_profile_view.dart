@@ -6,6 +6,8 @@ import 'package:country_picker/country_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:home_workout_app/components.dart';
+import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -46,14 +48,24 @@ class _EditProfileViewState extends State<EditProfileView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<EditProfileViewModel>(context, listen: false)
-        .setInitialData(context);
+    Future.delayed(Duration.zero).then((value) {
+      Provider.of<EditProfileViewModel>(context, listen: false)
+          .setInitialData(context);
 
-    final user =
-        Provider.of<ProfileViewModel>(context, listen: false).getUserData;
-    fnameController.text = user.fname;
-    lnameController.text = user.lname;
-    bioController.text = user.bio;
+      final user =
+          Provider.of<ProfileViewModel>(context, listen: false).getUserData;
+      fnameController.text = user.fname;
+      lnameController.text = user.lname;
+      bioController.text = user.bio;
+      heightController.text = user.height.toString();
+      weightController.text = user.weight.toString();
+      Provider.of<UserInformationViewModel>(context, listen: false)
+          .ChangeHeightUnit(user.heightUnit);
+      Provider.of<UserInformationViewModel>(context, listen: false)
+          .ChangeWeightUnit(user.weightUnit);
+      Provider.of<EditProfileViewModel>(context, listen: false)
+          .changeCountry(user.countryName);
+    });
   }
 
   @override
@@ -602,24 +614,25 @@ class _EditProfileViewState extends State<EditProfileView> {
                 ],
               ),
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/changeEmail');
-                  },
-                  child: ListTile(
-                    title: Text(
-                      'Change email',
-                      style: theme.textTheme.bodySmall,
-                    ).tr(),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      color: blueColor,
-                      size: 15,
-                    ),
-                  )),
-            ),
+            if (sharedPreferences.getBool('googleProvider') == false)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/changeEmail');
+                    },
+                    child: ListTile(
+                      title: Text(
+                        'Change email',
+                        style: theme.textTheme.bodySmall,
+                      ).tr(),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: blueColor,
+                        size: 15,
+                      ),
+                    )),
+              ),
             Align(
               alignment: Alignment.centerLeft,
               child: TextButton(
@@ -639,32 +652,30 @@ class _EditProfileViewState extends State<EditProfileView> {
                   )),
             ),
             Consumer<EditProfileViewModel>(
-              builder: (context, value, child) => ElevatedButton(
-                onPressed: () async {
-                  //nameKey.currentState!.validate();
-                  await Provider.of<EditProfileViewModel>(context,
-                          listen: false)
-                      .editProfile(
-                    fnameController.text.trim(),
-                    lnameController.text.trim(),
-                    value.getUserImage,
-                    bioController.text.trim(),
-                    heightController.text.trim(),
-                    weightController.text.trim(),
-                    value.getGender,
-                    value.getBirthdate,
-                    context,
-                    value.getCountry,
-                  );
-                },
-                child: value.getIsLoading
-                    ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
-                    : const Text(
+              builder: (context, value, child) => value.getIsLoading
+                  ? bigLoader(color: orangeColor)
+                  : ElevatedButton(
+                      onPressed: () async {
+                        //nameKey.currentState!.validate();
+                        await Provider.of<EditProfileViewModel>(context,
+                                listen: false)
+                            .editProfile(
+                          fnameController.text.trim(),
+                          lnameController.text.trim(),
+                          value.getUserImage,
+                          bioController.text.trim(),
+                          heightController.text.trim(),
+                          weightController.text.trim(),
+                          value.getGender,
+                          value.getBirthdate,
+                          context,
+                          value.getCountry,
+                        );
+                      },
+                      child: const Text(
                         'Save changes',
                       ).tr(),
-              ),
+                    ),
             ),
           ],
         ),
