@@ -10,7 +10,6 @@ Color greyColor = Colors.grey;
 
 String base_URL = 'http://192.168.1.105:8000/api';
 
-
 String ip = base_URL.replaceAll('/api', '');
 
 void setIP(String newIp) {
@@ -18,9 +17,6 @@ void setIP(String newIp) {
   print(newIp);
   print(base_URL);
 }
-
-
-
 
 const String apiKey =
     'THSzx8cmJny4DFmjvjX2calOKSduaJxb3YKC9sCuoCdEiF4J9w6qul5kRFwt1mUR';

@@ -656,7 +656,7 @@ class SignUp extends StatelessWidget {
                           ),
                           TextButton(
                               onPressed: () {
-                                Navigator.of(context).pushNamed(
+                                Navigator.of(context).pushReplacementNamed(
                                   '/signin',
                                 );
                               },
