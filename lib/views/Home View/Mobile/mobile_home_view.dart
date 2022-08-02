@@ -4,6 +4,7 @@ import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/my_flutter_app_icons.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
+import 'package:home_workout_app/views/Home%20View/Mobile/Pages/diet_page.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/Pages/home_page.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/Pages/profile_page.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
@@ -28,7 +29,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
     // TODO: implement initState
     super.initState();
     // Provider.of<ProfileViewModel>(context, listen: false).setCurrentUserData();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
       Provider.of<MobileHomeViewModel>(context, listen: false)
           .setCurrentTab(_tabController.index);
@@ -37,6 +38,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
     Future.delayed(Duration.zero).then((value) {
       Provider.of<ProfileViewModel>(context, listen: false)
           .setCurrentUserData(context);
+
       final args = ModalRoute.of(context)!.settings.arguments as Map;
       if (args['page'] != null) {
         _tabController.animateTo(args['page']);
@@ -73,7 +75,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
             floatingActionButton:
                 Provider.of<MobileHomeViewModel>(context, listen: true)
                             .getCurrentTab ==
-                        1
+                        2
                     ? (Provider.of<ProfileViewModel>(context, listen: true)
                                 .getUserData
                                 .roleId !=
@@ -108,7 +110,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
                               Provider.of<MobileHomeViewModel>(context,
                                           listen: true)
                                       .getCurrentTab ==
-                                  1
+                                  3
                           ? 50
                           : context.locale == const Locale('en')
                               ? 50
@@ -120,7 +122,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
                           Provider.of<MobileHomeViewModel>(context,
                                       listen: true)
                                   .getCurrentTab ==
-                              1
+                              3
                       ? null
                       : PreferredSize(
                           preferredSize: const Size(double.infinity, 80),
@@ -206,6 +208,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
                       controller: _tabController,
                       tabs: const [
                         Icon(Icons.home),
+                        Icon(Icons.food_bank_rounded),
                         Icon(
                           MyFlutterApp.newspaper,
                           size: 20,
@@ -218,6 +221,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
                         controller: _tabController,
                         children: [
                           HomePage(),
+                          DietPage(),
                           PostsPage(),
                           Consumer<ProfileViewModel>(
                             builder: (context, value, child) => ProfilePage(),

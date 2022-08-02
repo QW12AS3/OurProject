@@ -1,6 +1,8 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: curly_braces_in_flow_control_structures, use_build_context_synchronously
 
 import 'package:flutter/cupertino.dart';
+import 'package:home_workout_app/Api%20services/diet_api.dart';
+import 'package:home_workout_app/components.dart';
 
 class CreateDietViewModel with ChangeNotifier {
   bool _isLoading = false;
@@ -54,20 +56,37 @@ class CreateDietViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  // bool checkIfContain(int i) {
-  //   bool isContain = false;
-  //   if (_breakfastMeals.contains(i))
-  //     return true;
-  //   else if (_dinnerMeals.contains(i))
-  //     return true;
-  //   else if (_lunchMeals.contains(i))
-  //     return true;
-  //   else if (_snackMeals.contains(i))
-  //     return true;
-  //   else {
-  //     return isContain;
-  //   }
-  // }
+  Future<void> createMeal(
+      {required String name,
+      required BuildContext context,
+      required String lang}) async {
+    setIsLoading(true);
+    _mealsId.clear();
+    if (_breakfastMeals.isNotEmpty) _mealsId.add(_breakfastMeals);
+    if (_lunchMeals.isNotEmpty) _mealsId.add(_lunchMeals);
+    if (_snackMeals.isNotEmpty) _mealsId.add(_snackMeals);
+    if (_dinnerMeals.isNotEmpty) _mealsId.add(_dinnerMeals);
+
+    final response =
+        await DietAPI().createDiet(name: name, meals: getMeals, lang: lang);
+    if (response['success']) {
+      showSnackbar(Text(response['message'].toString()), context);
+      Navigator.pop(context);
+    } else {
+      showSnackbar(Text(response['message'].toString()), context);
+    }
+    setIsLoading(false);
+  }
+
+  void reset() {
+    _breakfastMeals.clear();
+    _dinnerMeals.clear();
+    _lunchMeals.clear();
+    _snackMeals.clear();
+    _mealsId = [];
+    _isLoading = false;
+    notifyListeners();
+  }
 
   void setIsLoading(value) {
     _isLoading = value;
