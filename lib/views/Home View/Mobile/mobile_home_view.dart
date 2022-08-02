@@ -32,11 +32,11 @@ class _MobileHomeViewState extends State<MobileHomeView>
     _tabController.addListener(() {
       Provider.of<MobileHomeViewModel>(context, listen: false)
           .setCurrentTab(_tabController.index);
-      Provider.of<ProfileViewModel>(context, listen: false)
-          .setCurrentUserData(context);
     });
 
     Future.delayed(Duration.zero).then((value) {
+      Provider.of<ProfileViewModel>(context, listen: false)
+          .setCurrentUserData(context);
       final args = ModalRoute.of(context)!.settings.arguments as Map;
       if (args['page'] != null) {
         _tabController.animateTo(args['page']);
