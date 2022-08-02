@@ -4,6 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/CV%20View%20Model/edit_apply_view_model.dart';
 import 'package:home_workout_app/view_models/Dashboards%20View%20Model/dashboards_view_model.dart';
+import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/create_diet_view_model.dart';
+import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/create_food_view_model.dart';
+import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/edit_food_view_model.dart';
+import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/foods_list_view_model.dart';
+import 'package:home_workout_app/view_models/Diet%20View%20Model/Meal/create_meal_view_model.dart';
+import 'package:home_workout_app/view_models/Diet%20View%20Model/Meal/edit_meal_view_model.dart';
+import 'package:home_workout_app/view_models/Diet%20View%20Model/Meal/meal_list_view_model.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/web_home_view_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/create_post_view_model.dart';
@@ -39,6 +46,15 @@ import 'package:home_workout_app/views/Dashboards%20View/dashboard_view.dart';
 import 'package:home_workout_app/views/Dashboards%20View/posts_dashboard_view.dart';
 import 'package:home_workout_app/views/Dashboards%20View/reported_comments_dashbaord.dart';
 import 'package:home_workout_app/views/Dashboards%20View/reported_post_dashboard_view.dart';
+import 'package:home_workout_app/views/Diet%20Views/Diet/create_diet_view.dart';
+import 'package:home_workout_app/views/Diet%20Views/Food/create_food_view.dart';
+import 'package:home_workout_app/views/Diet%20Views/Food/edit_food_view.dart';
+import 'package:home_workout_app/views/Diet%20Views/Food/food_picker_view.dart';
+import 'package:home_workout_app/views/Diet%20Views/Food/foods_list_view.dart';
+import 'package:home_workout_app/views/Diet%20Views/Meal/create_meal_view.dart';
+import 'package:home_workout_app/views/Diet%20Views/Meal/edit_meal_view.dart';
+import 'package:home_workout_app/views/Diet%20Views/Meal/meal_picker_view.dart';
+import 'package:home_workout_app/views/Diet%20Views/Meal/meals_list_view.dart';
 import 'package:home_workout_app/views/Edit%20Health%20Record%20View/edit_health_record_view.dart';
 import 'package:home_workout_app/views/Edit%20Profile%20View/edit_profile_view.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view.dart';
@@ -86,7 +102,7 @@ class Vigor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.setLocale(const Locale('ar'));
+    context.setLocale(const Locale('en'));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserInformationViewModel()),
@@ -112,6 +128,13 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => EditApplyViewModel()),
         ChangeNotifierProvider(create: (context) => StartViewModel()),
         ChangeNotifierProvider(create: (context) => DashboardsViewModel()),
+        ChangeNotifierProvider(create: (context) => CreateFoodViewModel()),
+        ChangeNotifierProvider(create: (context) => FoodsListViewModel()),
+        ChangeNotifierProvider(create: (context) => EditFoodViewModel()),
+        ChangeNotifierProvider(create: (context) => CreateMealViewModel()),
+        ChangeNotifierProvider(create: (context) => MealsListViewModel()),
+        ChangeNotifierProvider(create: (context) => EditMealViewModel()),
+        ChangeNotifierProvider(create: (context) => CreateDietViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -166,7 +189,17 @@ class Vigor extends StatelessWidget {
           '/postsDashboard': (context) => PostsDashbaordView(),
           '/cvsDashboard': (context) => CVsDashboard(),
           '/reportedPostDashboard': (context) => ReportedPostsDashbaordView(),
-          '/reportedCommentsDashboard': (context) => ReportedCommentsDashboard()
+          '/reportedCommentsDashboard': (context) =>
+              ReportedCommentsDashboard(),
+          '/createFood': (context) => CreateFoodView(),
+          '/foodList': (context) => FoodsListView(),
+          '/editFood': (context) => EditFoodView(),
+          '/createMeal': (context) => CreateMealView(),
+          '/foodPicker': (context) => FoodsPickerListView(),
+          '/mealsList': (context) => MealsListView(),
+          '/editMeal': (context) => EditMealView(),
+          '/createDiet': (context) => CreateDietView(),
+          '/mealPicker': (context) => MealPickerView(),
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,

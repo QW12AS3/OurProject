@@ -449,15 +449,16 @@ class CustomPostButtonn extends StatelessWidget {
 }
 
 class CustomTextField extends StatelessWidget {
-  CustomTextField(
-      {required this.maxLines,
-      required this.controller,
-      required this.title,
-      Key? key})
-      : super(key: key);
+  CustomTextField({
+    required this.maxLines,
+    required this.controller,
+    required this.title,
+    Key? key,
+  }) : super(key: key);
   TextEditingController controller;
   String title;
   int maxLines;
+  Function onChange = () {};
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
