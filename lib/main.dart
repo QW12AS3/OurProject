@@ -23,8 +23,10 @@ import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_vie
 import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
 import 'package:home_workout_app/view_models/CV%20View%20Model/apply_view_model.dart';
 import 'package:home_workout_app/view_models/comments_view_model.dart';
+import 'package:home_workout_app/view_models/create_challenge_view_model.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
 import 'package:home_workout_app/view_models/forget_password_view_model.dart';
+import 'package:home_workout_app/view_models/general_challenges_view_model.dart';
 import 'package:home_workout_app/view_models/health_record_view_model.dart';
 import 'package:home_workout_app/view_models/otp_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
@@ -63,6 +65,8 @@ import 'package:home_workout_app/views/Posts%20View/create_post_view.dart';
 import 'package:home_workout_app/views/Posts%20View/edit_post_view.dart';
 import 'package:home_workout_app/views/Posts%20View/post_view.dart';
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
+import 'package:home_workout_app/views/challenges/create_challenge_view.dart';
+import 'package:home_workout_app/views/challenges/general_challenges_view.dart';
 import 'package:home_workout_app/views/forget_password_view.dart';
 import 'package:home_workout_app/views/ip_view.dart';
 import 'package:home_workout_app/views/otp_view.dart';
@@ -128,7 +132,12 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ApplyViewModel()),
         ChangeNotifierProvider(create: (context) => EditApplyViewModel()),
         ChangeNotifierProvider(create: (context) => StartViewModel()),
+        ChangeNotifierProvider(
+            create: (context) => GeneralChallengesViewModel()),
+        ChangeNotifierProvider(
+            create: (context) => CreateChallengesViewModel()),
         ChangeNotifierProvider(create: (context) => DashboardsViewModel()),
+
         ChangeNotifierProvider(create: (context) => CreateFoodViewModel()),
         ChangeNotifierProvider(create: (context) => FoodsListViewModel()),
         ChangeNotifierProvider(create: (context) => EditFoodViewModel()),
@@ -136,7 +145,11 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MealsListViewModel()),
         ChangeNotifierProvider(create: (context) => EditMealViewModel()),
         ChangeNotifierProvider(create: (context) => CreateDietViewModel()),
+<<<<<<< HEAD
         ChangeNotifierProvider(create: (context) => DietListViewModel()),
+=======
+
+>>>>>>> 395d266cf88d2efe5f826843a04ed79c4856afed
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -160,7 +173,7 @@ class Vigor extends StatelessWidget {
         //   }
         // },
 
-        initialRoute: '/',
+        initialRoute: '/splash',
         routes: {
           '/signup': (context) => SignUp(),
           '/signin': (context) => SignIn(),
@@ -182,7 +195,9 @@ class Vigor extends StatelessWidget {
           '/postView': (context) => PostView(),
           '/savedPosts': (context) => SavedPostsView(),
           '/editPostView': (context) => EditPostView(),
-          '/': (context) => IPView(),
+          '/challenges': (context) => GeneralChallengesView(),
+          '/createChallenge': (context) => CreateChallengeView(),
+          // '/': (context) => IPView()
           '/apply': (context) => ApplyView(),
           '/pdf': (context) => PDFView(),
           '/cv': (context) => CVView(),
