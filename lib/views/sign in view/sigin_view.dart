@@ -509,7 +509,7 @@ class _SignInState extends State<SignIn> {
                           ),
                           TextButton(
                               onPressed: () {
-                                Navigator.of(context).pushNamed(
+                                Navigator.of(context).pushReplacementNamed(
                                   '/signup',
                                 );
                               },

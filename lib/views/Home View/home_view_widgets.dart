@@ -358,7 +358,27 @@ class myDrawer extends StatelessWidget {
                       ),
                     ],
                   ),
+
                   ExpansionTile(
+
+                ),
+                InkWell(
+                  onTap: () async {
+                    await Provider.of<ProfileViewModel>(context, listen: false)
+                        .logoutFromAll(context);
+                    sharedPreferences.remove("access_token");
+                    sharedPreferences.remove("refresh_token");
+                    sharedPreferences.remove("token_expiration");
+                    sharedPreferences.remove("role_id");
+                    sharedPreferences.remove("role_name");
+                    sharedPreferences.remove("googleProvider");
+                    sharedPreferences.remove("is_verified");
+                    sharedPreferences.remove("is_info");
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/start', (route) => false);
+                  },
+                  child: ListTile(
+
                     title: Text(
                       'Meals',
                       style: theme.textTheme.bodySmall,
@@ -427,6 +447,7 @@ class myDrawer extends StatelessWidget {
                   Icons.logout_rounded,
                   color: Colors.red,
                 ),
+
                 title: Text(
                   'Logout',
                   style: theme.textTheme.bodySmall,
@@ -478,6 +499,56 @@ class myDrawer extends StatelessWidget {
               ),
           ],
         ),
+
+              ],
+            )
+          else
+            bigLoader(
+              color: orangeColor,
+            ),
+          if (!Provider.of<ProfileViewModel>(context, listen: true)
+              .getIsLogoutLoading)
+            ExpansionTile(
+              trailing: const Icon(
+                Icons.accessibility_new_outlined,
+                color: Colors.red,
+              ),
+              title: Text(
+                'Challenges',
+                style: theme.textTheme.bodySmall,
+              ).tr(),
+              iconColor: blueColor,
+              children: [
+                InkWell(
+                  onTap: () async {
+                    Navigator.of(context).pushNamed('/challenges');
+                  },
+                  child: ListTile(
+                    title: Text(
+                      'My challenges',
+                      style: theme.textTheme.bodySmall,
+                    ).tr(),
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    Navigator.of(context).pushNamed('/createChallenge');
+                  },
+                  child: ListTile(
+                    title: Text(
+                      'My created challenges',
+                      style: theme.textTheme.bodySmall,
+                    ).tr(),
+                  ),
+                ),
+              ],
+            )
+          else
+            bigLoader(
+              color: orangeColor,
+            ),
+        ],
+
       ),
     );
   }
