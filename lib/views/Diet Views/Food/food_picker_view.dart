@@ -78,10 +78,27 @@ class _FoodsPickerListViewState extends State<FoodsPickerListView> {
                   )
                 : (food.getFoodsList.isEmpty
                     ? Center(
-                        child: Text('There are no foods',
-                                style: theme.textTheme.bodySmall!
-                                    .copyWith(color: greyColor))
-                            .tr(),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('There are no foods',
+                                    style: theme.textTheme.bodySmall!
+                                        .copyWith(color: greyColor))
+                                .tr(),
+                            TextButton(
+                                onPressed: () async {
+                                  Provider.of<FoodsListViewModel>(context,
+                                          listen: false)
+                                      .reset();
+                                  Provider.of<FoodsListViewModel>(context,
+                                          listen: false)
+                                      .getFoods(lang: getLang(context));
+                                },
+                                child: Text('Refresh',
+                                        style: theme.textTheme.bodySmall)
+                                    .tr())
+                          ],
+                        ),
                       )
                     : Column(
                         children: [

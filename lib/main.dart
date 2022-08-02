@@ -5,6 +5,7 @@ import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/CV%20View%20Model/edit_apply_view_model.dart';
 import 'package:home_workout_app/view_models/Dashboards%20View%20Model/dashboards_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/create_diet_view_model.dart';
+import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/diet_list_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/create_food_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/edit_food_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/foods_list_view_model.dart';
@@ -136,7 +137,6 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(
             create: (context) => CreateChallengesViewModel()),
         ChangeNotifierProvider(create: (context) => DashboardsViewModel()),
-
         ChangeNotifierProvider(create: (context) => CreateFoodViewModel()),
         ChangeNotifierProvider(create: (context) => FoodsListViewModel()),
         ChangeNotifierProvider(create: (context) => EditFoodViewModel()),
@@ -144,7 +144,7 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MealsListViewModel()),
         ChangeNotifierProvider(create: (context) => EditMealViewModel()),
         ChangeNotifierProvider(create: (context) => CreateDietViewModel()),
-
+        ChangeNotifierProvider(create: (context) => DietListViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,

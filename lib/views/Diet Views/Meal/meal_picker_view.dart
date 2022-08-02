@@ -58,7 +58,7 @@ class _MealPickerViewState extends State<MealPickerView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-       bottomNavigationBar: SizedBox(
+      bottomNavigationBar: SizedBox(
         height: 30,
         child: Center(
           child: Text(
@@ -299,67 +299,6 @@ class _MealPickerViewState extends State<MealPickerView> {
                                                         )
                                                         .toList(),
                                                   ),
-                                                  trailing:
-                                                      Provider.of<ProfileViewModel>(
-                                                                      context,
-                                                                      listen:
-                                                                          true)
-                                                                  .getUserData
-                                                                  .id ==
-                                                              e.ownerId
-                                                          ? PopupMenuButton(
-                                                              onSelected:
-                                                                  (value) async {
-                                                                switch (value) {
-                                                                  case 'edit':
-                                                                    Navigator.pushNamed(
-                                                                        context,
-                                                                        '/editMeal',
-                                                                        arguments: {
-                                                                          'meal':
-                                                                              e
-                                                                        });
-                                                                    break;
-
-                                                                  case 'delete':
-                                                                    await Provider.of<MealsListViewModel>(context, listen: false).deleteMeal(
-                                                                        lang: getLang(
-                                                                            context),
-                                                                        mealId: e
-                                                                            .id,
-                                                                        context:
-                                                                            context);
-                                                                    break;
-                                                                  default:
-                                                                }
-                                                              },
-                                                              itemBuilder:
-                                                                  (context) => [
-                                                                PopupMenuItem(
-                                                                    value:
-                                                                        'edit',
-                                                                    child: Text(
-                                                                      'Edit',
-                                                                      style: theme
-                                                                          .textTheme
-                                                                          .bodySmall!
-                                                                          .copyWith(
-                                                                              color: blueColor),
-                                                                    ).tr()),
-                                                                PopupMenuItem(
-                                                                    value:
-                                                                        'delete',
-                                                                    child: Text(
-                                                                      'Delete',
-                                                                      style: theme
-                                                                          .textTheme
-                                                                          .bodySmall!
-                                                                          .copyWith(
-                                                                              color: Colors.red),
-                                                                    ).tr())
-                                                              ],
-                                                            )
-                                                          : null,
                                                 ),
                                               ),
                                             ),

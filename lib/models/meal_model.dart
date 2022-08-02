@@ -13,7 +13,7 @@ class MealModel {
     print(json);
     type = json['type'] ?? 'Breakfast';
     id = json['id'] ?? 0;
-    print('iddddddddddddd'+id.toString());
+    print('iddddddddddddd' + id.toString());
     //day = json['day'] ?? 0;
     //ownerId = json['user_id'] ?? 0;
     calories = double.tryParse(json['calorie_count'].toString()) ?? 0;
@@ -23,5 +23,16 @@ class MealModel {
     // foodsData.forEach((element) {
     //   foods.add(FoodModel.fromJson(element));
     // });
+  }
+
+  MealModel.fromJsonForDiet(Map json) {
+    print(json);
+    type = json['type'] ?? 'Breakfast';
+    id = json['id'] ?? 0;
+
+    day = json['day'] ?? 0;
+    //ownerId = json['user_id'] ?? 0;
+    calories = double.tryParse(json['calorie_count'].toString()) ?? 0;
+    description = json['description'];
   }
 }
