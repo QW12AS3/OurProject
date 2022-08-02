@@ -137,7 +137,6 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(
             create: (context) => CreateChallengesViewModel()),
         ChangeNotifierProvider(create: (context) => DashboardsViewModel()),
-
         ChangeNotifierProvider(create: (context) => CreateFoodViewModel()),
         ChangeNotifierProvider(create: (context) => FoodsListViewModel()),
         ChangeNotifierProvider(create: (context) => EditFoodViewModel()),
@@ -145,11 +144,7 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MealsListViewModel()),
         ChangeNotifierProvider(create: (context) => EditMealViewModel()),
         ChangeNotifierProvider(create: (context) => CreateDietViewModel()),
-<<<<<<< HEAD
         ChangeNotifierProvider(create: (context) => DietListViewModel()),
-=======
-
->>>>>>> 395d266cf88d2efe5f826843a04ed79c4856afed
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
