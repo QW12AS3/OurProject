@@ -6,6 +6,8 @@ import 'package:home_workout_app/view_models/CV%20View%20Model/edit_apply_view_m
 import 'package:home_workout_app/view_models/Dashboards%20View%20Model/dashboards_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/create_diet_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/diet_list_view_model.dart';
+import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/edit_diet_view_model.dart';
+import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/specific_diet_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/create_food_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/edit_food_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/foods_list_view_model.dart';
@@ -50,6 +52,8 @@ import 'package:home_workout_app/views/Dashboards%20View/posts_dashboard_view.da
 import 'package:home_workout_app/views/Dashboards%20View/reported_comments_dashbaord.dart';
 import 'package:home_workout_app/views/Dashboards%20View/reported_post_dashboard_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Diet/create_diet_view.dart';
+import 'package:home_workout_app/views/Diet%20Views/Diet/edit_diet_view.dart';
+import 'package:home_workout_app/views/Diet%20Views/Diet/specific_diet_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Food/create_food_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Food/edit_food_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Food/food_picker_view.dart';
@@ -145,6 +149,8 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => EditMealViewModel()),
         ChangeNotifierProvider(create: (context) => CreateDietViewModel()),
         ChangeNotifierProvider(create: (context) => DietListViewModel()),
+        ChangeNotifierProvider(create: (context) => EditDietViewModel()),
+        ChangeNotifierProvider(create: (context) => SpecificDietViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -212,6 +218,8 @@ class Vigor extends StatelessWidget {
           '/editMeal': (context) => EditMealView(),
           '/createDiet': (context) => CreateDietView(),
           '/mealPicker': (context) => MealPickerView(),
+          '/editDiet': (context) => EditDietView(),
+          '/specDiet': (context) => SpecificDietView(),
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,

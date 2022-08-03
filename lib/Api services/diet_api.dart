@@ -38,7 +38,70 @@ class DietAPI {
         };
     } catch (e) {
       print('Create Diet Error: $e');
-      return {'success': true, 'message': e.toString()};
+      return {'success': false, 'message': e.toString()};
+    }
+  }
+
+  Future<Map> updateDiet(
+      {required int id, required List meals, required String lang}) async {
+    try {
+      print(meals);
+      final response =
+          await http.post(Uri.parse('$base_URL/diet/update'), headers: {
+        'apikey': apiKey,
+        'lang': lang,
+        'accept': 'application/json',
+        'authorization':
+            'Bearer ${sharedPreferences.getString('access_token')}',
+        'timeZone': getTimezone()
+      }, body: {
+        'diet_id': id.toString(),
+        'meals': jsonEncode(meals)
+      });
+      print(jsonDecode(response.body));
+      if (response.statusCode == 201) {
+        return {
+          'success': true,
+          'message': jsonDecode(response.body)['message']
+        };
+      } else
+        return {
+          'success': false,
+          'message': jsonDecode(response.body)['message']
+        };
+    } catch (e) {
+      print('Update Diet Error: $e');
+      return {'success': false, 'message': e.toString()};
+    }
+  }
+
+  Future<Map> deleteDiet({required int id, required String lang}) async {
+    try {
+      final response =
+          await http.post(Uri.parse('$base_URL/diet/delete'), headers: {
+        'apikey': apiKey,
+        'lang': lang,
+        'accept': 'application/json',
+        'authorization':
+            'Bearer ${sharedPreferences.getString('access_token')}',
+        'timeZone': getTimezone()
+      }, body: {
+        'diet_id': id.toString(),
+      });
+
+      if (response.statusCode == 201) {
+        return {
+          'success': true,
+          'message': jsonDecode(response.body)['message']
+        };
+      } else
+        return {
+          'success': false,
+          'message': jsonDecode(response.body)['message']
+        };
+    } catch (e) {
+      print('Delete Diet Error: $e');
+      return {'success': false, 'message': e.toString()};
     }
   }
 
@@ -70,5 +133,29 @@ class DietAPI {
       print('Get Foods List Error: $e');
     }
     return [];
+  }
+
+  Future<DietModel> getSpeDiet({required String lang, required int id}) async {
+    try {
+      final response =
+          await http.post(Uri.parse('$base_URL/diet/show'), headers: {
+        'apikey': apiKey,
+        'lang': lang,
+        'accept': 'application/json',
+        'authorization':
+            'Bearer ${sharedPreferences.getString('access_token')}',
+        'timeZone': getTimezone()
+      }, body: {
+        'diet_id': id.toString()
+      });
+
+      if (response.statusCode == 200) {
+        return DietModel.fromJsonForFull(jsonDecode(response.body));
+      }
+    } catch (e) {
+      print('Get Specific Diet Error: $e');
+      return DietModel();
+    }
+    return DietModel();
   }
 }

@@ -33,6 +33,9 @@ class MealsListViewModel with ChangeNotifier {
   }
 
   Future<void> getMeals({required String lang}) async {
+    if (_mealsList.isNotEmpty) return;
+
+    print('Called');
     setIsLoading(true);
     setPage(getPage + 1);
     final newMeals = await MealAPI().getMealsList(lang: lang, page: getPage);
@@ -40,6 +43,8 @@ class MealsListViewModel with ChangeNotifier {
       setPage(getPage - 1);
     else
       _mealsList.addAll(newMeals);
+
+    print(_mealsList);
 
     // _mealsList.add(MealModel.fromJson({
     //   'data': {
