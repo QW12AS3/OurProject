@@ -239,11 +239,19 @@ class _MealsListViewState extends State<MealsListView> {
                                               ),
                                               trailing:
                                                   Provider.of<ProfileViewModel>(
-                                                                  context,
-                                                                  listen: true)
-                                                              .getUserData
-                                                              .id ==
-                                                          e.ownerId
+                                                                      context,
+                                                                      listen:
+                                                                          true)
+                                                                  .getUserData
+                                                                  .roleId ==
+                                                              4 ||
+                                                          Provider.of<ProfileViewModel>(
+                                                                      context,
+                                                                      listen:
+                                                                          true)
+                                                                  .getUserData
+                                                                  .roleId ==
+                                                              5
                                                       ? PopupMenuButton(
                                                           onSelected:
                                                               (value) async {
