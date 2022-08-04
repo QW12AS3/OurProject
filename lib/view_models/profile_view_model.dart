@@ -173,12 +173,13 @@ class ProfileViewModel with ChangeNotifier {
       sharedPreferences.remove("role_id");
       sharedPreferences.remove("role_name");
       sharedPreferences.remove("googleProvider");
-      sharedPreferences.remove('registered');
-      sharedPreferences.remove('is_info');
+      sharedPreferences.remove("is_verified");
+      sharedPreferences.remove("is_info");
+
       setIslogoutLoading(false);
       _userData = UserModel();
 
-      Navigator.pushNamed(context, '/start');
+      Navigator.of(context).pushNamedAndRemoveUntil('/start', (route) => false);
     } else {
       setIslogoutLoading(false);
       showSnackbar(const Text('Logout failed'), context);
@@ -197,12 +198,13 @@ class ProfileViewModel with ChangeNotifier {
       sharedPreferences.remove("role_id");
       sharedPreferences.remove("role_name");
       sharedPreferences.remove("googleProvider");
-      sharedPreferences.remove('registered');
-      sharedPreferences.remove('is_info');
+      sharedPreferences.remove("is_verified");
+      sharedPreferences.remove("is_info");
+
       setIslogoutLoading(false);
       _userData = UserModel();
 
-      Navigator.pushReplacementNamed(context, '/');
+      Navigator.of(context).pushNamedAndRemoveUntil('/start', (route) => false);
     } else {
       setIslogoutLoading(false);
       showSnackbar(const Text('Logout failed'), context);
