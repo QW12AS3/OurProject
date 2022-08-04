@@ -6,30 +6,37 @@ import 'package:home_workout_app/models/create_challenge_model.dart';
 import 'package:http/http.dart';
 
 class CreateChallengeAPI {
-  static Future<CreateChallengeModel> createChallenge(
+  static Future<CreateChallengeModel?> createChallenge(
       CreateChallengeModel user, String lang) async {
     try {
-      var request = MultipartRequest("Post", Uri.parse('$base_URL/ch'));
+      var request = await MultipartRequest("Post", Uri.parse('$base_URL/ch'));
       request.headers['accept'] = 'application/json';
       request.headers['apikey'] = apiKey;
       request.headers['timeZone'] = getTimezone();
       request.headers['authorization'] =
           'Bearer ${sharedPreferences.getString('access_token')}';
-      request.fields['name'] = 'user.name!';
-      request.fields['end_time'] = '2022-8-8';
-      request.fields['time'] = '1';
-      request.fields['count'] = '100';
-      request.fields['ex_id'] = '1';
-      request.fields['desc'] = '1re';
+      request.fields['name'] = user.name!;
+      request.fields['end_time'] = user.end_time!;
+      if (user.time == 'true') {
+        request.fields['time'] = '1';
+      } else {
+        request.fields['time'] = '0';
+      }
+      request.fields['count'] = user.count!;
+      request.fields['ex_id'] = user.ex_id!;
+      request.fields['desc'] = user.desc!;
       // request.fields['gender'] = gender.name;
       // request.fields['birthdate'] = birthdate.toString();
       // request.fields['country'] = country;
       // request.fields['_method'] = 'PUT';
+      print('tiiiiiiiiime');
+      print(user.time);
       print(sharedPreferences.get('access_token'));
       if (user.img?.path != '') {
         var pic = await MultipartFile.fromPath("img", user.img!.path);
         request.files.add(pic);
       }
+
       // final Response response = await post(Uri.parse('$base_URL/ch'),
       //     headers: <String, String>{
       //       // "Access-Control-Allow-Origin": "*",
@@ -43,23 +50,24 @@ class CreateChallengeAPI {
 
       var response = await request.send();
       var responseData = await response.stream.toBytes();
-      var responseString = String.fromCharCodes(responseData);
+      var responseString = await String.fromCharCodes(responseData);
       // print(Response.fromStream(response));
       print(responseString);
       print(response.statusCode);
       final respStr = await response.stream.bytesToString();
       print(respStr);
-      if (response.statusCode == 200) {
-        return CreateChallengeModel(
-            message: 'There is a problem connecting to the internet',
-            statusCode: 0);
+      if (response.statusCode.toString() == '200') {
+        // responseString
+        //  return  CreateChallengeModel.fromJson(json.decode(responseString));
+        print('yeeeeeeess');
+        return CreateChallengeModel(message: 'dddddddddddddd', statusCode: 200);
         // CreateChallengeModel.fromJson(json.decode(response.body));
       } else {
         print(response.statusCode);
         // print(response.body);
         return CreateChallengeModel(
             message: 'There is a problem connecting to the internet',
-            statusCode: 0);
+            statusCode: 100);
         // CreateChallengeModel.fromJsonWithErrors(
         //     json.decode(response.body));
       }

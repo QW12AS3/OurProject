@@ -120,7 +120,6 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(
             create: (context) => CreateChallengesViewModel()),
         ChangeNotifierProvider(create: (context) => DashboardsViewModel()),
-
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -144,7 +143,7 @@ class Vigor extends StatelessWidget {
         //   }
         // },
 
-        initialRoute: '/splash',
+        initialRoute: '/createChallenge',
         routes: {
           '/signup': (context) => SignUp(),
           '/signin': (context) => SignIn(),

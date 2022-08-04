@@ -369,47 +369,41 @@ class myDrawer extends StatelessWidget {
             bigLoader(
               color: orangeColor,
             ),
-          if (!Provider.of<ProfileViewModel>(context, listen: true)
-              .getIsLogoutLoading)
-            ExpansionTile(
-              trailing: const Icon(
-                Icons.accessibility_new_outlined,
-                color: Colors.red,
-              ),
-              title: Text(
-                'Challenges',
-                style: theme.textTheme.bodySmall,
-              ).tr(),
-              iconColor: blueColor,
-              children: [
-                InkWell(
-                  onTap: () async {
-                    Navigator.of(context).pushNamed('/challenges');
-                  },
-                  child: ListTile(
-                    title: Text(
-                      'My challenges',
-                      style: theme.textTheme.bodySmall,
-                    ).tr(),
-                  ),
-                ),
-                InkWell(
-                  onTap: () async {
-                    Navigator.of(context).pushNamed('/createChallenge');
-                  },
-                  child: ListTile(
-                    title: Text(
-                      'My created challenges',
-                      style: theme.textTheme.bodySmall,
-                    ).tr(),
-                  ),
-                ),
-              ],
-            )
-          else
-            bigLoader(
+          ExpansionTile(
+            trailing: Icon(
+              Icons.accessibility_new_outlined,
               color: orangeColor,
             ),
+            title: Text(
+              'Challenges',
+              style: theme.textTheme.bodySmall,
+            ).tr(),
+            iconColor: blueColor,
+            children: [
+              InkWell(
+                onTap: () async {
+                  Navigator.of(context).pushNamed('/challenges');
+                },
+                child: ListTile(
+                  title: Text(
+                    'My challenges',
+                    style: theme.textTheme.bodySmall,
+                  ).tr(),
+                ),
+              ),
+              InkWell(
+                onTap: () async {
+                  Navigator.of(context).pushNamed('/createChallenge');
+                },
+                child: ListTile(
+                  title: Text(
+                    'My created challenges',
+                    style: theme.textTheme.bodySmall,
+                  ).tr(),
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );
