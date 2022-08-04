@@ -9,9 +9,25 @@ class GeneralChallengesViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  getData(String lang, int page) {
-    futurechallengesList = GeneralChallengesAPI().getUserchallenges(lang, page);
+  getData(String lang, int page, String linkTupe) {
+    futurechallengesList =
+        GeneralChallengesAPI().getUserchallenges(lang, page, linkTupe);
     notifyListeners();
     return futurechallengesList;
+  }
+
+  sendParticipate(String lang, int? id) {
+    GeneralChallengesAPI().participate(lang, id);
+    notifyListeners();
+  }
+
+  getSpecificChallengeData(String lang, int? page, String linkTupe) {
+    GeneralChallengesAPI().getUserchallenges(lang, page, linkTupe);
+    notifyListeners();
+  }
+
+  deleteSpecificChallengeData(String lang, int? id) {
+    GeneralChallengesAPI().deleteChallenge(lang, id);
+    notifyListeners();
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +23,13 @@ class CreateChallengeView extends StatefulWidget {
 
 class _CreateChallengeViewState extends State<CreateChallengeView> {
   final formGlobalKey = GlobalKey<FormState>();
+  final form1GlobalKey = GlobalKey<FormState>();
+  final form2GlobalKey = GlobalKey<FormState>();
   TimeOfDay initialTime = TimeOfDay(hour: 0, minute: 0);
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController hoursController = TextEditingController();
+  TextEditingController minuitesController = TextEditingController();
+  TextEditingController repetitionController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   Future<List<CreateChallengeModel>>? futurechallengesList;
   // List<String> dropDownList = [];
@@ -49,13 +57,14 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
-    final hours = initialTime.hour.toString().padLeft(2, '0');
-    final minuites = initialTime.minute.toString().padLeft(2, '0');
+    // final hours = initialTime.hour.toString().padLeft(2, '0');
+    // final minuites = initialTime.minute.toString().padLeft(2, '0');
+
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
             title: Text(
-              'Create challenges',
+              'Create challenge',
               style: theme.textTheme.bodyMedium!,
             ),
           ),
@@ -66,140 +75,338 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: mq.size.height * 0.2,
+                        height: mq.size.height * 0.02,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.end,
+                      //     children: [
+                      //       SizedBox(
+                      //         height: mq.size.height * 0.02,
+                      //       ),
+
+                      //       SizedBox(
+                      //         height: mq.size.height * 0.01,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+
+                      SizedBox(
+                        height: mq.size.height * 0.03,
+                      ),
+
+                      Container(
+                        child: Form(
+                          key: formGlobalKey,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              SizedBox(
-                                height: mq.size.height * 0.02,
-                              ),
-                              Form(
-                                key: formGlobalKey,
-                                child: Column(
-                                  children: [
-                                    /*    Container(
-                            width: 380,
-                            decoration: BoxDecoration(
-                                color: Colors.white70.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: TextFormField(
-                              controller: nameController,
-                              validator: (value) {
-                                return ''; //TODO:
-                              },
-                              decoration: InputDecoration(
-                                // focusedErrorBorder:  OutlineInputBorder(
-                                //   borderSide:
-                                //       BorderSide(color: blueColor, width: 1.5),
-                                //   borderRadius: BorderRadius.all(
-                                //     Radius.circular(15),
-                                //   ),
-                                // ),
-
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: greyColor, width: 1.5),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(15),
-                                  ),
-                                ),
-                                errorBorder: const OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.red, width: 1.5),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(15),
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: orangeColor, width: 1.5),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(15),
-                                  ),
-                                ),
-                                labelText: 'Name of challenge'.tr(),
-                                labelStyle: TextStyle(
-                                    color: orangeColor,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                                prefixIcon: Icon(
-                                  CupertinoIcons.textformat_abc_dottedunderline,
-                                  color: blueColor,
-                                  size: 33,
-                                ),
-                              ),
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(50),
-                              ],
-                              style: TextStyle(
-                                  color: blueColor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
-                              keyboardType: TextInputType.name,
-                              textInputAction: TextInputAction.next,
-                            ),
-                          ),
-                        */
-
-                                    Row(
-                                      children: [
-                                        const Text("Select exercise's name: "),
-                                        DropdownButton<String>(
-                                          value: Provider.of<
-                                                      CreateChallengesViewModel>(
-                                                  context,
-                                                  listen: false)
-                                              .dropDownNewValue,
-                                          icon: Icon(Icons.arrow_downward,
-                                              color: blueColor),
-                                          elevation: 16,
-                                          style: TextStyle(color: blueColor),
-                                          underline: Container(
-                                            height: 2,
-                                            color: blueColor,
-                                          ),
-                                          onChanged: (String? newValue) {
-                                            Provider.of<CreateChallengesViewModel>(
-                                                    context,
-                                                    listen: false)
-                                                .setdropDownNewValue(newValue!);
-                                          },
-                                          items: Provider.of<
-                                                      CreateChallengesViewModel>(
-                                                  context)
-                                              .dropDownList
-                                              ?.map<DropdownMenuItem<String>>(
-                                                  (String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(value),
-                                            );
-                                          }).toList(),
-                                        ),
-                                        /*  DropdownButton(
-                                  value: selectedDropDownValue,
-                                  items: dropDownList.map((item) {
-                                    return DropdownMenuItem(
-                                      child: Text(item),
-                                      value: item,
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? newValue) {
-                                    selectedDropDownValue = newValue!;
-                                  }
-                                  ),*/
-                                      ],
+                              Container(
+                                width: mq.size.width * 0.7,
+                                decoration: BoxDecoration(
+                                    color: Colors.white70.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: TextFormField(
+                                  controller: nameController,
+                                  validator: (value) {
+                                    return CreateChallengesViewModel()
+                                        .checkName(
+                                            value.toString(),
+                                            context.locale == Locale('en')
+                                                ? 'en'
+                                                : 'ar');
+                                  },
+                                  decoration: InputDecoration(
+                                    // focusedErrorBorder:  OutlineInputBorder(
+                                    //   borderSide:
+                                    //       BorderSide(color: blueColor, width: 1.5),
+                                    //   borderRadius: BorderRadius.all(
+                                    //     Radius.circular(15),
+                                    //   ),
+                                    // ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: greyColor, width: 1.5),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(15),
+                                      ),
                                     ),
-                                    SizedBox(
-                                      height: mq.size.height * 0.03,
+                                    errorBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.red, width: 1.5),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(15),
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: orangeColor, width: 1.5),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(15),
+                                      ),
+                                    ),
+                                    labelText: 'Name'.tr(),
+                                    labelStyle: TextStyle(
+                                        color: orangeColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                    prefixIcon: Icon(
+                                      CupertinoIcons
+                                          .textformat_abc_dottedunderline,
+                                      color: blueColor,
+                                      size: 33,
+                                    ),
+                                  ),
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(20),
+                                  ],
+                                  style: TextStyle(
+                                      color: blueColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                  // maxLines: 5,
+                                  keyboardType: TextInputType.name,
+                                  textInputAction: TextInputAction.done,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Select exercise's name: "),
+                                  ),
+                                  DropdownButton<String>(
+                                    value:
+                                        Provider.of<CreateChallengesViewModel>(
+                                                context,
+                                                listen: false)
+                                            .dropDownNewValue,
+                                    icon: Icon(Icons.arrow_downward,
+                                        color: blueColor),
+                                    elevation: 16,
+                                    style: TextStyle(color: blueColor),
+                                    underline: Container(
+                                      height: 2,
+                                      color: blueColor,
+                                    ),
+                                    onChanged: (String? newValue) {
+                                      Provider.of<CreateChallengesViewModel>(
+                                              context,
+                                              listen: false)
+                                          .setdropDownNewValue(newValue!);
+                                    },
+                                    items:
+                                        Provider.of<CreateChallengesViewModel>(
+                                                context)
+                                            .dropDownList
+                                            ?.map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                  ),
+                                  /*  DropdownButton(
+                              value: selectedDropDownValue,
+                              items: dropDownList.map((item) {
+                                return DropdownMenuItem(
+                                  child: Text(item),
+                                  value: item,
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                selectedDropDownValue = newValue!;
+                              }
+                              ),*/
+                                ],
+                              ),
+                              SizedBox(
+                                height: mq.size.height * 0.03,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: mq.size.width * 0.1),
+                                child: Consumer<CreateChallengesViewModel>(
+                                  builder: (context, value, child) => Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      value.userImage != null &&
+                                              value.userImage.path != ''
+                                          ? Container(
+                                              height: 150,
+                                              width: 150,
+                                              child: Image.file(
+                                                File(
+                                                  Provider.of<CreateChallengesViewModel>(
+                                                          context)
+                                                      .userImage
+                                                      .path,
+                                                ),
+                                                height: 150,
+                                                width: 150,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                          : Container(),
+                                      ElevatedButton(
+                                          onPressed: () async {
+                                            buildDialog(context);
+                                            print(value.userImage == null);
+                                            print(value.userImage.path == '');
+                                          },
+                                          child: Text(value.userImage != null &&
+                                                  value.userImage.path != ''
+                                              ? 'Change photo'
+                                              : 'Add photo'))
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: mq.size.height * 0.01,
+                              ),
+                              Container(
+                                width: mq.size.width * 0.7,
+                                decoration: BoxDecoration(
+                                    color: Colors.white70.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: TextFormField(
+                                  controller: descriptionController,
+                                  validator: (value) {
+                                    return CreateChallengesViewModel()
+                                        .checkDescription(
+                                            value.toString(),
+                                            context.locale == Locale('en')
+                                                ? 'en'
+                                                : 'ar');
+                                  },
+                                  decoration: InputDecoration(
+                                    // focusedErrorBorder:  OutlineInputBorder(
+                                    //   borderSide:
+                                    //       BorderSide(color: blueColor, width: 1.5),
+                                    //   borderRadius: BorderRadius.all(
+                                    //     Radius.circular(15),
+                                    //   ),
+                                    // ),
+
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: greyColor, width: 1.5),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(15),
+                                      ),
+                                    ),
+                                    errorBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.red, width: 1.5),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(15),
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: orangeColor, width: 1.5),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(15),
+                                      ),
+                                    ),
+                                    labelText: 'Description'.tr(),
+                                    labelStyle: TextStyle(
+                                        color: orangeColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                    prefixIcon: Icon(
+                                      Icons.description_outlined,
+                                      color: blueColor,
+                                      size: 33,
+                                    ),
+                                  ),
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(300),
+                                  ],
+                                  style: TextStyle(
+                                      color: blueColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                  maxLines: 5,
+                                  keyboardType: TextInputType.multiline,
+                                  textInputAction: TextInputAction.newline,
+                                ),
+                              ),
+                              SizedBox(
+                                height: mq.size.height * 0.01,
+                              ),
+
+                              // SizedBox(
+                              //   height: mq.size.height * 0.01,
+                              // ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Challenge end date:',
+                                      style: theme.textTheme.bodyMedium!
+                                          .copyWith(color: orangeColor),
+                                    ).tr(),
+                                  ),
+                                ],
+                              ),
+                              Consumer<CreateChallengesViewModel>(
+                                builder: (context, value, child) => Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      // DateFormat('yyyy-MM-dd')
+                                      //             .format(value.challengeDate) ==
+                                      //         DateFormat('yyyy-MM-dd')
+                                      //             .format(DateTime.now())
+                                      //     ? 'Year-Month-Day'
+                                      // :
+                                      DateFormat('yyyy-MM-dd')
+                                          .format(value.challengeDate),
+                                      style: theme.textTheme.bodySmall!
+                                          .copyWith(color: blueColor),
+                                    ).tr(),
+                                    IconButton(
+                                      onPressed: () {
+                                        value.changechallengeDate(context);
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        color: orangeColor,
+                                        size: 20,
+                                      ),
                                     ),
                                   ],
                                 ),
+                              ),
+                              Row(
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Practice by: '),
+                                  ),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        Provider.of<CreateChallengesViewModel>(
+                                                context,
+                                                listen: false)
+                                            .changeIsTime();
+                                      },
+                                      child: Text(
+                                          Provider.of<CreateChallengesViewModel>(
+                                                      context,
+                                                      listen: false)
+                                                  .isTime
+                                              ? 'Time'
+                                              : 'Repetition'))
+                                ],
                               ),
                               SizedBox(
                                 height: mq.size.height * 0.01,
@@ -208,56 +415,391 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: mq.size.width * 0.1),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      Container(
+                        child: Column(
                           children: [
-                            ElevatedButton(
-                                onPressed: () async {
-                                  Provider.of<CreateChallengesViewModel>(
-                                          context,
-                                          listen: false)
-                                      .changePhoto(ImageSource.gallery);
-                                },
-                                child: Text('Add photo')),
+                            if (Provider.of<CreateChallengesViewModel>(context,
+                                    listen: false)
+                                .isTime)
+                              Form(
+                                key: form1GlobalKey,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: mq.size.width * 0.35,
+                                      decoration: BoxDecoration(
+                                          color:
+                                              Colors.white70.withOpacity(0.5),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: TextFormField(
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(3),
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                        ],
+                                        controller: hoursController,
+                                        validator: (value) {
+                                          return CreateChallengesViewModel()
+                                              .checkHours(
+                                                  value.toString(),
+                                                  context.locale == Locale('en')
+                                                      ? 'en'
+                                                      : 'ar');
+                                        },
+                                        decoration: InputDecoration(
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: greyColor, width: 1.5),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(15),
+                                            ),
+                                          ),
+                                          errorBorder: const OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.red, width: 1.5),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(15),
+                                            ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: orangeColor, width: 1.5),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(15),
+                                            ),
+                                          ),
+                                          labelText: 'Hours'.tr(),
+                                          labelStyle: TextStyle(
+                                              color: orangeColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                          prefixIcon: Icon(
+                                            CupertinoIcons.time,
+                                            color: blueColor,
+                                            size: 33,
+                                          ),
+                                        ),
+                                        style: TextStyle(
+                                            color: blueColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                        keyboardType: TextInputType.number,
+                                        textInputAction: TextInputAction.next,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: mq.size.width * 0.03,
+                                    ),
+                                    Container(
+                                      width: mq.size.width * 0.35,
+                                      decoration: BoxDecoration(
+                                          color:
+                                              Colors.white70.withOpacity(0.5),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: TextFormField(
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(2),
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                          // LimitRange(0, 59),
+                                        ],
+                                        controller: minuitesController,
+                                        validator: (value) {
+                                          return CreateChallengesViewModel()
+                                              .checkMinuites(
+                                                  value.toString(),
+                                                  context.locale == Locale('en')
+                                                      ? 'en'
+                                                      : 'ar');
+                                        },
+                                        decoration: InputDecoration(
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: greyColor, width: 1.5),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(15),
+                                            ),
+                                          ),
+                                          errorBorder: const OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.red, width: 1.5),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(15),
+                                            ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: orangeColor, width: 1.5),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(15),
+                                            ),
+                                          ),
+                                          labelText: 'Minuites'.tr(),
+                                          labelStyle: TextStyle(
+                                              color: orangeColor,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                          prefixIcon: Icon(
+                                            CupertinoIcons.time,
+                                            color: blueColor,
+                                            size: 33,
+                                          ),
+                                        ),
+                                        style: TextStyle(
+                                            color: blueColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                        keyboardType: TextInputType.number,
+                                        textInputAction: TextInputAction.done,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            else
+                              Form(
+                                key: form2GlobalKey,
+                                child: Container(
+                                  width: mq.size.width * 0.35,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white70.withOpacity(0.5),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: TextFormField(
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(3),
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                    controller: repetitionController,
+                                    validator: (value) {
+                                      return CreateChallengesViewModel()
+                                          .checkRepetition(
+                                              value.toString(),
+                                              context.locale == Locale('en')
+                                                  ? 'en'
+                                                  : 'ar');
+                                    },
+                                    decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: greyColor, width: 1.5),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(15),
+                                        ),
+                                      ),
+                                      errorBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.red, width: 1.5),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(15),
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: orangeColor, width: 1.5),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(15),
+                                        ),
+                                      ),
+                                      labelText: 'Repetition'.tr(),
+                                      labelStyle: TextStyle(
+                                          color: orangeColor,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                      prefixIcon: Icon(
+                                        CupertinoIcons.repeat,
+                                        color: blueColor,
+                                        size: 33,
+                                      ),
+                                    ),
+                                    style: TextStyle(
+                                        color: blueColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                    keyboardType: TextInputType.number,
+                                    textInputAction: TextInputAction.done,
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                       ),
-                      ElevatedButton(
-                          onPressed: () async {
-                            final CreateChallengeModel BackEndMessage =
-                                await CreateChallengesViewModel()
-                                    .postChallengeInfo(
-                                        'nameVal',
-                                        '2022-8-8',
-                                        'countVal',
-                                        'ex_idVal',
-                                        'false',
-                                        Provider.of<CreateChallengesViewModel>(
-                                                context,
-                                                listen: false)
-                                            .userImage,
-                                        'descVal',
-                                        context.locale == Locale('en')
-                                            ? 'en'
-                                            : 'ar');
-                            print(Provider.of<CreateChallengesViewModel>(
-                                    context,
-                                    listen: false)
-                                .dropDownList);
-                            print(Provider.of<CreateChallengesViewModel>(
-                                    context,
-                                    listen: false)
-                                .getIdOfDropDownValue());
-                          },
-                          child: Text('Save')),
+
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                            onPressed: () async {
+                              // print(object)
+                              if (Provider.of<CreateChallengesViewModel>(
+                                              context,
+                                              listen: false)
+                                          .userImage !=
+                                      null &&
+                                  Provider.of<CreateChallengesViewModel>(
+                                              context,
+                                              listen: false)
+                                          .userImage
+                                          .path !=
+                                      '') {
+                                if (formGlobalKey.currentState!.validate() &&
+                                    ((Provider.of<CreateChallengesViewModel>(
+                                                    context,
+                                                    listen: false)
+                                                .isTime &&
+                                            form1GlobalKey.currentState!
+                                                .validate()) ||
+                                        (!Provider.of<CreateChallengesViewModel>(
+                                                    context,
+                                                    listen: false)
+                                                .isTime &&
+                                            form2GlobalKey.currentState!
+                                                .validate()))) {
+                                  formGlobalKey.currentState!.save();
+                                  final CreateChallengeModel BackEndMessage =
+                                      await CreateChallengesViewModel().postChallengeInfo(
+                                          nameController.text,
+                                          Provider.of<CreateChallengesViewModel>(context, listen: false)
+                                              .challengeDate
+                                              .toString(),
+                                          Provider.of<CreateChallengesViewModel>(context, listen: false).isTime
+                                              ? Provider.of<CreateChallengesViewModel>(context, listen: false)
+                                                  .getSumOfTime(
+                                                      hoursController.text,
+                                                      minuitesController.text)
+                                                  .toString()
+                                              : repetitionController.text,
+                                          Provider.of<CreateChallengesViewModel>(
+                                                  context,
+                                                  listen: false)
+                                              .getIdOfDropDownValue()
+                                              .toString(),
+                                          Provider.of<CreateChallengesViewModel>(
+                                                  context,
+                                                  listen: false)
+                                              .isTime
+                                              .toString(),
+                                          Provider.of<CreateChallengesViewModel>(
+                                                  context,
+                                                  listen: false)
+                                              .userImage,
+                                          descriptionController.text,
+                                          context.locale == Locale('en') ? 'en' : 'ar');
+                                  print('ffffffffffssssssssssss');
+                                  print(BackEndMessage.statusCode);
+                                  print(BackEndMessage.message);
+                                  if (BackEndMessage.statusCode == 200) {
+                                    nameController.clear();
+                                    descriptionController.clear();
+                                    repetitionController.clear();
+                                    hoursController.clear();
+                                    minuitesController.clear();
+                                    showSnackbar(
+                                        Text(BackEndMessage.message.toString()),
+                                        context);
+                                    Navigator.of(context).pop();
+                                  }
+                                  // print(Provider.of<CreateChallengesViewModel>(
+                                  //         context,
+                                  //         listen: false)
+                                  //     .dropDownList);
+                                  // print(Provider.of<CreateChallengesViewModel>(
+                                  //         context,
+                                  //         listen: false)
+                                  //     .getIdOfDropDownValue());
+                                }
+                              } else {
+                                showSnackbar(Text('Add photo'), context);
+                              }
+                            },
+                            child: Text('Save')),
+                      ),
                     ],
                   ),
                 )
               : CustomLoading()),
     );
+  }
+
+  void buildDialog(BuildContext context) {
+    final alert = AlertDialog(
+      title: Text(
+        'Photo type',
+        style: TextStyle(color: blueColor),
+      ),
+      content: Container(
+        height: 150,
+        child: Column(
+          children: [
+            Divider(),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Provider.of<CreateChallengesViewModel>(context, listen: false)
+                    .changePhoto(ImageSource.gallery);
+              },
+              child: Text(
+                'From gallery',
+                style: TextStyle(color: orangeColor),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Provider.of<CreateChallengesViewModel>(context, listen: false)
+                    .changePhoto(ImageSource.camera);
+              },
+              child: Text(
+                'From camera',
+                style: TextStyle(color: orangeColor),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+        context: context,
+        // barrierDismissible: false,
+        // barrierLabel: "ddddddddd",
+        barrierColor: orangeColor.withOpacity(0.1),
+        builder: (BuildContext ctx) {
+          return alert;
+        });
+  }
+}
+
+class LimitRange extends TextInputFormatter {
+  LimitRange(
+    this.minRange,
+    this.maxRange,
+  ) : assert(
+          minRange < maxRange,
+        );
+
+  final int minRange;
+  final int maxRange;
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    var value = int.parse(newValue.text.trim());
+    if (value < minRange) {
+      print('value print in between 0 - 59');
+      return TextEditingValue(text: minRange.toString());
+    } else if (value > maxRange) {
+      print('not more 59');
+      return TextEditingValue(text: maxRange.toString());
+    }
+    return newValue;
   }
 }
 /*

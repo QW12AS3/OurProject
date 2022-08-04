@@ -18,6 +18,8 @@ class ChallengeModel {
   bool? is_sub;
   bool? is_active;
   int? statusCode;
+  String? subs;
+  String? calory;
   ChallengeModel({
     this.id,
     this.name,
@@ -38,25 +40,35 @@ class ChallengeModel {
     this.is_time,
     this.is_sub,
     this.is_active,
+    this.subs,
+    this.calory,
   });
   // to convert data from json to dart object
   factory ChallengeModel.fromJson(Map<String, dynamic> user) => ChallengeModel(
+      message: user['message'] ?? '',
+      statusCode: user['status'] ?? 0,
+      id: user['id'] ?? 0,
+      name: user['name'] ?? '',
+      user_name: user['user_name'] ?? '',
+      desc: user['desc'] ?? '',
+      img: user['img'] ?? '',
+      end_time: user['end_time'] ?? '',
+      role_id: user['role_id'] ?? 0,
+      total_count: user['total_count'] ?? '',
+      my_count: user['my_count'] ?? '',
+      created_at: user['created_at'] ?? '',
+      sub_count: user['sub_count'] ?? '',
+      user_img: user['user_img'] ?? '',
+      is_time: user['is_time'] ?? false,
+      is_sub: user['is_sub'] ?? false,
+      is_active: user['is_active'] ?? false,
+      calory: user['ca'] ?? '');
+  factory ChallengeModel.fromJsonForParticipate(Map<String, dynamic> user) =>
+      ChallengeModel(
         message: user['message'] ?? '',
         statusCode: user['status'] ?? 0,
-        id: user['id'] ?? 0,
-        name: user['name'] ?? '',
-        desc: user['desc'] ?? '',
-        img: user['img'] ?? '',
-        end_time: user['end_time'] ?? '',
-        role_id: user['role_id'] ?? 0,
-        total_count: user['total_count'] ?? '',
-        my_count: user['my_count'] ?? '',
-        created_at: user['created_at'] ?? '',
-        sub_count: user['sub_count'] ?? '',
-        user_img: user['user_img'] ?? '',
-        is_time: user['is_time'] ?? false,
         is_sub: user['is_sub'] ?? false,
-        is_active: user['is_active'] ?? false,
+        subs: user['subs'] ?? '',
       );
   factory ChallengeModel.fromJsonWithErrors(Map<String, dynamic> user) =>
       ChallengeModel(message: user['message'], statusCode: user['status'] ?? 0);

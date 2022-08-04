@@ -141,6 +141,7 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(
             create: (context) => CreateChallengesViewModel()),
         ChangeNotifierProvider(create: (context) => DashboardsViewModel()),
+
         ChangeNotifierProvider(create: (context) => CreateFoodViewModel()),
         ChangeNotifierProvider(create: (context) => FoodsListViewModel()),
         ChangeNotifierProvider(create: (context) => EditFoodViewModel()),
@@ -151,6 +152,7 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DietListViewModel()),
         ChangeNotifierProvider(create: (context) => EditDietViewModel()),
         ChangeNotifierProvider(create: (context) => SpecificDietViewModel()),
+
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -174,7 +176,7 @@ class Vigor extends StatelessWidget {
         //   }
         // },
 
-        initialRoute: '/splash',
+        initialRoute: '/createChallenge',
         routes: {
           '/signup': (context) => SignUp(),
           '/signin': (context) => SignIn(),
