@@ -29,21 +29,21 @@ class _MealPickerViewState extends State<MealPickerView> {
       Provider.of<MealsListViewModel>(context, listen: false)
           .getMeals(lang: getLang(context));
 
-      _searchController.addListener(() {
-        if (_searchController.text.trim() != searchValue)
-          // ignore: curly_braces_in_flow_control_structures
-          setState(() {
-            searchValue = _searchController.text.trim();
-          });
-      });
+      // _searchController.addListener(() {
+      //   if (_searchController.text.trim() != searchValue)
+      //     // ignore: curly_braces_in_flow_control_structures
+      //     setState(() {
+      //       searchValue = _searchController.text.trim();
+      //     });
+      // });
 
-      _scrollController.addListener(() {
-        if (_scrollController.offset ==
-            _scrollController.position.maxScrollExtent) {
-          Provider.of<MealsListViewModel>(context, listen: false)
-              .getMeals(lang: getLang(context));
-        }
-      });
+      // _scrollController.addListener(() {
+      //   if (_scrollController.offset ==
+      //       _scrollController.position.maxScrollExtent) {
+      //     Provider.of<MealsListViewModel>(context, listen: false)
+      //         .getMeals(lang: getLang(context));
+      //   }
+      // });
     });
   }
 
@@ -61,6 +61,7 @@ class _MealPickerViewState extends State<MealPickerView> {
     final theme = Theme.of(context);
     return WillPopScope(
       onWillPop: () async {
+        Navigator.pop(context, meals);
         return false;
       },
       child: Scaffold(

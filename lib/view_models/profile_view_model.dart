@@ -3,9 +3,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/Api%20services/diet_api.dart';
 import 'package:home_workout_app/Api%20services/health_record_api.dart';
 import 'package:home_workout_app/Api%20services/profile_api.dart';
 import 'package:home_workout_app/components.dart';
+import 'package:home_workout_app/models/diet_model.dart';
 import 'package:home_workout_app/models/health_record_model.dart';
 import 'package:home_workout_app/models/post_models.dart';
 import 'package:home_workout_app/models/user_model.dart';
@@ -20,12 +22,15 @@ class ProfileViewModel with ChangeNotifier {
   HealthRecordModel _healthRecord = HealthRecordModel();
   bool _isLoading = false;
   bool _isPostLoading = false;
+  bool _isDietLoading = false;
+
   bool _iseditLoading = false;
   bool _islogoutLoading = false;
   List _selectedDis = [];
   String _searchValue = '';
   bool _addDesc = false;
   bool _getMoreLoading = false;
+  bool _getMoreDietsLoading = false;
 
   bool _infoWidgetVisible = false;
   List _followers = [];
@@ -33,9 +38,12 @@ class ProfileViewModel with ChangeNotifier {
   List _blocklist = [];
 
   List<PostModel> _userPosts = [];
+  List<DietModel> _userDiets = [];
   int _page = 0;
+  int _dietpage = 0;
 
   bool _postsIsOpened = false;
+  bool _dietsIsOpened = false;
 
   void changeIsCV(value) {
     _userData.cv = value ?? false;
@@ -46,13 +54,28 @@ class ProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void setGetMoreDietsLoading(value) {
+    _getMoreDietsLoading = value;
+    notifyListeners();
+  }
+
   void setPostIsOpened(value) {
     _postsIsOpened = value;
     notifyListeners();
   }
 
+  void setDietIsOpened(value) {
+    _dietsIsOpened = value;
+    notifyListeners();
+  }
+
   void setPage(int i) {
     _page = i;
+    notifyListeners();
+  }
+
+  void setDietPage(int i) {
+    _dietpage = i;
     notifyListeners();
   }
 
@@ -69,8 +92,27 @@ class ProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setUserDiets(String lang) async {
+    print('getting');
+    setDietPage(getDietPage + 1);
+    if (_userDiets.isNotEmpty) setGetMoreDietsLoading(true);
+    setIsdietLoading(true);
+    List<DietModel> newdiets =
+        await DietAPI().getUserDiets(lang: lang, page: getDietPage);
+    _userDiets.addAll(newdiets);
+    if (newdiets.isEmpty) setDietPage(getDietPage - 1);
+    setIsdietLoading(false);
+    setGetMoreDietsLoading(false);
+    notifyListeners();
+  }
+
   void clearPosts() {
     _userPosts.clear();
+    notifyListeners();
+  }
+
+  void clearDiets() {
+    _userDiets.clear();
     notifyListeners();
   }
 
@@ -95,6 +137,11 @@ class ProfileViewModel with ChangeNotifier {
   }
 
   void setIsPostLoading(value) {
+    _isPostLoading = value;
+    notifyListeners();
+  }
+
+  void setIsdietLoading(value) {
     _isPostLoading = value;
     notifyListeners();
   }
@@ -183,7 +230,8 @@ class ProfileViewModel with ChangeNotifier {
     } else {
       setIslogoutLoading(false);
       showSnackbar(const Text('Logout failed'), context);
-      Navigator.pop(context);
+      Navigator.of(context).pushNamedAndRemoveUntil('/start', (route) => false);
+      //Navigator.pop(context);
     }
     setIslogoutLoading(false);
   }
@@ -208,7 +256,8 @@ class ProfileViewModel with ChangeNotifier {
     } else {
       setIslogoutLoading(false);
       showSnackbar(const Text('Logout failed'), context);
-      Navigator.pop(context);
+      Navigator.of(context).pushNamedAndRemoveUntil('/start', (route) => false);
+      //Navigator.pop(context);
     }
     setIslogoutLoading(false);
   }
@@ -316,9 +365,16 @@ class ProfileViewModel with ChangeNotifier {
   bool get getIsLogoutLoading => _islogoutLoading;
   bool get getIsPostLogoutLoading => _isPostLoading;
   bool get getPostIsOpened => _postsIsOpened;
+  bool get getIsDietLogoutLoading => _isDietLoading;
+  bool get getDietIsOpened => _dietsIsOpened;
 
   int get getPage => _page;
+  int get getDietPage => _dietpage;
   List<PostModel> get getUserPosts => _userPosts;
+  List<DietModel> get getUserDiets => _userDiets;
+
   bool get getMoreLoading => _getMoreLoading;
+  bool get getMoreDietLoading => _getMoreDietsLoading;
+
   //bool get getPasswordObsecure => _PasswordObsecure;
 }

@@ -4,7 +4,7 @@ class FoodModel {
   String name = '';
   String imageUrl = '';
   int id = 0;
-  double calories = 0;
+  int calories = 0;
   int ownerId = 0;
   String description = '';
 
@@ -19,7 +19,7 @@ class FoodModel {
     if (imageUrl.substring(0, 4) != 'http') imageUrl = '$ip/$imageUrl';
     print(imageUrl);
     id = json['id'] ?? 0;
-    calories = double.tryParse(json['calories'].toString()) ?? 0;
+    calories = int.tryParse(json['calories'].toString()) ?? 0;
     //ownerId = json['data']['user_id'] ?? 0;
   }
 }

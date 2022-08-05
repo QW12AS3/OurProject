@@ -46,13 +46,13 @@ class FoodAPI {
     }
   }
 
-  Future<Map> editFood({
-    required int id,
-    required String foodName,
-    required String calories,
-    required String pickedImagePath,
-    required String lang,
-  }) async {
+  Future<Map> editFood(
+      {required int id,
+      required String foodName,
+      required String calories,
+      required String pickedImagePath,
+      required String lang,
+      required String description}) async {
     try {
       var request =
           http.MultipartRequest("Post", Uri.parse('$base_URL/food/update'));
@@ -65,6 +65,7 @@ class FoodAPI {
 
       request.fields['name'] = foodName;
       request.fields['calories'] = calories.toString();
+      request.fields['description'] = description.toString();
 
       if (pickedImagePath != '') {
         var pic =
@@ -92,7 +93,7 @@ class FoodAPI {
     print('Called');
     try {
       final response = await http.get(
-        Uri.parse('$base_URL/food/all?page=$page'),
+        Uri.parse('$base_URL/food/all'),
         headers: {
           'apikey': apiKey,
           'lang': lang,

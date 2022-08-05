@@ -54,6 +54,7 @@ dependencies:
   video_compress: ^3.1.1
   file_picker: ^4.6.1
   syncfusion_flutter_pdfviewer: ^20.2.39-beta
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:

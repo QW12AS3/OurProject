@@ -458,6 +458,54 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                           if (Provider.of<AnotherUserProfileViewModel>(context,
                                           listen: true)
                                       .getUserData
+                                      .roleId ==
+                                  3 &&
+                              Provider.of<AnotherUserProfileViewModel>(context,
+                                          listen: true)
+                                      .getUserData
+                                      .roleId !=
+                                  0)
+                            Consumer<AnotherUserProfileViewModel>(
+                              builder: (context, user, child) => ExpansionTile(
+                                onExpansionChanged: (change) async {
+                                  if (change) {
+                                    user.setDietIsOpened(true);
+                                    user.setDietPage(0);
+                                    user.clearDiets();
+                                    await user.setAnotherUserDiets(
+                                      context.locale == const Locale('en')
+                                          ? 'en'
+                                          : 'ar',
+                                    );
+                                  } else {
+                                    user.setDietIsOpened(false);
+
+                                    user.clearDiets();
+                                  }
+                                },
+                                iconColor: blueColor,
+                                title: Text(
+                                  'Shared diets',
+                                  style: theme.textTheme.bodySmall,
+                                ).tr(),
+                                children: (user.getIsDietLogoutLoading &&
+                                        user.getUserDiets.isEmpty)
+                                    ? [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Center(
+                                              child: bigLoader(
+                                                  color: orangeColor)),
+                                        ),
+                                      ]
+                                    : user.getUserDiets
+                                        .map((e) => Text(''))
+                                        .toList(),
+                              ),
+                            ),
+                          if (Provider.of<AnotherUserProfileViewModel>(context,
+                                          listen: true)
+                                      .getUserData
                                       .roleId !=
                                   1 &&
                               Provider.of<AnotherUserProfileViewModel>(context,

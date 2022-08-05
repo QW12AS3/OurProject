@@ -79,10 +79,23 @@ class MealsListViewModel with ChangeNotifier {
     if (response['success']) {
       showSnackbar(Text(response['message']), context);
       _mealsList.removeWhere((element) => element.id == mealId);
+
+      notifyListeners();
     } else {
       showSnackbar(Text(response['message']), context);
     }
     setIsDeleteLoading(false);
+  }
+
+  void editMeal({required MealModel meal}) {
+    try {
+      print(meal.id);
+      _mealsList[_mealsList.indexOf(
+          _mealsList.firstWhere((element) => element.id == meal.id))] = meal;
+      notifyListeners();
+    } catch (e) {
+      print('ssssssssssssssssssss $e');
+    }
   }
 
   int get getPage => _page;

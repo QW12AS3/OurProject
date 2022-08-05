@@ -41,6 +41,14 @@ class _ProfilePageState extends State<ProfilePage> {
           Provider.of<ProfileViewModel>(context, listen: false)
               .setUserPosts(context.locale == const Locale('en') ? 'en' : 'ar');
         }
+
+        if (_scrollController.offset ==
+                _scrollController.position.maxScrollExtent &&
+            Provider.of<ProfileViewModel>(context, listen: false)
+                .getDietIsOpened) {
+          Provider.of<ProfileViewModel>(context, listen: false)
+              .setUserDiets(context.locale == const Locale('en') ? 'en' : 'ar');
+        }
       });
     });
   }
@@ -564,19 +572,60 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                         ),
                         if (Provider.of<ProfileViewModel>(context, listen: true)
-                                    .getUserData
-                                    .roleId ==
-                                2 ||
-                            Provider.of<ProfileViewModel>(context, listen: true)
-                                    .getUserData
-                                    .roleId ==
-                                3)
+                                .getUserData
+                                .roleId ==
+                            2)
                           ExpansionTile(
                             iconColor: blueColor,
                             title: Text(
                               'Shared workouts',
                               style: theme.textTheme.bodySmall,
                             ).tr(),
+                          ),
+                        if (Provider.of<ProfileViewModel>(context, listen: true)
+                                    .getUserData
+                                    .roleId ==
+                                3 ||
+                            Provider.of<ProfileViewModel>(context, listen: true)
+                                    .getUserData
+                                    .roleId !=
+                                0)
+                          Consumer<ProfileViewModel>(
+                            builder: (context, user, child) => ExpansionTile(
+                              onExpansionChanged: (change) async {
+                                if (change) {
+                                  user.setDietIsOpened(true);
+                                  user.setDietPage(0);
+                                  user.clearDiets();
+                                  await user.setUserDiets(
+                                      context.locale == Locale('en')
+                                          ? 'en'
+                                          : 'ar');
+                                } else {
+                                  user.setDietIsOpened(false);
+
+                                  user.clearDiets();
+                                }
+                              },
+                              iconColor: blueColor,
+                              title: Text(
+                                'Shared diets',
+                                style: theme.textTheme.bodySmall,
+                              ).tr(),
+                              children: (user.getIsDietLogoutLoading &&
+                                      user.getUserDiets.isEmpty)
+                                  ? [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                            child:
+                                                bigLoader(color: orangeColor)),
+                                      ),
+                                    ]
+                                  : user.getUserDiets
+                                      .map((e) => Text(''))
+                                      .toList(),
+                            ),
                           ),
                         if (Provider.of<ProfileViewModel>(context, listen: true)
                                     .getUserData

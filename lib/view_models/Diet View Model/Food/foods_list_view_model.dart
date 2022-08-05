@@ -34,14 +34,8 @@ class FoodsListViewModel with ChangeNotifier {
 
   Future<void> getFoods({required String lang}) async {
     setIsLoading(true);
-    setPage(getPage + 1);
-    final newFoods = await FoodAPI().getFoodsList(lang: lang, page: getPage);
-    if (newFoods.isEmpty)
-      setPage(getPage - 1);
-    else
-      _foodsList.addAll(newFoods);
-
-    print(newFoods.length);
+    //setPage(getPage + 1);
+    _foodsList = await FoodAPI().getFoodsList(lang: lang, page: getPage);
 
     // _foodsList.add(FoodModel.fromJson({
     //   'data': {
@@ -66,6 +60,7 @@ class FoodsListViewModel with ChangeNotifier {
     if (response['success']) {
       showSnackbar(Text(response['message']), context);
       _foodsList.removeWhere((element) => element.id == foodId);
+      notifyListeners();
     } else {
       showSnackbar(Text(response['message']), context);
     }

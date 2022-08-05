@@ -17,7 +17,7 @@ class EditMealView extends StatefulWidget {
 
 class _EditMealViewState extends State<EditMealView> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _dayController = TextEditingController();
+  TextEditingController _descController = TextEditingController();
   String kcalString = 'kcal'.tr();
 
   String selectedType = 'Breakfast';
@@ -28,13 +28,14 @@ class _EditMealViewState extends State<EditMealView> {
     super.initState();
 
     Future.delayed(Duration.zero).then((value) {
-      // Provider.of<FoodsListViewModel>(context, listen: false)
-      //     .getFoods(lang: getLang(context));
+      Provider.of<FoodsListViewModel>(context, listen: false)
+          .getFoods(lang: getLang(context));
       final args = ModalRoute.of(context)!.settings.arguments as Map;
       setState(() {
         meal = args['meal'];
         selectedType = meal.type;
       });
+      _descController.text = meal.description;
       Provider.of<EditMealViewModel>(context, listen: false).reset();
       meal.foods.forEach((element) {
         Provider.of<EditMealViewModel>(context, listen: false)
@@ -50,28 +51,23 @@ class _EditMealViewState extends State<EditMealView> {
     final theme = Theme.of(context);
     return Scaffold(
       bottomNavigationBar: Consumer<EditMealViewModel>(
-        builder: (context, meal, child) => meal.getIsLoading
+        builder: (context, meal2, child) => meal2.getIsLoading
             ? bigLoader(color: orangeColor)
             : TextButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    if (selectedType == 'Breakfast') {
-                      showSnackbar(
-                          const Text('You have to add the meal type').tr(),
-                          context);
-                    } else if (meal.getPickedFoods.isEmpty) {
+                    if (meal2.getPickedFoods.isEmpty) {
                       showSnackbar(
                           const Text('You have to add at least a one food')
                               .tr(),
                           context);
                     } else {
-                      // await meal.createMeal(
-                      //     type: selectedType,
-                      //     day: _dayController.text.trim(),
-                      //     foodsIDs: meal.getPickedFoods,
-                      //     dietID: '1',
-                      //     lang: getLang(context),
-                      //     context: context);
+                      await meal2.editMeal(
+                          lang: getLang(context),
+                          id: meal.id,
+                          desc: _descController.text.trim(),
+                          context: context,
+                          type: selectedType);
                     }
                   }
                 },
@@ -136,47 +132,41 @@ class _EditMealViewState extends State<EditMealView> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
-                    child: SizedBox(
-                      width: 150,
-                      height: 70,
-                      child: TextFormField(
-                        validator: (value) {
-                          if (int.tryParse(value!) == null)
-                            return 'Invalid day';
-                        },
-                        controller: _dayController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          label: FittedBox(child: const Text('Day').tr()),
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          floatingLabelStyle: theme.textTheme.bodySmall,
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: orangeColor, width: 1.5),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
-                            ),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) return 'Cannot be embty'.tr();
+                      },
+                      controller: _descController,
+                      keyboardType: TextInputType.text,
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        label: FittedBox(child: const Text('Description').tr()),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        floatingLabelStyle: theme.textTheme.bodySmall,
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: orangeColor, width: 1.5),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(15),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: greyColor, width: 1.5),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
-                            ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: greyColor, width: 1.5),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(15),
                           ),
-                          errorBorder: const OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.red, width: 1.5),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                            ),
+                        ),
+                        errorBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red, width: 1.5),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(15),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: orangeColor, width: 1.5),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(15),
-                            ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: orangeColor, width: 1.5),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(15),
                           ),
                         ),
                       ),
@@ -189,8 +179,15 @@ class _EditMealViewState extends State<EditMealView> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/foodPicker');
+                    onPressed: () async {
+                      final mealsIds =
+                          await Navigator.pushNamed(context, '/foodPicker')
+                              as List;
+                      print(mealsIds);
+                      mealsIds.forEach((element) {
+                        Provider.of<EditMealViewModel>(context, listen: false)
+                            .addToFoods(element);
+                      });
                     },
                     child: Text(
                       '+ Add foods',

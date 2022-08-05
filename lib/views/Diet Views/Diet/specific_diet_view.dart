@@ -73,21 +73,21 @@ class _SpecificDietViewState extends State<SpecificDietView> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 25, vertical: 10),
-                      child: Row(
-                        children: [
-                          Text('Calories: ', style: theme.textTheme.bodySmall)
-                              .tr(),
-                          Text(
-                            '${diet.getDiet.caloriesCount.toString()} $kcalString',
-                            style: theme.textTheme.bodySmall!
-                                .copyWith(color: greyColor),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(
+                    //       horizontal: 25, vertical: 10),
+                    //   child: Row(
+                    //     children: [
+                    //       Text('Calories: ', style: theme.textTheme.bodySmall)
+                    //           .tr(),
+                    //       Text(
+                    //         '${diet.getDiet.caloriesCount.toString()} $kcalString',
+                    //         style: theme.textTheme.bodySmall!
+                    //             .copyWith(color: greyColor),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 25, vertical: 10),
@@ -163,8 +163,8 @@ class _SpecificDietViewState extends State<SpecificDietView> {
                                             style: theme.textTheme.bodySmall!
                                                 .copyWith(color: blueColor),
                                           ),
-                                          children: mealData.foods
-                                              .map(
+                                          children: e['foods']
+                                              .map<Widget>(
                                                 (e) => Container(
                                                   padding:
                                                       const EdgeInsets.all(8),

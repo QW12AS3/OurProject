@@ -6,7 +6,9 @@ import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/post_models.dart';
 import 'package:home_workout_app/models/user_model.dart';
 
+import '../Api services/diet_api.dart';
 import '../Api services/post_api.dart';
+import '../models/diet_model.dart';
 
 class AnotherUserProfileViewModel with ChangeNotifier {
   UserModel _anotherUserData = UserModel();
@@ -69,25 +71,25 @@ class AnotherUserProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Map<dynamic, dynamic> user = {
-    'id': 2,
-    'data': {
-      'fname': 'Omar',
-      'lname': 'Za',
-      'gender': 'male',
-      'followed': false,
-      'country': 'Syria',
-      'birthdate': '2001-6-21',
-      'imageUrl':
-          'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
-      'role': 'Coach',
-      'role_id': 2,
-      'finishedWorkouts': 5,
-      'enteredWorkouts': 7,
-      'bio':
-          'Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test '
-    }
-  };
+  // Map<dynamic, dynamic> user = {
+  //   'id': 2,
+  //   'data': {
+  //     'fname': 'Omar',
+  //     'lname': 'Za',
+  //     'gender': 'male',
+  //     'followed': false,
+  //     'country': 'Syria',
+  //     'birthdate': '2001-6-21',
+  //     'imageUrl':
+  //         'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg',
+  //     'role': 'Coach',
+  //     'role_id': 2,
+  //     'finishedWorkouts': 5,
+  //     'enteredWorkouts': 7,
+  //     'bio':
+  //         'Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test '
+  //   }
+  // };
 
   Future<void> blockUser(int id, String lang, BuildContext context) async {
     bool response = await ProfileApi().blockUser(id, lang);
@@ -157,6 +159,60 @@ class AnotherUserProfileViewModel with ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
+  //////////////////////////////////
+
+  bool _isDietLoading = false;
+  bool _getMoreDietsLoading = false;
+  List<DietModel> _userDiets = [];
+  int _dietpage = 0;
+  bool _dietsIsOpened = false;
+
+  void setIsdietLoading(value) {
+    _isPostLoading = value;
+    notifyListeners();
+  }
+
+  void setGetMoreDietsLoading(value) {
+    _getMoreDietsLoading = value;
+    notifyListeners();
+  }
+
+  void setDietIsOpened(value) {
+    _dietsIsOpened = value;
+    notifyListeners();
+  }
+
+  void setDietPage(int i) {
+    _dietpage = i;
+    notifyListeners();
+  }
+
+  Future<void> setAnotherUserDiets(String lang) async {
+    print('getting');
+    setDietPage(getDietPage + 1);
+    if (_userDiets.isNotEmpty) setGetMoreDietsLoading(true);
+    setIsdietLoading(true);
+    List<DietModel> newdiets =
+        await DietAPI().getAnotherUserDiets(lang: lang, page: getDietPage);
+    _userDiets.addAll(newdiets);
+    if (newdiets.isEmpty) setDietPage(getDietPage - 1);
+    setIsdietLoading(false);
+    setGetMoreDietsLoading(false);
+    notifyListeners();
+  }
+
+  void clearDiets() {
+    _userDiets.clear();
+    notifyListeners();
+  }
+
+  bool get getIsDietLogoutLoading => _isDietLoading;
+  bool get getDietIsOpened => _dietsIsOpened;
+  int get getDietPage => _dietpage;
+  List<DietModel> get getUserDiets => _userDiets;
+  bool get getMoreDietLoading => _getMoreDietsLoading;
+  ////////////////////////////////
 
   UserModel get getUserData => _anotherUserData;
   bool get getIsLoading => _isLoading;
