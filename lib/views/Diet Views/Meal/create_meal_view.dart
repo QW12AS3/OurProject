@@ -167,8 +167,14 @@ class _CreateMealViewState extends State<CreateMealView> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/foodPicker');
+                    onPressed: () async {
+                      final mealsId =
+                          await Navigator.pushNamed(context, '/foodPicker')
+                              as List;
+                      mealsId.forEach((element) {
+                        Provider.of<CreateMealViewModel>(context, listen: false)
+                            .addToFoods(element);
+                      });
                     },
                     child: Text(
                       '+ Add foods',
@@ -211,9 +217,8 @@ class _CreateMealViewState extends State<CreateMealView> {
                                   leading: CircleAvatar(
                                     radius: 50,
                                     backgroundImage: NetworkImage(
-                                        'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg'
-                                        //e.imageUrl,
-                                        ),
+                                      e.imageUrl,
+                                    ),
                                   ),
                                 ),
                               ),

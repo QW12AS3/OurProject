@@ -7,6 +7,7 @@ import 'package:home_workout_app/view_models/Dashboards%20View%20Model/dashboard
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/create_diet_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/diet_list_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/edit_diet_view_model.dart';
+import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/saved_diets_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/specific_diet_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/create_food_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/edit_food_view_model.dart';
@@ -55,6 +56,7 @@ import 'package:home_workout_app/views/Dashboards%20View/reported_comments_dashb
 import 'package:home_workout_app/views/Dashboards%20View/reported_post_dashboard_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Diet/create_diet_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Diet/edit_diet_view.dart';
+import 'package:home_workout_app/views/Diet%20Views/Diet/saved_diet_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Diet/specific_diet_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Food/create_food_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Food/edit_food_view.dart';
@@ -159,6 +161,8 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CreateworkoutViewModel()),
         ChangeNotifierProvider(create: (context) => CreateExerciseViewModel()),
         // ChangeNotifierProvider(create: (context) => CreateExerciseViewModel()),
+
+        ChangeNotifierProvider(create: (context) => SavedDietsViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -231,6 +235,8 @@ class Vigor extends StatelessWidget {
           '/createWorkout': (context) => CreateWorkoutView(),
           '/createExercise': (context) => CreateExerciseView(),
           '/EditExerciseView': (context) => EditExerciseView(),
+          '/savedDiets': (context) => SavedDietsView(),
+
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,

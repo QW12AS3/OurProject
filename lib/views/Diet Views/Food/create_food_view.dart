@@ -145,7 +145,7 @@ class _CreateFoodViewState extends State<CreateFoodView> {
                       height: 70,
                       child: TextFormField(
                         validator: (value) {
-                          if (double.tryParse(value!) == null)
+                          if (int.tryParse(value!) == null)
                             return 'Invalid calories';
                         },
                         controller: caloriesController,

@@ -34,13 +34,13 @@ class _MealsListViewState extends State<MealsListView> {
           });
       });
 
-      _scrollController.addListener(() {
-        if (_scrollController.offset ==
-            _scrollController.position.maxScrollExtent) {
-          Provider.of<MealsListViewModel>(context, listen: false)
-              .getMeals(lang: getLang(context));
-        }
-      });
+      // _scrollController.addListener(() {
+      //   if (_scrollController.offset ==
+      //       _scrollController.position.maxScrollExtent) {
+      //     Provider.of<MealsListViewModel>(context, listen: false)
+      //         .getMeals(lang: getLang(context));
+      //   }
+      // });
     });
   }
 
@@ -204,19 +204,45 @@ class _MealsListViewState extends State<MealsListView> {
                                                                     .circular(
                                                                         15)),
                                                         child: ListTile(
-                                                          title: Text(
-                                                            e.name,
-                                                            style: theme
-                                                                .textTheme
-                                                                .bodySmall!
-                                                                .copyWith(
-                                                                    color:
-                                                                        orangeColor,
-                                                                    fontSize:
-                                                                        17),
+                                                          title: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Expanded(
+                                                                child:
+                                                                    FittedBox(
+                                                                  child: Text(
+                                                                    e.name,
+                                                                    style: theme
+                                                                        .textTheme
+                                                                        .bodySmall!
+                                                                        .copyWith(
+                                                                            color:
+                                                                                orangeColor,
+                                                                            fontSize:
+                                                                                17),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 5,
+                                                              ),
+                                                              Text(
+                                                                '${e.calories} $kcalString',
+                                                                style: theme
+                                                                    .textTheme
+                                                                    .bodySmall!
+                                                                    .copyWith(
+                                                                        color:
+                                                                            orangeColor,
+                                                                        fontSize:
+                                                                            12),
+                                                              ),
+                                                            ],
                                                           ),
                                                           subtitle: Text(
-                                                            '${e.calories} $kcalString',
+                                                            e.description,
                                                             style: theme
                                                                 .textTheme
                                                                 .bodySmall!

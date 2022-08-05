@@ -26,7 +26,7 @@ class DietAPI {
         'meals': jsonEncode(meals)
       });
       print(jsonDecode(response.body));
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         return {
           'success': true,
           'message': jsonDecode(response.body)['message']
@@ -135,6 +135,96 @@ class DietAPI {
     return [];
   }
 
+  Future<List<DietModel>> getSavedDiets(
+      {required String lang, required int page}) async {
+    print('Called');
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/diet/all?page=$page'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
+      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        List<DietModel> newDiet = [];
+        final data = jsonDecode(response.body)['data'] as List;
+        data.forEach((element) {
+          newDiet.add(DietModel.fromJson(element));
+        });
+        return newDiet;
+      } else {}
+    } catch (e) {
+      print('Get Foods List Error: $e');
+    }
+    return [];
+  }
+
+  Future<List<DietModel>> getUserDiets(
+      {required String lang, required int page}) async {
+    print('Called');
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/diet/all?page=$page'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
+      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        List<DietModel> newDiet = [];
+        final data = jsonDecode(response.body)['data'] as List;
+        data.forEach((element) {
+          newDiet.add(DietModel.fromJson(element));
+        });
+        return newDiet;
+      } else {}
+    } catch (e) {
+      print('Get Foods List Error: $e');
+    }
+    return [];
+  }
+
+  Future<List<DietModel>> getAnotherUserDiets(
+      {required String lang, required int page}) async {
+    print('Called');
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/diet/all?page=$page'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
+      print(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        List<DietModel> newDiet = [];
+        final data = jsonDecode(response.body)['data'] as List;
+        data.forEach((element) {
+          newDiet.add(DietModel.fromJson(element));
+        });
+        return newDiet;
+      } else {}
+    } catch (e) {
+      print('Get Foods List Error: $e');
+    }
+    return [];
+  }
+
   Future<DietModel> getSpeDiet({required String lang, required int id}) async {
     try {
       final response =
@@ -150,7 +240,7 @@ class DietAPI {
       });
 
       if (response.statusCode == 200) {
-        return DietModel.fromJsonForFull(jsonDecode(response.body));
+        return DietModel.fromJsonForFull(jsonDecode(response.body)['data']);
       }
     } catch (e) {
       print('Get Specific Diet Error: $e');

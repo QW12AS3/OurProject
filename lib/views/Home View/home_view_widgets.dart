@@ -305,6 +305,106 @@ class myDrawer extends StatelessWidget {
                 ),
               ),
             ),
+
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/savedDiets');
+              },
+              child: ListTile(
+                title: Text(
+                  'Saved diets',
+                  style: theme.textTheme.bodySmall,
+                ).tr(),
+                trailing: Icon(
+                  Icons.star_rate_rounded,
+                  color: blueColor,
+                ),
+              ),
+            ),
+            if (Provider.of<ProfileViewModel>(context, listen: true)
+                        .getUserData
+                        .roleId ==
+                    4 ||
+                Provider.of<ProfileViewModel>(context, listen: true)
+                        .getUserData
+                        .roleId ==
+                    5)
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/dashboard');
+                },
+                child: ListTile(
+                  title: Text(
+                    'Dashboards',
+                    style: theme.textTheme.bodySmall,
+                  ).tr(),
+                  trailing: Icon(
+                    Icons.dashboard_rounded,
+                    color: blueColor,
+                  ),
+                ),
+
+                InkWell(
+                  onTap: () async {
+                    await Provider.of<ProfileViewModel>(context, listen: false)
+                        .logoutFromAll(context);
+                    sharedPreferences.remove("access_token");
+                    sharedPreferences.remove("refresh_token");
+                    sharedPreferences.remove("token_expiration");
+                    sharedPreferences.remove("role_id");
+                    sharedPreferences.remove("role_name");
+                    sharedPreferences.remove("googleProvider");
+                    sharedPreferences.remove("is_verified");
+                    sharedPreferences.remove("is_info");
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/start', (route) => false);
+                  },
+                  child: ListTile(
+                    title: Text(
+                      'From all devices',
+              ),
+            ExpansionTile(
+              trailing: const Icon(
+                Icons.accessibility_new_outlined,
+                color: Colors.red,
+              ),
+              title: Text(
+                'Challenges',
+                style: theme.textTheme.bodySmall,
+              ).tr(),
+              iconColor: blueColor,
+              children: [
+                InkWell(
+                  onTap: () async {
+                    Navigator.of(context).pushNamed('/challenges');
+                  },
+                  child: ListTile(
+                    title: Text(
+                      'My challenges',
+                      style: theme.textTheme.bodySmall,
+                    ).tr(),
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    Navigator.of(context).pushNamed('/createChallenge');
+                  },
+                  child: ListTile(
+                    title: Text(
+                      'My created challenges',
+
+                      style: theme.textTheme.bodySmall,
+                    ).tr(),
+                  ),
+                ),
+              ],
+
+            )
+          else
+            bigLoader(
+              color: orangeColor,
+            ),
+
           ExpansionTile(
             trailing: Icon(
               Icons.accessibility_new_outlined,
@@ -490,6 +590,7 @@ class myDrawer extends StatelessWidget {
                       style: theme.textTheme.bodySmall,
                     ).tr(),
                   ),
+
                 ),
               ],
             )
@@ -498,6 +599,57 @@ class myDrawer extends StatelessWidget {
               color: orangeColor,
             ),
         ]),
+
+                ],
+              ),
+            if (!Provider.of<ProfileViewModel>(context, listen: true)
+                .getIsLogoutLoading)
+              ExpansionTile(
+                trailing: const Icon(
+                  Icons.logout_rounded,
+                  color: Colors.red,
+                ),
+                title: Text(
+                  'Logout',
+                  style: theme.textTheme.bodySmall,
+                ).tr(),
+                iconColor: blueColor,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      await Provider.of<ProfileViewModel>(context,
+                              listen: false)
+                          .logout(context);
+                    },
+                    child: ListTile(
+                      title: Text(
+                        'From this device',
+                        style: theme.textTheme.bodySmall,
+                      ).tr(),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      await Provider.of<ProfileViewModel>(context,
+                              listen: false)
+                          .logoutFromAll(context);
+                    },
+                    child: ListTile(
+                      title: Text(
+                        'From all devices',
+                        style: theme.textTheme.bodySmall,
+                      ).tr(),
+                    ),
+                  ),
+                ],
+              )
+            else
+              bigLoader(
+                color: orangeColor,
+              ),
+          ],
+        ),
+
       ),
     );
   }

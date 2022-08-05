@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:home_workout_app/Api%20services/food_api.dart';
 import 'package:home_workout_app/components.dart';
@@ -34,6 +35,10 @@ class CreateFoodViewModel with ChangeNotifier {
       required String desc,
       required String lang,
       required BuildContext context}) async {
+    if (_pickedimage == null) {
+      showSnackbar(Text('You have to add a photo').tr(), context);
+      return;
+    }
     setIsLoading(true);
     final response = await FoodAPI().createFood(
         desc: desc,
