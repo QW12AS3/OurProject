@@ -27,14 +27,6 @@ class _FoodsPickerListViewState extends State<FoodsPickerListView> {
       Provider.of<FoodsListViewModel>(context, listen: false).reset();
       Provider.of<FoodsListViewModel>(context, listen: false)
           .getFoods(lang: getLang(context));
-
-      _scrollController.addListener(() {
-        if (_scrollController.offset ==
-            _scrollController.position.maxScrollExtent) {
-          Provider.of<FoodsListViewModel>(context, listen: false)
-              .getFoods(lang: getLang(context));
-        }
-      });
     });
   }
 
@@ -44,146 +36,166 @@ class _FoodsPickerListViewState extends State<FoodsPickerListView> {
 
   String kcalString = 'kcal'.tr();
 
+  List<int> mealsId = [];
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      bottomNavigationBar: SizedBox(
-        height: 30,
-        child: Center(
-          child: Text(
-            'Press back button when finished',
-            style: theme.textTheme.bodySmall!.copyWith(color: greyColor),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context, mealsId);
+        return false;
+      },
+      child: Scaffold(
+        bottomNavigationBar: SizedBox(
+          height: 30,
+          child: Center(
+            child: Text(
+              'Press back button when finished',
+              style: theme.textTheme.bodySmall!.copyWith(color: greyColor),
+            ).tr(),
+          ),
+        ),
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context, mealsId);
+            },
+            icon: Icon(Icons.arrow_back),
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Text(
+            'Foods list',
+            style: theme.textTheme.bodyMedium!,
           ).tr(),
         ),
-      ),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          'Foods list',
-          style: theme.textTheme.bodyMedium!,
-        ).tr(),
-      ),
-      body: Consumer2<FoodsListViewModel, CreateMealViewModel>(
-        builder: (context, food, meal, child) => RefreshIndicator(
-            color: orangeColor,
-            onRefresh: () async {
-              food.reset();
-              food..getFoods(lang: getLang(context));
-            },
-            child: food.getIsLoading
-                ? Center(
-                    child: bigLoader(color: orangeColor),
-                  )
-                : (food.getFoodsList.isEmpty
-                    ? Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('There are no foods',
-                                    style: theme.textTheme.bodySmall!
-                                        .copyWith(color: greyColor))
-                                .tr(),
-                            TextButton(
-                                onPressed: () async {
-                                  Provider.of<FoodsListViewModel>(context,
-                                          listen: false)
-                                      .reset();
-                                  Provider.of<FoodsListViewModel>(context,
-                                          listen: false)
-                                      .getFoods(lang: getLang(context));
-                                },
-                                child: Text('Refresh',
-                                        style: theme.textTheme.bodySmall)
-                                    .tr())
-                          ],
-                        ),
-                      )
-                    : Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CustomTextField(
-                                maxLines: 1,
-                                controller: _searchController,
-                                title: 'Search'),
+        body: Consumer2<FoodsListViewModel, CreateMealViewModel>(
+          builder: (context, food, meal, child) => RefreshIndicator(
+              color: orangeColor,
+              onRefresh: () async {
+                food.reset();
+                food..getFoods(lang: getLang(context));
+              },
+              child: food.getIsLoading
+                  ? Center(
+                      child: bigLoader(color: orangeColor),
+                    )
+                  : (food.getFoodsList.isEmpty
+                      ? Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('There are no foods',
+                                      style: theme.textTheme.bodySmall!
+                                          .copyWith(color: greyColor))
+                                  .tr(),
+                              TextButton(
+                                  onPressed: () async {
+                                    Provider.of<FoodsListViewModel>(context,
+                                            listen: false)
+                                        .reset();
+                                    Provider.of<FoodsListViewModel>(context,
+                                            listen: false)
+                                        .getFoods(lang: getLang(context));
+                                  },
+                                  child: Text('Refresh',
+                                          style: theme.textTheme.bodySmall)
+                                      .tr())
+                            ],
                           ),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              physics: const BouncingScrollPhysics(
-                                  parent: AlwaysScrollableScrollPhysics()),
-                              controller: _scrollController,
-                              child: Column(
-                                children: [
-                                  Column(
-                                    children: food.getFoodsList
-                                        .where((element) => _searchController
-                                                .text
-                                                .trim()
-                                                .isEmpty
-                                            ? true
-                                            : element.name.contains(
-                                                _searchController.text.trim()))
-                                        .map(
-                                          (e) => InkWell(
-                                            onTap: () {
-                                              if (meal.getPickedFoods
-                                                  .contains(e.id))
-                                                meal.removeFromFoods(e.id);
-                                              else
-                                                meal.addToFoods(e.id);
-                                            },
-                                            child: Container(
-                                              padding: const EdgeInsets.all(8),
-                                              margin: const EdgeInsets.all(8),
-                                              decoration: BoxDecoration(
-                                                  color: meal.getPickedFoods
-                                                          .contains(e.id)
-                                                      ? blueColor
-                                                      : Colors.transparent,
-                                                  border: Border.all(
-                                                      color: blueColor,
-                                                      width: 1),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15)),
-                                              child: ListTile(
-                                                title: Text(
-                                                  e.name,
-                                                  style: theme
-                                                      .textTheme.bodySmall!
-                                                      .copyWith(
-                                                          color: orangeColor,
-                                                          fontSize: 17),
-                                                ),
-                                                subtitle: Text(
-                                                  e.description,
-                                                  style: theme
-                                                      .textTheme.bodySmall!
-                                                      .copyWith(
-                                                          color: greyColor,
-                                                          fontSize: 12),
-                                                ),
-                                                leading: CircleAvatar(
-                                                  radius: 50,
-                                                  backgroundImage: NetworkImage(
-                                                      'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/full-body-workout-1563458040.jpg'
-                                                      //e.imageUrl,
-                                                      ),
+                        )
+                      : Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CustomTextField(
+                                  maxLines: 1,
+                                  controller: _searchController,
+                                  title: 'Search'),
+                            ),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                physics: const BouncingScrollPhysics(
+                                    parent: AlwaysScrollableScrollPhysics()),
+                                controller: _scrollController,
+                                child: Column(
+                                  children: [
+                                    Column(
+                                      children: food.getFoodsList
+                                          .where((element) => _searchController
+                                                  .text
+                                                  .trim()
+                                                  .isEmpty
+                                              ? true
+                                              : element.name.contains(
+                                                  _searchController.text
+                                                      .trim()))
+                                          .map(
+                                            (e) => InkWell(
+                                              onTap: () {
+                                                setState(() {
+                                                  if (!mealsId.contains(e.id)) {
+                                                    mealsId.add(e.id);
+                                                  } else {
+                                                    mealsId.removeWhere(
+                                                        (element) =>
+                                                            element == e.id);
+                                                  }
+                                                });
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(8),
+                                                margin: const EdgeInsets.all(8),
+                                                decoration: BoxDecoration(
+                                                    color: mealsId
+                                                            .contains(e.id)
+                                                        ? blueColor
+                                                        : Colors.transparent,
+                                                    border: Border.all(
+                                                        color: blueColor,
+                                                        width: 1),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                child: ListTile(
+                                                  title: Text(
+                                                    e.name,
+                                                    style: theme
+                                                        .textTheme.bodySmall!
+                                                        .copyWith(
+                                                            color: orangeColor,
+                                                            fontSize: 17),
+                                                  ),
+                                                  subtitle: Text(
+                                                    e.description,
+                                                    style: theme
+                                                        .textTheme.bodySmall!
+                                                        .copyWith(
+                                                            color: greyColor,
+                                                            fontSize: 12),
+                                                  ),
+                                                  leading: CircleAvatar(
+                                                    radius: 50,
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                      e.imageUrl,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        )
-                                        .toList(),
-                                  ),
-                                ],
+                                          )
+                                          .toList(),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ))),
+                          ],
+                        ))),
+        ),
       ),
     );
   }

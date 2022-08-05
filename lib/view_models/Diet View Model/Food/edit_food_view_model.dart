@@ -34,12 +34,15 @@ class EditFoodViewModel with ChangeNotifier {
       required int id,
       required String calories,
       required String lang,
+      required String description,
       required BuildContext context}) async {
+    print(getPickedImage);
     setIsLoading(true);
     final response = await FoodAPI().editFood(
         id: id,
         foodName: foodName,
         calories: calories,
+        description: description,
         pickedImagePath: getPickedImage == null ? '' : getPickedImage!.path,
         lang: lang);
     if (response['success']) {

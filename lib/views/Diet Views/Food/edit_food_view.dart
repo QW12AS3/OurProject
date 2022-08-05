@@ -22,6 +22,8 @@ class EditFoodView extends StatefulWidget {
 class _EditFoodViewState extends State<EditFoodView> {
   TextEditingController foodNameController = TextEditingController();
   TextEditingController caloriesController = TextEditingController();
+  TextEditingController descController = TextEditingController();
+
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -37,6 +39,7 @@ class _EditFoodViewState extends State<EditFoodView> {
       });
       foodNameController.text = food.name;
       caloriesController.text = food.calories.toString();
+      descController.text = food.description;
     });
   }
 
@@ -109,12 +112,54 @@ class _EditFoodViewState extends State<EditFoodView> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) return 'Cannot be empty'.tr();
+                      },
+                      controller: descController,
+                      keyboardType: TextInputType.text,
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        label: FittedBox(child: const Text('Description').tr()),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        floatingLabelStyle: theme.textTheme.bodySmall,
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: orangeColor, width: 1.5),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(15),
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: greyColor, width: 1.5),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(15),
+                          ),
+                        ),
+                        errorBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red, width: 1.5),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(15),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: orangeColor, width: 1.5),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(15),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
                       width: 150,
                       height: 70,
                       child: TextFormField(
                         validator: (value) {
-                          if (double.tryParse(value!) == null)
+                          if (int.tryParse(value!) == null)
                             return 'Invalid calories';
                         },
                         controller: caloriesController,
@@ -230,6 +275,7 @@ class _EditFoodViewState extends State<EditFoodView> {
                                 await Provider.of<EditFoodViewModel>(context,
                                         listen: false)
                                     .editFood(
+                                        description: descController.text.trim(),
                                         id: food.id,
                                         foodName:
                                             foodNameController.text.trim(),

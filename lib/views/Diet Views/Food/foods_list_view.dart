@@ -25,22 +25,6 @@ class _FoodsListViewState extends State<FoodsListView> {
       Provider.of<FoodsListViewModel>(context, listen: false).reset();
       Provider.of<FoodsListViewModel>(context, listen: false)
           .getFoods(lang: getLang(context));
-
-      _searchController.addListener(() {
-        if (_searchController.text.trim() != searchValue)
-          // ignore: curly_braces_in_flow_control_structures
-          setState(() {
-            searchValue = _searchController.text.trim();
-          });
-      });
-
-      _scrollController.addListener(() {
-        if (_scrollController.offset ==
-            _scrollController.position.maxScrollExtent) {
-          Provider.of<FoodsListViewModel>(context, listen: false)
-              .getFoods(lang: getLang(context));
-        }
-      });
     });
   }
 
