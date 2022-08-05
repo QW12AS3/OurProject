@@ -183,7 +183,9 @@ class ProfileViewModel with ChangeNotifier {
     } else {
       setIslogoutLoading(false);
       showSnackbar(const Text('Logout failed'), context);
-      Navigator.pop(context);
+      Navigator.of(context).pushNamedAndRemoveUntil('/start', (route) => false);
+
+      //Navigator.pop(context);
     }
     setIslogoutLoading(false);
   }
@@ -208,7 +210,9 @@ class ProfileViewModel with ChangeNotifier {
     } else {
       setIslogoutLoading(false);
       showSnackbar(const Text('Logout failed'), context);
-      Navigator.pop(context);
+      Navigator.of(context).pushNamedAndRemoveUntil('/start', (route) => false);
+
+      //Navigator.pop(context);
     }
     setIslogoutLoading(false);
   }

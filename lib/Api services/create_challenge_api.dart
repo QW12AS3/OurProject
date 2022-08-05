@@ -54,20 +54,18 @@ class CreateChallengeAPI {
       // print(Response.fromStream(response));
       print(responseString);
       print(response.statusCode);
-      final respStr = await response.stream.bytesToString();
-      print(respStr);
-      if (response.statusCode.toString() == '200') {
+
+      if (response.statusCode == 200) {
         // responseString
-        //  return  CreateChallengeModel.fromJson(json.decode(responseString));
         print('yeeeeeeess');
-        return CreateChallengeModel(message: 'dddddddddddddd', statusCode: 200);
+        return CreateChallengeModel.fromJson(json.decode(responseString));
+
+        // return CreateChallengeModel(message: 'dddddddddddddd', statusCode: 200);
         // CreateChallengeModel.fromJson(json.decode(response.body));
       } else {
         print(response.statusCode);
         // print(response.body);
-        return CreateChallengeModel(
-            message: 'There is a problem connecting to the internet',
-            statusCode: 100);
+        return CreateChallengeModel.fromJson(json.decode(responseString));
         // CreateChallengeModel.fromJsonWithErrors(
         //     json.decode(response.body));
       }

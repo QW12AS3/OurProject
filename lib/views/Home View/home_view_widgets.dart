@@ -191,185 +191,124 @@ class myDrawer extends StatelessWidget {
     final theme = Theme.of(context);
     return Drawer(
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                  tabController.animateTo(2);
-                },
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(user.imageUrl),
-                      onBackgroundImageError: (child, stacktrace) =>
-                          const LoadingContainer(),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                              color: user.roleId == 2
-                                  ? orangeColor
-                                  : (user.roleId == 3
-                                      ? blueColor
-                                      : Colors.transparent),
-                              width: 2),
-                        ),
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+                tabController.animateTo(2);
+              },
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(user.imageUrl),
+                    onBackgroundImageError: (child, stacktrace) =>
+                        const LoadingContainer(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            color: user.roleId == 2
+                                ? orangeColor
+                                : (user.roleId == 3
+                                    ? blueColor
+                                    : Colors.transparent),
+                            width: 2),
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          '${user.fname} ${user.lname}',
+                          style: theme.textTheme.bodyMedium!
+                              .copyWith(color: Colors.black),
+                        ),
+                      ),
+                      if (user.roleId != 1)
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Text(
-                            '${user.fname} ${user.lname}',
-                            style: theme.textTheme.bodyMedium!
-                                .copyWith(color: Colors.black),
+                            user.role,
+                            style: theme.textTheme.bodyMedium!.copyWith(
+                                color: user.roleId == 2
+                                    ? orangeColor
+                                    : (user.roleId == 3
+                                        ? blueColor
+                                        : Colors.transparent),
+                                fontSize: 12),
                           ),
                         ),
-                        if (user.roleId != 1)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              user.role,
-                              style: theme.textTheme.bodyMedium!.copyWith(
-                                  color: user.roleId == 2
-                                      ? orangeColor
-                                      : (user.roleId == 3
-                                          ? blueColor
-                                          : Colors.transparent),
-                                  fontSize: 12),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            Divider(
-              color: blueColor,
-              thickness: 2,
-            ),
-            InkWell(
-              onTap: () {},
-              child: ListTile(
-                title: Text(
-                  'Settings',
-                  style: theme.textTheme.bodySmall,
-                ).tr(),
-                trailing: Icon(
-                  Icons.settings,
-                  color: blueColor,
-                ),
+          ),
+          Divider(
+            color: blueColor,
+            thickness: 2,
+          ),
+          InkWell(
+            onTap: () {},
+            child: ListTile(
+              title: Text(
+                'Settings',
+                style: theme.textTheme.bodySmall,
+              ).tr(),
+              trailing: Icon(
+                Icons.settings,
+                color: blueColor,
               ),
             ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, '/savedPosts');
+            },
+            child: ListTile(
+              title: Text(
+                'Saved posts',
+                style: theme.textTheme.bodySmall,
+              ).tr(),
+              trailing: Icon(
+                Icons.star_rate_rounded,
+                color: blueColor,
+              ),
+            ),
+          ),
+          if (Provider.of<ProfileViewModel>(context, listen: true)
+                      .getUserData
+                      .roleId ==
+                  4 ||
+              Provider.of<ProfileViewModel>(context, listen: true)
+                      .getUserData
+                      .roleId ==
+                  5)
             InkWell(
               onTap: () {
-                Navigator.pushNamed(context, '/savedPosts');
+                Navigator.pushNamed(context, '/dashboard');
               },
               child: ListTile(
                 title: Text(
-                  'Saved posts',
+                  'Dashboards',
                   style: theme.textTheme.bodySmall,
                 ).tr(),
                 trailing: Icon(
-                  Icons.star_rate_rounded,
+                  Icons.dashboard_rounded,
                   color: blueColor,
                 ),
               ),
-            ),
-            if (Provider.of<ProfileViewModel>(context, listen: true)
-                        .getUserData
-                        .roleId ==
-                    4 ||
-                Provider.of<ProfileViewModel>(context, listen: true)
-                        .getUserData
-                        .roleId ==
-                    5)
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, '/dashboard');
-                },
-                child: ListTile(
-                  title: Text(
-                    'Dashboards',
-                    style: theme.textTheme.bodySmall,
-                  ).tr(),
-                  trailing: Icon(
-                    Icons.dashboard_rounded,
-                    color: blueColor,
-                  ),
-                ),
-
-                InkWell(
-                  onTap: () async {
-                    await Provider.of<ProfileViewModel>(context, listen: false)
-                        .logoutFromAll(context);
-                    sharedPreferences.remove("access_token");
-                    sharedPreferences.remove("refresh_token");
-                    sharedPreferences.remove("token_expiration");
-                    sharedPreferences.remove("role_id");
-                    sharedPreferences.remove("role_name");
-                    sharedPreferences.remove("googleProvider");
-                    sharedPreferences.remove("is_verified");
-                    sharedPreferences.remove("is_info");
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/start', (route) => false);
-                  },
-                  child: ListTile(
-                    title: Text(
-                      'From all devices',
-              ),
-            ExpansionTile(
-              trailing: const Icon(
-                Icons.accessibility_new_outlined,
-                color: Colors.red,
-              ),
-              title: Text(
-                'Challenges',
-                style: theme.textTheme.bodySmall,
-              ).tr(),
-              iconColor: blueColor,
-              children: [
-                InkWell(
-                  onTap: () async {
-                    Navigator.of(context).pushNamed('/challenges');
-                  },
-                  child: ListTile(
-                    title: Text(
-                      'My challenges',
-                      style: theme.textTheme.bodySmall,
-                    ).tr(),
-                  ),
-                ),
-                InkWell(
-                  onTap: () async {
-                    Navigator.of(context).pushNamed('/createChallenge');
-                  },
-                  child: ListTile(
-                    title: Text(
-                      'My created challenges',
-
-                      style: theme.textTheme.bodySmall,
-                    ).tr(),
-                  ),
-                ),
-              ],
-
-            )
-          else
-            bigLoader(
-              color: orangeColor,
             ),
           ExpansionTile(
             trailing: Icon(
               Icons.accessibility_new_outlined,
-              color: orangeColor,
+              color: blueColor,
             ),
             title: Text(
               'Challenges',
@@ -400,172 +339,165 @@ class myDrawer extends StatelessWidget {
                 ),
               ),
             ],
-          )
-        ],
-
-            ),
-            if (Provider.of<ProfileViewModel>(context,
-                            listen: true)
-                        .getUserData
-                        .roleId ==
-                    3 ||
-                Provider.of<ProfileViewModel>(context, listen: true)
-                        .getUserData
-                        .roleId ==
-                    4 ||
-                Provider.of<ProfileViewModel>(context, listen: true)
-                        .getUserData
-                        .roleId ==
-                    5)
-              ExpansionTile(
-                trailing: Icon(
-                  Icons.food_bank_rounded,
-                  color: blueColor,
-                ),
-                title: Text(
-                  'Diet system',
-                  style: theme.textTheme.bodySmall,
-                ).tr(),
-                iconColor: blueColor,
-                children: [
-                  ExpansionTile(
-                    title: Text(
-                      'Diets',
-                      style: theme.textTheme.bodySmall,
-                    ).tr(),
-                    children: [
-                      InkWell(
-                        onTap: () async {
-                          Navigator.pushNamed(context, '/createDiet');
-                        },
-                        child: ListTile(
-                          title: Text(
-                            'Add diet',
-                            style: theme.textTheme.bodySmall,
-                          ).tr(),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () async {},
-                        child: ListTile(
-                          title: Text(
-                            'Diets list',
-                            style: theme.textTheme.bodySmall,
-                          ).tr(),
-                        ),
-                      ),
-                    ],
-                  ),
-                  ExpansionTile(
-                    title: Text(
-                      'Foods',
-                      style: theme.textTheme.bodySmall,
-                    ).tr(),
-                    children: [
-                      InkWell(
-                        onTap: () async {
-                          Navigator.pushNamed(context, '/createFood');
-                        },
-                        child: ListTile(
-                          title: Text(
-                            'Add food',
-                            style: theme.textTheme.bodySmall,
-                          ).tr(),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          Navigator.pushNamed(context, '/foodList');
-                        },
-                        child: ListTile(
-                          title: Text(
-                            'Foods list',
-                            style: theme.textTheme.bodySmall,
-                          ).tr(),
-                        ),
-                      ),
-                    ],
-                  ),
-                  ExpansionTile(
-                    title: Text(
-                      'Meals',
-                      style: theme.textTheme.bodySmall,
-                    ).tr(),
-                    children: [
-                      InkWell(
-                        onTap: () async {
-                          Navigator.pushNamed(context, '/createMeal');
-                        },
-                        child: ListTile(
-                          title: Text(
-                            'Add meal',
-                            style: theme.textTheme.bodySmall,
-                          ).tr(),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          Navigator.pushNamed(context, '/mealsList');
-                        },
-                        child: ListTile(
-                          title: Text(
-                            'Meals list',
-                            style: theme.textTheme.bodySmall,
-                          ).tr(),
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (!Provider.of<ProfileViewModel>(context, listen: true)
-                      .getIsLogoutLoading)
-                    ExpansionTile(
-                      trailing: const Icon(
-                        Icons.logout_rounded,
-                        color: Colors.red,
-                      ),
-                      title: Text(
-                        'Logout',
-                        style: theme.textTheme.bodySmall,
-                      ).tr(),
-                      iconColor: blueColor,
-                      children: [
-                        InkWell(
-                          onTap: () async {
-                            await Provider.of<ProfileViewModel>(context,
-                                    listen: false)
-                                .logout(context);
-                          },
-                          child: ListTile(
-                            title: Text(
-                              'From this device',
-                              style: theme.textTheme.bodySmall,
-                            ).tr(),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            await Provider.of<ProfileViewModel>(context,
-                                    listen: false)
-                                .logoutFromAll(context);
-                          },
-                          child: ListTile(
-                            title: Text(
-                              'From all devices',
-                              style: theme.textTheme.bodySmall,
-                            ).tr(),
-                          ),
-                        ),
-                      ],
-                    )
-                  else
-                    bigLoader(
-                      color: orangeColor,
-                    ),
-                ],
+          ),
+          if (Provider.of<ProfileViewModel>(context,
+                          listen: true)
+                      .getUserData
+                      .roleId ==
+                  3 ||
+              Provider.of<ProfileViewModel>(context, listen: true)
+                      .getUserData
+                      .roleId ==
+                  4 ||
+              Provider.of<ProfileViewModel>(context, listen: true)
+                      .getUserData
+                      .roleId ==
+                  5)
+            ExpansionTile(
+              trailing: Icon(
+                Icons.food_bank_rounded,
+                color: blueColor,
               ),
-          ],
-        ),
-
+              title: Text(
+                'Diet system',
+                style: theme.textTheme.bodySmall,
+              ).tr(),
+              iconColor: blueColor,
+              children: [
+                ExpansionTile(
+                  title: Text(
+                    'Diets',
+                    style: theme.textTheme.bodySmall,
+                  ).tr(),
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        Navigator.pushNamed(context, '/createDiet');
+                      },
+                      child: ListTile(
+                        title: Text(
+                          'Add diet',
+                          style: theme.textTheme.bodySmall,
+                        ).tr(),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {},
+                      child: ListTile(
+                        title: Text(
+                          'Diets list',
+                          style: theme.textTheme.bodySmall,
+                        ).tr(),
+                      ),
+                    ),
+                  ],
+                ),
+                ExpansionTile(
+                  title: Text(
+                    'Foods',
+                    style: theme.textTheme.bodySmall,
+                  ).tr(),
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        Navigator.pushNamed(context, '/createFood');
+                      },
+                      child: ListTile(
+                        title: Text(
+                          'Add food',
+                          style: theme.textTheme.bodySmall,
+                        ).tr(),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        Navigator.pushNamed(context, '/foodList');
+                      },
+                      child: ListTile(
+                        title: Text(
+                          'Foods list',
+                          style: theme.textTheme.bodySmall,
+                        ).tr(),
+                      ),
+                    ),
+                  ],
+                ),
+                ExpansionTile(
+                  title: Text(
+                    'Meals',
+                    style: theme.textTheme.bodySmall,
+                  ).tr(),
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        Navigator.pushNamed(context, '/createMeal');
+                      },
+                      child: ListTile(
+                        title: Text(
+                          'Add meal',
+                          style: theme.textTheme.bodySmall,
+                        ).tr(),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        Navigator.pushNamed(context, '/mealsList');
+                      },
+                      child: ListTile(
+                        title: Text(
+                          'Meals list',
+                          style: theme.textTheme.bodySmall,
+                        ).tr(),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          if (!Provider.of<ProfileViewModel>(context, listen: true)
+              .getIsLogoutLoading)
+            ExpansionTile(
+              trailing: const Icon(
+                Icons.logout_rounded,
+                color: Colors.red,
+              ),
+              title: Text(
+                'Logout',
+                style: theme.textTheme.bodySmall,
+              ).tr(),
+              iconColor: blueColor,
+              children: [
+                InkWell(
+                  onTap: () async {
+                    await Provider.of<ProfileViewModel>(context, listen: false)
+                        .logout(context);
+                  },
+                  child: ListTile(
+                    title: Text(
+                      'From this device',
+                      style: theme.textTheme.bodySmall,
+                    ).tr(),
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    await Provider.of<ProfileViewModel>(context, listen: false)
+                        .logoutFromAll(context);
+                  },
+                  child: ListTile(
+                    title: Text(
+                      'From all devices',
+                      style: theme.textTheme.bodySmall,
+                    ).tr(),
+                  ),
+                ),
+              ],
+            )
+          else
+            bigLoader(
+              color: orangeColor,
+            ),
+        ]),
       ),
     );
   }
