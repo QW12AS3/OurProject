@@ -55,13 +55,14 @@ class FoodAPI {
       required String description}) async {
     try {
       var request =
-          http.MultipartRequest("Post", Uri.parse('$base_URL/food/update'));
+          http.MultipartRequest("Put", Uri.parse('$base_URL/food/update/$id'));
       request.headers['accept'] = 'application/json';
       request.headers['apikey'] = apiKey;
       request.headers['timeZone'] = getTimezone();
       request.headers['authorization'] =
           'Bearer ${sharedPreferences.getString('access_token')}';
-      request.fields['food_id'] = id.toString();
+
+      //request.fields['food_id'] = id.toString();
 
       request.fields['name'] = foodName;
       request.fields['calories'] = calories.toString();
@@ -120,17 +121,17 @@ class FoodAPI {
 
   Future<Map> deleteFood({required String lang, required int foodId}) async {
     try {
-      final response =
-          await http.post(Uri.parse('$base_URL/food/delete'), headers: {
-        'apikey': apiKey,
-        'lang': lang,
-        'accept': 'application/json',
-        'authorization':
-            'Bearer ${sharedPreferences.getString('access_token')}',
-        'timeZone': getTimezone()
-      }, body: {
-        'food_id': foodId.toString()
-      });
+      final response = await http.delete(
+        Uri.parse('$base_URL/food/delete/$foodId'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
       if (response.statusCode == 200) {
         return {
           'success': true,

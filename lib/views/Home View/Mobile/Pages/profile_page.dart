@@ -2,6 +2,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
@@ -11,6 +12,9 @@ import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+
+import '../../../../view_models/Diet View Model/Diet/diet_list_view_model.dart';
+import '../../../Posts View/post_view_widgets.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
@@ -623,7 +627,271 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                     ]
                                   : user.getUserDiets
-                                      .map((e) => Text(''))
+                                      .map(
+                                        (e) => InkWell(
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                                context, '/specDiet',
+                                                arguments: {'dietId': e.id});
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: blueColor,
+                                                      width: 1),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15)),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  ListTile(
+                                                    trailing: PopupMenuButton(
+                                                      onSelected:
+                                                          (value) async {
+                                                        switch (value) {
+                                                          case 'edit':
+                                                            Navigator.pushNamed(
+                                                                context,
+                                                                '/editDiet',
+                                                                arguments: {
+                                                                  'dietId':
+                                                                      e.id,
+                                                                  'diet': e
+                                                                });
+                                                            break;
+
+                                                          case 'save':
+                                                            final response = await Provider
+                                                                    .of<
+                                                                            DietListViewModel>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                .saveDiet(
+                                                                    lang: getLang(
+                                                                        context),
+                                                                    id: e.id,
+                                                                    context:
+                                                                        context);
+                                                            if (response) {
+                                                              setState(() {
+                                                                e.saved =
+                                                                    !e.saved;
+                                                              });
+                                                            }
+                                                            break;
+
+                                                          case 'delete':
+                                                            await Provider.of<
+                                                                        ProfileViewModel>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .deleteDiet(
+                                                                    lang: getLang(
+                                                                        context),
+                                                                    id: e.id,
+                                                                    context:
+                                                                        context);
+                                                            break;
+                                                          default:
+                                                        }
+                                                      },
+                                                      itemBuilder: (context) =>
+                                                          [
+                                                        PopupMenuItem(
+                                                            value: 'save',
+                                                            child: Text(
+                                                              e.saved
+                                                                  ? 'Saved'
+                                                                  : 'Save',
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .bodySmall!
+                                                                  .copyWith(
+                                                                      color: e.saved
+                                                                          ? Colors
+                                                                              .amber
+                                                                          : blueColor),
+                                                            ).tr()),
+                                                        if (Provider.of<ProfileViewModel>(context, listen: false).getUserData.roleId == 4 ||
+                                                            Provider.of<ProfileViewModel>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .getUserData
+                                                                    .roleId ==
+                                                                5 ||
+                                                            Provider.of<ProfileViewModel>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .getUserData
+                                                                    .roleId ==
+                                                                e.userId)
+                                                          PopupMenuItem(
+                                                              value: 'edit',
+                                                              child: Text(
+                                                                'Edit',
+                                                                style: theme
+                                                                    .textTheme
+                                                                    .bodySmall!
+                                                                    .copyWith(
+                                                                        color:
+                                                                            blueColor),
+                                                              ).tr()),
+                                                        if (Provider.of<ProfileViewModel>(context, listen: false).getUserData.roleId == 4 ||
+                                                            Provider.of<ProfileViewModel>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .getUserData
+                                                                    .roleId ==
+                                                                5 ||
+                                                            Provider.of<ProfileViewModel>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .getUserData
+                                                                    .roleId ==
+                                                                e.userId)
+                                                          PopupMenuItem(
+                                                              value: 'delete',
+                                                              child: Text(
+                                                                'Delete',
+                                                                style: theme
+                                                                    .textTheme
+                                                                    .bodySmall!
+                                                                    .copyWith(
+                                                                        color: Colors
+                                                                            .red),
+                                                              ).tr())
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 25,
+                                                        vertical: 10),
+                                                    child: Text(
+                                                      e.name,
+                                                      style: theme
+                                                          .textTheme.bodyMedium,
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 25,
+                                                        vertical: 10),
+                                                    child: Row(
+                                                      children: [
+                                                        Text('Meals: ',
+                                                                style: theme
+                                                                    .textTheme
+                                                                    .bodySmall)
+                                                            .tr(),
+                                                        Text(
+                                                          e.mealsCount
+                                                              .toString(),
+                                                          style: theme.textTheme
+                                                              .bodySmall!
+                                                              .copyWith(
+                                                                  color:
+                                                                      greyColor),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Divider(
+                                                    endIndent: 50,
+                                                    indent: 50,
+                                                    color: blueColor,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Padding(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      25,
+                                                                  vertical: 10),
+                                                              child:
+                                                                  RatingBarIndicator(
+                                                                rating:
+                                                                    e.rating,
+                                                                itemSize: 25,
+                                                                itemCount: 5,
+                                                                itemBuilder: (context,
+                                                                        index) =>
+                                                                    const Icon(
+                                                                  Icons.star,
+                                                                  color: Colors
+                                                                      .amber,
+                                                                ),
+                                                              )),
+                                                          Text(
+                                                            e.rating.toString(),
+                                                            style: theme
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .copyWith(
+                                                                    color:
+                                                                        greyColor),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pushNamed(
+                                                              context,
+                                                              '/comments',
+                                                              arguments: {
+                                                                'id': e.id,
+                                                                'review': true
+                                                              });
+                                                        },
+                                                        child: Row(
+                                                          children: [
+                                                            Text(
+                                                              'Comments',
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .bodySmall,
+                                                            ).tr(),
+                                                            Icon(
+                                                              Icons
+                                                                  .arrow_forward_ios_rounded,
+                                                              size: 15,
+                                                              color:
+                                                                  orangeColor,
+                                                            )
+                                                          ],
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
                                       .toList(),
                             ),
                           ),

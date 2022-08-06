@@ -7,6 +7,7 @@ import 'package:home_workout_app/models/diet_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../main.dart';
+import '../models/comments_model.dart';
 
 class DietAPI {
   Future<Map> createDiet(
@@ -43,11 +44,14 @@ class DietAPI {
   }
 
   Future<Map> updateDiet(
-      {required int id, required List meals, required String lang}) async {
+      {required int id,
+      required List meals,
+      required String lang,
+      required String name}) async {
     try {
       print(meals);
       final response =
-          await http.post(Uri.parse('$base_URL/diet/update'), headers: {
+          await http.put(Uri.parse('$base_URL/diet/update/$id'), headers: {
         'apikey': apiKey,
         'lang': lang,
         'accept': 'application/json',
@@ -55,7 +59,7 @@ class DietAPI {
             'Bearer ${sharedPreferences.getString('access_token')}',
         'timeZone': getTimezone()
       }, body: {
-        'diet_id': id.toString(),
+        'name': name,
         'meals': jsonEncode(meals)
       });
       print(jsonDecode(response.body));
@@ -77,17 +81,17 @@ class DietAPI {
 
   Future<Map> deleteDiet({required int id, required String lang}) async {
     try {
-      final response =
-          await http.post(Uri.parse('$base_URL/diet/delete'), headers: {
-        'apikey': apiKey,
-        'lang': lang,
-        'accept': 'application/json',
-        'authorization':
-            'Bearer ${sharedPreferences.getString('access_token')}',
-        'timeZone': getTimezone()
-      }, body: {
-        'diet_id': id.toString(),
-      });
+      final response = await http.delete(
+        Uri.parse('$base_URL/diet/delete/$id'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
 
       if (response.statusCode == 201) {
         return {
@@ -140,7 +144,7 @@ class DietAPI {
     print('Called');
     try {
       final response = await http.get(
-        Uri.parse('$base_URL/diet/all?page=$page'),
+        Uri.parse('$base_URL/diet/favorites'),
         headers: {
           'apikey': apiKey,
           'lang': lang,
@@ -170,7 +174,7 @@ class DietAPI {
     print('Called');
     try {
       final response = await http.get(
-        Uri.parse('$base_URL/diet/all?page=$page'),
+        Uri.parse('$base_URL/diet/my_diets?page=$page'),
         headers: {
           'apikey': apiKey,
           'lang': lang,
@@ -180,7 +184,7 @@ class DietAPI {
           'timeZone': getTimezone()
         },
       );
-      print(jsonDecode(response.body));
+      //print(jsonDecode(response.body));
       if (response.statusCode == 200) {
         List<DietModel> newDiet = [];
         final data = jsonDecode(response.body)['data'] as List;
@@ -190,17 +194,17 @@ class DietAPI {
         return newDiet;
       } else {}
     } catch (e) {
-      print('Get Foods List Error: $e');
+      print('Get My Diets List Error: $e');
     }
     return [];
   }
 
   Future<List<DietModel>> getAnotherUserDiets(
-      {required String lang, required int page}) async {
+      {required String lang, required int page, required int id}) async {
     print('Called');
     try {
       final response = await http.get(
-        Uri.parse('$base_URL/diet/all?page=$page'),
+        Uri.parse('$base_URL/diet/user/$id?page=$page'),
         headers: {
           'apikey': apiKey,
           'lang': lang,
@@ -227,17 +231,17 @@ class DietAPI {
 
   Future<DietModel> getSpeDiet({required String lang, required int id}) async {
     try {
-      final response =
-          await http.post(Uri.parse('$base_URL/diet/show'), headers: {
-        'apikey': apiKey,
-        'lang': lang,
-        'accept': 'application/json',
-        'authorization':
-            'Bearer ${sharedPreferences.getString('access_token')}',
-        'timeZone': getTimezone()
-      }, body: {
-        'diet_id': id.toString()
-      });
+      final response = await http.get(
+        Uri.parse('$base_URL/diet/show/$id'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
 
       if (response.statusCode == 200) {
         return DietModel.fromJsonForFull(jsonDecode(response.body)['data']);
@@ -247,5 +251,103 @@ class DietAPI {
       return DietModel();
     }
     return DietModel();
+  }
+
+  Future<Map> saveDiet({required String lang, required int id}) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/diet/favorite/$id'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return {
+          'success': true,
+          'message': jsonDecode(response.body)['message']
+        };
+      } else
+        return {
+          'success': false,
+          'message': jsonDecode(response.body)['message']
+        };
+    } catch (e) {
+      print('Save Diet Error: $e');
+      return {'success': false, 'message': e.toString()};
+    }
+  }
+
+  Future<List<CommentsModel>> getReviews(
+      {required int id, required String lang, required int page}) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$base_URL/diet/reviews/$id?page=$page'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
+        List data = jsonDecode(response.body)['data'];
+        List<CommentsModel> comments = [];
+        data.forEach((element) {
+          comments.add(CommentsModel.fromJson(element));
+        });
+        print(comments);
+
+        return comments;
+      } else {
+        print(jsonDecode(response.body));
+        return [];
+      }
+    } catch (e) {
+      print('Get Reviews Error: $e');
+      return [];
+    }
+  }
+
+  Future<Map> sendReview(
+      {required String lang,
+      required int id,
+      required String review,
+      required double stars}) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$base_URL/diet/favorite/$id'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return {
+          'success': true,
+          'message': jsonDecode(response.body)['message']
+        };
+      } else
+        return {
+          'success': false,
+          'message': jsonDecode(response.body)['message']
+        };
+    } catch (e) {
+      print('Send Review Error: $e');
+      return {'success': false, 'message': e.toString()};
+    }
   }
 }

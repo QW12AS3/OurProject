@@ -10,6 +10,12 @@ class DietListViewModel with ChangeNotifier {
   int _page = 0;
   bool _isLoading = false;
   bool _isDeleteLoading = false;
+  bool _isReviewLoading = false;
+
+  void setIsReviewLoading(value) {
+    _isReviewLoading = value;
+    notifyListeners();
+  }
 
   void reset() {
     _diets.clear();
@@ -49,6 +55,39 @@ class DietListViewModel with ChangeNotifier {
       showSnackbar(Text(response['message'].toString()), context);
     }
     setIsDeleteLoading(false);
+  }
+
+  Future<bool> sendReview(
+      {required String lang,
+      required int id,
+      required String review,
+      required double stars,
+      required BuildContext context}) async {
+    setIsReviewLoading(true);
+    final response = await DietAPI()
+        .sendReview(id: id, lang: lang, review: review, stars: stars);
+
+    if (response['success']) {
+      return true;
+    } else {
+      showSnackbar(Text(response['message'].toString()), context);
+      setIsReviewLoading(false);
+      return false;
+    }
+  }
+
+  Future<bool> saveDiet(
+      {required String lang,
+      required int id,
+      required BuildContext context}) async {
+    final response = await DietAPI().saveDiet(id: id, lang: lang);
+
+    if (response['success']) {
+      return true;
+    } else {
+      showSnackbar(Text(response['message'].toString()), context);
+      return false;
+    }
   }
 
   Future<void> getDietsList({required String lang}) async {
@@ -184,4 +223,5 @@ class DietListViewModel with ChangeNotifier {
   int get getPage => _page;
   bool get getIsLoading => _isLoading;
   bool get getIsDeleteLoading => _isDeleteLoading;
+  bool get getIsREviewLoading => _isReviewLoading;
 }

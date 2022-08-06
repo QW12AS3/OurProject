@@ -1,5 +1,7 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:home_workout_app/Api%20services/diet_api.dart';
@@ -37,6 +39,13 @@ class CreateDietViewModel with ChangeNotifier {
     if (getMeals.isEmpty) {
       showSnackbar(Text('Meals cannot be empty').tr(), context);
       return;
+    }
+    for (int i = 0; i < getMeals.length; i++) {
+      if (getMeals[i].isEmpty) {
+        log('ttttt');
+        showSnackbar(Text('Meals cannot be empty').tr(), context);
+        return;
+      }
     }
     setIsLoading(true);
 

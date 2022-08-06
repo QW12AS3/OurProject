@@ -1,6 +1,7 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
 import 'package:flutter/cupertino.dart';
+import 'package:home_workout_app/components.dart';
 
 import '../../../Api services/diet_api.dart';
 import '../../../models/diet_model.dart';
@@ -44,6 +45,20 @@ class SavedDietsViewModel with ChangeNotifier {
       _diets.addAll(response);
 
     setIsLoading(false);
+  }
+
+  Future<void> unsaveDiet(
+      {required String lang,
+      required int id,
+      required BuildContext context}) async {
+    final response = await DietAPI().saveDiet(id: id, lang: lang);
+
+    if (response['success']) {
+      _diets.removeWhere((element) => element.id == id);
+      notifyListeners();
+    } else {
+      showSnackbar(Text(response['message'].toString()), context);
+    }
   }
 
   List<DietModel> get getSavedDiets => _diets;
