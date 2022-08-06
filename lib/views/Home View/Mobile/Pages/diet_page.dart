@@ -123,116 +123,122 @@ class _DietPageState extends State<DietPage> {
                                                     });
                                               },
                                               child: ListTile(
-                                                trailing: Provider.of<
-                                                                DietListViewModel>(
+                                                trailing: PopupMenuButton(
+                                                  onSelected: (value) async {
+                                                    switch (value) {
+                                                      case 'edit':
+                                                        Navigator.pushNamed(
                                                             context,
-                                                            listen: true)
-                                                        .getIsDeleteLoading
-                                                    ? bigLoader(
-                                                        color: orangeColor)
-                                                    : PopupMenuButton(
-                                                        onSelected:
-                                                            (value) async {
-                                                          switch (value) {
-                                                            case 'edit':
-                                                              Navigator.pushNamed(
-                                                                  context,
-                                                                  '/editDiet',
-                                                                  arguments: {
-                                                                    'dietId':
-                                                                        e.id,
-                                                                    'diet': e
-                                                                  });
-                                                              break;
+                                                            '/editDiet',
+                                                            arguments: {
+                                                              'dietId': e.id,
+                                                              'diet': e
+                                                            });
+                                                        break;
 
-                                                            case 'save':
-                                                              break;
+                                                      case 'save':
+                                                        final response = await Provider
+                                                                .of<DietListViewModel>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                            .saveDiet(
+                                                                lang: getLang(
+                                                                    context),
+                                                                id: e.id,
+                                                                context:
+                                                                    context);
+                                                        if (response) {
+                                                          setState(() {
+                                                            e.saved = !e.saved;
+                                                          });
+                                                        }
+                                                        break;
 
-                                                            case 'delete':
-                                                              await Provider.of<DietListViewModel>(
-                                                                      context,
-                                                                      listen:
-                                                                          false)
-                                                                  .deleteDiet(
-                                                                      lang: getLang(
-                                                                          context),
-                                                                      id: e.id,
-                                                                      context:
-                                                                          context);
-                                                              break;
-                                                            default:
-                                                          }
-                                                        },
-                                                        itemBuilder:
-                                                            (context) => [
-                                                          PopupMenuItem(
-                                                              value: 'save',
-                                                              child: Text(
-                                                                e.saved
-                                                                    ? 'Saved'
-                                                                    : 'Save',
-                                                                style: theme
-                                                                    .textTheme
-                                                                    .bodySmall!
-                                                                    .copyWith(
-                                                                        color: e.saved
-                                                                            ? Colors.amber
-                                                                            : blueColor),
-                                                              ).tr()),
-                                                          if (Provider.of<ProfileViewModel>(context, listen: false).getUserData.roleId == 4 ||
-                                                              Provider.of<ProfileViewModel>(
-                                                                          context,
-                                                                          listen:
-                                                                              false)
-                                                                      .getUserData
-                                                                      .roleId ==
-                                                                  5 ||
-                                                              Provider.of<ProfileViewModel>(
-                                                                          context,
-                                                                          listen:
-                                                                              false)
-                                                                      .getUserData
-                                                                      .roleId ==
-                                                                  e.userId)
-                                                            PopupMenuItem(
-                                                                value: 'edit',
-                                                                child: Text(
-                                                                  'Edit',
-                                                                  style: theme
-                                                                      .textTheme
-                                                                      .bodySmall!
-                                                                      .copyWith(
-                                                                          color:
-                                                                              blueColor),
-                                                                ).tr()),
-                                                          if (Provider.of<ProfileViewModel>(context, listen: false).getUserData.roleId == 4 ||
-                                                              Provider.of<ProfileViewModel>(
-                                                                          context,
-                                                                          listen:
-                                                                              false)
-                                                                      .getUserData
-                                                                      .roleId ==
-                                                                  5 ||
-                                                              Provider.of<ProfileViewModel>(
-                                                                          context,
-                                                                          listen:
-                                                                              false)
-                                                                      .getUserData
-                                                                      .roleId ==
-                                                                  e.userId)
-                                                            PopupMenuItem(
-                                                                value: 'delete',
-                                                                child: Text(
-                                                                  'Delete',
-                                                                  style: theme
-                                                                      .textTheme
-                                                                      .bodySmall!
-                                                                      .copyWith(
-                                                                          color:
-                                                                              Colors.red),
-                                                                ).tr())
-                                                        ],
-                                                      ),
+                                                      case 'delete':
+                                                        await Provider.of<
+                                                                    DietListViewModel>(
+                                                                context,
+                                                                listen: false)
+                                                            .deleteDiet(
+                                                                lang: getLang(
+                                                                    context),
+                                                                id: e.id,
+                                                                context:
+                                                                    context);
+                                                        break;
+                                                      default:
+                                                    }
+                                                  },
+                                                  itemBuilder: (context) => [
+                                                    PopupMenuItem(
+                                                        value: 'save',
+                                                        child: Text(
+                                                          e.saved
+                                                              ? 'Saved'
+                                                              : 'Save',
+                                                          style: theme.textTheme
+                                                              .bodySmall!
+                                                              .copyWith(
+                                                                  color: e.saved
+                                                                      ? Colors
+                                                                          .amber
+                                                                      : blueColor),
+                                                        ).tr()),
+                                                    if (Provider.of<ProfileViewModel>(context, listen: false).getUserData.roleId == 4 ||
+                                                        Provider.of<ProfileViewModel>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .getUserData
+                                                                .roleId ==
+                                                            5 ||
+                                                        Provider.of<ProfileViewModel>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .getUserData
+                                                                .roleId ==
+                                                            e.userId)
+                                                      PopupMenuItem(
+                                                          value: 'edit',
+                                                          child: Text(
+                                                            'Edit',
+                                                            style: theme
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .copyWith(
+                                                                    color:
+                                                                        blueColor),
+                                                          ).tr()),
+                                                    if (Provider.of<ProfileViewModel>(context, listen: false).getUserData.roleId == 4 ||
+                                                        Provider.of<ProfileViewModel>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .getUserData
+                                                                .roleId ==
+                                                            5 ||
+                                                        Provider.of<ProfileViewModel>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .getUserData
+                                                                .roleId ==
+                                                            e.userId)
+                                                      PopupMenuItem(
+                                                          value: 'delete',
+                                                          child: Text(
+                                                            'Delete',
+                                                            style: theme
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .copyWith(
+                                                                    color: Colors
+                                                                        .red),
+                                                          ).tr())
+                                                  ],
+                                                ),
                                                 title: Text(
                                                   '${e.userFname} ${e.userLname}',
                                                   style: theme
@@ -293,82 +299,156 @@ class _DietPageState extends State<DietPage> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                                  MainAxisAlignment.spaceAround,
                                               children: [
-                                                Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 25,
-                                                        vertical: 10),
-                                                    child: RatingBarIndicator(
-                                                      rating: e.rating,
-                                                      itemSize: 25,
-                                                      itemCount: 5,
-                                                      itemBuilder:
-                                                          (context, index) =>
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal: 25,
+                                                                vertical: 10),
+                                                        child:
+                                                            RatingBarIndicator(
+                                                          rating: e.rating,
+                                                          itemSize: 25,
+                                                          itemCount: 5,
+                                                          itemBuilder: (context,
+                                                                  index) =>
                                                               const Icon(
-                                                        Icons.star,
-                                                        color: Colors.amber,
-                                                      ),
-                                                    )),
-                                                Text(
-                                                  e.rating.toString(),
-                                                  style: theme
-                                                      .textTheme.bodySmall!
-                                                      .copyWith(
-                                                          color: greyColor),
+                                                            Icons.star,
+                                                            color: Colors.amber,
+                                                          ),
+                                                        )),
+                                                    Text(
+                                                      e.rating.toString(),
+                                                      style: theme
+                                                          .textTheme.bodySmall!
+                                                          .copyWith(
+                                                              color: greyColor),
+                                                    ),
+                                                  ],
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pushNamed(
+                                                        context, '/comments',
+                                                        arguments: {
+                                                          'review': true,
+                                                          'isReviewd':
+                                                              e.reviewd,
+                                                          'id': e.id
+                                                        });
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        'Comments',
+                                                        style: theme.textTheme
+                                                            .bodySmall,
+                                                      ).tr(),
+                                                      Icon(
+                                                        Icons
+                                                            .arrow_forward_ios_rounded,
+                                                        size: 15,
+                                                        color: orangeColor,
+                                                      )
+                                                    ],
+                                                  ),
                                                 )
                                               ],
                                             ),
                                             if (Provider.of<ProfileViewModel>(
-                                                        context,
-                                                        listen: true)
-                                                    .getUserData
-                                                    .id !=
-                                                e.userId)
+                                                            context,
+                                                            listen: true)
+                                                        .getUserData
+                                                        .id !=
+                                                    e.userId &&
+                                                e.reviewd == false)
                                               Center(
                                                 child: TextButton(
                                                   onPressed: () {
                                                     showDialog(
                                                         context: context,
                                                         builder:
-                                                            (BuildContext
-                                                                    ctx) =>
-                                                                AlertDialog(
-                                                                  shape: RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              15)),
-                                                                  content:
-                                                                      Container(
-                                                                          height:
-                                                                              240,
-                                                                          child:
-                                                                              Column(
-                                                                            children: [
-                                                                              RatingBar.builder(
-                                                                                itemCount: 5,
-                                                                                allowHalfRating: true,
-                                                                                unratedColor: greyColor,
-                                                                                initialRating: e.rating,
-                                                                                maxRating: 5,
-                                                                                itemBuilder: (context, index) => const Icon(
-                                                                                  Icons.star,
-                                                                                  color: Colors.amber,
-                                                                                ),
-                                                                                onRatingUpdate: (value) {
-                                                                                  print(value);
-                                                                                  return;
-                                                                                },
-                                                                              ),
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: CustomTextField(maxLines: 5, controller: _reviewController, title: 'Comment'),
-                                                                              ),
-                                                                              ElevatedButton(onPressed: () {}, child: const Text('Submit'))
-                                                                            ],
-                                                                          )),
-                                                                ));
+                                                            (BuildContext ctx) {
+                                                          double stars = 0;
+                                                          return AlertDialog(
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            15)),
+                                                            content: Container(
+                                                                height: 240,
+                                                                child: Column(
+                                                                  children: [
+                                                                    RatingBar
+                                                                        .builder(
+                                                                      itemCount:
+                                                                          5,
+                                                                      allowHalfRating:
+                                                                          true,
+                                                                      unratedColor:
+                                                                          greyColor,
+                                                                      //initialRating: e.rating,
+                                                                      maxRating:
+                                                                          5,
+                                                                      itemBuilder:
+                                                                          (context, index) =>
+                                                                              const Icon(
+                                                                        Icons
+                                                                            .star,
+                                                                        color: Colors
+                                                                            .amber,
+                                                                      ),
+                                                                      onRatingUpdate:
+                                                                          (value) {
+                                                                        stars =
+                                                                            value;
+                                                                        return;
+                                                                      },
+                                                                    ),
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child: CustomTextField(
+                                                                          maxLines:
+                                                                              5,
+                                                                          controller:
+                                                                              _reviewController,
+                                                                          title:
+                                                                              'Comment'),
+                                                                    ),
+                                                                    ElevatedButton(
+                                                                        onPressed:
+                                                                            () async {
+                                                                          print('ssssssssssss0' +
+                                                                              stars.toString());
+                                                                          final response = await Provider.of<DietListViewModel>(context, listen: false).sendReview(
+                                                                              lang: getLang(context),
+                                                                              id: e.id,
+                                                                              review: _reviewController.text.trim(),
+                                                                              stars: stars,
+                                                                              context: context);
+                                                                          if (response) {
+                                                                            setState(() {
+                                                                              e.reviewd = true;
+                                                                            });
+                                                                            _reviewController.clear();
+                                                                            Navigator.pop(ctx);
+                                                                          }
+                                                                        },
+                                                                        child: const Text(
+                                                                            'Submit'))
+                                                                  ],
+                                                                )),
+                                                          );
+                                                        });
                                                   },
                                                   child: Text(
                                                     'Add a review',

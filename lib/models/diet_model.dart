@@ -19,16 +19,19 @@ class DietModel {
   bool saved = false;
   //double caloriesCount = 0;
   int mealsCount = 0;
+  bool reviewd = false;
 
   DietModel();
 
   DietModel.fromJson(Map json) {
+    print('Model ' + json.toString());
     name = json['name'] ?? '';
     id = json['id'] ?? 0;
     rating = json['rating'] ?? 0;
     createAt = json['created_at'] ?? '';
     mealsCount = json['meal_count'] ?? 0;
     saved = json['saved'] ?? false;
+    reviewd = json['reviewd'] ?? false;
 
     userId = json['created_by']['id'] ?? 0;
     userImg = json['created_by']['prof_img_url'] ?? '';
@@ -44,6 +47,7 @@ class DietModel {
     id = json['id'] ?? 0;
     createAt = json['created_at'] ?? '';
     mealsCount = json['meal_count'] ?? 0;
+    reviewd = json['reviewd'] ?? false;
 
     userId = json['created_by']['id'] ?? 0;
     userImg = json['created_by']['prof_img_url'] ?? '';
@@ -56,7 +60,7 @@ class DietModel {
     mealsL.forEach((element) {
       final m = [];
       List<FoodModel> foods = [];
-      final l = element['meals_list'] as List;
+      final l = element['meal_list'] as List;
       l.forEach((element) {
         m.add(MealModel.fromJsonForDiet(element));
         final foodsData = element['food_list'] as List;

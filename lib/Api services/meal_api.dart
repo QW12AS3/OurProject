@@ -56,7 +56,7 @@ class MealAPI {
     try {
       print(foodsIDs);
       final response =
-          await http.post(Uri.parse('$base_URL/meal/update'), headers: {
+          await http.put(Uri.parse('$base_URL/meal/update/$id'), headers: {
         'apikey': apiKey,
         'lang': lang,
         'accept': 'application/json',
@@ -64,7 +64,7 @@ class MealAPI {
             'Bearer ${sharedPreferences.getString('access_token')}',
         'timeZone': getTimezone()
       }, body: {
-        'meal_id': id.toString(),
+        //'meal_id': id.toString(),
         'type': type,
         'description': desc,
         'food_ids': jsonEncode(foodsIDs)
@@ -121,8 +121,8 @@ class MealAPI {
 
   Future<Map> deleteMeal({required String lang, required int mealId}) async {
     try {
-      final response =
-          await http.post(Uri.parse('$base_URL/meal/delete'), headers: {
+      final response = await http
+          .delete(Uri.parse('$base_URL/meal/delete/$mealId'), headers: {
         'apikey': apiKey,
         'lang': lang,
         'accept': 'application/json',
@@ -130,7 +130,7 @@ class MealAPI {
             'Bearer ${sharedPreferences.getString('access_token')}',
         'timeZone': getTimezone()
       }, body: {
-        'meal_id': mealId.toString()
+        //'meal_id': mealId.toString()
       });
       if (response.statusCode == 200) {
         return {

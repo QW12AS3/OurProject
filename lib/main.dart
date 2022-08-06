@@ -158,6 +158,7 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DietListViewModel()),
         ChangeNotifierProvider(create: (context) => EditDietViewModel()),
         ChangeNotifierProvider(create: (context) => SpecificDietViewModel()),
+
         ChangeNotifierProvider(create: (context) => CreateworkoutViewModel()),
         ChangeNotifierProvider(create: (context) => CreateExerciseViewModel()),
         // ChangeNotifierProvider(create: (context) => CreateExerciseViewModel()),

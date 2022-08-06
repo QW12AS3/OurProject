@@ -69,6 +69,7 @@ class EditDietViewModel with ChangeNotifier {
 
   Future<void> editDiet(
       {required String lang,
+      required String name,
       required int id,
       required BuildContext context}) async {
     log('Meals: $getMeals');
@@ -79,8 +80,8 @@ class EditDietViewModel with ChangeNotifier {
     }
 
     setIsLoading(true);
-    final response =
-        await DietAPI().updateDiet(id: id, meals: getMeals, lang: lang);
+    final response = await DietAPI()
+        .updateDiet(id: id, meals: getMeals, lang: lang, name: name);
     if (response['success']) {
       showSnackbar(Text(response['message'].toString()), context);
       Navigator.pop(context);
