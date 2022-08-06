@@ -333,7 +333,7 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
                                       fontWeight: FontWeight.bold),
                                   maxLines: 5,
                                   keyboardType: TextInputType.multiline,
-                                  textInputAction: TextInputAction.newline,
+                                  textInputAction: TextInputAction.done,
                                 ),
                               ),
                               SizedBox(
@@ -693,15 +693,23 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
                                   print('ffffffffffssssssssssss');
                                   print(BackEndMessage.statusCode);
                                   print(BackEndMessage.message);
-                                  if (BackEndMessage.statusCode == 200) {
+                                  if (BackEndMessage.message != null &&
+                                      BackEndMessage.message != '') {
+                                    showSnackbar(
+                                        Text(BackEndMessage.message.toString()),
+                                        context);
+                                  }
+                                  if (BackEndMessage.statusCode == 200 ||
+                                      BackEndMessage.statusCode == 201) {
                                     nameController.clear();
                                     descriptionController.clear();
                                     repetitionController.clear();
                                     hoursController.clear();
                                     minuitesController.clear();
-                                    showSnackbar(
-                                        Text(BackEndMessage.message.toString()),
-                                        context);
+                                    Provider.of<CreateChallengesViewModel>(
+                                            context,
+                                            listen: false)
+                                        .resetImage();
                                     Navigator.of(context).pop();
                                   }
                                   // print(Provider.of<CreateChallengesViewModel>(

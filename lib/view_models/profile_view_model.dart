@@ -272,6 +272,7 @@ class ProfileViewModel with ChangeNotifier {
       setIslogoutLoading(false);
       showSnackbar(const Text('Logout failed'), context);
       Navigator.of(context).pushNamedAndRemoveUntil('/start', (route) => false);
+
       //Navigator.pop(context);
     }
     setIslogoutLoading(false);

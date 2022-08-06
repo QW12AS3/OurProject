@@ -24,8 +24,8 @@ class _SpecificChallengeState extends State<SpecificChallenge> {
         child: Column(
           children: [
             Container(
-              width: mq.size.width * 0.3,
-              height: mq.size.height * 0.2,
+              // width: mq.size.width * 0.3,
+              // height: mq.size.height * 0.2,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image(

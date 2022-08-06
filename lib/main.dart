@@ -23,6 +23,8 @@ import 'package:home_workout_app/view_models/Posts%20View%20Model/posts_view_mod
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_by_google_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_view_model.dart';
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
+import 'package:home_workout_app/view_models/Workout_View_Model/create_exercise_view_model.dart';
+import 'package:home_workout_app/view_models/Workout_View_Model/create_workout_view_model.dart';
 import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
 import 'package:home_workout_app/view_models/CV%20View%20Model/apply_view_model.dart';
 import 'package:home_workout_app/view_models/comments_view_model.dart';
@@ -71,8 +73,11 @@ import 'package:home_workout_app/views/Posts%20View/create_post_view.dart';
 import 'package:home_workout_app/views/Posts%20View/edit_post_view.dart';
 import 'package:home_workout_app/views/Posts%20View/post_view.dart';
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
+import 'package:home_workout_app/views/Workout/create_workout_view.dart';
+import 'package:home_workout_app/views/Workout/edit_exercise_view.dart';
 import 'package:home_workout_app/views/challenges/create_challenge_view.dart';
 import 'package:home_workout_app/views/challenges/general_challenges_view.dart';
+import 'package:home_workout_app/views/create_exercise_view.dart';
 import 'package:home_workout_app/views/forget_password_view.dart';
 import 'package:home_workout_app/views/ip_view.dart';
 import 'package:home_workout_app/views/otp_view.dart';
@@ -153,6 +158,11 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DietListViewModel()),
         ChangeNotifierProvider(create: (context) => EditDietViewModel()),
         ChangeNotifierProvider(create: (context) => SpecificDietViewModel()),
+
+        ChangeNotifierProvider(create: (context) => CreateworkoutViewModel()),
+        ChangeNotifierProvider(create: (context) => CreateExerciseViewModel()),
+        // ChangeNotifierProvider(create: (context) => CreateExerciseViewModel()),
+
         ChangeNotifierProvider(create: (context) => SavedDietsViewModel()),
       ],
       child: MaterialApp(
@@ -223,7 +233,11 @@ class Vigor extends StatelessWidget {
           '/mealPicker': (context) => MealPickerView(),
           '/editDiet': (context) => EditDietView(),
           '/specDiet': (context) => SpecificDietView(),
+          '/createWorkout': (context) => CreateWorkoutView(),
+          '/createExercise': (context) => CreateExerciseView(),
+          '/EditExerciseView': (context) => EditExerciseView(),
           '/savedDiets': (context) => SavedDietsView(),
+
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,
