@@ -6,8 +6,8 @@ import 'package:home_workout_app/models/create_exercise_model.dart';
 import 'package:http/http.dart';
 
 class CreateExerciseAPI {
-  static //Future<CreateExerciseModel?>
-      createExercise(CreateExerciseModel user, String url, String lang) async {
+  static Future<CreateExerciseModel?> createExercise(
+      CreateExerciseModel user, String url, String lang) async {
     try {
       var request = MultipartRequest("Post", Uri.parse('$base_URL$url'));
       request.headers['accept'] = 'application/json';
@@ -17,6 +17,7 @@ class CreateExerciseAPI {
           'Bearer ${sharedPreferences.getString('access_token')}';
       request.fields['name'] = user.name!;
       print('dddddaaaaaaaaaa' + user.description!);
+      print(user.img?.path);
       request.fields['description'] = user.description!;
       request.fields['burn_calories'] = user.burn_calories!;
       // if (user.time == 'true') {
@@ -29,10 +30,14 @@ class CreateExerciseAPI {
       // request.fields['desc'] = user.desc!;
 
       print(sharedPreferences.get('access_token'));
+
       if (user.img?.path != '') {
-        print(user.img?.path);
-        var pic = await MultipartFile.fromPath("img", user.img!.path);
+        print('............................');
+        var pic =
+            await MultipartFile.fromPath("excersise_media", user.img!.path);
         request.files.add(pic);
+        print(user.img?.path);
+        print(pic);
       }
 
       // final Response response = await post(Uri.parse('$base_URL/ch'),
@@ -118,7 +123,7 @@ class CreateExerciseAPI {
         statusCode: 0);
   }
 
-  Future<CreateExerciseModel> deleteChallenge(String lang, int? id) async {
+  Future<CreateExerciseModel> deleteExercise(String lang, int? id) async {
     //business logic to send data to server
     try {
       final Response response = await delete(

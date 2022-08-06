@@ -9,7 +9,9 @@ Color blueColor = const Color(0xff126782);
 Color greyColor = Colors.grey;
 
 
+
 String base_URL = 'http://192.168.1.105:8000/api';
+
 
 
 String ip = base_URL.replaceAll('/api', '');
@@ -84,15 +86,19 @@ String getTimezone() {
 
 String firebaseNotificationToken = '';
 getFirebaseNotificationToken() {
-  if (firebaseNotificationToken != '' && firebaseNotificationToken != null) {
-    print('firbase token: $firebaseNotificationToken');
-    return firebaseNotificationToken;
-  } else {
-    FirebaseMessaging.instance.getToken().then((value) {
-      firebaseNotificationToken = value.toString();
+  try {
+    if (firebaseNotificationToken != '' && firebaseNotificationToken != null) {
       print('firbase token: $firebaseNotificationToken');
-    });
-    return firebaseNotificationToken;
+      return firebaseNotificationToken;
+    } else {
+      FirebaseMessaging.instance.getToken().then((value) {
+        firebaseNotificationToken = value.toString();
+        print('firbase token: $firebaseNotificationToken');
+      });
+      return firebaseNotificationToken;
+    }
+  } catch (e) {
+    print('get firebase token error: $e');
   }
 }
  

@@ -166,7 +166,7 @@ class HomePage extends StatelessWidget {
   void buildDialog(BuildContext context) {
     final alert = AlertDialog(
       title: Text(
-        'Add type',
+        'Create type',
         style: TextStyle(color: blueColor),
       ),
       content: Container(
@@ -182,7 +182,7 @@ class HomePage extends StatelessWidget {
                 );
               },
               child: Text(
-                'Add exercise',
+                'Create exercise',
                 style: TextStyle(color: orangeColor),
               ),
             ),
@@ -197,7 +197,7 @@ class HomePage extends StatelessWidget {
                 );
               },
               child: Text(
-                'Add workout',
+                'Create workout',
                 style: TextStyle(color: orangeColor),
               ),
             ),
@@ -207,8 +207,6 @@ class HomePage extends StatelessWidget {
     );
     showDialog(
         context: context,
-        // barrierDismissible: false,
-        // barrierLabel: "ddddddddd",
         barrierColor: orangeColor.withOpacity(0.1),
         builder: (BuildContext ctx) {
           return alert;

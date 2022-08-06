@@ -45,34 +45,38 @@ class _SplashViewState extends State<SplashView> {
   FirebaseMessaging _firebaseMessage = FirebaseMessaging.instance;
 
   void firebaseTrigger() async {
-    print(
-        'objeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeect');
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
+    try {
       print(
-          'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
+          'objeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeect');
+      FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+        print("message recieved");
+        print(
+            'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
 
-      print(event.notification!.body);
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print(message.data);
-      print(message);
-      if (message.data['page'] == 'Home Screen') {
-        print('wooooooooorking');
-        print(message.data['page']);
-        if (sharedPreferences.getBool('registered') == true &&
-            sharedPreferences.getBool('is_info') == true) {
-          Navigator.pushReplacementNamed(context, '/home');
+        print(event.notification!.body);
+      });
+      FirebaseMessaging.onMessageOpenedApp.listen((message) {
+        print(message.data);
+        print(message);
+        if (message.data['page'] == 'Home Screen') {
+          print('wooooooooorking');
+          print(message.data['page']);
+          if (sharedPreferences.getBool('registered') == true &&
+              sharedPreferences.getBool('is_info') == true) {
+            Navigator.pushReplacementNamed(context, '/home');
+          }
         }
-      }
-      print('Message clicked!');
-      print(message.data);
-      print(
-          'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
-    });
-    // FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
-    //   print("onBackgroundMessage: $message");
-    // });
+        print('Message clicked!');
+        print(message.data);
+        print(
+            'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
+      });
+      // FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
+      //   print("onBackgroundMessage: $message");
+      // });
+    } catch (e) {
+      print('firebase error when go to specific screen $e ');
+    }
   }
 
   @override
