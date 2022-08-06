@@ -8,6 +8,7 @@ class CommentsModel {
   int id = 0;
   int ownerId = 0;
   int reports = 0;
+  double reviewRate = 0;
 
   CommentsModel();
   CommentsModel.fromJson(Map<String, dynamic> json) {
@@ -21,5 +22,6 @@ class CommentsModel {
       ownerImageUrl = '$ip/$ownerImageUrl';
     }
     reports = json['reports'] ?? 0;
+    reviewRate = json['review'] ?? 0;
   }
 }

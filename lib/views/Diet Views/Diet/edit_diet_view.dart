@@ -1,3 +1,7 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
@@ -42,6 +46,7 @@ class _EditDietViewState extends State<EditDietView> {
 
   String kcalString = 'kcal'.tr();
   String dayString = 'Day'.tr();
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +59,10 @@ class _EditDietViewState extends State<EditDietView> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     await editDiet.editDiet(
-                        lang: getLang(context), id: diet.id, context: context);
+                        name: _nameController.text.trim(),
+                        lang: getLang(context),
+                        id: diet.id,
+                        context: context);
                   }
                 },
                 child: Text('Edit', style: theme.textTheme.bodyMedium)),
@@ -394,122 +402,111 @@ class _EditDietViewState extends State<EditDietView> {
                       ).tr(),
                     ),
                     Column(
-                      children: Provider.of<MealsListViewModel>(context,
-                              listen: true)
-                          .getMealsList
-                          .where((element) => createDiet
-                              .getMeals[createDiet.getMeals.indexOf(e1)]
-                              .contains(element.id))
-                          .map(
-                            (e) => Provider.of<MealsListViewModel>(context,
-                                        listen: true)
-                                    .getIsLoading
-                                ? bigLoader(color: orangeColor)
-                                : Dismissible(
-                                    key: Key(e.id.toString()),
-                                    onDismissed: (dir) {
-                                      createDiet.removeFromMeals(e.id,
-                                          createDiet.getMeals.indexOf(e1));
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      margin: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: blueColor, width: 1),
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      child: ListTile(
-                                        title: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  e.type,
-                                                  style: theme
-                                                      .textTheme.bodySmall!
-                                                      .copyWith(
-                                                          color: orangeColor,
-                                                          fontSize: 17),
-                                                ),
-                                                Text(
-                                                  '${e.calories} $kcalString',
-                                                  style: theme
-                                                      .textTheme.bodySmall!
-                                                      .copyWith(
-                                                          color: orangeColor,
-                                                          fontSize: 12),
-                                                ),
-                                              ],
+                      children:
+                          Provider.of<MealsListViewModel>(context, listen: true)
+                              .getMealsList
+                              .where((element) => createDiet
+                                  .getMeals[createDiet.getMeals.indexOf(e1)]
+                                  .contains(element.id))
+                              .map((e) {
+                        index++;
+                        log((e.id + createDiet.getMeals.indexOf(e1) + 1)
+                            .toString());
+                        if (Provider.of<MealsListViewModel>(context,
+                                listen: true)
+                            .getIsLoading)
+                          return bigLoader(color: orangeColor);
+                        else
+                          return Dismissible(
+                            key: Key((e.id + index).toString()),
+                            onDismissed: (dir) {
+                              createDiet.removeFromMeals(
+                                  e.id, createDiet.getMeals.indexOf(e1));
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              margin: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: blueColor, width: 1),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: ListTile(
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          e.type,
+                                          style: theme.textTheme.bodySmall!
+                                              .copyWith(
+                                                  color: orangeColor,
+                                                  fontSize: 17),
+                                        ),
+                                        Text(
+                                          '${e.calories} $kcalString',
+                                          style: theme.textTheme.bodySmall!
+                                              .copyWith(
+                                                  color: orangeColor,
+                                                  fontSize: 12),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      e.description,
+                                      style: theme.textTheme.bodySmall!
+                                          .copyWith(
+                                              color: greyColor, fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                                subtitle: ExpansionTile(
+                                  title: Text(
+                                    'Foods',
+                                    style: theme.textTheme.bodySmall!
+                                        .copyWith(color: blueColor),
+                                  ),
+                                  children: e.foods
+                                      .map(
+                                        (e) => Container(
+                                          padding: const EdgeInsets.all(8),
+                                          margin: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: blueColor, width: 1),
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          child: ListTile(
+                                            title: Text(
+                                              e.name,
+                                              style: theme.textTheme.bodySmall!
+                                                  .copyWith(
+                                                      color: orangeColor,
+                                                      fontSize: 17),
                                             ),
-                                            Text(
-                                              e.description,
+                                            subtitle: Text(
+                                              '${e.calories} $kcalString',
                                               style: theme.textTheme.bodySmall!
                                                   .copyWith(
                                                       color: greyColor,
                                                       fontSize: 12),
                                             ),
-                                          ],
-                                        ),
-                                        subtitle: ExpansionTile(
-                                          title: Text(
-                                            'Foods',
-                                            style: theme.textTheme.bodySmall!
-                                                .copyWith(color: blueColor),
+                                            leading: CircleAvatar(
+                                              radius: 50,
+                                              backgroundImage:
+                                                  NetworkImage(e.imageUrl),
+                                            ),
                                           ),
-                                          children: e.foods
-                                              .map(
-                                                (e) => Container(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
-                                                  margin:
-                                                      const EdgeInsets.all(8),
-                                                  decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: blueColor,
-                                                          width: 1),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15)),
-                                                  child: ListTile(
-                                                    title: Text(
-                                                      e.name,
-                                                      style: theme
-                                                          .textTheme.bodySmall!
-                                                          .copyWith(
-                                                              color:
-                                                                  orangeColor,
-                                                              fontSize: 17),
-                                                    ),
-                                                    subtitle: Text(
-                                                      '${e.calories} $kcalString',
-                                                      style: theme
-                                                          .textTheme.bodySmall!
-                                                          .copyWith(
-                                                              color: greyColor,
-                                                              fontSize: 12),
-                                                    ),
-                                                    leading: CircleAvatar(
-                                                      radius: 50,
-                                                      backgroundImage:
-                                                          NetworkImage(
-                                                              e.imageUrl),
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                              .toList(),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                          )
-                          .toList(),
+                                      )
+                                      .toList(),
+                                ),
+                              ),
+                            ),
+                          );
+                      }).toList(),
                     ),
                     Divider(
                       indent: 50,

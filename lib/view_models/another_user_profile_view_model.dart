@@ -47,6 +47,21 @@ class AnotherUserProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteDiet(
+      {required String lang,
+      required int id,
+      required BuildContext context}) async {
+    final response = await DietAPI().deleteDiet(id: id, lang: lang);
+
+    if (response['success']) {
+      showSnackbar(Text(response['message'].toString()), context);
+      _userDiets.removeWhere((element) => element.id == id);
+      notifyListeners();
+    } else {
+      showSnackbar(Text(response['message'].toString()), context);
+    }
+  }
+
   Future<void> setAnotherUserPosts(String lang, int userId) async {
     print('getting');
     setPage(getPage + 1);
@@ -169,7 +184,7 @@ class AnotherUserProfileViewModel with ChangeNotifier {
   bool _dietsIsOpened = false;
 
   void setIsdietLoading(value) {
-    _isPostLoading = value;
+    _isDietLoading = value;
     notifyListeners();
   }
 
@@ -188,13 +203,13 @@ class AnotherUserProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setAnotherUserDiets(String lang) async {
+  Future<void> setAnotherUserDiets(String lang, int id) async {
     print('getting');
     setDietPage(getDietPage + 1);
     if (_userDiets.isNotEmpty) setGetMoreDietsLoading(true);
     setIsdietLoading(true);
-    List<DietModel> newdiets =
-        await DietAPI().getAnotherUserDiets(lang: lang, page: getDietPage);
+    List<DietModel> newdiets = await DietAPI()
+        .getAnotherUserDiets(lang: lang, page: getDietPage, id: id);
     _userDiets.addAll(newdiets);
     if (newdiets.isEmpty) setDietPage(getDietPage - 1);
     setIsdietLoading(false);

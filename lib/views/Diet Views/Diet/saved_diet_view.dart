@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 
 import '../../../components.dart';
 import '../../../constants.dart';
+import '../../../view_models/Diet View Model/Diet/diet_list_view_model.dart';
 import '../../../view_models/profile_view_model.dart';
+import '../../Posts View/post_view_widgets.dart';
 
 class SavedDietsView extends StatefulWidget {
   const SavedDietsView({Key? key}) : super(key: key);
@@ -17,6 +19,7 @@ class SavedDietsView extends StatefulWidget {
 
 class _SavedDietsViewState extends State<SavedDietsView> {
   ScrollController _scrollController = ScrollController();
+  TextEditingController _reviewController = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -139,6 +142,16 @@ class _SavedDietsViewState extends State<SavedDietsView> {
                                                   onSelected: (value) async {
                                                     switch (value) {
                                                       case 'save':
+                                                        await Provider.of<
+                                                                    SavedDietsViewModel>(
+                                                                context,
+                                                                listen: false)
+                                                            .unsaveDiet(
+                                                                lang: getLang(
+                                                                    context),
+                                                                id: e.id,
+                                                                context:
+                                                                    context);
                                                         break;
 
                                                       default:
@@ -148,16 +161,12 @@ class _SavedDietsViewState extends State<SavedDietsView> {
                                                     PopupMenuItem(
                                                         value: 'save',
                                                         child: Text(
-                                                          e.saved
-                                                              ? 'Saved'
-                                                              : 'Save',
+                                                          'Saved',
                                                           style: theme.textTheme
                                                               .bodySmall!
                                                               .copyWith(
-                                                                  color: e.saved
-                                                                      ? Colors
-                                                                          .amber
-                                                                      : blueColor),
+                                                                  color: Colors
+                                                                      .amber),
                                                         ).tr()),
                                                   ],
                                                 ),
@@ -214,46 +223,154 @@ class _SavedDietsViewState extends State<SavedDietsView> {
                                                   ],
                                                 ),
                                               ),
+                                              Divider(
+                                                endIndent: 50,
+                                                indent: 50,
+                                                color: blueColor,
+                                              ),
                                               Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
                                                 children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 25,
-                                                        vertical: 10),
-                                                    child: RatingBar.builder(
-                                                      itemCount: 5,
-                                                      allowHalfRating: true,
-                                                      unratedColor: greyColor,
-                                                      initialRating: e.rating,
-                                                      maxRating: 5,
-                                                      itemBuilder:
-                                                          (context, index) =>
-                                                              const Icon(
-                                                        Icons.star,
-                                                        color: Colors.amber,
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      25,
+                                                                  vertical: 10),
+                                                          child:
+                                                              RatingBarIndicator(
+                                                            rating: e.rating,
+                                                            itemSize: 25,
+                                                            itemCount: 5,
+                                                            itemBuilder:
+                                                                (context,
+                                                                        index) =>
+                                                                    const Icon(
+                                                              Icons.star,
+                                                              color:
+                                                                  Colors.amber,
+                                                            ),
+                                                          )),
+                                                      Text(
+                                                        e.rating.toString(),
+                                                        style: theme.textTheme
+                                                            .bodySmall!
+                                                            .copyWith(
+                                                                color:
+                                                                    greyColor),
                                                       ),
-                                                      onRatingUpdate: (value) {
-                                                        return;
-                                                      },
-                                                    ),
+                                                    ],
                                                   ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pushNamed(
+                                                          context, '/comments',
+                                                          arguments: {
+                                                            'id': e.id,
+                                                            'review': true,
+                                                            'isReviewd':
+                                                                e.reviewd,
+                                                          });
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          'Comments',
+                                                          style: theme.textTheme
+                                                              .bodySmall,
+                                                        ).tr(),
+                                                        Icon(
+                                                          Icons
+                                                              .arrow_forward_ios_rounded,
+                                                          size: 15,
+                                                          color: orangeColor,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  )
                                                 ],
                                               ),
                                               if (Provider.of<ProfileViewModel>(
-                                                          context,
-                                                          listen: true)
-                                                      .getUserData
-                                                      .id !=
-                                                  e.userId)
+                                                              context,
+                                                              listen: true)
+                                                          .getUserData
+                                                          .id !=
+                                                      e.userId &&
+                                                  e.reviewd == false)
                                                 Center(
                                                   child: TextButton(
                                                     onPressed: () {
                                                       showDialog(
                                                           context: context,
                                                           builder: (BuildContext
-                                                                  ctx) =>
-                                                              AlertDialog());
+                                                              ctx) {
+                                                            double stars = 0;
+                                                            return AlertDialog(
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              15)),
+                                                              content:
+                                                                  Container(
+                                                                      height:
+                                                                          240,
+                                                                      child:
+                                                                          Column(
+                                                                        children: [
+                                                                          RatingBar
+                                                                              .builder(
+                                                                            itemCount:
+                                                                                5,
+                                                                            allowHalfRating:
+                                                                                true,
+                                                                            unratedColor:
+                                                                                greyColor,
+                                                                            //initialRating: e.rating,
+                                                                            maxRating:
+                                                                                5,
+                                                                            itemBuilder: (context, index) =>
+                                                                                const Icon(
+                                                                              Icons.star,
+                                                                              color: Colors.amber,
+                                                                            ),
+                                                                            onRatingUpdate:
+                                                                                (value) {
+                                                                              stars = value;
+                                                                              return;
+                                                                            },
+                                                                          ),
+                                                                          Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child: CustomTextField(
+                                                                                maxLines: 5,
+                                                                                controller: _reviewController,
+                                                                                title: 'Comment'),
+                                                                          ),
+                                                                          ElevatedButton(
+                                                                              onPressed: () async {
+                                                                                final response = await Provider.of<DietListViewModel>(context, listen: false).sendReview(lang: getLang(context), id: e.id, review: _reviewController.text.trim(), stars: stars, context: context);
+                                                                                if (response) {
+                                                                                  setState(() {
+                                                                                    e.reviewd = true;
+                                                                                  });
+                                                                                  Navigator.pop(ctx);
+                                                                                }
+                                                                              },
+                                                                              child: const Text('Submit'))
+                                                                        ],
+                                                                      )),
+                                                            );
+                                                          });
                                                     },
                                                     child: Text(
                                                       'Add a review',
