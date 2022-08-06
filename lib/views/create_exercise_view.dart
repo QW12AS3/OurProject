@@ -363,7 +363,6 @@ class _CreateExerciseViewState extends State<CreateExerciseView> {
                                             context,
                                             listen: false)
                                         .resetImage();
-
                                     Navigator.of(context).pop();
                                   }
                                 }

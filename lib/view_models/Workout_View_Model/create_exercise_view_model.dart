@@ -36,6 +36,7 @@ class CreateExerciseViewModel with ChangeNotifier {
   postExerciseInfo(String nameVal, String descriptionVal,
       String burn_caloriesVal, XFile imgVal, String urlVal, String lang) async {
     CreateExerciseModel? result;
+    print(imgVal.path);
     return await CreateExerciseAPI.createExercise(
         CreateExerciseModel(
             name: nameVal,
@@ -80,7 +81,7 @@ class CreateExerciseViewModel with ChangeNotifier {
   }
 
   deleteSpecificChallengeData(String lang, int? id) {
-    CreateExerciseAPI().deleteChallenge(lang, id);
+    CreateExerciseAPI().deleteExercise(lang, id);
     notifyListeners();
   }
 }

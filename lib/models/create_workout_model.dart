@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:image_picker/image_picker.dart';
 
 class CreateworkoutModel {
@@ -5,12 +7,16 @@ class CreateworkoutModel {
   String? name;
   String? message;
   XFile? img;
+  String? exercise_img;
   String? end_time;
   String? time;
   String? count;
   String? ex_id;
   String? desc;
-
+  String? categorie_id;
+  String? equipment;
+  String? difficulty;
+  List? excersisesList;
   int? statusCode;
   CreateworkoutModel(
       {this.id,
@@ -22,7 +28,12 @@ class CreateworkoutModel {
       this.time,
       this.count,
       this.ex_id,
-      this.desc});
+      this.desc,
+      this.exercise_img,
+      this.categorie_id,
+      this.equipment,
+      this.difficulty,
+      this.excersisesList});
   // to convert data from json to dart object
   factory CreateworkoutModel.fromJson(Map<String, dynamic> user) =>
       CreateworkoutModel(
@@ -43,13 +54,23 @@ class CreateworkoutModel {
         // is_sub: user['is_sub'] ?? false,
         // is_active: user['is_active'] ?? false,
       );
-  factory CreateworkoutModel.fromexercisesJson(Map<String, dynamic> user) =>
+  factory CreateworkoutModel.fromCategoriesJson(Map<String, dynamic> user) =>
       CreateworkoutModel(
         // message: user['message'] ?? '',
         // statusCode: user['status'] ?? 0,
         id: user['id'] ?? 0,
         name: user['name'] ?? '',
         // img: user['img'] ?? '',
+        //  ca: user['ca'] ?? '',
+      );
+  factory CreateworkoutModel.fromExercisesJson(Map<String, dynamic> user) =>
+      CreateworkoutModel(
+        // message: user['message'] ?? '',
+        // statusCode: user['status'] ?? 0,
+        id: user['id'] ?? 0,
+        name: user['name'] ?? '',
+        desc: user['description'] ?? '',
+        exercise_img: user['excersise_media_url'] ?? '',
         //  ca: user['ca'] ?? '',
       );
   factory CreateworkoutModel.fromJsonWithErrors(Map<String, dynamic> user) =>
@@ -59,11 +80,9 @@ class CreateworkoutModel {
   // to convert data to json
   Map<String, dynamic> toJson() => {
         'name': name,
-        'end_time': end_time,
-        'time': time,
-        'count': count,
-        'ex_id': ex_id,
-        'img': img,
-        'desc': desc
+        'categorie_id': categorie_id,
+        'difficulty': difficulty,
+        'equipment': equipment,
+        'excersises': jsonEncode(excersisesList)
       };
 }
