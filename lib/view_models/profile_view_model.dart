@@ -79,6 +79,21 @@ class ProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteDiet(
+      {required String lang,
+      required int id,
+      required BuildContext context}) async {
+    final response = await DietAPI().deleteDiet(id: id, lang: lang);
+
+    if (response['success']) {
+      showSnackbar(Text(response['message'].toString()), context);
+      _userDiets.removeWhere((element) => element.id == id);
+      notifyListeners();
+    } else {
+      showSnackbar(Text(response['message'].toString()), context);
+    }
+  }
+
   Future<void> setUserPosts(String lang) async {
     print('getting');
     setPage(getPage + 1);
@@ -142,7 +157,7 @@ class ProfileViewModel with ChangeNotifier {
   }
 
   void setIsdietLoading(value) {
-    _isPostLoading = value;
+    _isDietLoading = value;
     notifyListeners();
   }
 
