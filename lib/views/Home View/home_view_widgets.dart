@@ -513,54 +513,6 @@ class myDrawer extends StatelessWidget {
               color: orangeColor,
             ),
         ]),
-
-        /*
-            if (!Provider.of<ProfileViewModel>(context, listen: true)
-                .getIsLogoutLoading)
-              ExpansionTile(
-                trailing: const Icon(
-                  Icons.logout_rounded,
-                  color: Colors.red,
-                ),
-                title: Text(
-                  'Logout',
-                  style: theme.textTheme.bodySmall,
-                ).tr(),
-                iconColor: blueColor,
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      await Provider.of<ProfileViewModel>(context,
-                              listen: false)
-                          .logout(context);
-                    },
-                    child: ListTile(
-                      title: Text(
-                        'From this device',
-                        style: theme.textTheme.bodySmall,
-                      ).tr(),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      await Provider.of<ProfileViewModel>(context,
-                              listen: false)
-                          .logoutFromAll(context);
-                    },
-                    child: ListTile(
-                      title: Text(
-                        'From all devices',
-                        style: theme.textTheme.bodySmall,
-                      ).tr(),
-                    ),
-                  ),
-                ],
-              )
-            else
-              bigLoader(
-                color: orangeColor,
-              ),
-              */
       ),
     );
   }
