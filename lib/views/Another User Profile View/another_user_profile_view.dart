@@ -15,6 +15,7 @@ import '../../view_models/Diet View Model/Diet/diet_list_view_model.dart';
 import '../../view_models/profile_view_model.dart';
 import '../Home View/Mobile/mobile_home_view_widgets.dart';
 import '../Home View/home_view_widgets.dart';
+import '../Posts View/post_view_widgets.dart';
 
 class AnotherUserProfileView extends StatefulWidget {
   const AnotherUserProfileView({Key? key}) : super(key: key);
@@ -25,6 +26,7 @@ class AnotherUserProfileView extends StatefulWidget {
 
 class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
   ScrollController _scrollController = ScrollController();
+  TextEditingController _reviewController = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -58,7 +60,8 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                   Provider.of<AnotherUserProfileViewModel>(context,
                           listen: false)
                       .getUserData
-                      .id);
+                      .id,
+                  context);
         }
       });
     });
@@ -738,7 +741,10 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                                                 '/comments',
                                                                 arguments: {
                                                                   'id': e.id,
-                                                                  'review': true
+                                                                  'review':
+                                                                      true,
+                                                                  'isReviewd':
+                                                                      e.reviewd,
                                                                 });
                                                           },
                                                           child: Row(
@@ -761,6 +767,92 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                                         )
                                                       ],
                                                     ),
+                                                    if (Provider.of<ProfileViewModel>(
+                                                                    context,
+                                                                    listen:
+                                                                        true)
+                                                                .getUserData
+                                                                .id !=
+                                                            e.userId &&
+                                                        e.reviewd == false)
+                                                      Center(
+                                                        child: Consumer<
+                                                            DietListViewModel>(
+                                                          builder: (context,
+                                                                  review,
+                                                                  child) =>
+                                                              review.getIsREviewLoading
+                                                                  ? Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child: bigLoader(
+                                                                          color:
+                                                                              orangeColor),
+                                                                    )
+                                                                  : TextButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        showDialog(
+                                                                            context:
+                                                                                context,
+                                                                            builder:
+                                                                                (BuildContext ctx) {
+                                                                              _reviewController.clear();
+                                                                              double stars = 0;
+                                                                              return AlertDialog(
+                                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                                                                content: Container(
+                                                                                    height: 240,
+                                                                                    child: Column(
+                                                                                      children: [
+                                                                                        RatingBar.builder(
+                                                                                          itemCount: 5,
+                                                                                          allowHalfRating: true,
+                                                                                          unratedColor: greyColor,
+                                                                                          //initialRating: e.rating,
+                                                                                          maxRating: 5,
+                                                                                          itemBuilder: (context, index) => const Icon(
+                                                                                            Icons.star,
+                                                                                            color: Colors.amber,
+                                                                                          ),
+                                                                                          onRatingUpdate: (value) {
+                                                                                            stars = value;
+                                                                                            return;
+                                                                                          },
+                                                                                        ),
+                                                                                        Padding(
+                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                          child: CustomTextField(maxLines: 5, controller: _reviewController, title: 'Comment'),
+                                                                                        ),
+                                                                                        ElevatedButton(
+                                                                                            onPressed: () async {
+                                                                                              Navigator.pop(ctx);
+                                                                                              final response = await review.sendReview(lang: getLang(context), id: e.id, review: _reviewController.text.trim(), stars: stars, context: context);
+                                                                                              if (response) {
+                                                                                                setState(() {
+                                                                                                  e.reviewd = true;
+                                                                                                });
+                                                                                              }
+                                                                                              _reviewController.clear();
+                                                                                            },
+                                                                                            child: const Text('Submit')),
+                                                                                      ],
+                                                                                    )),
+                                                                              );
+                                                                            });
+                                                                      },
+                                                                      child:
+                                                                          Text(
+                                                                        'Add a review',
+                                                                        style: theme
+                                                                            .textTheme
+                                                                            .bodySmall!
+                                                                            .copyWith(color: Colors.amber),
+                                                                      ),
+                                                                    ),
+                                                        ),
+                                                      ),
                                                   ],
                                                 ),
                                               ),
@@ -791,7 +883,8 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                         context.locale == const Locale('en')
                                             ? 'en'
                                             : 'ar',
-                                        user.getUserData.id);
+                                        user.getUserData.id,
+                                        context);
                                   } else {
                                     user.setPostIsOpened(false);
 

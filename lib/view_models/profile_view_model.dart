@@ -228,53 +228,36 @@ class ProfileViewModel with ChangeNotifier {
   Future<void> logout(BuildContext context) async {
     setIslogoutLoading(true);
     final response = await ProfileApi().logout('en');
-    if (response) {
-      sharedPreferences.remove("access_token");
-      sharedPreferences.remove("refresh_token");
-      sharedPreferences.remove("token_expiration");
-      sharedPreferences.remove("role_id");
-      sharedPreferences.remove("role_name");
-      sharedPreferences.remove("googleProvider");
-      sharedPreferences.remove("is_verified");
-      sharedPreferences.remove("is_info");
 
-      setIslogoutLoading(false);
-      _userData = UserModel();
-
-      Navigator.of(context).pushNamedAndRemoveUntil('/start', (route) => false);
-    } else {
-      setIslogoutLoading(false);
-      showSnackbar(const Text('Logout failed'), context);
-      Navigator.of(context).pushNamedAndRemoveUntil('/start', (route) => false);
-      //Navigator.pop(context);
-    }
-    setIslogoutLoading(false);
+    sharedPreferences.remove("access_token");
+    sharedPreferences.remove("refresh_token");
+    sharedPreferences.remove("token_expiration");
+    sharedPreferences.remove("role_id");
+    sharedPreferences.remove("role_name");
+    sharedPreferences.remove("googleProvider");
+    sharedPreferences.remove("is_verified");
+    sharedPreferences.remove("is_info");
+    _userData = UserModel();
+    Navigator.of(context).pushNamedAndRemoveUntil('/start', (route) => false);
   }
 
   Future<void> logoutFromAll(BuildContext context) async {
     setIslogoutLoading(true);
     final response = await ProfileApi().logoutFromAll('en');
-    if (response) {
-      sharedPreferences.remove("access_token");
-      sharedPreferences.remove("refresh_token");
-      sharedPreferences.remove("token_expiration");
-      sharedPreferences.remove("role_id");
-      sharedPreferences.remove("role_name");
-      sharedPreferences.remove("googleProvider");
-      sharedPreferences.remove("is_verified");
-      sharedPreferences.remove("is_info");
 
-      setIslogoutLoading(false);
-      _userData = UserModel();
+    sharedPreferences.remove("access_token");
+    sharedPreferences.remove("refresh_token");
+    sharedPreferences.remove("token_expiration");
+    sharedPreferences.remove("role_id");
+    sharedPreferences.remove("role_name");
+    sharedPreferences.remove("googleProvider");
+    sharedPreferences.remove("is_verified");
+    sharedPreferences.remove("is_info");
+    _userData = UserModel();
+    Navigator.of(context).pushNamedAndRemoveUntil('/start', (route) => false);
 
-      Navigator.of(context).pushNamedAndRemoveUntil('/start', (route) => false);
-    } else {
-      setIslogoutLoading(false);
-      showSnackbar(const Text('Logout failed'), context);
-      Navigator.of(context).pushNamedAndRemoveUntil('/start', (route) => false);
+    //Navigator.pop(context);
 
-      //Navigator.pop(context);
-    }
     setIslogoutLoading(false);
   }
 

@@ -469,6 +469,21 @@ class myDrawer extends StatelessWidget {
                 ),
               ],
             ),
+          if (Provider.of<ProfileViewModel>(context, listen: true)
+                  .getUserData
+                  .roleId ==
+              5)
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/appControl');
+              },
+              child: ListTile(
+                title: Text(
+                  'App Control',
+                  style: theme.textTheme.bodySmall,
+                ).tr(),
+              ),
+            ),
           if (!Provider.of<ProfileViewModel>(context, listen: true)
               .getIsLogoutLoading)
             ExpansionTile(

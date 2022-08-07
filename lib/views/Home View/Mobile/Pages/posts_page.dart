@@ -24,14 +24,14 @@ class _PostsPageState extends State<PostsPage> {
     Future.delayed(Duration.zero).then((value) {
       Provider.of<PostsViewModel>(context, listen: false).clearPosts();
       Provider.of<PostsViewModel>(context, listen: false).setPage(0);
-      Provider.of<PostsViewModel>(context, listen: false)
-          .setPosts(context.locale == const Locale('en') ? 'en' : 'ar');
+      Provider.of<PostsViewModel>(context, listen: false).setPosts(
+          context.locale == const Locale('en') ? 'en' : 'ar', context);
 
       _scrollController.addListener(() {
         if (_scrollController.offset ==
             _scrollController.position.maxScrollExtent) {
-          Provider.of<PostsViewModel>(context, listen: false)
-              .setPosts(context.locale == const Locale('en') ? 'en' : 'ar');
+          Provider.of<PostsViewModel>(context, listen: false).setPosts(
+              context.locale == const Locale('en') ? 'en' : 'ar', context);
         }
       });
     });
@@ -45,8 +45,8 @@ class _PostsPageState extends State<PostsPage> {
       onRefresh: () async {
         Provider.of<PostsViewModel>(context, listen: false).clearPosts();
         Provider.of<PostsViewModel>(context, listen: false).setPage(0);
-        await Provider.of<PostsViewModel>(context, listen: false)
-            .setPosts(context.locale == const Locale('en') ? 'en' : 'ar');
+        await Provider.of<PostsViewModel>(context, listen: false).setPosts(
+            context.locale == const Locale('en') ? 'en' : 'ar', context);
       },
       child: Consumer<PostsViewModel>(
           builder: (context, posts, child) => (posts.getIsLoading &&
@@ -71,9 +71,11 @@ class _PostsPageState extends State<PostsPage> {
                                   .setPage(0);
                               await Provider.of<PostsViewModel>(context,
                                       listen: false)
-                                  .setPosts(context.locale == const Locale('en')
-                                      ? 'en'
-                                      : 'ar');
+                                  .setPosts(
+                                      context.locale == const Locale('en')
+                                          ? 'en'
+                                          : 'ar',
+                                      context);
                             },
                             child: Text('Refresh',
                                 style: theme.textTheme.bodySmall))

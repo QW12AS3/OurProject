@@ -337,10 +337,10 @@ class _DietPageState extends State<DietPage> {
                                                     Navigator.pushNamed(
                                                         context, '/comments',
                                                         arguments: {
+                                                          'id': e.id,
                                                           'review': true,
                                                           'isReviewd':
                                                               e.reviewd,
-                                                          'id': e.id
                                                         });
                                                   },
                                                   child: Row(
@@ -369,95 +369,86 @@ class _DietPageState extends State<DietPage> {
                                                     e.userId &&
                                                 e.reviewd == false)
                                               Center(
-                                                child: TextButton(
-                                                  onPressed: () {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder:
-                                                            (BuildContext ctx) {
-                                                          double stars = 0;
-                                                          return AlertDialog(
-                                                            shape: RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            15)),
-                                                            content: Container(
-                                                                height: 240,
-                                                                child: Column(
-                                                                  children: [
-                                                                    RatingBar
-                                                                        .builder(
-                                                                      itemCount:
-                                                                          5,
-                                                                      allowHalfRating:
-                                                                          true,
-                                                                      unratedColor:
-                                                                          greyColor,
-                                                                      //initialRating: e.rating,
-                                                                      maxRating:
-                                                                          5,
-                                                                      itemBuilder:
-                                                                          (context, index) =>
-                                                                              const Icon(
-                                                                        Icons
-                                                                            .star,
+                                                child:
+                                                    Consumer<DietListViewModel>(
+                                                  builder: (context, review,
+                                                          child) =>
+                                                      review.getIsREviewLoading
+                                                          ? Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: bigLoader(
+                                                                  color:
+                                                                      orangeColor),
+                                                            )
+                                                          : TextButton(
+                                                              onPressed: () {
+                                                                showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (BuildContext
+                                                                            ctx) {
+                                                                      _reviewController
+                                                                          .clear();
+                                                                      double
+                                                                          stars =
+                                                                          0;
+                                                                      return AlertDialog(
+                                                                        shape: RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(15)),
+                                                                        content: Container(
+                                                                            height: 240,
+                                                                            child: Column(
+                                                                              children: [
+                                                                                RatingBar.builder(
+                                                                                  itemCount: 5,
+                                                                                  allowHalfRating: true,
+                                                                                  unratedColor: greyColor,
+                                                                                  //initialRating: e.rating,
+                                                                                  maxRating: 5,
+                                                                                  itemBuilder: (context, index) => const Icon(
+                                                                                    Icons.star,
+                                                                                    color: Colors.amber,
+                                                                                  ),
+                                                                                  onRatingUpdate: (value) {
+                                                                                    stars = value;
+                                                                                    return;
+                                                                                  },
+                                                                                ),
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: CustomTextField(maxLines: 5, controller: _reviewController, title: 'Comment'),
+                                                                                ),
+                                                                                ElevatedButton(
+                                                                                    onPressed: () async {
+                                                                                      Navigator.pop(ctx);
+                                                                                      final response = await review.sendReview(lang: getLang(context), id: e.id, review: _reviewController.text.trim(), stars: stars, context: context);
+                                                                                      if (response) {
+                                                                                        setState(() {
+                                                                                          e.reviewd = true;
+                                                                                        });
+                                                                                      }
+                                                                                      _reviewController.clear();
+                                                                                    },
+                                                                                    child: const Text('Submit')),
+                                                                              ],
+                                                                            )),
+                                                                      );
+                                                                    });
+                                                              },
+                                                              child: Text(
+                                                                'Add a review',
+                                                                style: theme
+                                                                    .textTheme
+                                                                    .bodySmall!
+                                                                    .copyWith(
                                                                         color: Colors
-                                                                            .amber,
-                                                                      ),
-                                                                      onRatingUpdate:
-                                                                          (value) {
-                                                                        stars =
-                                                                            value;
-                                                                        return;
-                                                                      },
-                                                                    ),
-                                                                    Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child: CustomTextField(
-                                                                          maxLines:
-                                                                              5,
-                                                                          controller:
-                                                                              _reviewController,
-                                                                          title:
-                                                                              'Comment'),
-                                                                    ),
-                                                                    ElevatedButton(
-                                                                        onPressed:
-                                                                            () async {
-                                                                          print('ssssssssssss0' +
-                                                                              stars.toString());
-                                                                          final response = await Provider.of<DietListViewModel>(context, listen: false).sendReview(
-                                                                              lang: getLang(context),
-                                                                              id: e.id,
-                                                                              review: _reviewController.text.trim(),
-                                                                              stars: stars,
-                                                                              context: context);
-                                                                          if (response) {
-                                                                            setState(() {
-                                                                              e.reviewd = true;
-                                                                            });
-                                                                            _reviewController.clear();
-                                                                            Navigator.pop(ctx);
-                                                                          }
-                                                                        },
-                                                                        child: const Text(
-                                                                            'Submit'))
-                                                                  ],
-                                                                )),
-                                                          );
-                                                        });
-                                                  },
-                                                  child: Text(
-                                                    'Add a review',
-                                                    style: theme
-                                                        .textTheme.bodySmall!
-                                                        .copyWith(
-                                                            color:
-                                                                Colors.amber),
-                                                  ),
+                                                                            .amber),
+                                                              ),
+                                                            ),
                                                 ),
                                               ),
                                           ],

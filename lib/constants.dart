@@ -8,7 +8,7 @@ Color orangeColor = const Color(0xFFFB8500);
 Color blueColor = const Color(0xff126782);
 Color greyColor = Colors.grey;
 
-String base_URL = 'http://192.168.137.163:8000/api';
+String base_URL = 'http://192.168.1.106:8000/api';
 
 String ip = base_URL.replaceAll('/api', '');
 
@@ -30,6 +30,8 @@ Map<String, dynamic> headers = {'accept': 'application/json'};
 enum Gender { male, female }
 
 enum Units { kg, lb, cm, ft }
+
+enum Filters { users, posts, diet, workout, challenges }
 
 // enum Reacts { like, dislike, clap, strong, none }
 const reacts = [

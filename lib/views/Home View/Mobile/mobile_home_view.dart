@@ -193,7 +193,9 @@ class _MobileHomeViewState extends State<MobileHomeView>
                         ),
                   actions: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/search');
+                      },
                       icon: const Icon(Icons.search),
                     )
                   ],

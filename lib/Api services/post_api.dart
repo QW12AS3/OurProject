@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/comments_model.dart';
 import 'package:home_workout_app/models/post_models.dart';
@@ -198,7 +202,8 @@ class PostAPI {
     }
   }
 
-  Future<List<PostModel>> getPosts(String lang, int page) async {
+  Future<List<PostModel>> getPosts(
+      String lang, int page, BuildContext context) async {
     try {
       print('Page $page');
       final response = await http.get(
@@ -222,6 +227,7 @@ class PostAPI {
         });
         return posts;
       } else {
+        showSnackbar(Text(jsonDecode(response.body)['message'] ?? ''), context);
         return [];
       }
     } catch (e) {
@@ -230,7 +236,8 @@ class PostAPI {
     }
   }
 
-  Future<List<PostModel>> getSavedPosts(String lang, int page) async {
+  Future<List<PostModel>> getSavedPosts(
+      String lang, int page, BuildContext context) async {
     try {
       print('Page $page');
       final response = await http.get(
@@ -254,6 +261,8 @@ class PostAPI {
         print(posts);
         return posts;
       } else {
+        showSnackbar(Text(jsonDecode(response.body)['message'] ?? ''), context);
+
         print(jsonDecode(response.body));
         return [];
       }
@@ -297,7 +306,7 @@ class PostAPI {
   }
 
   Future<List<PostModel>> getAnotherUserPosts(
-      String lang, int page, int userId) async {
+      String lang, int page, int userId, BuildContext context) async {
     try {
       print('Page $page');
       final response = await http.get(
@@ -321,6 +330,8 @@ class PostAPI {
         print(posts);
         return posts;
       } else {
+        showSnackbar(Text(jsonDecode(response.body)['message'] ?? ''), context);
+
         print(jsonDecode(response.body));
         return [];
       }
