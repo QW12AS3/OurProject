@@ -27,6 +27,7 @@ import 'package:home_workout_app/view_models/Workout_View_Model/create_exercise_
 import 'package:home_workout_app/view_models/Workout_View_Model/create_workout_view_model.dart';
 import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
 import 'package:home_workout_app/view_models/CV%20View%20Model/apply_view_model.dart';
+import 'package:home_workout_app/view_models/app_control_view_model.dart';
 import 'package:home_workout_app/view_models/comments_view_model.dart';
 import 'package:home_workout_app/view_models/create_challenge_view_model.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
@@ -37,10 +38,12 @@ import 'package:home_workout_app/view_models/otp_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/view_models/reset_password_view_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/saved_posts_view_model.dart';
+import 'package:home_workout_app/view_models/search_view_model.dart';
 import 'package:home_workout_app/view_models/start_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/Add%20Health%20Record%20View/add_health_record_view.dart';
 import 'package:home_workout_app/views/Another%20User%20Profile%20View/another_user_profile_view.dart';
+import 'package:home_workout_app/views/App%20Control%20View/app_control_view.dart';
 import 'package:home_workout_app/views/Apply%20CV%20View/apply_view.dart';
 import 'package:home_workout_app/views/Apply%20CV%20View/cv_view.dart';
 import 'package:home_workout_app/views/Apply%20CV%20View/edit_apply_view.dart';
@@ -84,6 +87,7 @@ import 'package:home_workout_app/views/ip_view.dart';
 import 'package:home_workout_app/views/otp_view.dart';
 import 'package:home_workout_app/views/reset_password_view.dart';
 import 'package:home_workout_app/views/saved_posts_view.dart';
+import 'package:home_workout_app/views/search_view.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:home_workout_app/views/sign%20up%20view/sign_up_view.dart';
 import 'package:home_workout_app/views/splash_view.dart';
@@ -165,6 +169,8 @@ class Vigor extends StatelessWidget {
         // ChangeNotifierProvider(create: (context) => CreateExerciseViewModel()),
 
         ChangeNotifierProvider(create: (context) => SavedDietsViewModel()),
+        ChangeNotifierProvider(create: (context) => AppControlViewModel()),
+        ChangeNotifierProvider(create: (context) => SearchViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -239,6 +245,8 @@ class Vigor extends StatelessWidget {
           '/EditExerciseView': (context) => EditExerciseView(),
           '/savedDiets': (context) => SavedDietsView(),
           '/exercisesPicker': (context) => ExercisePickerListView(),
+          '/appControl': (context) => AppControlView(),
+          '/search': (context) => SearchView(),
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,

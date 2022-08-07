@@ -91,4 +91,17 @@ class UserModel {
     weightUnit =
         json['data']['user']['weight_unit'] == 'lb' ? Units.lb : Units.kg;
   }
+
+  UserModel.fromJsonForSearch(Map<dynamic, dynamic> json) {
+    print(json);
+    fname = json['fname'];
+    lname = json['lname'];
+    id = json['id'];
+    role = json['role'];
+    imageUrl = json['img'] ?? '';
+
+    if (imageUrl.substring(0, 4) != 'http') {
+      imageUrl = '$ip/$imageUrl';
+    }
+  }
 }

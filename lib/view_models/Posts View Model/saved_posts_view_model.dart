@@ -33,7 +33,8 @@ class SavedPostsViewModel with ChangeNotifier {
     setPage(getPage + 1);
     if (_savedPosts.isNotEmpty) setMoreIsLoading(true);
     setIsLoading(true);
-    List<PostModel> newPosts = await PostAPI().getSavedPosts(lang, getPage);
+    List<PostModel> newPosts =
+        await PostAPI().getSavedPosts(lang, getPage, context);
     _savedPosts.addAll(newPosts);
     if (newPosts.isEmpty) setPage(getPage - 1);
     print(_savedPosts);
