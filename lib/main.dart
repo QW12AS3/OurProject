@@ -25,11 +25,13 @@ import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_vie
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/create_exercise_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/create_workout_view_model.dart';
+import 'package:home_workout_app/view_models/Workout_View_Model/workout_list_view_model.dart';
 import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
 import 'package:home_workout_app/view_models/CV%20View%20Model/apply_view_model.dart';
 import 'package:home_workout_app/view_models/comments_view_model.dart';
 import 'package:home_workout_app/view_models/create_challenge_view_model.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
+import 'package:home_workout_app/view_models/exercise_list_view_model.dart';
 import 'package:home_workout_app/view_models/forget_password_view_model.dart';
 import 'package:home_workout_app/view_models/general_challenges_view_model.dart';
 import 'package:home_workout_app/view_models/health_record_view_model.dart';
@@ -159,12 +161,11 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DietListViewModel()),
         ChangeNotifierProvider(create: (context) => EditDietViewModel()),
         ChangeNotifierProvider(create: (context) => SpecificDietViewModel()),
-
         ChangeNotifierProvider(create: (context) => CreateworkoutViewModel()),
         ChangeNotifierProvider(create: (context) => CreateExerciseViewModel()),
-        // ChangeNotifierProvider(create: (context) => CreateExerciseViewModel()),
-
+        ChangeNotifierProvider(create: (context) => exercisesListViewModel()),
         ChangeNotifierProvider(create: (context) => SavedDietsViewModel()),
+        ChangeNotifierProvider(create: (context) => WorkoutListViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,

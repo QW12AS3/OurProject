@@ -10,20 +10,35 @@ class CreateworkoutViewModel with ChangeNotifier {
   List<String>? dropDownList = [];
   String dropDownNewValue = '';
   List<String>? equipmentDropDownList = [
-    'Recomended',
+    'Recommended',
     'Required',
-    'Not required'
+    'Not Required'
   ];
   List<String>? difficultyDropDownList = ['Easy', 'Medium', 'Hard'];
-  String? equipmentDropDownNewValue = 'Recomended';
+  String? equipmentDropDownNewValue = 'Recommended';
   String? difficultyDropDownNewValue = 'Easy';
+
+  bool switchValue = false;
 
   List<CreateworkoutModel>? ConvertedFutureCategoriesList;
   List<CreateworkoutModel>? ConvertedFutureExercisesList;
   bool fetchedList = false;
-  bool fetchedExercisesList = false;
+  // bool fetchedExercisesList = false;
 
-  List<int> pickedExercisesIDs = [];
+  List _pickedExercisesIDs = [];
+
+  List piickedExc = [];
+
+  List<Map<int, int>> pickedExercisesIDsAndCount = [];
+  // var f<String,dynamic> = {};
+  // List<f, f> l;
+
+  bool _isLoading = false;
+
+  void setIsLoading(value) {
+    _isLoading = value;
+    notifyListeners();
+  }
 
   reset() {
     fetchedList = false;
@@ -31,18 +46,45 @@ class CreateworkoutViewModel with ChangeNotifier {
     dropDownList = [];
     ConvertedFutureCategoriesList?.clear();
     ConvertedFutureExercisesList?.clear();
-    fetchedExercisesList = false;
+    // fetchedExercisesList = false;
   }
 
   void addToExercises(int i) {
-    if (!pickedExercisesIDs.contains(i)) pickedExercisesIDs.add(i);
+//     [{
+//       'id':1,'isTime':true,'value':50,
+//     }
+// ]
+
+    bool exist = false;
+    _pickedExercisesIDs.forEach((element) {
+      if (element['id'] == i) exist = true;
+    });
+
+    if (!exist) {
+      _pickedExercisesIDs.add({'id': i, 'isTime': false, 'value': 5});
+    }
+    // if (!_pickedExercisesIDs.contains(i)) {
+    //   _pickedExercisesIDs.add(i);
+    // pickedExercisesIDsAndCount.add();
+    // }
     notifyListeners();
   }
 
-  // void addToFoods(int i) {
-  //   if (!_pickedFoodsIDs.contains(i)) _pickedFoodsIDs.add(i);
-  //   notifyListeners();
-  // }
+  bool containIdInExercises(int id) {
+    for (int i = 0; i < _pickedExercisesIDs.length; i++) {
+      if (_pickedExercisesIDs[i]['id'] == id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void removeFromExercises(int i) {
+    if (_pickedExercisesIDs.contains(i)) {
+      _pickedExercisesIDs.removeWhere((element) => element == i);
+    }
+    notifyListeners();
+  }
 
   getData(String lang, int page) async {
     try {
@@ -69,33 +111,33 @@ class CreateworkoutViewModel with ChangeNotifier {
     }
   }
 
-  getExercisesData(String lang) async {
-    try {
-      ConvertedFutureExercisesList =
-          await CreateWorkoutAPI().getExercisesList(lang);
-      // futureExercisesList;
-      // print(ConvertedFutureCategoriesList!.length);
-      // if (ConvertedFutureCategoriesList != null) {
-      for (var i = 0; i < ConvertedFutureExercisesList!.length; i++) {
-        print(ConvertedFutureExercisesList![i].id.toString());
-        // dropDownList?.add(ConvertedFutureCategoriesList![i].name.toString());
-        // // dropDownList!.insert('v');
-        // // print(dropDownList![i]);
-        // print(ConvertedFutureCategoriesList![i].id.toString());
-        // // dropDownList![i] = '$i';
-        // print('dddddddddddd');
-        // print(dropDownList![i]);
-      }
-      //   dropDownNewValue = ConvertedFutureCategoriesList![0].name.toString();
-      // }
-      // fetchedExercisesList = true;
-      setfetchedExercisesList();
-      notifyListeners();
-      // return futureExercisesList;
-    } catch (e) {
-      print('get exercises in create workout error $e');
-    }
-  }
+  // getExercisesData(String lang) async {
+  //   try {
+  //     ConvertedFutureExercisesList =
+  //         await CreateWorkoutAPI().getExercisesList(lang);
+  //     // futureExercisesList;
+  //     // print(ConvertedFutureCategoriesList!.length);
+  //     // if (ConvertedFutureCategoriesList != null) {
+  //     for (var i = 0; i < ConvertedFutureExercisesList!.length; i++) {
+  //       print(ConvertedFutureExercisesList![i].id.toString());
+  //       // dropDownList?.add(ConvertedFutureCategoriesList![i].name.toString());
+  //       // // dropDownList!.insert('v');
+  //       // // print(dropDownList![i]);
+  //       // print(ConvertedFutureCategoriesList![i].id.toString());
+  //       // // dropDownList![i] = '$i';
+  //       // print('dddddddddddd');
+  //       // print(dropDownList![i]);
+  //     }
+  //     //   dropDownNewValue = ConvertedFutureCategoriesList![0].name.toString();
+  //     // }
+  //     // fetchedExercisesList = true;
+  //     setfetchedExercisesList();
+  //     notifyListeners();
+  //     // return futureExercisesList;
+  //   } catch (e) {
+  //     print('get exercises in create workout error $e');
+  //   }
+  // }
 
   postWorkoutInfo(String nameVal, String categoryVal, String equipmentVal,
       String difficultyVal, List exercisesVal, String lang) async {
@@ -115,10 +157,10 @@ class CreateworkoutViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  setfetchedExercisesList() {
-    fetchedExercisesList = true;
-    notifyListeners();
-  }
+  // setfetchedExercisesList() {
+  //   fetchedExercisesList = true;
+  //   notifyListeners();
+  // }
 
   setequipmentDropDownNewValue(String dropDownNewVal) {
     equipmentDropDownNewValue = dropDownNewVal;
@@ -156,6 +198,51 @@ class CreateworkoutViewModel with ChangeNotifier {
     }
   }
 
-  bool get getIsFetched => fetchedExercisesList;
-  List<CreateworkoutModel>? get exercisesList => ConvertedFutureExercisesList;
+  void changestateOfTime(int id) {
+    for (int i = 0; i < _pickedExercisesIDs.length; i++) {
+      if (_pickedExercisesIDs[i]['id'] == id) {
+        _pickedExercisesIDs[i]['isTime'] = !_pickedExercisesIDs[i]['isTime'];
+      }
+    }
+    notifyListeners();
+  }
+
+  changeSwitchState() {
+    switchValue = !switchValue;
+    // notifyListeners();
+  }
+
+  void decreaseCount(int id) {
+    for (int i = 0; i < _pickedExercisesIDs.length; i++) {
+      if (_pickedExercisesIDs[i]['id'] == id &&
+          _pickedExercisesIDs[i]['value'] > 2) {
+        _pickedExercisesIDs[i]['value']--;
+      }
+    }
+    notifyListeners();
+  }
+
+  void increaseCount(int id) {
+    for (int i = 0; i < _pickedExercisesIDs.length; i++) {
+      if (_pickedExercisesIDs[i]['id'] == id) {
+        _pickedExercisesIDs[i]['value']++;
+      }
+    }
+    notifyListeners();
+  }
+
+  getCountVal(int id) {
+    for (int i = 0; i < _pickedExercisesIDs.length; i++) {
+      if (_pickedExercisesIDs[i]['id'] == id) {
+        return _pickedExercisesIDs[i]['value'];
+      }
+    }
+    notifyListeners();
+  }
+
+  // bool get getIsFetched => fetchedExercisesList;
+  // List<CreateworkoutModel>? get exercisesList => ConvertedFutureExercisesList;
+
+  List get getPickedExercises => _pickedExercisesIDs;
+  bool get getIsLoading => _isLoading;
 }

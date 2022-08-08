@@ -117,7 +117,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                               ),
                             ),
                             inputFormatters: [
-                              LengthLimitingTextInputFormatter(20),
+                              LengthLimitingTextInputFormatter(40),
                             ],
                             style: TextStyle(
                                 color: blueColor,

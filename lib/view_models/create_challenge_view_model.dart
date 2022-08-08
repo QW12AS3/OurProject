@@ -75,6 +75,7 @@ class CreateChallengesViewModel with ChangeNotifier {
 
   resetImage() {
     userImage = XFile('');
+    dropDownList = [];
     notifyListeners();
   }
 

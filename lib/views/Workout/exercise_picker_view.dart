@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/create_workout_view_model.dart';
+import 'package:home_workout_app/view_models/exercise_list_view_model.dart';
 import 'package:home_workout_app/views/Posts%20View/post_view_widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -22,12 +23,12 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
     super.initState();
 
     Future.delayed(Duration.zero).then((value) {
-      Provider.of<CreateworkoutViewModel>(context, listen: false).reset();
-      Provider.of<CreateworkoutViewModel>(context, listen: false)
-          .getExercisesData(getLang(context));
+      Provider.of<exercisesListViewModel>(context, listen: false).reset();
+      Provider.of<exercisesListViewModel>(context, listen: false)
+          .getExercisesData(lang: getLang(context));
       print('fffffffff]]]]]]]]');
-      print(Provider.of<CreateworkoutViewModel>(context, listen: false)
-          .getIsFetched);
+      // print(Provider.of<exercisesListViewModel>(context, listen: false)
+      //     .getIsFetched);
     });
   }
 
@@ -37,14 +38,14 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
 
   // String kcalString = 'kcal'.tr();
 
-  List<int> exercisesId = [];
+  List<int> workoutsId = [];
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return WillPopScope(
         onWillPop: () async {
-          Navigator.pop(context, exercisesId);
+          Navigator.pop(context, workoutsId);
           return false;
         },
         child: Scaffold(
@@ -60,7 +61,7 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.pop(context, exercisesId);
+                Navigator.pop(context, workoutsId);
               },
               icon: Icon(Icons.arrow_back),
             ),
@@ -71,25 +72,18 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
               style: theme.textTheme.bodyMedium!,
             ).tr(),
           ),
-          body: Consumer<CreateworkoutViewModel>(
-            builder: ((context, value, _) => RefreshIndicator(
+          body: Consumer2<exercisesListViewModel, CreateworkoutViewModel>(
+            builder: (context, exercise, workout, child) => RefreshIndicator(
                 color: orangeColor,
                 onRefresh: () async {
-                  value.reset();
-                  value.getExercisesData(getLang(context));
-                  print('fffffffff]]]]]]]]');
-                  print(Provider.of<CreateworkoutViewModel>(context,
-                          listen: false)
-                      .fetchedExercisesList);
+                  exercise.reset();
+                  exercise..getExercisesData(lang: getLang(context));
                 },
-                child: !Provider.of<CreateworkoutViewModel>(context,
-                            listen: true)
-                        .fetchedExercisesList
+                child: exercise.getIsLoading
                     ? Center(
                         child: bigLoader(color: orangeColor),
                       )
-                    : ((value.ConvertedFutureExercisesList == null ||
-                            value.ConvertedFutureExercisesList!.isEmpty)
+                    : ((exercise.getexercisesList.isEmpty
                         ? Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -100,8 +94,15 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
                                     .tr(),
                                 TextButton(
                                     onPressed: () async {
-                                      value.reset();
-                                      value.getExercisesData(getLang(context));
+                                      Provider.of<exercisesListViewModel>(
+                                              context,
+                                              listen: false)
+                                          .reset();
+                                      Provider.of<exercisesListViewModel>(
+                                              context,
+                                              listen: false)
+                                          .getExercisesData(
+                                              lang: getLang(context));
                                     },
                                     child: Text('Refresh',
                                             style: theme.textTheme.bodySmall)
@@ -126,7 +127,7 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
                                   child: Column(
                                     children: [
                                       Column(
-                                        children: value.exercisesList!
+                                        children: exercise.getexercisesList
                                             .where((element) =>
                                                 _searchController.text
                                                         .trim()
@@ -139,12 +140,12 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
                                               (e) => InkWell(
                                                 onTap: () {
                                                   setState(() {
-                                                    if (!exercisesId
+                                                    if (!workoutsId
                                                         .contains(e.id)) {
-                                                      exercisesId
+                                                      workoutsId
                                                           .add(e.id!.toInt());
                                                     } else {
-                                                      exercisesId.removeWhere(
+                                                      workoutsId.removeWhere(
                                                           (element) =>
                                                               element == e.id);
                                                     }
@@ -156,7 +157,7 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
                                                   margin:
                                                       const EdgeInsets.all(8),
                                                   decoration: BoxDecoration(
-                                                      color: exercisesId
+                                                      color: workoutsId
                                                               .contains(e.id)
                                                           ? blueColor
                                                           : Colors.transparent,
