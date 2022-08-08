@@ -39,12 +39,12 @@ class PostsViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setPosts(String lang) async {
+  Future<void> setPosts(String lang, BuildContext context) async {
     print('getting');
     setPage(getPage + 1);
     if (_posts.isNotEmpty) setMoreIsLoading(true);
     setIsLoading(true);
-    List<PostModel> newPosts = await PostAPI().getPosts(lang, getPage);
+    List<PostModel> newPosts = await PostAPI().getPosts(lang, getPage, context);
     _posts.addAll(newPosts);
     if (newPosts.isEmpty) setPage(getPage - 1);
     setIsLoading(false);

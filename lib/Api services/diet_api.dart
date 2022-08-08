@@ -287,7 +287,7 @@ class DietAPI {
       {required int id, required String lang, required int page}) async {
     try {
       final response = await http.get(
-        Uri.parse('$base_URL/diet/reviews/$id?page=$page'),
+        Uri.parse('$base_URL/diet/review/$id?page=$page'),
         headers: {
           'apikey': apiKey,
           'lang': lang,
@@ -302,7 +302,7 @@ class DietAPI {
         List data = jsonDecode(response.body)['data'];
         List<CommentsModel> comments = [];
         data.forEach((element) {
-          comments.add(CommentsModel.fromJson(element));
+          comments.add(CommentsModel.fromJsonForReview(element));
         });
         print(comments);
 
@@ -323,17 +323,18 @@ class DietAPI {
       required String review,
       required double stars}) async {
     try {
-      final response = await http.post(
-        Uri.parse('$base_URL/diet/favorite/$id'),
-        headers: {
-          'apikey': apiKey,
-          'lang': lang,
-          'accept': 'application/json',
-          'authorization':
-              'Bearer ${sharedPreferences.getString('access_token')}',
-          'timeZone': getTimezone()
-        },
-      );
+      final response =
+          await http.post(Uri.parse('$base_URL/diet/review/$id'), headers: {
+        'apikey': apiKey,
+        'lang': lang,
+        'accept': 'application/json',
+        'authorization':
+            'Bearer ${sharedPreferences.getString('access_token')}',
+        'timeZone': getTimezone()
+      }, body: {
+        'stars': stars.toString(),
+        'description': review
+      });
 
       if (response.statusCode == 200) {
         return {

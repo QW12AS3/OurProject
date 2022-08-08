@@ -31,7 +31,7 @@ class DietModel {
     createAt = json['created_at'] ?? '';
     mealsCount = json['meal_count'] ?? 0;
     saved = json['saved'] ?? false;
-    reviewd = json['reviewd'] ?? false;
+    reviewd = json['is_reviewed'] ?? false;
 
     userId = json['created_by']['id'] ?? 0;
     userImg = json['created_by']['prof_img_url'] ?? '';
@@ -47,7 +47,7 @@ class DietModel {
     id = json['id'] ?? 0;
     createAt = json['created_at'] ?? '';
     mealsCount = json['meal_count'] ?? 0;
-    reviewd = json['reviewd'] ?? false;
+    reviewd = json['is_reviewed'] ?? false;
 
     userId = json['created_by']['id'] ?? 0;
     userImg = json['created_by']['prof_img_url'] ?? '';

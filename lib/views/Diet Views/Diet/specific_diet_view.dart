@@ -44,10 +44,19 @@ class _SpecificDietViewState extends State<SpecificDietView> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Consumer<SpecificDietViewModel>(
-          builder: (context, diet, child) => Text(
-            diet.getDiet.name,
-            style: theme.textTheme.bodyMedium!,
-          ).tr(),
+          builder: (context, diet, child) => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                diet.getDiet.name,
+                style: theme.textTheme.bodyMedium!,
+              ).tr(),
+              Text(
+                'Subscribe',
+                style: theme.textTheme.bodySmall!,
+              ).tr(),
+            ],
+          ),
         ),
       ),
       body: Provider.of<SpecificDietViewModel>(context, listen: true)

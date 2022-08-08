@@ -212,5 +212,7 @@
     "Add diet": "اضافة نظام غذائي",
     "Edit diet": "تعديل النظام الغذائي",
     "Diets list": "قائمة الانظمة الغذائية",
-    "Refresh": "تحديث"
+    "Refresh": "تحديث",
+    "There are no posts": "لا يوجد منشورات",
+    "There are no diets": "لا يوجد أنظمة غذائية"
 }

@@ -62,13 +62,14 @@ class AnotherUserProfileViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> setAnotherUserPosts(String lang, int userId) async {
+  Future<void> setAnotherUserPosts(
+      String lang, int userId, BuildContext context) async {
     print('getting');
     setPage(getPage + 1);
     if (_userPosts.isNotEmpty) setMoreLoading(true);
     setIsPostLoading(true);
     List<PostModel> newPosts =
-        await PostAPI().getAnotherUserPosts(lang, getPage, userId);
+        await PostAPI().getAnotherUserPosts(lang, getPage, userId, context);
     _userPosts.addAll(newPosts);
     if (newPosts.isEmpty) setPage(getPage - 1);
     setIsPostLoading(false);

@@ -24,14 +24,14 @@ class _PostsPageState extends State<PostsPage> {
     Future.delayed(Duration.zero).then((value) {
       Provider.of<PostsViewModel>(context, listen: false).clearPosts();
       Provider.of<PostsViewModel>(context, listen: false).setPage(0);
-      Provider.of<PostsViewModel>(context, listen: false)
-          .setPosts(context.locale == const Locale('en') ? 'en' : 'ar');
+      Provider.of<PostsViewModel>(context, listen: false).setPosts(
+          context.locale == const Locale('en') ? 'en' : 'ar', context);
 
       _scrollController.addListener(() {
         if (_scrollController.offset ==
             _scrollController.position.maxScrollExtent) {
-          Provider.of<PostsViewModel>(context, listen: false)
-              .setPosts(context.locale == const Locale('en') ? 'en' : 'ar');
+          Provider.of<PostsViewModel>(context, listen: false).setPosts(
+              context.locale == const Locale('en') ? 'en' : 'ar', context);
         }
       });
     });
@@ -39,43 +39,73 @@ class _PostsPageState extends State<PostsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return RefreshIndicator(
+      color: orangeColor,
       onRefresh: () async {
         Provider.of<PostsViewModel>(context, listen: false).clearPosts();
         Provider.of<PostsViewModel>(context, listen: false).setPage(0);
-        await Provider.of<PostsViewModel>(context, listen: false)
-            .setPosts(context.locale == const Locale('en') ? 'en' : 'ar');
+        await Provider.of<PostsViewModel>(context, listen: false).setPosts(
+            context.locale == const Locale('en') ? 'en' : 'ar', context);
       },
       child: Consumer<PostsViewModel>(
-        builder: (context, posts, child) =>
-            (posts.getIsLoading && posts.getPosts.isEmpty)
-                ? Center(child: bigLoader(color: orangeColor))
-                : Column(
-                    children: [
-                      Expanded(
-                        child: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(
-                              parent: BouncingScrollPhysics(
-                                  parent: AlwaysScrollableScrollPhysics())),
-                          controller: _scrollController,
-                          child: Column(
-                            children: posts.getPosts.map((e) {
-                              if (e.type == 2 || e.type == 3)
-                                return pollPostCard(post: e, ctx: context);
-                              else
-                                return NormalPostCard(post: e, ctx: context);
-                            }).toList(),
+          builder: (context, posts, child) => (posts.getIsLoading &&
+                  posts.getPosts.isEmpty)
+              ? Center(child: bigLoader(color: orangeColor))
+              : (posts.getPosts.isEmpty
+                  ? Center(
+                      child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('There are no posts',
+                                style: theme.textTheme.bodySmall!
+                                    .copyWith(color: greyColor))
+                            .tr(),
+                        TextButton(
+                            onPressed: () async {
+                              Provider.of<PostsViewModel>(context,
+                                      listen: false)
+                                  .clearPosts();
+                              Provider.of<PostsViewModel>(context,
+                                      listen: false)
+                                  .setPage(0);
+                              await Provider.of<PostsViewModel>(context,
+                                      listen: false)
+                                  .setPosts(
+                                      context.locale == const Locale('en')
+                                          ? 'en'
+                                          : 'ar',
+                                      context);
+                            },
+                            child: Text('Refresh',
+                                style: theme.textTheme.bodySmall))
+                      ],
+                    ))
+                  : Column(
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(
+                                parent: BouncingScrollPhysics(
+                                    parent: AlwaysScrollableScrollPhysics())),
+                            controller: _scrollController,
+                            child: Column(
+                              children: posts.getPosts.map((e) {
+                                if (e.type == 2 || e.type == 3)
+                                  return pollPostCard(post: e, ctx: context);
+                                else
+                                  return NormalPostCard(post: e, ctx: context);
+                              }).toList(),
+                            ),
                           ),
                         ),
-                      ),
-                      if (posts.getMoreIsLoading)
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: bigLoader(color: orangeColor),
-                        )
-                    ],
-                  ),
-      ),
+                        if (posts.getMoreIsLoading)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: bigLoader(color: orangeColor),
+                          )
+                      ],
+                    ))),
     );
   }
 }
