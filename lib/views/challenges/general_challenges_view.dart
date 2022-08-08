@@ -19,19 +19,38 @@ class GeneralChallengesView extends StatefulWidget {
 class _GeneralChallengesViewState extends State<GeneralChallengesView> {
   Future<List<ChallengeModel>>? futurechallengesList;
   // late List<ChallengeModel> challengesList;
+  final ListViewController = ScrollController();
   @override
   void initState() {
     super.initState();
     // futurechallengesList = GeneralChallengesViewModel().getData('en', 1);
     // print(futurechallengesList);
     Future.delayed(Duration.zero).then((value) async {
-      Provider.of<GeneralChallengesViewModel>(context, listen: false)
-          .getData(context.locale == Locale('en') ? 'en' : 'ar', 1, 'out');
+      Provider.of<GeneralChallengesViewModel>(context, listen: false).reset();
+      Provider.of<GeneralChallengesViewModel>(context, listen: false).getData(
+          context.locale == Locale('en') ? 'en' : 'ar',
+          Provider.of<GeneralChallengesViewModel>(context, listen: false).page,
+          'out');
       // futurechallengesList = GeneralChallengesViewModel()
       //     .getData(context.locale == Locale('en') ? 'en' : 'ar', 1);
       print(Provider.of<GeneralChallengesViewModel>(context, listen: false)
-          .futurechallengesList);
+          .challengesList);
       // challengesList = await GeneralChallengesViewModel().getData('en', 1);
+      ListViewController.addListener(() {
+        if (ListViewController.position.maxScrollExtent ==
+            ListViewController.offset) {
+          Provider.of<GeneralChallengesViewModel>(context, listen: false)
+              .setIsLoading(true);
+          Provider.of<GeneralChallengesViewModel>(context, listen: false)
+              .getData(
+                  context.locale == Locale('en') ? 'en' : 'ar',
+                  Provider.of<GeneralChallengesViewModel>(context,
+                          listen: false)
+                      .page,
+                  'out');
+          // print(object)
+        }
+      });
     });
     // futurechallengesList = List<ChallengeModel>();
     // WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -41,12 +60,26 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
     // });
   }
 
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+
+  //   ListViewController.dispose();
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
+        // bottomNavigationBar:
+        // Provider.of<GeneralChallengesViewModel>(context, listen: true)
+        //             .isLoading ==
+        //         true
+        //     ? bigLoader(color: orangeColor)
+        //     : Container(),
         appBar: AppBar(
           title: Text(
             'Challenges',
@@ -56,33 +89,56 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text('Diagram'),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8),
+            //   child: Text('Diagram'),
+            // ),
             Expanded(
               child: Consumer<GeneralChallengesViewModel>(
-                builder: ((context, value, _) =>
-                    (FutureBuilder<List<ChallengeModel>>(
-                        future: value.futurechallengesList,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return ListView.builder(
-                                physics: BouncingScrollPhysics(),
-                                // scrollDirection: Axis.horizontal,
-                                itemCount: snapshot.data?.length,
-                                itemBuilder: ((context, index) => _buildList(
-                                    context, index, snapshot.data![index])));
-                          } else if (snapshot.hasError) {
-                            return Text(
-                                'There is a problem connecting to the internet');
-                          }
-                          return bigLoader(
-                            color: orangeColor,
-                          );
-                        }))),
+                builder: ((context, value, _) => (Provider.of<
+                            GeneralChallengesViewModel>(context, listen: true)
+                        .getchallengesList!
+                        .isEmpty
+                    ? bigLoader(color: orangeColor)
+                    : RefreshIndicator(
+                        onRefresh: () async {
+                          Provider.of<GeneralChallengesViewModel>(context,
+                                  listen: false)
+                              .reset();
+                          Provider.of<GeneralChallengesViewModel>(context,
+                                  listen: false)
+                              .getData(
+                                  context.locale == Locale('en') ? 'en' : 'ar',
+                                  Provider.of<GeneralChallengesViewModel>(
+                                          context,
+                                          listen: false)
+                                      .page,
+                                  'out');
+                        },
+                        child: ListView.builder(
+                          controller: ListViewController,
+                          physics: BouncingScrollPhysics(),
+                          // scrollDirection: Axis.horizontal,
+                          itemCount: value.challengesList?.length,
+                          itemBuilder: ((context, index) {
+                            if (index < value.challengesList!.length) {
+                              final item = value.challengesList![index];
+                              // return ListTile(title: Text(item));
+                              return _buildList(
+                                  context, index, value.challengesList![index]);
+                            } else {
+                              return CircularProgressIndicator();
+                            }
+                          }),
+                        ),
+                      ))),
               ),
-            )
+            ),
+            Provider.of<GeneralChallengesViewModel>(context, listen: true)
+                        .isLoading ==
+                    true
+                ? bigLoader(color: orangeColor)
+                : Container(),
           ],
         ),
       ),
@@ -131,12 +187,14 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
                             padding: const EdgeInsets.all(8.0),
                             child: CircleAvatar(
                               backgroundImage: NetworkImage(challengeValue
-                                          .user_img
-                                          .toString()
-                                          .substring(0, 4) !=
-                                      'http'
-                                  ? '$ip/${challengeValue.user_img}'
-                                  : challengeValue.user_img.toString()),
+                                              .user_img
+                                              .toString()
+                                              .substring(0, 4) !=
+                                          'http'
+                                      ? '$ip/${challengeValue.user_img}'
+                                      : challengeValue.user_img.toString()
+                                  // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'
+                                  ),
                             ),
                           ),
                           Column(
@@ -189,8 +247,8 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
                                     : child,
                             fit: BoxFit.fill,
                             image: NetworkImage(
-                              "$ip/${challengeValue.img.toString()}",
-                            ),
+                                // "$ip/${challengeValue.img.toString()}",
+                                'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'),
                           ),
                         ),
                       ),

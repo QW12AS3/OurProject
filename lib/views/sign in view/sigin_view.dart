@@ -654,18 +654,20 @@ class _SignInState extends State<SignIn> {
                                               'assets/images/google.png'))
                                       : mediumLoader(color: orangeColor),
                                 ))),
-                        IconButton(
-                          onPressed: () {
-                            //TODO:
-                            DateTime dateTime = DateTime.now();
-                            print(dateTime.timeZoneName);
-                            print(dateTime.timeZoneOffset);
-                          },
-                          icon: Image.asset(
-                            'assets/images/facebook.png',
-                          ),
-                          //   iconSize: mq.size.width * 0.01,
-                        ),
+                        // IconButton(
+                        //   //TODO: DELETE OR ADD
+                        //   onPressed: () {
+                        //     Navigator.of(context).pushReplacementNamed(
+                        //         '/resetPassword',
+                        //         arguments: {
+                        //           'code': 'BackEndMessage.forgetPasswordCode'
+                        //         });
+                        //   },
+                        //   icon: Image.asset(
+                        //     'assets/images/facebook.png',
+                        //   ),
+                        //   //   iconSize: mq.size.width * 0.01,
+                        // ),
                       ],
                     ),
                   ),
@@ -674,12 +676,12 @@ class _SignInState extends State<SignIn> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        TextButton(
-                            onPressed: () {}, //TODO:
-                            child: Text(
-                              ' Skip > '.tr(),
-                              style: theme.textTheme.bodySmall,
-                            ))
+                        // TextButton(
+                        //     onPressed: () {}, //TODO:
+                        //     child: Text(
+                        //       ' Skip > '.tr(),
+                        //       style: theme.textTheme.bodySmall,
+                        //     ))
                       ],
                     ),
                   ),
