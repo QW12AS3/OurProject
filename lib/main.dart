@@ -9,6 +9,7 @@ import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/diet_list_
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/edit_diet_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/saved_diets_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/specific_diet_view_model.dart';
+import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/user_diets_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/create_food_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/edit_food_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Food/foods_list_view_model.dart';
@@ -25,10 +26,15 @@ import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_vie
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/create_exercise_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/create_workout_view_model.dart';
+
 import 'package:home_workout_app/view_models/Workout_View_Model/edit_workout_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/favorite_workouts_view_model.dart';
+
+import 'package:home_workout_app/view_models/Workout_View_Model/practicing_view_model.dart';
+import 'package:home_workout_app/view_models/Workout_View_Model/specific_workout_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/my_workouts_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/workout_list_view_model.dart';
+
 import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
 import 'package:home_workout_app/view_models/CV%20View%20Model/apply_view_model.dart';
 import 'package:home_workout_app/view_models/app_control_view_model.dart';
@@ -66,6 +72,7 @@ import 'package:home_workout_app/views/Diet%20Views/Diet/create_diet_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Diet/edit_diet_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Diet/saved_diet_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Diet/specific_diet_view.dart';
+import 'package:home_workout_app/views/Diet%20Views/Diet/user_diets_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Food/create_food_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Food/edit_food_view.dart';
 import 'package:home_workout_app/views/Diet%20Views/Food/food_picker_view.dart';
@@ -85,7 +92,10 @@ import 'package:home_workout_app/views/Workout/create_workout_view.dart';
 import 'package:home_workout_app/views/Workout/edit_exercise_view.dart';
 import 'package:home_workout_app/views/Workout/edit_workout_view.dart';
 import 'package:home_workout_app/views/Workout/exercise_picker_view.dart';
+
 import 'package:home_workout_app/views/Workout/favorite_workouts_view.dart';
+import 'package:home_workout_app/views/Workout/practicing_view.dart';
+import 'package:home_workout_app/views/Workout/specific_workout_view.dart';
 import 'package:home_workout_app/views/Workout/my_workouts_view.dart';
 import 'package:home_workout_app/views/challenges/create_challenge_view.dart';
 import 'package:home_workout_app/views/challenges/general_challenges_view.dart';
@@ -178,6 +188,9 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => WorkoutListViewModel()),
         ChangeNotifierProvider(create: (context) => AppControlViewModel()),
         ChangeNotifierProvider(create: (context) => SearchViewModel()),
+        ChangeNotifierProvider(create: (context) => UserDietsViewModel()),
+        ChangeNotifierProvider(create: (context) => SpecificWorkoutViewModel()),
+        ChangeNotifierProvider(create: (context) => PracticingViewModel()),
         ChangeNotifierProvider(create: (context) => MyWorkoutsViewModel()),
         ChangeNotifierProvider(create: (context) => EditworkoutViewModel()),
         ChangeNotifierProvider(
@@ -258,6 +271,10 @@ class Vigor extends StatelessWidget {
           '/exercisesPicker': (context) => ExercisePickerListView(),
           '/appControl': (context) => AppControlView(),
           '/search': (context) => SearchView(),
+          '/subscribedDiet': (context) => SubscribedDietView(),
+          '/specificWorkout': (context) => SpecificWorkoutView(),
+          '/practice': (context) => PracticingView()
+
           '/myWorkouts': (context) => MyWorkouts(),
           '/editWorkout': (context) => EditWorkoutView(),
           '/favoriteWorkouts': (context) => favoriteWorkoutsView(),

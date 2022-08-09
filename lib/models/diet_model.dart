@@ -20,6 +20,7 @@ class DietModel {
   //double caloriesCount = 0;
   int mealsCount = 0;
   bool reviewd = false;
+  bool subscribed = false;
 
   DietModel();
 
@@ -27,7 +28,7 @@ class DietModel {
     print('Model ' + json.toString());
     name = json['name'] ?? '';
     id = json['id'] ?? 0;
-    rating = json['rating'] ?? 0;
+    rating = double.tryParse(json['review_count'].toString()) ?? 0;
     createAt = json['created_at'] ?? '';
     mealsCount = json['meal_count'] ?? 0;
     saved = json['saved'] ?? false;
@@ -35,6 +36,8 @@ class DietModel {
 
     userId = json['created_by']['id'] ?? 0;
     userImg = json['created_by']['prof_img_url'] ?? '';
+    if (userImg.substring(0, 4) != 'http') userImg = '$ip/$userImg';
+    print(userImg);
     userFname = json['created_by']['f_name'] ?? '';
     userLname = json['created_by']['l_name'] ?? '';
   }
@@ -48,9 +51,11 @@ class DietModel {
     createAt = json['created_at'] ?? '';
     mealsCount = json['meal_count'] ?? 0;
     reviewd = json['is_reviewed'] ?? false;
+    subscribed = json['subscribed'] ?? false;
 
     userId = json['created_by']['id'] ?? 0;
     userImg = json['created_by']['prof_img_url'] ?? '';
+    if (userImg.substring(0, 4) != 'http') userImg = '$ip/$userImg';
     userFname = json['created_by']['f_name'] ?? '';
     userLname = json['created_by']['l_name'] ?? '';
 

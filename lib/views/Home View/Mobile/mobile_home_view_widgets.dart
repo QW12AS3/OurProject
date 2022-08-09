@@ -28,7 +28,7 @@ class buildSummaryRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         FittedBox(child: Text(title1, style: theme.textTheme.bodySmall).tr()),
         Text(title2, style: theme.textTheme.bodySmall).tr()
@@ -1010,6 +1010,7 @@ class _pollPostCardState extends State<pollPostCard> {
                   .map(
                     (e) => Consumer<MobileHomeViewModel>(
                       builder: (context, value, child) => RadioListTile<int>(
+                        activeColor: orangeColor,
                         value: e['vote_id'],
                         groupValue: groupValue,
                         onChanged: (selectedvalue) async {
@@ -1079,7 +1080,7 @@ class _pollPostCardState extends State<pollPostCard> {
 }
 
 showBottomList(BuildContext context, String title, List user) {
-  print(user);
+  print('sssssssss' + user.toString());
 
   final theme = Theme.of(context);
   showModalBottomSheet(

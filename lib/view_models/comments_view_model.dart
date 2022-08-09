@@ -6,6 +6,7 @@ import 'package:home_workout_app/Api%20services/diet_api.dart';
 import 'package:home_workout_app/Api%20services/post_api.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/comments_model.dart';
+import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/diet_list_view_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/posts_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -112,6 +113,28 @@ class CommentsViewModel with ChangeNotifier {
     setIsdeleteLoading(false);
   }
 
+  Future<bool> deleteReview(
+      {required int reviewId,
+      required String lang,
+      required int dietId,
+      required BuildContext context}) async {
+    setIsdeleteLoading(true);
+    final response = await DietAPI()
+        .deleteReview(lang: lang, reviewId: reviewId, dietId: dietId);
+    setIsdeleteLoading(false);
+
+    if (response['success']) {
+      _comments.removeWhere((element) => element.id == reviewId);
+      Provider.of<DietListViewModel>(context, listen: false)
+          .changeIsReviews(dietId: dietId, value: false);
+      setIsdeleteLoading(false);
+      return true;
+    } else
+      showSnackbar(Text(response['message']), context);
+    setIsdeleteLoading(false);
+    return false;
+  }
+
   Future<void> updateComment(
       {required int commentId,
       required int postId,
@@ -124,6 +147,31 @@ class CommentsViewModel with ChangeNotifier {
       {
         _comments.firstWhere((element) => element.id == commentId).comment =
             comment;
+        notifyListeners();
+      }
+    } else
+      showSnackbar(Text(response['message']), context);
+  }
+
+  Future<void> updateReview(
+      {required int reviewId,
+      required int dietId,
+      required String comment,
+      required String lang,
+      required double stars,
+      required BuildContext context}) async {
+    final response = await DietAPI().updateReview(
+        lang: lang,
+        reviewId: reviewId,
+        comment: comment,
+        dietId: dietId,
+        stars: stars);
+    if (response['success']) {
+      {
+        _comments.firstWhere((element) => element.id == reviewId).comment =
+            comment;
+        _comments.firstWhere((element) => element.id == reviewId).reviewRate =
+            stars;
         notifyListeners();
       }
     } else

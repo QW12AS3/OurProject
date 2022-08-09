@@ -10,6 +10,7 @@ Color greyColor = Colors.grey;
 
 String base_URL = 'http://192.168.137.1:8000/api';
 
+
 String ip = base_URL.replaceAll('/api', '');
 
 void setIP(String newIp) {

@@ -12,6 +12,11 @@ class DietListViewModel with ChangeNotifier {
   bool _isDeleteLoading = false;
   bool _isReviewLoading = false;
 
+  void changeIsReviews({required int dietId, required bool value}) {
+    _diets.firstWhere((element) => element.id == dietId).reviewd = value;
+    notifyListeners();
+  }
+
   void setIsReviewLoading(value) {
     _isReviewLoading = value;
     notifyListeners();
@@ -67,11 +72,12 @@ class DietListViewModel with ChangeNotifier {
     final response = await DietAPI()
         .sendReview(id: id, lang: lang, review: review, stars: stars);
 
+    setIsReviewLoading(false);
+
     if (response['success']) {
       return true;
     } else {
       showSnackbar(Text(response['message'].toString()), context);
-      setIsReviewLoading(false);
       return false;
     }
   }

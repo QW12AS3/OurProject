@@ -75,7 +75,9 @@ class UserModel {
 
     countryName = json['data']['user']['country'] ?? '';
     email = json['data']['user']['email'] ?? '';
-    roleId = json['data']['user']['role_id'];
+    roleId = json['data']['user']['role_id'] ?? 0;
+
+    sharedPreferences.setInt('role_id', roleId);
 
     followed = json['data']['is_following'] ?? false;
     isBlocked = json['data']['is_blocked'] ?? false;
