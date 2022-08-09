@@ -6,7 +6,7 @@ import 'package:home_workout_app/components.dart';
 import '../../../Api services/diet_api.dart';
 import '../../../models/diet_model.dart';
 
-class SavedDietsViewModel with ChangeNotifier {
+class UserDietsViewModel with ChangeNotifier {
   List<DietModel> _diets = [];
   int _page = 0;
   bool _isLoading = false;
@@ -38,7 +38,7 @@ class SavedDietsViewModel with ChangeNotifier {
   Future<void> getDietsList({required String lang}) async {
     setIsLoading(true);
     setPage(getPage + 1);
-    final response = await DietAPI().getUserSubDiets(lang: lang, page: getPage);
+    final response = await DietAPI().getSavedDiets(lang: lang, page: getPage);
     if (response.isEmpty)
       setPage(getPage - 1);
     else

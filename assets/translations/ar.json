@@ -214,5 +214,15 @@
     "Diets list": "قائمة الانظمة الغذائية",
     "Refresh": "تحديث",
     "There are no posts": "لا يوجد منشورات",
-    "There are no diets": "لا يوجد أنظمة غذائية"
+    "There are no diets": "لا يوجد أنظمة غذائية",
+    "App Control": "التحكم بالتطبيق",
+    "Users": "المستخدمين",
+    "Workouts": "البرامج الرياضية",
+    "Challenges": "التحديات",
+    "My diets": "أنظمتي الغذائية",
+    "There are no subscribed diets": "لم تقم بمتابعة اي نظام غذائي",
+    "There are no search results": "لا يوجد نتائج بحث",
+    "Review stars cannot be 0": "لا يمكن التقييم أن يكون صفراً",
+    "Subscribe": "اشتراك",
+    "Unsubscribe": "الغاء الاشتراك"
 }

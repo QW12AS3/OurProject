@@ -1,25 +1,19 @@
-import 'dart:math';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
-import 'package:home_workout_app/models/diet_model.dart';
 import 'package:home_workout_app/models/meal_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/specific_diet_view_model.dart';
 import 'package:provider/provider.dart';
 
-import '../../../view_models/Diet View Model/Meal/meal_list_view_model.dart';
-import '../../../view_models/profile_view_model.dart';
-
-class SpecificDietView extends StatefulWidget {
-  const SpecificDietView({Key? key}) : super(key: key);
+class SubscribedDietView extends StatefulWidget {
+  const SubscribedDietView({Key? key}) : super(key: key);
 
   @override
-  State<SpecificDietView> createState() => _SpecificDietViewState();
+  State<SubscribedDietView> createState() => _SubscribedDietViewState();
 }
 
-class _SpecificDietViewState extends State<SpecificDietView> {
+class _SubscribedDietViewState extends State<SubscribedDietView> {
   @override
   void initState() {
     // TODO: implement initState
@@ -85,7 +79,7 @@ class _SpecificDietViewState extends State<SpecificDietView> {
                                 ));
                       },
                       child: Text(
-                        diet.getDiet.subscribed ? 'Unsubscribe' : 'Subscribe',
+                        'Unsubscribe',
                         style: theme.textTheme.bodySmall!,
                       ).tr(),
                     )

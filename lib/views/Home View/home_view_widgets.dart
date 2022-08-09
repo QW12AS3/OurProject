@@ -297,6 +297,27 @@ class myDrawer extends StatelessWidget {
               ),
             ),
           ),
+
+          Consumer<MobileHomeViewModel>(
+            builder: (context, value, child) => value.getIsSummaryLoading
+                ? bigLoader(color: orangeColor)
+                : InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/subscribedDiet',
+                          arguments: {'dietId': value.getSummary.dietId});
+                    },
+                    child: ListTile(
+                      title: Text(
+                        'My diet',
+                        style: theme.textTheme.bodySmall,
+                      ).tr(),
+                      trailing: Icon(
+                        Icons.star_rate_rounded,
+                        color: blueColor,
+                      ),
+                    ),
+                  ),
+
           InkWell(
             onTap: () {
               Navigator.pushNamed(context, '/myWorkouts');
@@ -311,6 +332,7 @@ class myDrawer extends StatelessWidget {
                 color: blueColor,
               ),
             ),
+
           ),
           if (Provider.of<ProfileViewModel>(context, listen: true)
                       .getUserData
@@ -407,15 +429,6 @@ class myDrawer extends StatelessWidget {
                       child: ListTile(
                         title: Text(
                           'Add diet',
-                          style: theme.textTheme.bodySmall,
-                        ).tr(),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () async {},
-                      child: ListTile(
-                        title: Text(
-                          'Diets list',
                           style: theme.textTheme.bodySmall,
                         ).tr(),
                       ),

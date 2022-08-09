@@ -149,6 +149,11 @@ class _SearchViewState extends State<SearchView> {
                         ))
                     .toList(),
               ),
+            if (search.getIsSugLoading)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: bigLoader(color: orangeColor),
+              ),
             Divider(
               indent: 50,
               endIndent: 50,
@@ -178,7 +183,7 @@ class _SearchViewState extends State<SearchView> {
                                   style: theme.textTheme.bodySmall!.copyWith(
                                       color: Colors.white,
                                       fontSize: e.value ? 15 : 10),
-                                ),
+                                ).tr(),
                               ),
                             ),
                           ),
@@ -197,59 +202,86 @@ class _SearchViewState extends State<SearchView> {
                   print('aaaaaaaaaa' + search.getFilter());
                   switch (search.getFilter()) {
                     case 'Users':
-                      return Column(
-                        children: search.getUsers
-                            .map(
-                              (e) => Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                        context, '/anotherUserProfile',
-                                        arguments: {'id': e.id});
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      border: Border.all(
-                                          color: blueColor, width: 1),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: CircleAvatar(
-                                              backgroundImage:
-                                                  NetworkImage(e.imageUrl),
-                                            ),
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                '${e.role} ${'${e.fname} ${e.lname}'}',
-                                                style: theme
-                                                    .textTheme.bodySmall!
-                                                    .copyWith(color: blueColor),
+                      if (search.getUsers.isEmpty)
+                        return Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: mq.size.width * 0.5),
+                            child: Text(
+                              'There are no search results',
+                              style: theme.textTheme.bodySmall!
+                                  .copyWith(color: greyColor),
+                            ),
+                          ),
+                        );
+                      else
+                        return Column(
+                          children: search.getUsers
+                              .map(
+                                (e) => Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, '/anotherUserProfile',
+                                          arguments: {'id': e.id});
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: Border.all(
+                                            color: blueColor, width: 1),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: CircleAvatar(
+                                                backgroundImage:
+                                                    NetworkImage(e.imageUrl),
                                               ),
-                                            ],
-                                          ),
-                                        ],
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${e.role} ${'${e.fname} ${e.lname}'}',
+                                                  style: theme
+                                                      .textTheme.bodySmall!
+                                                      .copyWith(
+                                                          color: blueColor),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                            .toList(),
-                      );
+                              )
+                              .toList(),
+                        );
 
                     /////////////////////
 
                     case 'Posts':
+                      if (search.getposts.isEmpty)
+                        return Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: mq.size.width * 0.5),
+                            child: Text(
+                              'There are no search results',
+                              style: theme.textTheme.bodySmall!
+                                  .copyWith(color: greyColor),
+                            ),
+                          ),
+                        );
                       return Column(
                         children: search.getposts.map<Widget>((e) {
                           if (e.type == 2 || e.type == 3)
@@ -260,6 +292,18 @@ class _SearchViewState extends State<SearchView> {
                       );
 
                     case 'Diets':
+                      if (search.getDiets.isEmpty)
+                        return Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: mq.size.width * 0.5),
+                            child: Text(
+                              'There are no search results',
+                              style: theme.textTheme.bodySmall!
+                                  .copyWith(color: greyColor),
+                            ),
+                          ),
+                        );
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: search.getDiets
@@ -629,6 +673,18 @@ class _SearchViewState extends State<SearchView> {
                       );
 
                     case 'Challenges':
+                      if (search.getChallenges.isEmpty)
+                        return Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: mq.size.width * 0.5),
+                            child: Text(
+                              'There are no search results',
+                              style: theme.textTheme.bodySmall!
+                                  .copyWith(color: greyColor),
+                            ),
+                          ),
+                        );
                       return Column(
                         children: search.getChallenges
                             .map((challengeValue) => Padding(
@@ -847,7 +903,7 @@ class _SearchViewState extends State<SearchView> {
                       );
 
                     default:
-                      return const Text('ssssssss');
+                      return const Text('');
                   }
                 }),
               ),

@@ -11,6 +11,7 @@ import 'package:home_workout_app/models/comments_model.dart';
 import 'package:home_workout_app/view_models/comments_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/views/Posts%20View/post_view_widgets.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 import '../../view_models/Diet View Model/Diet/diet_list_view_model.dart';
@@ -361,55 +362,187 @@ class _CommentsViewState extends State<CommentsView> {
                                                               MainAxisAlignment
                                                                   .spaceBetween,
                                                           children: [
-                                                            InkWell(
-                                                              onTap: () {
-                                                                Navigator.pushNamed(
-                                                                    context,
-                                                                    '/anotherUserProfile',
-                                                                    arguments: {
-                                                                      'id': e
-                                                                          .ownerId
-                                                                    });
-                                                              },
-                                                              child: Row(
-                                                                children: [
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child:
-                                                                        CircleAvatar(
-                                                                      backgroundImage:
-                                                                          NetworkImage(
-                                                                              e.ownerImageUrl),
-                                                                    ),
-                                                                  ),
-                                                                  Column(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                InkWell(
+                                                                  onTap: () {
+                                                                    Navigator.pushNamed(
+                                                                        context,
+                                                                        '/anotherUserProfile',
+                                                                        arguments: {
+                                                                          'id':
+                                                                              e.ownerId
+                                                                        });
+                                                                  },
+                                                                  child: Row(
                                                                     children: [
-                                                                      Text(
-                                                                        e.owner,
-                                                                        style: theme
-                                                                            .textTheme
-                                                                            .bodySmall!
-                                                                            .copyWith(color: blueColor),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            CircleAvatar(
+                                                                          backgroundImage:
+                                                                              NetworkImage(e.ownerImageUrl),
+                                                                        ),
                                                                       ),
-                                                                      Text(
-                                                                        e.createdAt,
-                                                                        style: theme
-                                                                            .textTheme
-                                                                            .displaySmall!
-                                                                            .copyWith(
-                                                                                color: greyColor,
-                                                                                fontSize: 10),
-                                                                      )
+                                                                      Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        children: [
+                                                                          Text(
+                                                                            e.owner,
+                                                                            style:
+                                                                                theme.textTheme.bodySmall!.copyWith(color: blueColor),
+                                                                          ),
+                                                                          Text(
+                                                                            e.createdAt,
+                                                                            style:
+                                                                                theme.textTheme.displaySmall!.copyWith(color: greyColor, fontSize: 10),
+                                                                          )
+                                                                        ],
+                                                                      ),
                                                                     ],
                                                                   ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            if (e.ownerId ==
+                                                                Provider.of<ProfileViewModel>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .getUserData
+                                                                    .id)
+                                                              Row(
+                                                                children: [
+                                                                  IconButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      double
+                                                                          stars =
+                                                                          0;
+                                                                      showDialog(
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (BuildContext ctx) =>
+                                                                                AlertDialog(
+                                                                          shape:
+                                                                              RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(15),
+                                                                          ),
+                                                                          actions: [
+                                                                            TextButton(
+                                                                              onPressed: () {
+                                                                                FocusScope.of(context).unfocus();
+                                                                                Navigator.pop(ctx);
+                                                                                editCommentsController.clear();
+                                                                              },
+                                                                              child: Text(
+                                                                                'Cancel',
+                                                                                style: theme.textTheme.bodySmall!.copyWith(color: greyColor),
+                                                                              ).tr(),
+                                                                            ),
+                                                                            TextButton(
+                                                                              onPressed: () async {
+                                                                                FocusScope.of(context).unfocus();
+                                                                                if (stars == 0) {
+                                                                                  Navigator.pop(ctx);
+                                                                                  showSnackbar(Text('Review stars cannot be 0').tr(), context);
+                                                                                  return;
+                                                                                }
+                                                                                await comments.updateReview(
+                                                                                  reviewId: e.id,
+                                                                                  dietId: dietId,
+                                                                                  stars: stars,
+                                                                                  comment: editCommentsController.text.trim(),
+                                                                                  lang: context.locale == const Locale('en') ? 'en' : 'ar',
+                                                                                  context: context,
+                                                                                );
+
+                                                                                Navigator.pop(ctx);
+                                                                                editCommentsController.clear();
+                                                                              },
+                                                                              child: Text(
+                                                                                'Edit',
+                                                                                style: theme.textTheme.bodySmall!.copyWith(color: orangeColor),
+                                                                              ).tr(),
+                                                                            ),
+                                                                          ],
+                                                                          content:
+                                                                              SizedBox(
+                                                                            height:
+                                                                                110,
+                                                                            child:
+                                                                                Column(
+                                                                              children: [
+                                                                                RatingBar.builder(
+                                                                                  itemCount: 5,
+                                                                                  allowHalfRating: true,
+                                                                                  unratedColor: greyColor,
+                                                                                  //initialRating: e.rating,
+                                                                                  maxRating: 5,
+                                                                                  itemBuilder: (context, index) => const Icon(
+                                                                                    Icons.star,
+                                                                                    color: Colors.amber,
+                                                                                  ),
+                                                                                  onRatingUpdate: (value) {
+                                                                                    stars = value;
+                                                                                    return;
+                                                                                  },
+                                                                                ),
+                                                                                const SizedBox(
+                                                                                  height: 10,
+                                                                                ),
+                                                                                CustomTextField(maxLines: 1, controller: editCommentsController, title: 'Type a comment...'),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                    icon: Icon(
+                                                                      Icons
+                                                                          .edit,
+                                                                      size: 20,
+                                                                      color:
+                                                                          blueColor,
+                                                                    ),
+                                                                  ),
+                                                                  comments
+                                                                          .getdeleteIsLoading
+                                                                      ? smallLoader(
+                                                                          color:
+                                                                              Colors.red)
+                                                                      : IconButton(
+                                                                          onPressed:
+                                                                              () async {
+                                                                            final response = await comments.deleteReview(
+                                                                                reviewId: e.id,
+                                                                                dietId: dietId,
+                                                                                lang: context.locale == const Locale('en') ? 'en' : 'ar',
+                                                                                context: context);
+                                                                            if (response)
+                                                                              // ignore: curly_braces_in_flow_control_structures
+                                                                              setState(() {
+                                                                                isReviewd = !isReviewd;
+                                                                              });
+                                                                          },
+                                                                          icon:
+                                                                              const Icon(
+                                                                            Icons.delete,
+                                                                            size:
+                                                                                20,
+                                                                            color:
+                                                                                Colors.red,
+                                                                          ),
+                                                                        ),
                                                                 ],
                                                               ),
-                                                            ),
                                                           ],
                                                         ),
                                                         Align(
