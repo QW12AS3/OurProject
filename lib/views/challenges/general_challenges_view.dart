@@ -137,7 +137,10 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
             Provider.of<GeneralChallengesViewModel>(context, listen: true)
                         .isLoading ==
                     true
-                ? bigLoader(color: orangeColor)
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: bigLoader(color: orangeColor),
+                  )
                 : Container(),
           ],
         ),
@@ -181,40 +184,49 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CircleAvatar(
-                              backgroundImage: NetworkImage(challengeValue
-                                              .user_img
-                                              .toString()
-                                              .substring(0, 4) !=
-                                          'http'
-                                      ? '$ip/${challengeValue.user_img}'
-                                      : challengeValue.user_img.toString()
-                                  // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'
-                                  ),
-                            ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Coach ${challengeValue.user_name}',
-                                style: theme.textTheme.bodySmall!
-                                    .copyWith(color: blueColor),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/anotherUserProfile',
+                              arguments: {'id': challengeValue.user_id});
+                        },
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(challengeValue
+                                                .user_img
+                                                .toString()
+                                                .substring(0, 4) !=
+                                            'http'
+                                        ? '$ip/${challengeValue.user_img}'
+                                        : challengeValue.user_img.toString()
+                                    // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'
+                                    ),
                               ),
-                              Text(
-                                '${challengeValue.created_at}',
-                                style: theme.textTheme.displaySmall!
-                                    .copyWith(color: greyColor, fontSize: 10),
-                              )
-                            ],
-                          ),
-                        ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Coach ${challengeValue.user_name}',
+                                  style: theme.textTheme.bodySmall!
+                                      .copyWith(color: blueColor),
+                                ),
+                                Text(
+                                  '${challengeValue.created_at}',
+                                  style: theme.textTheme.displaySmall!
+                                      .copyWith(color: greyColor, fontSize: 10),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      if (sharedPreferences.get("role_id") == 2) //TODO:
+                      if ((sharedPreferences.get("role_id") == 2 &&
+                              challengeValue.user_id == 2) ||
+                          sharedPreferences.get("role_id") == 4 ||
+                          sharedPreferences.get("role_id") == 5) //TODO:
                         IconButton(
                             onPressed: () {
                               Provider.of<GeneralChallengesViewModel>(context,

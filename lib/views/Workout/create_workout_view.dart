@@ -374,25 +374,70 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                                   //         .toString()),
                                                 ),
                                               ),
-                                              Switch(
-                                                  value: Provider.of<
-                                                              CreateworkoutViewModel>(
-                                                          context)
-                                                      .switchValue,
-                                                  onChanged: Provider.of<
-                                                              CreateworkoutViewModel>(
-                                                          context,
-                                                          listen: false)
-                                                      .changeSwitchState()),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Text(
+                                                    'Count',
+                                                    style: TextStyle(
+                                                        color: blueColor),
+                                                  ),
+                                                  Switch(
+                                                    inactiveTrackColor:
+                                                        orangeColor,
+                                                    activeTrackColor:
+                                                        orangeColor,
+                                                    inactiveThumbColor:
+                                                        orangeColor,
+                                                    activeColor: orangeColor,
+                                                    value: Provider.of<
+                                                                CreateworkoutViewModel>(
+                                                            context,
+                                                            listen: true)
+                                                        .getSwitchVal(
+                                                            e.id!.toInt()),
+                                                    onChanged: (bool Val) {
+                                                      Provider.of<CreateworkoutViewModel>(
+                                                              context,
+                                                              listen: false)
+                                                          .changeSwitchState(
+                                                              Val,
+                                                              e.id!.toInt());
+                                                      print(Provider.of<
+                                                                  CreateworkoutViewModel>(
+                                                              context,
+                                                              listen: false)
+                                                          .getSwitchVal(
+                                                              e.id!.toInt()));
+                                                    },
+                                                  ),
+                                                  Text(
+                                                    'Time',
+                                                    style: TextStyle(
+                                                        color: blueColor),
+                                                  ),
+                                                ],
+                                              ),
                                               Text(Provider.of<
                                                           CreateworkoutViewModel>(
                                                       context)
                                                   .getCountVal(e.id!.toInt())
                                                   .toString()),
                                               Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
                                                 children: [
                                                   ElevatedButton(
-                                                      onPressed: () {},
+                                                      onPressed: () {
+                                                        Provider.of<CreateworkoutViewModel>(
+                                                                context,
+                                                                listen: false)
+                                                            .decreaseCount(
+                                                                e.id!.toInt());
+                                                      },
                                                       child:
                                                           Icon(Icons.remove)),
                                                   ElevatedButton(
@@ -405,7 +450,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                                       },
                                                       child: Icon(Icons.add)),
                                                 ],
-                                              )
+                                              ),
                                             ],
                                           ),
                                         ),
