@@ -20,6 +20,7 @@ class SearchViewModel with ChangeNotifier {
   List<ChallengeModel> _challenges = [];
   int _page = 0;
   Filters _filter = Filters.users;
+  bool _isSugLoading = false;
 
   List<String> _suggestions = [];
 
@@ -30,6 +31,11 @@ class SearchViewModel with ChangeNotifier {
     'Diets': false,
     'Challenges': false,
   };
+
+  void setIsSugLoading(value) {
+    _isSugLoading = value;
+    notifyListeners();
+  }
 
   changeSelectedCategorie(key, selectedValue) {
     categories.updateAll((key, value) => false);
@@ -53,6 +59,8 @@ class SearchViewModel with ChangeNotifier {
     _users.clear();
     _posts.clear();
     _diets.clear();
+    _challenges.clear();
+    _workouts.clear();
     _page = 0;
     _isLoading = false;
     notifyListeners();
@@ -70,10 +78,13 @@ class SearchViewModel with ChangeNotifier {
       required String text,
       required BuildContext context}) async {
     print('Called');
+    setIsSugLoading(true);
     _suggestions.clear();
     _suggestions = await SearchApi().getSuggestion(
         lang: lang, text: text, filter: getFilter(), context: context);
     print(_suggestions);
+    setIsSugLoading(false);
+
     notifyListeners();
   }
 
@@ -147,5 +158,6 @@ class SearchViewModel with ChangeNotifier {
   List<WorkoutModel> get getWorkouts => _workouts;
   int get getPage => _page;
   List<String> get getSugs => _suggestions;
+  bool get getIsSugLoading => _isSugLoading;
   //Filters get getFilter => _filter;
 }

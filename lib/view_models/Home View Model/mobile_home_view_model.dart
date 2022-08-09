@@ -1,11 +1,23 @@
 import 'package:flutter/cupertino.dart';
+import 'package:home_workout_app/Api%20services/home_api.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/models/summary_model.dart';
 import 'package:home_workout_app/models/workout_model.dart';
 
 class MobileHomeViewModel with ChangeNotifier {
   int _currentTab = 0;
 
   int _radioValue = 0;
+
+  bool _isSummaryLoading = false;
+
+  SummaryModel _summary = SummaryModel();
+
+  void setisSummaryLoading(value) {
+    _isSummaryLoading = value;
+    notifyListeners();
+  }
 
   void setRadioValue(int value) {
     _radioValue = value;
@@ -129,6 +141,16 @@ class MobileHomeViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getSummaryData(
+      {required String lang, required BuildContext context}) async {
+    setisSummaryLoading(true);
+    _summary = await HomeAPI().getSummaryInfo(lang: getLang(context));
+    setisSummaryLoading(false);
+    notifyListeners();
+  }
+
   int get getCurrentTab => _currentTab;
   int get getRadioValue => _radioValue;
+  SummaryModel get getSummary => _summary;
+  bool get getIsSummaryLoading => _isSummaryLoading;
 }

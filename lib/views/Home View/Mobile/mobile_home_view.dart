@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/my_flutter_app_icons.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
@@ -36,8 +37,12 @@ class _MobileHomeViewState extends State<MobileHomeView>
     });
 
     Future.delayed(Duration.zero).then((value) {
+      Navigator.pushNamed(context, '/specificWorkout',
+          arguments: {'workoutId': 37});
       Provider.of<ProfileViewModel>(context, listen: false)
           .setCurrentUserData(context);
+      Provider.of<MobileHomeViewModel>(context, listen: false)
+          .getSummaryData(lang: getLang(context), context: context);
 
       final args = ModalRoute.of(context)!.settings.arguments as Map;
       if (args['page'] != null) {
@@ -77,9 +82,13 @@ class _MobileHomeViewState extends State<MobileHomeView>
                             .getCurrentTab ==
                         2
                     ? (Provider.of<ProfileViewModel>(context, listen: true)
-                                .getUserData
-                                .roleId !=
-                            1
+                                    .getUserData
+                                    .roleId !=
+                                1 &&
+                            Provider.of<ProfileViewModel>(context, listen: true)
+                                    .getUserData
+                                    .roleId !=
+                                0
                         ? FloatingActionButton(
                             onPressed: () {
                               Navigator.pushNamed(context, '/createPost');
@@ -113,8 +122,8 @@ class _MobileHomeViewState extends State<MobileHomeView>
                                   3
                           ? 50
                           : context.locale == const Locale('en')
-                              ? 50
-                              : 90,
+                              ? 90
+                              : 130,
                   bottom: Provider.of<MobileHomeViewModel>(context,
                                       listen: true)
                                   .getCurrentTab ==
@@ -128,65 +137,101 @@ class _MobileHomeViewState extends State<MobileHomeView>
                           preferredSize: const Size(double.infinity, 80),
                           child: Column(
                             children: [
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 500),
-                                decoration: BoxDecoration(
-                                  color: orangeColor.withAlpha(50),
-                                  borderRadius: BorderRadius.circular(15),
-                                  border:
-                                      Border.all(color: blueColor, width: 1.5),
-                                ),
-                                margin: const EdgeInsets.only(
-                                    right: 15, left: 15, top: 15, bottom: 0),
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.topCenter,
-                                      child: Text('Your short summary: '.tr(),
-                                          style: theme.textTheme.bodySmall),
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                              Consumer<MobileHomeViewModel>(
+                                builder: (context, summary, child) => summary
+                                        .getIsSummaryLoading
+                                    ? Center(
+                                        child: bigLoader(color: orangeColor))
+                                    : AnimatedContainer(
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        decoration: BoxDecoration(
+                                          color: orangeColor.withAlpha(50),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          border: Border.all(
+                                              color: blueColor, width: 1.5),
+                                        ),
+                                        margin: const EdgeInsets.only(
+                                            right: 15,
+                                            left: 15,
+                                            top: 15,
+                                            bottom: 0),
+                                        padding: const EdgeInsets.all(10),
+                                        child: Column(
                                           children: [
-                                            buildSummaryRow(
-                                                title1: 'Calories Burned: ',
-                                                title2: '2500 kcal'),
+                                            Align(
+                                              alignment: Alignment.topCenter,
+                                              child: Text(
+                                                  'Your short summary: '.tr(),
+                                                  style: theme
+                                                      .textTheme.bodySmall),
+                                            ),
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            buildSummaryRow(
-                                                title1: 'Workouts finished: ',
-                                                title2: '5'),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    buildSummaryRow(
+                                                        title1:
+                                                            'Calories Burned: ',
+                                                        title2: summary
+                                                            .getSummary.calories
+                                                            .toString()),
+                                                    const SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    buildSummaryRow(
+                                                        title1:
+                                                            'Workouts finished: ',
+                                                        title2: summary
+                                                            .getSummary.workouts
+                                                            .toString()),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    buildSummaryRow(
+                                                        title1: 'BMI: ',
+                                                        title2: summary
+                                                            .getSummary.bmi),
+                                                    const SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    buildSummaryRow(
+                                                        title1: 'Weight: ',
+                                                        title2: summary
+                                                            .getSummary.weight
+                                                            .toString()),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            Align(
+                                              alignment: Alignment.center,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                child: buildSummaryRow(
+                                                    title1: summary.getSummary
+                                                            .dietName.isEmpty
+                                                        ? ' '
+                                                        : 'Subscribed diet: ',
+                                                    title2: summary
+                                                        .getSummary.dietName),
+                                              ),
+                                            )
                                           ],
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            buildSummaryRow(
-                                                title1: 'BMI: ',
-                                                title2: 'Normal'),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            buildSummaryRow(
-                                                title1: 'Weight: ',
-                                                title2: '75 kg'),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                      ),
                               ),
                             ],
                           ),

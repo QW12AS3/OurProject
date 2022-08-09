@@ -190,6 +190,7 @@ class ProfileViewModel with ChangeNotifier {
 
   Future<void> setFollowings(int id, String lang) async {
     _followings = await ProfileApi().getFollowings(lang, id);
+    print('sssssaaaaa' + _followings.toString());
     notifyListeners();
   }
 

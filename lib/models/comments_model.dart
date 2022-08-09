@@ -25,14 +25,14 @@ class CommentsModel {
       ownerImageUrl = '$ip/$ownerImageUrl';
     }
     reports = json['reports'] ?? 0;
-    reviewRate = json['review'] ?? 0;
+    reviewRate = double.tryParse(json['stars'].toString()) ?? 0;
   }
 
   CommentsModel.fromJsonForReview(Map<String, dynamic> json) {
     log(json.toString());
     owner = json['user_id']['f_name'] + ' ' + json['user_id']['l_name'] ?? '';
     comment = json['description'] ?? '';
-    createdAt = json['created_at'];
+    createdAt = json['created_at'] ?? '';
     id = json['id'] ?? 0;
     ownerId = json['user_id']['id'] ?? 0;
 
@@ -41,7 +41,7 @@ class CommentsModel {
       ownerImageUrl = '$ip/$ownerImageUrl';
     }
     reports = json['reports'] ?? 0;
-    reviewRate = json['stars'] ?? 0;
-    log(reviewRate.toString());
+    reviewRate = double.tryParse(json['stars'].toString()) ?? 0;
+    // log(reviewRate.toString());
   }
 }

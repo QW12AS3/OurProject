@@ -99,7 +99,7 @@
     "Delete": "Delete",
     "Report": "Report",
     "See more >": "See more >",
-    "Type a comment...": "Type a comments...",
+    "Type a comment...": "Type a comment...",
     "Post Type: ": "Post Type: ",
     "Type something about you here... (Optional)": "Type something about you here... (Optional)",
     "Upload your CV": "Upload your CV",
@@ -214,5 +214,15 @@
     "Diets list": "Diets list",
     "Refresh": "Refresh",
     "There are no posts": "There are no posts",
-    "There are no diets": "There are no diets"
+    "There are no diets": "There are no diets",
+    "App Control": "App Control",
+    "Users": "Users",
+    "Workouts": "Workouts",
+    "Challenges": "Challenges",
+    "My diets": "My diets",
+    "There are no subscribed diets": "There are no subscribed diets",
+    "There are no search results": "There are no search results",
+    "Review stars cannot be 0": "Review stars cannot be 0",
+    "Subscribe": "Subscribe",
+    "Unsubscribe": "Unsubscribe"
 }

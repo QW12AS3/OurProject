@@ -505,8 +505,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                       context.locale == Locale('en')
                                           ? 'en'
                                           : 'ar');
-                                  showBottomList(
-                                      context, 'Followings', user.getFollowers);
+
+                                  showBottomList(context, 'Followings',
+                                      user.getFollowings);
                                 },
                                 child: Column(
                                   children: [

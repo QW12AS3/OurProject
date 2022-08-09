@@ -1,5 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/Api%20services/home_api.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
 
@@ -21,6 +23,8 @@ class _SplashViewState extends State<SplashView> {
     print(getFirebaseNotificationToken());
     Future.delayed(const Duration(seconds: 1)).then((value) {
       firebaseTrigger();
+
+      HomeAPI().getSummaryInfo(lang: getLang(context));
 
       if (sharedPreferences.getBool('registered') == true &&
           sharedPreferences.getBool('is_info') == true &&
