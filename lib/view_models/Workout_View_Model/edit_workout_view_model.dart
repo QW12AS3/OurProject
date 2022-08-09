@@ -4,10 +4,10 @@ import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/create_workout_model.dart';
 import 'package:image_picker/image_picker.dart';
 
-class CreateworkoutViewModel with ChangeNotifier {
-  XFile userImage = XFile('');
+class EditworkoutViewModel with ChangeNotifier {
   Future<List<CreateworkoutModel>>? futureworkoutList;
   Future<List<CreateworkoutModel>>? futureExercisesList;
+  XFile userImage = XFile('');
   List<String>? dropDownList = [];
   String dropDownNewValue = '';
   List<String>? equipmentDropDownList = [
@@ -41,30 +41,13 @@ class CreateworkoutViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> changePhoto(ImageSource src) async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: src);
-    if (pickedImage != null) {
-      userImage = pickedImage;
-      print('vvvvvvvvvvvvvvvvvvvvvvccccccccccc');
-      print(userImage.path);
-    }
-    notifyListeners();
-  }
-
   reset() {
-    userImage = XFile('');
     fetchedList = false;
     dropDownNewValue = '';
     dropDownList = [];
     ConvertedFutureCategoriesList?.clear();
     ConvertedFutureExercisesList?.clear();
     // fetchedExercisesList = false;
-  }
-
-  resetImage() {
-    userImage = XFile('');
-    notifyListeners();
   }
 
   void addToExercises(int i) {
@@ -282,6 +265,17 @@ class CreateworkoutViewModel with ChangeNotifier {
       if (_pickedExercisesIDs[i]['id'] == id) {
         _pickedExercisesIDs[i]['isTime'] = Val;
       }
+    }
+    notifyListeners();
+  }
+
+  Future<void> changePhoto(ImageSource src) async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: src);
+    if (pickedImage != null) {
+      userImage = pickedImage;
+      print('vvvvvvvvvvvvvvvvvvvvvvccccccccccc');
+      print(userImage.path);
     }
     notifyListeners();
   }

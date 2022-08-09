@@ -23,7 +23,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
   TextEditingController BurnCaloriesController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  var argu;
+  var argu; //Is the main
   @override
   void initState() {
     // TODO: implement initState

@@ -7,10 +7,14 @@ class WorkoutListViewModel with ChangeNotifier {
 
   List<WorkoutListModel>? CategoriesList = [];
   String PickedCategoryValue = '';
+  String PickedDifficultyValue = 'Easy';
   int CategoryNumber = 1;
+  int DifficultyNumber = 1;
   int page = 1;
   bool isLoading = false;
   bool CategoriesfetchedList = false;
+  // bool DiffetchedList = false;
+  List<String>? difficultyList = ['Easy', 'Medium', 'Hard'];
   setfutureworkoutsList(List<WorkoutListModel>? futureworkoutsList) {
     workoutsList?.addAll(futureworkoutsList!);
     isLoading = false;
@@ -35,11 +39,18 @@ class WorkoutListViewModel with ChangeNotifier {
     CategoriesfetchedList = false;
   }
 
-  getWorkoutsData(String lang, int category, int difficulty, int page,
+  resetForFilter() {
+    workoutsList = [];
+    page = 1;
+    isLoading = false;
+    // CategoriesfetchedList = false;
+  }
+
+  getWorkoutsData(String lang, int page, int category, int difficulty,
       String linkType) async {
     isLoading = true;
     setfutureworkoutsList(await WorkoutListsAPI()
-        .getworkouts(lang, '/$category', '', page, linkType));
+        .getworkouts(lang, '/$category', '/$difficulty', page, linkType));
     increasePages();
     notifyListeners();
     // return futureworkoutsList;
@@ -86,6 +97,19 @@ class WorkoutListViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  updatePickedDifficulty(String PickedDifficulty) {
+    PickedDifficultyValue = PickedDifficulty;
+    if (PickedDifficultyValue == 'Easy') {
+      DifficultyNumber = 1;
+    } else if (PickedDifficultyValue == 'Medium') {
+      DifficultyNumber = 2;
+    } else {
+      DifficultyNumber = 3;
+    }
+    notifyListeners();
+  }
+
   List<WorkoutListModel>? get getfutureworkoutsList => workoutsList;
   List<WorkoutListModel>? get getCategoriesList => CategoriesList;
+  List<String>? get getdifficultyList => difficultyList;
 }
