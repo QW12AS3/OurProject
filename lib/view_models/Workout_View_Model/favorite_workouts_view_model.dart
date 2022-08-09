@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/workout_list_api.dart';
 import 'package:home_workout_app/models/workout_list_model.dart';
 
-class MyWorkoutsViewModel with ChangeNotifier {
+class favoriteWorkoutsViewModel with ChangeNotifier {
   List<WorkoutListModel>? workoutsList = [];
   int page = 1;
   bool isLoading = false;

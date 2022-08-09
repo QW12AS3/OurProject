@@ -10,42 +10,59 @@ import 'package:flutter/widgets.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/create_workout_model.dart';
-import 'package:home_workout_app/view_models/Workout_View_Model/create_workout_view_model.dart';
+import 'package:home_workout_app/view_models/Workout_View_Model/edit_workout_view_model.dart';
 import 'package:home_workout_app/view_models/exercise_list_view_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class CreateWorkoutView extends StatefulWidget {
-  const CreateWorkoutView({Key? key}) : super(key: key);
+class EditWorkoutView extends StatefulWidget {
+  const EditWorkoutView({Key? key}) : super(key: key);
 
   @override
-  State<CreateWorkoutView> createState() => _CreateWorkoutViewState();
+  State<EditWorkoutView> createState() => _EditWorkoutViewState();
 }
 
-class _CreateWorkoutViewState extends State<CreateWorkoutView> {
+class _EditWorkoutViewState extends State<EditWorkoutView> {
   // Future<List<CreateworkoutModel>>? futurechallengesList;
   final formGlobalKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
-  List workoutsId = [];
+  var argu; //isthe main
   @override
   void initState() {
     super.initState();
     // futurechallengesList = GeneralChallengesViewModel().getData('en', 1);
     // print(futurechallengesList);
     Future.delayed(Duration.zero).then((value) async {
-      Provider.of<CreateworkoutViewModel>(context, listen: false).reset();
-      if (Provider.of<CreateworkoutViewModel>(context, listen: false)
+      final args = ModalRoute.of(context)!.settings.arguments as Map;
+      argu = args;
+      setState(() {
+        // nameController.text = args['burn calories'] ?? '';
+        nameController.text = args['name'] ?? '';
+        // descriptionController.text = args['description'] ?? '';
+      });
+      Provider.of<EditworkoutViewModel>(context, listen: false).reset();
+      argu['Categories IDs'].forEach((element) {
+        Provider.of<EditworkoutViewModel>(context, listen: false)
+            .addToExercises(element);
+      });
+      Provider.of<EditworkoutViewModel>(context, listen: false)
+          .setdropDownNewValue(argu['Categories']);
+      Provider.of<EditworkoutViewModel>(context, listen: false)
+          .setequipmentDropDownNewValue(argu['Equipment']);
+      Provider.of<EditworkoutViewModel>(context, listen: false)
+          .setdifficultyDropDownNewValue(argu['Difficulty']);
+      if (Provider.of<EditworkoutViewModel>(context, listen: false)
               .fetchedList ==
           false)
         // futurechallengesList =
-        Provider.of<CreateworkoutViewModel>(context, listen: false)
+        Provider.of<EditworkoutViewModel>(context, listen: false)
             .getData(context.locale == Locale('en') ? 'en' : 'ar', 0);
-      print(Provider.of<CreateworkoutViewModel>(context, listen: false)
+      print(Provider.of<EditworkoutViewModel>(context, listen: false)
               .fetchedList ==
           false);
       // List data = jsonDecode(response.body)['data'] ?? [];
 
-      // print(Provider.of<CreateworkoutViewModel>(context, listen: false).getChallengesList(lang));
+      // print(Provider.of<EditworkoutViewModel>(context, listen: false).getChallengesList(lang));
     });
   }
 
@@ -57,17 +74,17 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
       appBar: AppBar(
         // leading: IconButton(
         //   onPressed: () {
-        //     Provider.of<CreateworkoutViewModel>(context, listen: false).reset();
+        //     Provider.of<EditworkoutViewModel>(context, listen: false).reset();
         //     Navigator.pop(context);
         //   },
         //   icon: Icon(Icons.arrow_back),
         // ),
         title: Text(
-          'Create workout',
+          'Edit workout',
           style: theme.textTheme.bodyMedium!,
         ),
       ),
-      body: Provider.of<CreateworkoutViewModel>(context).fetchedList == true
+      body: Provider.of<EditworkoutViewModel>(context).fetchedList == true
           ? SafeArea(
               child: Container(
                 color: Colors.white,
@@ -89,7 +106,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                               child: TextFormField(
                                 controller: nameController,
                                 validator: (value) {
-                                  return CreateworkoutViewModel().checkName(
+                                  return EditworkoutViewModel().checkName(
                                       value.toString(),
                                       context.locale == Locale('en')
                                           ? 'en'
@@ -164,7 +181,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                             ),
                           ),
                           DropdownButton<String>(
-                            value: Provider.of<CreateworkoutViewModel>(context,
+                            value: Provider.of<EditworkoutViewModel>(context,
                                     listen: false)
                                 .dropDownNewValue,
                             icon: Icon(Icons.arrow_downward, color: blueColor),
@@ -175,11 +192,11 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                               color: blueColor,
                             ),
                             onChanged: (String? newValue) {
-                              Provider.of<CreateworkoutViewModel>(context,
+                              Provider.of<EditworkoutViewModel>(context,
                                       listen: false)
                                   .setdropDownNewValue(newValue!);
                             },
-                            items: Provider.of<CreateworkoutViewModel>(context)
+                            items: Provider.of<EditworkoutViewModel>(context)
                                 .dropDownList
                                 ?.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
@@ -217,7 +234,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                             ),
                           ),
                           DropdownButton<String>(
-                            value: Provider.of<CreateworkoutViewModel>(context,
+                            value: Provider.of<EditworkoutViewModel>(context,
                                     listen: false)
                                 .equipmentDropDownNewValue,
                             icon: Icon(Icons.arrow_downward, color: blueColor),
@@ -228,11 +245,11 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                               color: blueColor,
                             ),
                             onChanged: (String? newValue) {
-                              Provider.of<CreateworkoutViewModel>(context,
+                              Provider.of<EditworkoutViewModel>(context,
                                       listen: false)
                                   .setequipmentDropDownNewValue(newValue!);
                             },
-                            items: Provider.of<CreateworkoutViewModel>(context)
+                            items: Provider.of<EditworkoutViewModel>(context)
                                 .equipmentDropDownList
                                 ?.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
@@ -270,7 +287,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                             ),
                           ),
                           DropdownButton<String>(
-                            value: Provider.of<CreateworkoutViewModel>(context,
+                            value: Provider.of<EditworkoutViewModel>(context,
                                     listen: false)
                                 .difficultyDropDownNewValue,
                             icon: Icon(Icons.arrow_downward, color: blueColor),
@@ -281,11 +298,11 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                               color: blueColor,
                             ),
                             onChanged: (String? newValue) {
-                              Provider.of<CreateworkoutViewModel>(context,
+                              Provider.of<EditworkoutViewModel>(context,
                                       listen: false)
                                   .setdifficultyDropDownNewValue(newValue!);
                             },
-                            items: Provider.of<CreateworkoutViewModel>(context)
+                            items: Provider.of<EditworkoutViewModel>(context)
                                 .difficultyDropDownList
                                 ?.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
@@ -314,7 +331,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: mq.size.width * 0.1),
-                        child: Consumer<CreateworkoutViewModel>(
+                        child: Consumer<EditworkoutViewModel>(
                           builder: (context, value, child) => Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -325,7 +342,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                       width: 150,
                                       child: Image.file(
                                         File(
-                                          Provider.of<CreateworkoutViewModel>(
+                                          Provider.of<EditworkoutViewModel>(
                                                   context)
                                               .userImage
                                               .path,
@@ -358,15 +375,14 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                           padding: const EdgeInsets.all(8.0),
                           child: TextButton(
                               onPressed: () async {
-                                workoutsId = await Navigator.pushNamed(
+                                final workoutsId = await Navigator.pushNamed(
                                     context, '/exercisesPicker') as List;
                                 workoutsId.forEach((element) {
-                                  Provider.of<CreateworkoutViewModel>(context,
+                                  Provider.of<EditworkoutViewModel>(context,
                                           listen: false)
                                       .addToExercises(element);
                                 });
-                                print(Provider.of<CreateworkoutViewModel>(
-                                        context,
+                                print(Provider.of<EditworkoutViewModel>(context,
                                         listen: false)
                                     .fetchedList);
                               },
@@ -379,7 +395,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                       SizedBox(
                         height: mq.size.height * 0.05,
                       ),
-                      Consumer2<CreateworkoutViewModel, exercisesListViewModel>(
+                      Consumer2<EditworkoutViewModel, exercisesListViewModel>(
                         builder: (context, workout, exercises, child) => workout
                                 .getPickedExercises.isEmpty
                             ? const Text('')
@@ -454,20 +470,20 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                                         orangeColor,
                                                     activeColor: orangeColor,
                                                     value: Provider.of<
-                                                                CreateworkoutViewModel>(
+                                                                EditworkoutViewModel>(
                                                             context,
                                                             listen: true)
                                                         .getSwitchVal(
                                                             e.id!.toInt()),
                                                     onChanged: (bool Val) {
-                                                      Provider.of<CreateworkoutViewModel>(
+                                                      Provider.of<EditworkoutViewModel>(
                                                               context,
                                                               listen: false)
                                                           .changeSwitchState(
                                                               Val,
                                                               e.id!.toInt());
                                                       print(Provider.of<
-                                                                  CreateworkoutViewModel>(
+                                                                  EditworkoutViewModel>(
                                                               context,
                                                               listen: false)
                                                           .getSwitchVal(
@@ -482,7 +498,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                                 ],
                                               ),
                                               Text(Provider.of<
-                                                          CreateworkoutViewModel>(
+                                                          EditworkoutViewModel>(
                                                       context)
                                                   .getCountVal(e.id!.toInt())
                                                   .toString()),
@@ -493,7 +509,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                                 children: [
                                                   ElevatedButton(
                                                       onPressed: () {
-                                                        Provider.of<CreateworkoutViewModel>(
+                                                        Provider.of<EditworkoutViewModel>(
                                                                 context,
                                                                 listen: false)
                                                             .decreaseCount(
@@ -503,7 +519,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                                           Icon(Icons.remove)),
                                                   ElevatedButton(
                                                       onPressed: () {
-                                                        Provider.of<CreateworkoutViewModel>(
+                                                        Provider.of<EditworkoutViewModel>(
                                                                 context,
                                                                 listen: false)
                                                             .increaseCount(
@@ -522,11 +538,11 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                       ),
                       ElevatedButton(
                           onPressed: () async {
-                            if (Provider.of<CreateworkoutViewModel>(context,
+                            if (Provider.of<EditworkoutViewModel>(context,
                                             listen: false)
                                         .userImage !=
                                     null &&
-                                Provider.of<CreateworkoutViewModel>(context,
+                                Provider.of<EditworkoutViewModel>(context,
                                             listen: false)
                                         .userImage
                                         .path !=
@@ -535,36 +551,35 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                 formGlobalKey.currentState!.save();
                                 print('ddddddddddddd');
                                 final CreateworkoutModel BackEndMessage =
-                                    await CreateworkoutViewModel()
-                                        .postWorkoutInfo(
-                                            nameController.text,
-                                            Provider.of<CreateworkoutViewModel>(
-                                                    context,
-                                                    listen: false)
-                                                .getIdOfDropDownValue()
-                                                .toString(),
-                                            Provider.of<CreateworkoutViewModel>(
-                                                    context,
-                                                    listen: false)
-                                                .equipmentDropDownNewValue
-                                                .toString(),
-                                            Provider.of<CreateworkoutViewModel>(
-                                                    context,
-                                                    listen: false)
-                                                .getIdOfDifficultyDropDownValue()
-                                                .toString(),
-                                            Provider.of<CreateworkoutViewModel>(
-                                                    context,
-                                                    listen: false)
-                                                .getPickedExercises,
-                                            Provider.of<CreateworkoutViewModel>(
-                                                    context,
-                                                    listen: false)
-                                                .userImage,
-                                            '/workout/create',
-                                            context.locale == Locale('en')
-                                                ? 'en'
-                                                : 'ar');
+                                    await EditworkoutViewModel().postWorkoutInfo(
+                                        nameController.text,
+                                        Provider.of<EditworkoutViewModel>(
+                                                context,
+                                                listen: false)
+                                            .getIdOfDropDownValue()
+                                            .toString(),
+                                        Provider.of<EditworkoutViewModel>(
+                                                context,
+                                                listen: false)
+                                            .equipmentDropDownNewValue
+                                            .toString(),
+                                        Provider.of<EditworkoutViewModel>(
+                                                context,
+                                                listen: false)
+                                            .getIdOfDifficultyDropDownValue()
+                                            .toString(),
+                                        Provider.of<EditworkoutViewModel>(
+                                                context,
+                                                listen: false)
+                                            .getPickedExercises,
+                                        Provider.of<EditworkoutViewModel>(
+                                                context,
+                                                listen: false)
+                                            .userImage,
+                                        '/workout/update/${argu['id']}',
+                                        context.locale == Locale('en')
+                                            ? 'en'
+                                            : 'ar');
                                 print('ffffffffffssssssssssss');
                                 print(BackEndMessage.statusCode);
                                 print(BackEndMessage.message);
@@ -574,42 +589,19 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                       Text(BackEndMessage.message.toString()),
                                       context);
                                 }
-                                if (BackEndMessage.statusCode == 201) {
+                                if (BackEndMessage.statusCode == 201 ||
+                                    BackEndMessage.statusCode == 200) {
                                   nameController.clear();
 
                                   Navigator.of(context).pop();
                                 }
                               }
-                            } else {
-                              showSnackbar(Text('Add photo'), context);
                             }
                           },
                           child: Text('Save')),
                       SizedBox(
                         height: mq.size.height * 0.05,
                       ),
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed('/editWorkout', arguments: {
-                              'Categories IDs': workoutsId,
-                              'name': nameController.text,
-                              'Categories': Provider.of<CreateworkoutViewModel>(
-                                      context,
-                                      listen: false)
-                                  .dropDownNewValue,
-                              'Equipment': Provider.of<CreateworkoutViewModel>(
-                                      context,
-                                      listen: false)
-                                  .equipmentDropDownNewValue,
-                              'Difficulty': Provider.of<CreateworkoutViewModel>(
-                                      context,
-                                      listen: false)
-                                  .difficultyDropDownNewValue,
-                              'id': 3 //TODO:
-                            });
-                          },
-                          child: Text('edit')),
                     ]),
                   ),
                 ),
@@ -633,7 +625,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Provider.of<CreateworkoutViewModel>(context, listen: false)
+                Provider.of<EditworkoutViewModel>(context, listen: false)
                     .changePhoto(ImageSource.gallery);
               },
               child: Text(
@@ -647,7 +639,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Provider.of<CreateworkoutViewModel>(context, listen: false)
+                Provider.of<EditworkoutViewModel>(context, listen: false)
                     .changePhoto(ImageSource.camera);
               },
               child: Text(

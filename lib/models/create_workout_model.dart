@@ -6,7 +6,7 @@ class CreateworkoutModel {
   int? id;
   String? name;
   String? message;
-  XFile? img;
+  // XFile? img;
   String? exercise_img;
   String? end_time;
   String? time;
@@ -18,12 +18,13 @@ class CreateworkoutModel {
   String? difficulty;
   List? excersisesList;
   int? statusCode;
+  XFile? workout_image;
   CreateworkoutModel(
       {this.id,
       this.name,
       this.message,
       this.statusCode,
-      this.img,
+      // this.img,
       this.end_time,
       this.time,
       this.count,
@@ -33,7 +34,8 @@ class CreateworkoutModel {
       this.categorie_id,
       this.equipment,
       this.difficulty,
-      this.excersisesList});
+      this.excersisesList,
+      this.workout_image});
   // to convert data from json to dart object
   factory CreateworkoutModel.fromJson(Map<String, dynamic> user) =>
       CreateworkoutModel(

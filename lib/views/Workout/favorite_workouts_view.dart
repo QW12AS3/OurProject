@@ -4,18 +4,19 @@ import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/workout_list_model.dart';
+import 'package:home_workout_app/view_models/Workout_View_Model/favorite_workouts_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/my_workouts_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
 
-class MyWorkouts extends StatefulWidget {
-  const MyWorkouts({Key? key}) : super(key: key);
+class favoriteWorkoutsView extends StatefulWidget {
+  const favoriteWorkoutsView({Key? key}) : super(key: key);
 
   @override
-  State<MyWorkouts> createState() => _MyWorkoutsState();
+  State<favoriteWorkoutsView> createState() => _favoriteWorkoutsViewState();
 }
 
-class _MyWorkoutsState extends State<MyWorkouts> {
+class _favoriteWorkoutsViewState extends State<favoriteWorkoutsView> {
   final ListViewController = ScrollController();
 
   @override
@@ -23,21 +24,24 @@ class _MyWorkoutsState extends State<MyWorkouts> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero).then((value) async {
-      Provider.of<MyWorkoutsViewModel>(context, listen: false).reset();
-      Provider.of<MyWorkoutsViewModel>(context, listen: false).getWorkoutsData(
-          getLang(context),
-          Provider.of<MyWorkoutsViewModel>(context, listen: false).page,
-          '/workout/my_workouts');
+      Provider.of<favoriteWorkoutsViewModel>(context, listen: false).reset();
+      Provider.of<favoriteWorkoutsViewModel>(context, listen: false)
+          .getWorkoutsData(
+              getLang(context),
+              Provider.of<favoriteWorkoutsViewModel>(context, listen: false)
+                  .page,
+              '/workout/my_workouts');
       print('ccccccccccccccccccccccccccc');
       ListViewController.addListener(() {
         if (ListViewController.position.maxScrollExtent ==
             ListViewController.offset) {
-          Provider.of<MyWorkoutsViewModel>(context, listen: false)
+          Provider.of<favoriteWorkoutsViewModel>(context, listen: false)
               .setIsLoading(true);
-          Provider.of<MyWorkoutsViewModel>(context, listen: false)
+          Provider.of<favoriteWorkoutsViewModel>(context, listen: false)
               .getWorkoutsData(
                   getLang(context),
-                  Provider.of<MyWorkoutsViewModel>(context, listen: false).page,
+                  Provider.of<favoriteWorkoutsViewModel>(context, listen: false)
+                      .page,
                   '/workout/my_workouts');
           // print(object)
         }
@@ -62,7 +66,7 @@ class _MyWorkoutsState extends State<MyWorkouts> {
         //     : Container(),
         appBar: AppBar(
           title: Text(
-            'My workouts',
+            'Favorite workouts',
             style: theme.textTheme.bodyMedium!,
           ),
         ),
@@ -102,22 +106,23 @@ class _MyWorkoutsState extends State<MyWorkouts> {
             //   ),
             // ),
             Expanded(
-              child: Consumer<MyWorkoutsViewModel>(
+              child: Consumer<favoriteWorkoutsViewModel>(
                 builder: ((context, value, _) => (Provider.of<
-                            MyWorkoutsViewModel>(context, listen: true)
+                            favoriteWorkoutsViewModel>(context, listen: true)
                         .getfutureworkoutsList!
                         .isEmpty
                     ? bigLoader(color: orangeColor)
                     : RefreshIndicator(
                         onRefresh: () async {
-                          Provider.of<MyWorkoutsViewModel>(context,
+                          Provider.of<favoriteWorkoutsViewModel>(context,
                                   listen: false)
                               .reset();
-                          Provider.of<MyWorkoutsViewModel>(context,
+                          Provider.of<favoriteWorkoutsViewModel>(context,
                                   listen: false)
                               .getWorkoutsData(
                                   context.locale == Locale('en') ? 'en' : 'ar',
-                                  Provider.of<MyWorkoutsViewModel>(context,
+                                  Provider.of<favoriteWorkoutsViewModel>(
+                                          context,
                                           listen: false)
                                       .page,
                                   '/workout/my_workouts');
@@ -141,7 +146,8 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                       ))),
               ),
             ),
-            Provider.of<MyWorkoutsViewModel>(context, listen: true).isLoading ==
+            Provider.of<favoriteWorkoutsViewModel>(context, listen: true)
+                        .isLoading ==
                     true
                 ? Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -257,7 +263,8 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                 sharedPreferences.get("role_id") == 5) //TODO:
               IconButton(
                   onPressed: () {
-                    Provider.of<MyWorkoutsViewModel>(context, listen: false)
+                    Provider.of<favoriteWorkoutsViewModel>(context,
+                            listen: false)
                         .deleteSpecificChallengeData(
                             context.locale == Locale('en') ? 'en' : 'ar',
                             // 2

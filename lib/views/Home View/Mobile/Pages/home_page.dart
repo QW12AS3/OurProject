@@ -34,8 +34,9 @@ class _HomePageState extends State<HomePage> {
           Provider.of<WorkoutListViewModel>(context, listen: false).page,
           Provider.of<WorkoutListViewModel>(context, listen: false)
               .CategoryNumber,
-          1,
-          '/workout/all');
+          Provider.of<WorkoutListViewModel>(context, listen: false)
+              .DifficultyNumber,
+          '/workout/filter');
       print('ccccccccccccccccccccccccccc');
       ListViewController.addListener(() {
         if (ListViewController.position.maxScrollExtent ==
@@ -49,8 +50,9 @@ class _HomePageState extends State<HomePage> {
                       .page,
                   Provider.of<WorkoutListViewModel>(context, listen: false)
                       .CategoryNumber,
-                  1,
-                  '/workout/all');
+                  Provider.of<WorkoutListViewModel>(context, listen: false)
+                      .DifficultyNumber,
+                  '/workout/filter');
           // print(object)
         }
       });
@@ -129,8 +131,10 @@ class _HomePageState extends State<HomePage> {
                                 Provider.of<WorkoutListViewModel>(context,
                                         listen: false)
                                     .CategoryNumber,
-                                1,
-                                '/workout/all');
+                                Provider.of<WorkoutListViewModel>(context,
+                                        listen: false)
+                                    .DifficultyNumber,
+                                '/workout/filter');
                       },
                       child: ListView.builder(
                         // controller: ListViewController,
@@ -148,6 +152,21 @@ class _HomePageState extends State<HomePage> {
                                   value.updatePickedCategory(value
                                       .getCategoriesList![index].name
                                       .toString());
+                                  value.resetForFilter();
+                                  value.getWorkoutsData(
+                                      context.locale == Locale('en')
+                                          ? 'en'
+                                          : 'ar',
+                                      Provider.of<WorkoutListViewModel>(context,
+                                              listen: false)
+                                          .page,
+                                      Provider.of<WorkoutListViewModel>(context,
+                                              listen: false)
+                                          .CategoryNumber,
+                                      Provider.of<WorkoutListViewModel>(context,
+                                              listen: false)
+                                          .DifficultyNumber,
+                                      '/workout/filter');
                                 }
                                 // consumer.changeSelectedCategorie(e.key, true);
                               },
@@ -187,7 +206,101 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Expanded(
-            flex: 10,
+            // flex: 3,
+            child: Consumer<WorkoutListViewModel>(
+              builder: ((context, value, _) => (Provider.of<
+                          WorkoutListViewModel>(context, listen: true)
+                      .getCategoriesList!
+                      .isEmpty
+                  ? bigLoader(color: orangeColor)
+                  : RefreshIndicator(
+                      onRefresh: () async {
+                        Provider.of<WorkoutListViewModel>(context,
+                                listen: false)
+                            .reset();
+                        Provider.of<WorkoutListViewModel>(context,
+                                listen: false)
+                            .getWorkoutsData(
+                                context.locale == Locale('en') ? 'en' : 'ar',
+                                Provider.of<WorkoutListViewModel>(context,
+                                        listen: false)
+                                    .page,
+                                Provider.of<WorkoutListViewModel>(context,
+                                        listen: false)
+                                    .CategoryNumber,
+                                Provider.of<WorkoutListViewModel>(context,
+                                        listen: false)
+                                    .DifficultyNumber,
+                                '/workout/filter');
+                      },
+                      child: ListView.builder(
+                        // controller: ListViewController,
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: value.getdifficultyList?.length,
+                        itemBuilder: ((context, index) {
+                          if (index < value.getdifficultyList!.length) {
+                            final item = value.getdifficultyList![index];
+                            // return ListTile(title: Text(item));
+                            return InkWell(
+                              onTap: () {
+                                if (value.getdifficultyList![index] !=
+                                    value.PickedDifficultyValue) {
+                                  value.updatePickedDifficulty(value
+                                      .getdifficultyList![index]
+                                      .toString());
+                                  value.resetForFilter();
+                                  value.getWorkoutsData(
+                                      context.locale == Locale('en')
+                                          ? 'en'
+                                          : 'ar',
+                                      Provider.of<WorkoutListViewModel>(context,
+                                              listen: false)
+                                          .page,
+                                      Provider.of<WorkoutListViewModel>(context,
+                                              listen: false)
+                                          .CategoryNumber,
+                                      Provider.of<WorkoutListViewModel>(context,
+                                              listen: false)
+                                          .DifficultyNumber,
+                                      '/workout/filter');
+                                }
+                                // consumer.changeSelectedCategorie(e.key, true);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(7),
+                                decoration: BoxDecoration(
+                                    color: value.getdifficultyList![index] ==
+                                            value.PickedDifficultyValue
+                                        ? blueColor
+                                        : greyColor,
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Text(
+                                    value.getdifficultyList![index].toString(),
+                                    style: theme.textTheme.bodySmall!.copyWith(
+                                        color: Colors.white,
+                                        fontSize:
+                                            value.getdifficultyList![index] ==
+                                                    value.PickedDifficultyValue
+                                                ? 15
+                                                : 10),
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return CircularProgressIndicator();
+                          }
+                        }),
+                      ),
+                    ))),
+            ),
+          ),
+          Expanded(
+            flex: 11,
             child: Consumer<WorkoutListViewModel>(
               builder: ((context, value, _) =>
                   (Provider.of<WorkoutListViewModel>(context, listen: true)
@@ -211,8 +324,10 @@ class _HomePageState extends State<HomePage> {
                                     Provider.of<WorkoutListViewModel>(context,
                                             listen: false)
                                         .CategoryNumber,
-                                    1,
-                                    '/workout/all');
+                                    Provider.of<WorkoutListViewModel>(context,
+                                            listen: false)
+                                        .DifficultyNumber,
+                                    '/workout/filter');
                           },
                           child: ListView.builder(
                             controller: ListViewController,
@@ -312,11 +427,12 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: CircleAvatar(
                   backgroundImage: NetworkImage(
-                      // workoutValue.prof_img_url.toString().substring(0, 4) !=
-                      //         'http'
-                      //     ? '$ip/${workoutValue.prof_img_url}'
-                      //     : workoutValue.prof_img_url.toString()
-                      'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'),
+                      workoutValue.prof_img_url.toString().substring(0, 4) !=
+                              'http'
+                          ? '$ip/${workoutValue.prof_img_url}'
+                          : workoutValue.prof_img_url.toString()
+                      // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'
+                      ),
                 ),
               ),
               Column(
@@ -328,8 +444,8 @@ class _HomePageState extends State<HomePage> {
                         theme.textTheme.bodySmall!.copyWith(color: blueColor),
                   ),
                   Text(
-                    '6/3/2022 - 5:33 PM',
-                    //  '${workoutValue.created_at}',
+                    // '6/3/2022 - 5:33 PM',
+                    '${workoutValue.created_at}',
                     style: theme.textTheme.displaySmall!
                         .copyWith(color: greyColor, fontSize: 10),
                   )
@@ -364,17 +480,14 @@ class _HomePageState extends State<HomePage> {
                     width: mq.width * 0.95,
                     height: 250,
                     fit: BoxFit.cover,
-                    image: NetworkImage(
-                      // workoutValue
-                      //                       .workout_image_url
-                      //                       .toString()
-                      //                       .substring(0, 4) !=
-                      //                   'http'
-                      //               ? '$ip/${workoutValue.workout_image_url}'
-                      //               : workoutValue
-                      //                       .workout_image_url.toString()
-                      'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612',
-                    ),
+                    image: NetworkImage(workoutValue.workout_image_url
+                                    .toString()
+                                    .substring(0, 4) !=
+                                'http'
+                            ? '$ip/${workoutValue.workout_image_url}'
+                            : workoutValue.workout_image_url.toString()
+                        // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612',
+                        ),
                   ),
                 ),
                 Container(

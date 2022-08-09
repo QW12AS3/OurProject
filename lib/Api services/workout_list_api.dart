@@ -10,6 +10,7 @@ class WorkoutListsAPI {
       String difficulty, int page, String link) async {
     try {
       print('Page $page');
+      print('$base_URL$link$category$difficulty?page=$page');
       final response = await get(
         Uri.parse('$base_URL$link$category$difficulty?page=$page'),
         headers: {
@@ -72,5 +73,35 @@ class WorkoutListsAPI {
       print('Get Categories List Error: $e');
       return [];
     }
+  }
+
+  Future<WorkoutListModel> deleteExercise(String lang, int? id) async {
+    //business logic to send data to server
+    try {
+      final Response response = await delete(
+        Uri.parse('$base_URL/workout/delete/$id'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
+      print(response.body);
+      if (response.statusCode == 200) {
+        return WorkoutListModel.fromJsonWithErrors(json.decode(response.body));
+      } else {
+        print(response.statusCode);
+        print(response.body);
+        return WorkoutListModel.fromJsonWithErrors(json.decode(response.body));
+      }
+    } catch (e) {
+      print(e);
+    }
+    return WorkoutListModel(
+        message: 'There is a problem connecting to the internet',
+        statusCode: 0);
   }
 }

@@ -25,6 +25,8 @@ import 'package:home_workout_app/view_models/Register%20View%20Model/sign_in_vie
 import 'package:home_workout_app/view_models/Register%20View%20Model/sign_up_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/create_exercise_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/create_workout_view_model.dart';
+import 'package:home_workout_app/view_models/Workout_View_Model/edit_workout_view_model.dart';
+import 'package:home_workout_app/view_models/Workout_View_Model/favorite_workouts_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/my_workouts_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/workout_list_view_model.dart';
 import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
@@ -81,7 +83,9 @@ import 'package:home_workout_app/views/Posts%20View/post_view.dart';
 import 'package:home_workout_app/views/User%20Information%20View/user_information_view.dart';
 import 'package:home_workout_app/views/Workout/create_workout_view.dart';
 import 'package:home_workout_app/views/Workout/edit_exercise_view.dart';
+import 'package:home_workout_app/views/Workout/edit_workout_view.dart';
 import 'package:home_workout_app/views/Workout/exercise_picker_view.dart';
+import 'package:home_workout_app/views/Workout/favorite_workouts_view.dart';
 import 'package:home_workout_app/views/Workout/my_workouts_view.dart';
 import 'package:home_workout_app/views/challenges/create_challenge_view.dart';
 import 'package:home_workout_app/views/challenges/general_challenges_view.dart';
@@ -175,6 +179,9 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AppControlViewModel()),
         ChangeNotifierProvider(create: (context) => SearchViewModel()),
         ChangeNotifierProvider(create: (context) => MyWorkoutsViewModel()),
+        ChangeNotifierProvider(create: (context) => EditworkoutViewModel()),
+        ChangeNotifierProvider(
+            create: (context) => favoriteWorkoutsViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -252,6 +259,8 @@ class Vigor extends StatelessWidget {
           '/appControl': (context) => AppControlView(),
           '/search': (context) => SearchView(),
           '/myWorkouts': (context) => MyWorkouts(),
+          '/editWorkout': (context) => EditWorkoutView(),
+          '/favoriteWorkouts': (context) => favoriteWorkoutsView(),
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,
