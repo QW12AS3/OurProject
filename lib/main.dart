@@ -273,7 +273,7 @@ class Vigor extends StatelessWidget {
           '/search': (context) => SearchView(),
           '/subscribedDiet': (context) => SubscribedDietView(),
           '/specificWorkout': (context) => SpecificWorkoutView(),
-          '/practice': (context) => PracticingView()
+          '/practice': (context) => PracticingView(),
 
           '/myWorkouts': (context) => MyWorkouts(),
           '/editWorkout': (context) => EditWorkoutView(),
