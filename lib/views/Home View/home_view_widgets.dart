@@ -297,7 +297,6 @@ class myDrawer extends StatelessWidget {
               ),
             ),
           ),
-
           Consumer<MobileHomeViewModel>(
             builder: (context, value, child) => value.getIsSummaryLoading
                 ? bigLoader(color: orangeColor)
@@ -317,7 +316,7 @@ class myDrawer extends StatelessWidget {
                       ),
                     ),
                   ),
-
+          ),
           InkWell(
             onTap: () {
               Navigator.pushNamed(context, '/favoriteWorkouts');
@@ -332,7 +331,6 @@ class myDrawer extends StatelessWidget {
                 color: blueColor,
               ),
             ),
-
           ),
           if (Provider.of<ProfileViewModel>(context, listen: true)
                       .getUserData
