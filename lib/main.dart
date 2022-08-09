@@ -28,12 +28,17 @@ import 'package:home_workout_app/view_models/Workout_View_Model/create_exercise_
 import 'package:home_workout_app/view_models/Workout_View_Model/create_workout_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/practicing_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/specific_workout_view_model.dart';
+
+import 'package:home_workout_app/view_models/Workout_View_Model/my_workouts_view_model.dart';
+import 'package:home_workout_app/view_models/Workout_View_Model/workout_list_view_model.dart';
+
 import 'package:home_workout_app/view_models/another_user_profile_view_model.dart';
 import 'package:home_workout_app/view_models/CV%20View%20Model/apply_view_model.dart';
 import 'package:home_workout_app/view_models/app_control_view_model.dart';
 import 'package:home_workout_app/view_models/comments_view_model.dart';
 import 'package:home_workout_app/view_models/create_challenge_view_model.dart';
 import 'package:home_workout_app/view_models/edit_profile_view_model.dart';
+import 'package:home_workout_app/view_models/exercise_list_view_model.dart';
 import 'package:home_workout_app/view_models/forget_password_view_model.dart';
 import 'package:home_workout_app/view_models/general_challenges_view_model.dart';
 import 'package:home_workout_app/view_models/health_record_view_model.dart';
@@ -83,8 +88,11 @@ import 'package:home_workout_app/views/User%20Information%20View/user_informatio
 import 'package:home_workout_app/views/Workout/create_workout_view.dart';
 import 'package:home_workout_app/views/Workout/edit_exercise_view.dart';
 import 'package:home_workout_app/views/Workout/exercise_picker_view.dart';
+ 
 import 'package:home_workout_app/views/Workout/practicing_view.dart';
 import 'package:home_workout_app/views/Workout/specific_workout_view.dart';
+
+import 'package:home_workout_app/views/Workout/my_workouts_view.dart';
 import 'package:home_workout_app/views/challenges/create_challenge_view.dart';
 import 'package:home_workout_app/views/challenges/general_challenges_view.dart';
 import 'package:home_workout_app/views/create_exercise_view.dart';
@@ -169,17 +177,17 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DietListViewModel()),
         ChangeNotifierProvider(create: (context) => EditDietViewModel()),
         ChangeNotifierProvider(create: (context) => SpecificDietViewModel()),
-
         ChangeNotifierProvider(create: (context) => CreateworkoutViewModel()),
         ChangeNotifierProvider(create: (context) => CreateExerciseViewModel()),
-        // ChangeNotifierProvider(create: (context) => CreateExerciseViewModel()),
-
+        ChangeNotifierProvider(create: (context) => exercisesListViewModel()),
         ChangeNotifierProvider(create: (context) => SavedDietsViewModel()),
+        ChangeNotifierProvider(create: (context) => WorkoutListViewModel()),
         ChangeNotifierProvider(create: (context) => AppControlViewModel()),
         ChangeNotifierProvider(create: (context) => SearchViewModel()),
         ChangeNotifierProvider(create: (context) => UserDietsViewModel()),
         ChangeNotifierProvider(create: (context) => SpecificWorkoutViewModel()),
         ChangeNotifierProvider(create: (context) => PracticingViewModel()),
+        ChangeNotifierProvider(create: (context) => MyWorkoutsViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
@@ -259,6 +267,8 @@ class Vigor extends StatelessWidget {
           '/subscribedDiet': (context) => SubscribedDietView(),
           '/specificWorkout': (context) => SpecificWorkoutView(),
           '/practice': (context) => PracticingView()
+
+          '/myWorkouts': (context) => MyWorkouts(),
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,

@@ -45,7 +45,6 @@ class _StartViewState extends State<StartView> {
     }
   }
 
-
   FirebaseMessaging _firebaseMessage =
       FirebaseMessaging.instance; //TODO: delete
 
@@ -79,7 +78,6 @@ class _StartViewState extends State<StartView> {
       print("onBackgroundMessage: $message");
     });
   }
-
 
   @override
   void dispose() {
@@ -468,21 +466,21 @@ class _StartViewState extends State<StartView> {
                                                   'assets/images/google.png'))
                                           : mediumLoader(color: orangeColor),
                                     ))),
-                            IconButton(
-                              //TODO: DELETE OR ADD
-                              onPressed: () {
-                                Navigator.of(context).pushReplacementNamed(
-                                  '/home',
-                                  // arguments: {
-                                  //   'code': 'BackEndMessage.forgetPasswordCode'
-                                  // }
-                                );
-                              },
-                              icon: Image.asset(
-                                'assets/images/facebook.png',
-                              ),
-                              //   iconSize: mq.size.width * 0.01,
-                            ),
+                            // IconButton(
+                            //   //TODO: DELETE OR ADD
+                            //   onPressed: () {
+                            //     Navigator.of(context).pushReplacementNamed(
+                            //         '/resetPassword',
+                            //         arguments: {
+                            //           'code':
+                            //               'BackEndMessage.forgetPasswordCode'
+                            //         });
+                            //   },
+                            //   icon: Image.asset(
+                            //     'assets/images/facebook.png',
+                            //   ),
+                            //   //   iconSize: mq.size.width * 0.01,
+                            // ),
                           ],
                         ),
                       ),
@@ -491,12 +489,12 @@ class _StartViewState extends State<StartView> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            TextButton(
-                                onPressed: () {}, //TODO:
-                                child: Text(
-                                  ' Skip > '.tr(),
-                                  style: theme.textTheme.bodySmall,
-                                ))
+                            // TextButton(
+                            //     onPressed: () {}, //TODO:
+                            //     child: Text(
+                            //       ' Skip > '.tr(),
+                            //       style: theme.textTheme.bodySmall,
+                            //     ))
                           ],
                         ),
                       ),

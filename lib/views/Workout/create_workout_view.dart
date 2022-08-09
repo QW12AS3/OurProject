@@ -9,6 +9,7 @@ import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/create_workout_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/create_workout_view_model.dart';
+import 'package:home_workout_app/view_models/exercise_list_view_model.dart';
 import 'package:provider/provider.dart';
 
 class CreateWorkoutView extends StatefulWidget {
@@ -132,7 +133,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                   ),
                                 ),
                                 inputFormatters: [
-                                  LengthLimitingTextInputFormatter(20),
+                                  LengthLimitingTextInputFormatter(40),
                                 ],
                                 style: TextStyle(
                                     color: blueColor,
@@ -140,7 +141,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                     fontWeight: FontWeight.bold),
                                 // maxLines: 5,
                                 keyboardType: TextInputType.name,
-                                textInputAction: TextInputAction.next,
+                                textInputAction: TextInputAction.done,
                               ),
                             ),
                           ])),
@@ -296,9 +297,9 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                           padding: const EdgeInsets.all(8.0),
                           child: TextButton(
                               onPressed: () async {
-                                final mealsId = await Navigator.pushNamed(
+                                final workoutsId = await Navigator.pushNamed(
                                     context, '/exercisesPicker') as List;
-                                mealsId.forEach((element) {
+                                workoutsId.forEach((element) {
                                   Provider.of<CreateworkoutViewModel>(context,
                                           listen: false)
                                       .addToExercises(element);
@@ -317,54 +318,152 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                       SizedBox(
                         height: mq.size.height * 0.05,
                       ),
-                      //          Consumer<CreateworkoutViewModel>(
-                      // builder: ((context, value, _) => value.pickedExercisesIDs.isEmpty
-                      //       ? const Text('')
-                      //       : ListBody(
-                      //           children: value.pickedExercisesIDs
-                      //               .where((element) =>
-                      //                   value.pickedExercisesIDs.contains(element.id))
-                      //               .map(
-                      //                 (e) => Dismissible(
-                      //                   key: Key(e.id.toString()),
-                      //                   onDismissed: (direction) {
-                      //                     (e.id);
-                      //                   },
-                      //                   child: Container(
-                      //                     padding: const EdgeInsets.all(8),
-                      //                     margin: const EdgeInsets.all(8),
-                      //                     decoration: BoxDecoration(
-                      //                         border:
-                      //                             Border.all(color: blueColor, width: 1),
-                      //                         borderRadius: BorderRadius.circular(15)),
-                      //                     child: ListTile(
-                      //                       title: Text(
-                      //                         e.name,
-                      //                         style: theme.textTheme.bodySmall!.copyWith(
-                      //                             color: orangeColor, fontSize: 17),
-                      //                       ),
-                      //                       subtitle: Text(
-                      //                         '${e.} ',
-                      //                         style: theme.textTheme.bodySmall!.copyWith(
-                      //                             color: greyColor, fontSize: 12),
-                      //                       ),
-                      //                       leading: CircleAvatar(
-                      //                         radius: 50,
-                      //                         backgroundImage: NetworkImage(
-                      //                           e.,
-                      //                         ),
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //               )
-                      //               .toList(),
-                      //         )
-                      // ),)
+                      Consumer2<CreateworkoutViewModel, exercisesListViewModel>(
+                        builder: (context, workout, exercises, child) => workout
+                                .getPickedExercises.isEmpty
+                            ? const Text('')
+                            : ListBody(
+                                children: exercises.getexercisesList
+                                    .where((element) =>
+                                        workout.containIdInExercises(
+                                            element.id!.toInt()))
+                                    .map(
+                                      (e) => Dismissible(
+                                        key: Key(e.id.toString()),
+                                        onDismissed: (direction) {
+                                          workout.removeFromExercises(
+                                              e.id!.toInt());
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(8),
+                                          margin: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: blueColor, width: 1),
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          child: Column(
+                                            children: [
+                                              ListTile(
+                                                title: Text(
+                                                  e.name.toString(),
+                                                  style: theme
+                                                      .textTheme.bodySmall!
+                                                      .copyWith(
+                                                          color: orangeColor,
+                                                          fontSize: 17),
+                                                ),
+                                                subtitle: Text(
+                                                  '${e.desc} ',
+                                                  style: theme
+                                                      .textTheme.bodySmall!
+                                                      .copyWith(
+                                                          color: greyColor,
+                                                          fontSize: 12),
+                                                ),
+                                                leading: CircleAvatar(
+                                                  radius: 50,
+                                                  // backgroundImage: NetworkImage(e
+                                                  //             .exercise_img
+                                                  //             .toString()
+                                                  //             .substring(
+                                                  //                 0, 4) !=
+                                                  //         'http'
+                                                  //     ? '$ip/${e.exercise_img}'
+                                                  //     : e.exercise_img
+                                                  //         .toString()),
+                                                ),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Text(
+                                                    'Count',
+                                                    style: TextStyle(
+                                                        color: blueColor),
+                                                  ),
+                                                  Switch(
+                                                    inactiveTrackColor:
+                                                        orangeColor,
+                                                    activeTrackColor:
+                                                        orangeColor,
+                                                    inactiveThumbColor:
+                                                        orangeColor,
+                                                    activeColor: orangeColor,
+                                                    value: Provider.of<
+                                                                CreateworkoutViewModel>(
+                                                            context,
+                                                            listen: true)
+                                                        .getSwitchVal(
+                                                            e.id!.toInt()),
+                                                    onChanged: (bool Val) {
+                                                      Provider.of<CreateworkoutViewModel>(
+                                                              context,
+                                                              listen: false)
+                                                          .changeSwitchState(
+                                                              Val,
+                                                              e.id!.toInt());
+                                                      print(Provider.of<
+                                                                  CreateworkoutViewModel>(
+                                                              context,
+                                                              listen: false)
+                                                          .getSwitchVal(
+                                                              e.id!.toInt()));
+                                                    },
+                                                  ),
+                                                  Text(
+                                                    'Time',
+                                                    style: TextStyle(
+                                                        color: blueColor),
+                                                  ),
+                                                ],
+                                              ),
+                                              Text(Provider.of<
+                                                          CreateworkoutViewModel>(
+                                                      context)
+                                                  .getCountVal(e.id!.toInt())
+                                                  .toString()),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  ElevatedButton(
+                                                      onPressed: () {
+                                                        Provider.of<CreateworkoutViewModel>(
+                                                                context,
+                                                                listen: false)
+                                                            .decreaseCount(
+                                                                e.id!.toInt());
+                                                      },
+                                                      child:
+                                                          Icon(Icons.remove)),
+                                                  ElevatedButton(
+                                                      onPressed: () {
+                                                        Provider.of<CreateworkoutViewModel>(
+                                                                context,
+                                                                listen: false)
+                                                            .increaseCount(
+                                                                e.id!.toInt());
+                                                      },
+                                                      child: Icon(Icons.add)),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                      ),
                       ElevatedButton(
                           onPressed: () async {
                             if (formGlobalKey.currentState!.validate()) {
                               formGlobalKey.currentState!.save();
+                              print('ddddddddddddd');
                               final CreateworkoutModel BackEndMessage =
                                   await CreateworkoutViewModel()
                                       .postWorkoutInfo(
@@ -372,7 +471,8 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                           Provider.of<CreateworkoutViewModel>(
                                                   context,
                                                   listen: false)
-                                              .dropDownNewValue,
+                                              .getIdOfDropDownValue()
+                                              .toString(),
                                           Provider.of<CreateworkoutViewModel>(
                                                   context,
                                                   listen: false)
@@ -381,8 +481,12 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                           Provider.of<CreateworkoutViewModel>(
                                                   context,
                                                   listen: false)
-                                              .getIdOfDifficultyDropDownValue(),
-                                          [''],
+                                              .getIdOfDifficultyDropDownValue()
+                                              .toString(),
+                                          Provider.of<CreateworkoutViewModel>(
+                                                  context,
+                                                  listen: false)
+                                              .getPickedExercises, //TODO:
                                           context.locale == Locale('en')
                                               ? 'en'
                                               : 'ar');

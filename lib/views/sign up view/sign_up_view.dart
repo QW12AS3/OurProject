@@ -801,25 +801,25 @@ class SignUp extends StatelessWidget {
                                               'assets/images/google.png'))
                                       : mediumLoader(color: orangeColor),
                                 ))),
-                        IconButton(
-                          onPressed: () {
-                            // Navigator.of(context).pushReplacementNamed(
-                            //   '/forgetPassword',
-                            // );
-                            // Navigator.of(context).pushReplacementNamed('/otp',
-                            //     arguments: {'state': 'forget password'});
+                        // IconButton(
+                        //   onPressed: () {
+                        //     // Navigator.of(context).pushReplacementNamed(
+                        //     //   '/forgetPassword',
+                        //     // );
+                        //     // Navigator.of(context).pushReplacementNamed('/otp',
+                        //     //     arguments: {'state': 'forget password'});
 
-                            Navigator.of(context).pushNamed('/resetPassword',
-                                arguments: {
-                                  'code': 'BackEndMessage.forgetPasswordCode'
-                                });
-                            print(context.locale == Locale('en') ? 'en' : 'ar');
-                          },
-                          icon: Image.asset(
-                            'assets/images/facebook.png',
-                          ),
-                          //   iconSize: mq.size.width * 0.01,
-                        ),
+                        //     Navigator.of(context).pushNamed('/resetPassword',
+                        //         arguments: {
+                        //           'code': 'BackEndMessage.forgetPasswordCode'
+                        //         });
+                        //     print(context.locale == Locale('en') ? 'en' : 'ar');
+                        //   },
+                        //   icon: Image.asset(
+                        //     'assets/images/facebook.png',
+                        //   ),
+                        //   //   iconSize: mq.size.width * 0.01,
+                        // ),
                       ],
                     ),
                   ),
@@ -828,12 +828,12 @@ class SignUp extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        TextButton(
-                            onPressed: () {}, //TODO:
-                            child: Text(
-                              ' Skip > '.tr(),
-                              style: theme.textTheme.bodySmall,
-                            ))
+                        // TextButton(
+                        //     onPressed: () {}, //TODO:
+                        //     child: Text(
+                        //       ' Skip > '.tr(),
+                        //       style: theme.textTheme.bodySmall,
+                        //     ))
                       ],
                     ),
                   ),

@@ -73,8 +73,16 @@ class CreateChallengesViewModel with ChangeNotifier {
     return (hours! * 60) + minuites!;
   }
 
-  resetImage() {
+  resetData() {
     userImage = XFile('');
+    dropDownList = [];
+    dropDownNewValue = '';
+    fetchedList = false;
+    isTime = false;
+    challengeDate = DateTime.now();
+    hours = 0;
+    minuites = 0;
+    ConvertedFuturechallengesList?.clear();
     notifyListeners();
   }
 
