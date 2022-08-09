@@ -297,6 +297,21 @@ class myDrawer extends StatelessWidget {
               ),
             ),
           ),
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, '/myWorkouts');
+            },
+            child: ListTile(
+              title: Text(
+                'My Workouts',
+                style: theme.textTheme.bodySmall,
+              ).tr(),
+              trailing: Icon(
+                Icons.star_rate_rounded,
+                color: blueColor,
+              ),
+            ),
+          ),
           if (Provider.of<ProfileViewModel>(context, listen: true)
                       .getUserData
                       .roleId ==

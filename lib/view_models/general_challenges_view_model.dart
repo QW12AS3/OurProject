@@ -30,10 +30,10 @@ class GeneralChallengesViewModel with ChangeNotifier {
     isLoading = false;
   }
 
-  getData(String lang, int page, String linkTupe) async {
+  getData(String lang, int page, String linkType) async {
     isLoading = true;
     setfuturechallengesList(
-        await GeneralChallengesAPI().getUserchallenges(lang, page, linkTupe));
+        await GeneralChallengesAPI().getUserchallenges(lang, page, linkType));
     increasePages();
     notifyListeners();
     // return futurechallengesList;
@@ -44,8 +44,8 @@ class GeneralChallengesViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  getSpecificChallengeData(String lang, int? page, String linkTupe) {
-    GeneralChallengesAPI().getUserchallenges(lang, page, linkTupe);
+  getSpecificChallengeData(String lang, int? page, String linkType) {
+    GeneralChallengesAPI().getUserchallenges(lang, page, linkType);
     notifyListeners();
   }
 

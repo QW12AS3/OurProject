@@ -43,6 +43,8 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
     // futurechallengesList = GeneralChallengesViewModel().getData('en', 1);
     // print(futurechallengesList);
     Future.delayed(Duration.zero).then((value) async {
+      Provider.of<CreateChallengesViewModel>(context, listen: false)
+          .resetData();
       futurechallengesList =
           Provider.of<CreateChallengesViewModel>(context, listen: false)
               .getData(context.locale == Locale('en') ? 'en' : 'ar', 0);
@@ -722,7 +724,7 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
                                       Provider.of<CreateChallengesViewModel>(
                                               context,
                                               listen: false)
-                                          .resetImage();
+                                          .resetData();
                                       Navigator.of(context).pop();
                                     }
                                     // print(Provider.of<CreateChallengesViewModel>(

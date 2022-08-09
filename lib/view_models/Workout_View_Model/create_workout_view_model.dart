@@ -61,7 +61,7 @@ class CreateworkoutViewModel with ChangeNotifier {
     });
 
     if (!exist) {
-      _pickedExercisesIDs.add({'id': i, 'isTime': false, 'value': 5});
+      _pickedExercisesIDs.add({'id': i, 'isTime': false, 'value': 10});
     }
     // if (!_pickedExercisesIDs.contains(i)) {
     //   _pickedExercisesIDs.add(i);
@@ -79,9 +79,14 @@ class CreateworkoutViewModel with ChangeNotifier {
     return false;
   }
 
-  void removeFromExercises(int i) {
-    if (_pickedExercisesIDs.contains(i)) {
-      _pickedExercisesIDs.removeWhere((element) => element == i);
+  void removeFromExercises(int id) {
+    // if (_pickedExercisesIDs.contains(i)) {
+    //   _pickedExercisesIDs.removeWhere((element) => element == i);
+    // }
+    for (int i = 0; i < _pickedExercisesIDs.length; i++) {
+      if (_pickedExercisesIDs[i]['id'] == id) {
+        _pickedExercisesIDs.removeAt(i);
+      }
     }
     notifyListeners();
   }
@@ -207,15 +212,10 @@ class CreateworkoutViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  changeSwitchState() {
-    switchValue = !switchValue;
-    // notifyListeners();
-  }
-
   void decreaseCount(int id) {
     for (int i = 0; i < _pickedExercisesIDs.length; i++) {
       if (_pickedExercisesIDs[i]['id'] == id &&
-          _pickedExercisesIDs[i]['value'] > 2) {
+          _pickedExercisesIDs[i]['value'] > 1) {
         _pickedExercisesIDs[i]['value']--;
       }
     }
@@ -240,9 +240,28 @@ class CreateworkoutViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  getSwitchVal(int id) {
+    for (int i = 0; i < _pickedExercisesIDs.length; i++) {
+      if (_pickedExercisesIDs[i]['id'] == id) {
+        return _pickedExercisesIDs[i]['isTime'];
+      }
+    }
+    notifyListeners();
+  }
+
+  changeSwitchState(bool Val, int id) {
+    for (int i = 0; i < _pickedExercisesIDs.length; i++) {
+      if (_pickedExercisesIDs[i]['id'] == id) {
+        _pickedExercisesIDs[i]['isTime'] = Val;
+      }
+    }
+    notifyListeners();
+  }
+
   // bool get getIsFetched => fetchedExercisesList;
   // List<CreateworkoutModel>? get exercisesList => ConvertedFutureExercisesList;
 
   List get getPickedExercises => _pickedExercisesIDs;
   bool get getIsLoading => _isLoading;
+  bool get getswitchValue => switchValue;
 }
