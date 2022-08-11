@@ -134,7 +134,7 @@ class _SearchViewState extends State<SearchView> {
                       : Text(
                           'Go',
                           style: theme.textTheme.bodySmall,
-                        ))
+                        ).tr())
             ],
           ),
         ),

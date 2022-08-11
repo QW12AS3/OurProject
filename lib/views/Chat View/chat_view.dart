@@ -159,19 +159,25 @@ class _ChatViewState extends State<ChatView> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Consumer<ChatViewModel>(
-          builder: (context, chat, child) => Row(
-            children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(chat.getChat.userImg),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                chat.getChat.userName,
-                style: theme.textTheme.bodySmall!.copyWith(color: blueColor),
-              ).tr(),
-            ],
+          builder: (context, chat, child) => InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, '/anotherUserProfile',
+                  arguments: {'id': chat.getChat.userId});
+            },
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: NetworkImage(chat.getChat.userImg),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  chat.getChat.userName,
+                  style: theme.textTheme.bodySmall!.copyWith(color: blueColor),
+                ).tr(),
+              ],
+            ),
           ),
         ),
       ),

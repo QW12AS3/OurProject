@@ -22,7 +22,7 @@ class _SettingsViewState extends State<SettingsView> {
 
     Future.delayed(Duration.zero).then((value) {
       Provider.of<SettingsViewModel>(context, listen: false)
-          .setLang(getLang(context) == 'en' ? true : false, context);
+          .setLangFirstTime(context);
     });
   }
 
@@ -40,6 +40,18 @@ class _SettingsViewState extends State<SettingsView> {
         child: Consumer<SettingsViewModel>(
           builder: (context, settings, child) => Column(
             children: [
+              Align(
+                alignment: context.locale == Locale('en')
+                    ? Alignment.bottomLeft
+                    : Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Language:',
+                    style: theme.textTheme.bodyMedium,
+                  ).tr(),
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -50,8 +62,14 @@ class _SettingsViewState extends State<SettingsView> {
                     width: 5,
                   ),
                   Switch(
-                    value: settings.getLang ? true : false,
-                    onChanged: (value) {},
+                    activeColor: orangeColor,
+                    inactiveThumbColor: orangeColor,
+                    thumbColor: MaterialStateProperty.all(orangeColor),
+                    inactiveTrackColor: orangeColor.withOpacity(0.5),
+                    value: settings.getLang ? false : true,
+                    onChanged: (_) {
+                      settings.setLang(context);
+                    },
                   ),
                   const SizedBox(
                     width: 5,
@@ -59,6 +77,45 @@ class _SettingsViewState extends State<SettingsView> {
                   Text('Arabic',
                       style: theme.textTheme.bodySmall!.copyWith(
                           color: !settings.getLang ? orangeColor : greyColor)),
+                ],
+              ),
+              Align(
+                alignment: context.locale == Locale('en')
+                    ? Alignment.bottomLeft
+                    : Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Theme:',
+                    style: theme.textTheme.bodyMedium,
+                  ).tr(),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Light',
+                      style: theme.textTheme.bodySmall!.copyWith(
+                          color: settings.getTheme ? orangeColor : greyColor)),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Switch(
+                    activeColor: orangeColor,
+                    inactiveThumbColor: orangeColor,
+                    thumbColor: MaterialStateProperty.all(orangeColor),
+                    inactiveTrackColor: orangeColor.withOpacity(0.5),
+                    value: settings.getTheme ? false : true,
+                    onChanged: (_) {
+                      settings.setTheme(context);
+                    },
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text('Dark',
+                      style: theme.textTheme.bodySmall!.copyWith(
+                          color: !settings.getTheme ? orangeColor : greyColor)),
                 ],
               ),
             ],
