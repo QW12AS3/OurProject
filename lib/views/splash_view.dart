@@ -35,12 +35,15 @@ class _SplashViewState extends State<SplashView> {
           ((sharedPreferences.getBool('is_verified') == true) ||
               (sharedPreferences.getBool('googleProvider') == true))) {
         print(sharedPreferences.getBool('is_info'));
+
+        ////remove here if error
         Future.delayed(Duration.zero).then((_) {
           Provider.of<MobileHomeViewModel>(context, listen: false)
               .getSummaryData(lang: getLang(context), context: context);
           Provider.of<ProfileViewModel>(context, listen: false)
               .setCurrentUserData(context);
         });
+        ////remove here if error
         Navigator.pushReplacementNamed(context, '/home');
       } else if (sharedPreferences.getBool('registered') == true &&
           sharedPreferences.getBool('is_verified') != true &&
@@ -77,12 +80,14 @@ class _SplashViewState extends State<SplashView> {
           print(message.data['page']);
           if (sharedPreferences.getBool('registered') == true &&
               sharedPreferences.getBool('is_info') == true) {
+            ////remove here if error
             Future.delayed(Duration.zero).then((_) {
               Provider.of<MobileHomeViewModel>(context, listen: false)
                   .getSummaryData(lang: getLang(context), context: context);
               Provider.of<ProfileViewModel>(context, listen: false)
                   .setCurrentUserData(context);
             });
+            ////remove here if error
             Navigator.pushReplacementNamed(context, '/home');
           }
         }
