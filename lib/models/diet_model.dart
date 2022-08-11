@@ -35,6 +35,7 @@ class DietModel {
     reviewd = json['is_reviewed'] ?? false;
 
     userId = json['created_by']['id'] ?? 0;
+    log('UserId: $userId');
     userImg = json['created_by']['prof_img_url'] ?? '';
     if (userImg.substring(0, 4) != 'http') userImg = '$ip/$userImg';
     print(userImg);

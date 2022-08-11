@@ -198,7 +198,7 @@ class _DietPageState extends State<DietPage> {
                                                                     listen:
                                                                         false)
                                                                 .getUserData
-                                                                .roleId ==
+                                                                .id ==
                                                             e.userId)
                                                       PopupMenuItem(
                                                           value: 'edit',
@@ -224,7 +224,7 @@ class _DietPageState extends State<DietPage> {
                                                                     listen:
                                                                         false)
                                                                 .getUserData
-                                                                .roleId ==
+                                                                .id ==
                                                             e.userId)
                                                       PopupMenuItem(
                                                           value: 'delete',

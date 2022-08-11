@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/components.dart';
@@ -43,7 +45,9 @@ class _MobileHomeViewState extends State<MobileHomeView>
           .getSummaryData(lang: getLang(context), context: context);
 
       final args = ModalRoute.of(context)!.settings.arguments as Map;
+      //log('Page ${args['page']}');
       if (args['page'] != null) {
+        //log('Page ${args['page']}');
         _tabController.animateTo(args['page']);
       }
     });
@@ -235,6 +239,12 @@ class _MobileHomeViewState extends State<MobileHomeView>
                           ),
                         ),
                   actions: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/chatList');
+                      },
+                      icon: const Icon(Icons.chat),
+                    ),
                     IconButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/search');

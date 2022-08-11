@@ -633,24 +633,25 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ),
                     )),
               ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/changePassword');
-                  },
-                  child: ListTile(
-                    title: Text(
-                      'Change password',
-                      style: theme.textTheme.bodySmall,
-                    ).tr(),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      color: blueColor,
-                      size: 15,
-                    ),
-                  )),
-            ),
+            if (sharedPreferences.getBool('googleProvider') == false)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/changePassword');
+                    },
+                    child: ListTile(
+                      title: Text(
+                        'Change password',
+                        style: theme.textTheme.bodySmall,
+                      ).tr(),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: blueColor,
+                        size: 15,
+                      ),
+                    )),
+              ),
             Consumer<EditProfileViewModel>(
               builder: (context, value, child) => value.getIsLoading
                   ? bigLoader(color: orangeColor)

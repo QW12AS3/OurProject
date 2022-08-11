@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/diet_model.dart';
+import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Api services/diet_api.dart';
@@ -39,6 +40,20 @@ class SpecificDietViewModel with ChangeNotifier {
       id: dietId,
     );
     if (response['success']) {
+      Provider.of<MobileHomeViewModel>(context, listen: false)
+          .getSummaryData(lang: getLang(context), context: context);
+      if (Provider.of<MobileHomeViewModel>(context, listen: false)
+              .getSummary
+              .dietId ==
+          0)
+        // ignore: curly_braces_in_flow_control_structures
+        Provider.of<MobileHomeViewModel>(context, listen: false)
+            .setDietId(dietId);
+      else {
+        Provider.of<MobileHomeViewModel>(context, listen: false).setDietId(0);
+        Navigator.pop(context);
+      }
+
       _diet.subscribed = !_diet.subscribed;
       notifyListeners();
     } else {

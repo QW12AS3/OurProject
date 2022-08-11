@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/CV%20View%20Model/edit_apply_view_model.dart';
+import 'package:home_workout_app/view_models/Chat%20View%20Model/chat_list_view_model.dart';
+import 'package:home_workout_app/view_models/Chat%20View%20Model/chat_view_model.dart';
 import 'package:home_workout_app/view_models/Dashboards%20View%20Model/dashboards_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/create_diet_view_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/diet_list_view_model.dart';
@@ -30,6 +32,7 @@ import 'package:home_workout_app/view_models/Workout_View_Model/edit_exercise_vi
 
 import 'package:home_workout_app/view_models/Workout_View_Model/edit_workout_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/favorite_workouts_view_model.dart';
+import 'package:home_workout_app/view_models/Workout_View_Model/finish_workout_view_model.dart';
 
 import 'package:home_workout_app/view_models/Workout_View_Model/practicing_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/specific_workout_view_model.dart';
@@ -51,6 +54,7 @@ import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/view_models/reset_password_view_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/saved_posts_view_model.dart';
 import 'package:home_workout_app/view_models/search_view_model.dart';
+import 'package:home_workout_app/view_models/settings_view_mode.dart';
 import 'package:home_workout_app/view_models/start_view_model.dart';
 import 'package:home_workout_app/view_models/user_information_view_model.dart';
 import 'package:home_workout_app/views/Add%20Health%20Record%20View/add_health_record_view.dart';
@@ -63,6 +67,8 @@ import 'package:home_workout_app/views/Apply%20CV%20View/pdf_view.dart';
 
 import 'package:home_workout_app/views/Change%20Email%20View/change_email_view.dart';
 import 'package:home_workout_app/views/Change%20Password%20View/change_password_view.dart';
+import 'package:home_workout_app/views/Chat%20View/chat_list_view.dart';
+import 'package:home_workout_app/views/Chat%20View/chat_view.dart';
 import 'package:home_workout_app/views/Comments%20View/comments_view.dart';
 import 'package:home_workout_app/views/Dashboards%20View/cvs_dashbaord.dart';
 import 'package:home_workout_app/views/Dashboards%20View/dashboard_view.dart';
@@ -95,6 +101,7 @@ import 'package:home_workout_app/views/Workout/edit_workout_view.dart';
 import 'package:home_workout_app/views/Workout/exercise_picker_view.dart';
 
 import 'package:home_workout_app/views/Workout/favorite_workouts_view.dart';
+import 'package:home_workout_app/views/Workout/finished_workout_view.dart';
 import 'package:home_workout_app/views/Workout/practicing_view.dart';
 import 'package:home_workout_app/views/Workout/specific_workout_view.dart';
 import 'package:home_workout_app/views/Workout/my_workouts_view.dart';
@@ -107,6 +114,7 @@ import 'package:home_workout_app/views/otp_view.dart';
 import 'package:home_workout_app/views/reset_password_view.dart';
 import 'package:home_workout_app/views/saved_posts_view.dart';
 import 'package:home_workout_app/views/search_view.dart';
+import 'package:home_workout_app/views/settings_view.dart';
 import 'package:home_workout_app/views/sign%20in%20view/sigin_view.dart';
 import 'package:home_workout_app/views/sign%20up%20view/sign_up_view.dart';
 import 'package:home_workout_app/views/splash_view.dart';
@@ -194,6 +202,10 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => PracticingViewModel()),
         ChangeNotifierProvider(create: (context) => MyWorkoutsViewModel()),
         ChangeNotifierProvider(create: (context) => EditworkoutViewModel()),
+        ChangeNotifierProvider(create: (context) => SettingsViewModel()),
+        ChangeNotifierProvider(create: (context) => FinishWorkoutViewModel()),
+        ChangeNotifierProvider(create: (context) => ChatViewModel()),
+        ChangeNotifierProvider(create: (context) => ChatListViewModel()),
         ChangeNotifierProvider(create: (context) => EditExerciseViewModel()),
         ChangeNotifierProvider(
             create: (context) => favoriteWorkoutsViewModel()),
@@ -244,7 +256,7 @@ class Vigor extends StatelessWidget {
           '/editPostView': (context) => EditPostView(),
           '/challenges': (context) => GeneralChallengesView(),
           '/createChallenge': (context) => CreateChallengeView(),
-          // '/': (context) => IPView()
+          '/': (context) => IPView(),
           '/apply': (context) => ApplyView(),
           '/pdf': (context) => PDFView(),
           '/cv': (context) => CVView(),
@@ -279,6 +291,10 @@ class Vigor extends StatelessWidget {
           '/myWorkouts': (context) => MyWorkouts(),
           '/editWorkout': (context) => EditWorkoutView(),
           '/favoriteWorkouts': (context) => favoriteWorkoutsView(),
+          '/settings': (context) => SettingsView(),
+          '/finishWorkout': (context) => FinishWorkoutView(),
+          '/chat': (context) => ChatView(),
+          '/chatList': (context) => ChatListView()
         },
         title: 'Vigor',
         debugShowCheckedModeBanner: false,

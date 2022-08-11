@@ -23,6 +23,8 @@ class _AddHealthRecordViewState extends State<AddHealthRecordView> {
     Future.delayed(Duration.zero).then((value) {
       Provider.of<HealthRecordViewModel>(context, listen: false)
           .setDiseases(context.locale == const Locale('en') ? 'en' : 'ar');
+      Provider.of<HealthRecordViewModel>(context, listen: false)
+          .setSearchVal('');
     });
   }
 
@@ -180,6 +182,7 @@ class _AddHealthRecordViewState extends State<AddHealthRecordView> {
                   child: Column(
                     children: consumer.getDiseases
                         .where((element) {
+                          if (consumer.getSearchVal.isEmpty) return true;
                           return element['name']
                               .toString()
                               .toLowerCase()

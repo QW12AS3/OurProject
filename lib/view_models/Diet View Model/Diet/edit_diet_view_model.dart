@@ -78,7 +78,13 @@ class EditDietViewModel with ChangeNotifier {
       showSnackbar(Text('Meals cannot be empty').tr(), context);
       return;
     }
-
+    for (int i = 0; i < getMeals.length; i++) {
+      if (getMeals[i].isEmpty) {
+        log('ttttt');
+        showSnackbar(Text('Meals cannot be empty').tr(), context);
+        return;
+      }
+    }
     setIsLoading(true);
     final response = await DietAPI()
         .updateDiet(id: id, meals: getMeals, lang: lang, name: name);
