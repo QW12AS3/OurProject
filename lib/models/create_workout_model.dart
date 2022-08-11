@@ -85,6 +85,7 @@ class CreateworkoutModel {
         'categorie_id': categorie_id,
         'difficulty': difficulty,
         'equipment': equipment,
+        'description': desc,
         'excersises': jsonEncode(excersisesList)
       };
 }

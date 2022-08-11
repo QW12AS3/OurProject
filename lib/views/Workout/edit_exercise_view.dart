@@ -7,7 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/create_exercise_model.dart';
-import 'package:home_workout_app/view_models/Workout_View_Model/create_exercise_view_model.dart';
+import 'package:home_workout_app/view_models/Workout_View_Model/edit_exercise_view_model.dart';
+import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
   TextEditingController BurnCaloriesController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  String imageURL = '';
   var argu; //Is the main
   @override
   void initState() {
@@ -31,7 +33,9 @@ class _EditExerciseViewState extends State<EditExerciseView> {
     Future.delayed(Duration.zero).then((value) {
       final args = ModalRoute.of(context)!.settings.arguments as Map;
       argu = args;
+
       setState(() {
+        imageURL = argu['image'];
         BurnCaloriesController.text = args['burn calories'] ?? '';
         nameController.text = args['name'] ?? '';
         descriptionController.text = args['description'] ?? '';
@@ -72,7 +76,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                           child: TextFormField(
                             controller: nameController,
                             validator: (value) {
-                              return CreateExerciseViewModel().checkName(
+                              return EditExerciseViewModel().checkName(
                                   value.toString(),
                                   context.locale == Locale('en') ? 'en' : 'ar');
                             },
@@ -139,7 +143,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                           child: TextFormField(
                             controller: descriptionController,
                             validator: (value) {
-                              return CreateExerciseViewModel().checkDescription(
+                              return EditExerciseViewModel().checkDescription(
                                   value.toString(),
                                   context.locale == Locale('en') ? 'en' : 'ar');
                             },
@@ -211,7 +215,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                             ],
                             controller: BurnCaloriesController,
                             validator: (value) {
-                              return CreateExerciseViewModel().checkCalories(
+                              return EditExerciseViewModel().checkCalories(
                                   value.toString(),
                                   context.locale == Locale('en') ? 'en' : 'ar');
                             },
@@ -263,7 +267,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                         Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: mq.size.width * 0.1),
-                          child: Consumer<CreateExerciseViewModel>(
+                          child: Consumer<EditExerciseViewModel>(
                             builder: (context, value, child) => Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -274,7 +278,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                                         width: 150,
                                         child: Image.file(
                                           File(
-                                            Provider.of<CreateExerciseViewModel>(
+                                            Provider.of<EditExerciseViewModel>(
                                                     context)
                                                 .userImage
                                                 .path,
@@ -284,17 +288,29 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                                           fit: BoxFit.cover,
                                         ),
                                       )
-                                    : Container(),
+                                    : Container(
+                                        height: 150,
+                                        width: 150,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                          image: NetworkImage(
+                                            // imageURL
+                                            //               .toString()
+                                            //               .substring(0, 4) !=
+                                            //           'http'
+                                            //       ? '$ip/${imageURL}'
+                                            //       : imageURL.toString()
+                                            imageURL,
+                                          ),
+                                        )),
+                                      ),
                                 ElevatedButton(
                                     onPressed: () async {
                                       buildDialog(context);
                                       print(value.userImage == null);
                                       print(value.userImage.path == '');
                                     },
-                                    child: Text(value.userImage != null &&
-                                            value.userImage.path != ''
-                                        ? 'Change photo'
-                                        : 'Add photo'))
+                                    child: Text('Change photo'))
                               ],
                             ),
                           ),
@@ -305,18 +321,18 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                         ElevatedButton(
                             onPressed: () async {
                               // final CreateExerciseModel BackEndMessage =
-                              //     await CreateExerciseViewModel().postExerciseInfo(
+                              //     await EditExerciseViewModel().postExerciseInfo(
                               //         'nameController.text',
                               //         '10',
-                              //         Provider.of<CreateExerciseViewModel>(context,
+                              //         Provider.of<EditExerciseViewModel>(context,
                               //                 listen: false)
                               //             .userImage,
                               //         context.locale == Locale('en') ? 'en' : 'ar');
-                              if (Provider.of<CreateExerciseViewModel>(context,
+                              if (Provider.of<EditExerciseViewModel>(context,
                                               listen: false)
                                           .userImage !=
                                       null &&
-                                  Provider.of<CreateExerciseViewModel>(context,
+                                  Provider.of<EditExerciseViewModel>(context,
                                               listen: false)
                                           .userImage
                                           .path !=
@@ -324,12 +340,12 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                                 if (formGlobalKey.currentState!.validate()) {
                                   formGlobalKey.currentState!.save();
                                   final CreateExerciseModel BackEndMessage =
-                                      await CreateExerciseViewModel()
+                                      await EditExerciseViewModel()
                                           .postExerciseInfo(
                                               nameController.text,
                                               descriptionController.text,
                                               BurnCaloriesController.text,
-                                              Provider.of<CreateExerciseViewModel>(
+                                              Provider.of<EditExerciseViewModel>(
                                                       context,
                                                       listen: false)
                                                   .userImage,
@@ -350,8 +366,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                                       BackEndMessage.statusCode == 200) {
                                     nameController.clear();
                                     BurnCaloriesController.clear();
-                                    Provider.of<CreateExerciseViewModel>(
-                                            context,
+                                    Provider.of<EditExerciseViewModel>(context,
                                             listen: false)
                                         .resetImage();
 
@@ -360,36 +375,39 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                                 }
                               } else {
                                 print(argu['id']);
-                                final CreateExerciseModel BackEndMessage =
-                                    await CreateExerciseViewModel()
-                                        .editExerciseInfo(
-                                            nameController.text,
-                                            descriptionController.text,
-                                            BurnCaloriesController.text,
-                                            argu['id'],
-                                            context.locale == Locale('en')
-                                                ? 'en'
-                                                : 'ar');
-                                print(BackEndMessage.statusCode);
-                                print(BackEndMessage.message);
-                                if (BackEndMessage.message != null &&
-                                    BackEndMessage.message != '') {
-                                  showSnackbar(
-                                      Text(BackEndMessage.message.toString()),
-                                      context);
-                                  if (BackEndMessage.statusCode == 201 ||
-                                      BackEndMessage.statusCode == 200) {
-                                    nameController.clear();
-                                    BurnCaloriesController.clear();
-                                    Navigator.of(context).pop();
+                                if (formGlobalKey.currentState!.validate()) {
+                                  formGlobalKey.currentState!.save();
+                                  final CreateExerciseModel BackEndMessage =
+                                      await EditExerciseViewModel()
+                                          .editExerciseInfo(
+                                              nameController.text,
+                                              descriptionController.text,
+                                              BurnCaloriesController.text,
+                                              argu['id'],
+                                              context.locale == Locale('en')
+                                                  ? 'en'
+                                                  : 'ar');
+                                  print(BackEndMessage.statusCode);
+                                  print(BackEndMessage.message);
+                                  if (BackEndMessage.message != null &&
+                                      BackEndMessage.message != '') {
+                                    showSnackbar(
+                                        Text(BackEndMessage.message.toString()),
+                                        context);
+                                    if (BackEndMessage.statusCode == 201 ||
+                                        BackEndMessage.statusCode == 200) {
+                                      nameController.clear();
+                                      BurnCaloriesController.clear();
+                                      Navigator.of(context).pop();
+                                    }
                                   }
                                 }
                               }
                               // final CreateExerciseModel BackEndMessage =
-                              //     await CreateExerciseViewModel().editExerciseInfo(
+                              //     await EditExerciseViewModel().editExerciseInfo(
                               //         'nameController.text',
                               //         '10',
-                              //         // Provider.of<CreateExerciseViewModel>(context,
+                              //         // Provider.of<EditExerciseViewModel>(context,
                               //         //         listen: false)
                               //         //     .userImage,
                               //         context.locale == Locale('en') ? 'en' : 'ar');
@@ -422,7 +440,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Provider.of<CreateExerciseViewModel>(context, listen: false)
+                Provider.of<EditExerciseViewModel>(context, listen: false)
                     .changePhoto(ImageSource.gallery);
               },
               child: Text(
@@ -436,7 +454,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Provider.of<CreateExerciseViewModel>(context, listen: false)
+                Provider.of<EditExerciseViewModel>(context, listen: false)
                     .changePhoto(ImageSource.camera);
               },
               child: Text(
@@ -462,26 +480,26 @@ class _EditExerciseViewState extends State<EditExerciseView> {
 /*
 ElevatedButton(
                 onPressed: () {
-                  Provider.of<CreateExerciseViewModel>(context, listen: false)
+                  Provider.of<EditExerciseViewModel>(context, listen: false)
                       .changePhoto(ImageSource.gallery);
                 },
                 child: Text('Add photo')),
             ElevatedButton(
                 onPressed: () async {
                   // final CreateExerciseModel BackEndMessage =
-                  //     await CreateExerciseViewModel().postExerciseInfo(
+                  //     await EditExerciseViewModel().postExerciseInfo(
                   //         'nameController.text',
                   //         '10',
-                  //         Provider.of<CreateExerciseViewModel>(context,
+                  //         Provider.of<EditExerciseViewModel>(context,
                   //                 listen: false)
                   //             .userImage,
                   //         context.locale == Locale('en') ? 'en' : 'ar');
 
                   final CreateExerciseModel BackEndMessage =
-                      await CreateExerciseViewModel().editExerciseInfo(
+                      await EditExerciseViewModel().editExerciseInfo(
                           'nameController.text',
                           '10',
-                          // Provider.of<CreateExerciseViewModel>(context,
+                          // Provider.of<EditExerciseViewModel>(context,
                           //         listen: false)
                           //     .userImage,
                           context.locale == Locale('en') ? 'en' : 'ar');
@@ -490,15 +508,15 @@ ElevatedButton(
             ElevatedButton(
                 onPressed: () async {
                   // final CreateExerciseModel BackEndMessage =
-                  //     await CreateExerciseViewModel().postExerciseInfo(
+                  //     await EditExerciseViewModel().postExerciseInfo(
                   //         'nameController.text',
                   //         '10',
-                  //         Provider.of<CreateExerciseViewModel>(context,
+                  //         Provider.of<EditExerciseViewModel>(context,
                   //                 listen: false)
                   //             .userImage,
                   //         context.locale == Locale('en') ? 'en' : 'ar');
 
-                  await CreateExerciseViewModel().deleteSpecificChallengeData(
+                  await EditExerciseViewModel().deleteSpecificChallengeData(
                       context.locale == Locale('en') ? 'en' : 'ar', 10);
                 },
                 child: Text('delete')),
