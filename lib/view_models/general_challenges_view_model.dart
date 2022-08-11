@@ -28,6 +28,7 @@ class GeneralChallengesViewModel with ChangeNotifier {
     challengesList = [];
     page = 1;
     isLoading = false;
+    notifyListeners();
   }
 
   getData(String lang, int page, String linkType) async {

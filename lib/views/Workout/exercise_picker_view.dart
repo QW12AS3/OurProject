@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/create_workout_view_model.dart';
-import 'package:home_workout_app/view_models/exercise_list_view_model.dart';
+import 'package:home_workout_app/view_models/exercise_picker_view_model.dart';
 import 'package:home_workout_app/views/Posts%20View/post_view_widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -23,11 +23,11 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
     super.initState();
 
     Future.delayed(Duration.zero).then((value) {
-      Provider.of<exercisesListViewModel>(context, listen: false).reset();
-      Provider.of<exercisesListViewModel>(context, listen: false)
+      Provider.of<exercisesPickerViewModel>(context, listen: false).reset();
+      Provider.of<exercisesPickerViewModel>(context, listen: false)
           .getExercisesData(lang: getLang(context));
       print('fffffffff]]]]]]]]');
-      // print(Provider.of<exercisesListViewModel>(context, listen: false)
+      // print(Provider.of<exercisesPickerViewModel>(context, listen: false)
       //     .getIsFetched);
     });
   }
@@ -72,7 +72,7 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
               style: theme.textTheme.bodyMedium!,
             ).tr(),
           ),
-          body: Consumer2<exercisesListViewModel, CreateworkoutViewModel>(
+          body: Consumer2<exercisesPickerViewModel, CreateworkoutViewModel>(
             builder: (context, exercise, workout, child) => RefreshIndicator(
                 color: orangeColor,
                 onRefresh: () async {
@@ -94,11 +94,11 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
                                     .tr(),
                                 TextButton(
                                     onPressed: () async {
-                                      Provider.of<exercisesListViewModel>(
+                                      Provider.of<exercisesPickerViewModel>(
                                               context,
                                               listen: false)
                                           .reset();
-                                      Provider.of<exercisesListViewModel>(
+                                      Provider.of<exercisesPickerViewModel>(
                                               context,
                                               listen: false)
                                           .getExercisesData(

@@ -59,7 +59,10 @@ class CreateworkoutViewModel with ChangeNotifier {
     dropDownList = [];
     ConvertedFutureCategoriesList?.clear();
     ConvertedFutureExercisesList?.clear();
+    _pickedExercisesIDs = [];
     // fetchedExercisesList = false;
+
+    notifyListeners();
   }
 
   resetImage() {
@@ -164,6 +167,7 @@ class CreateworkoutViewModel with ChangeNotifier {
 
   postWorkoutInfo(
       String nameVal,
+      String descriptionVal,
       String categoryVal,
       String equipmentVal,
       String difficultyVal,
@@ -175,6 +179,7 @@ class CreateworkoutViewModel with ChangeNotifier {
     return await CreateWorkoutAPI.CreateWorkout(
         CreateworkoutModel(
           name: nameVal,
+          desc: descriptionVal,
           categorie_id: categoryVal,
           equipment: equipmentVal,
           difficulty: difficultyVal,
@@ -229,6 +234,13 @@ class CreateworkoutViewModel with ChangeNotifier {
     } else {
       return null;
     }
+  }
+
+  String? checkDescription(String name, String lang) {
+    if (name.isEmpty) {
+      return lang == 'en' ? ' Enter description' : ' أدخل الوصف ';
+    } else
+      return null;
   }
 
   void changestateOfTime(int id) {

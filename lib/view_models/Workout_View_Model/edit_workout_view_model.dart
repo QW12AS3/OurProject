@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/create_workout_api.dart';
+import 'package:home_workout_app/Api%20services/workout2_api.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/create_workout_model.dart';
+import 'package:home_workout_app/models/exercises_model.dart';
+import 'package:home_workout_app/models/workout2_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditworkoutViewModel with ChangeNotifier {
@@ -20,6 +23,13 @@ class EditworkoutViewModel with ChangeNotifier {
   String? difficultyDropDownNewValue = 'Easy';
 
   bool switchValue = false;
+  bool _isLoading = false;
+  Workout2Model _workout = Workout2Model();
+
+  void setIsLoading(value) {
+    _isLoading = value;
+    notifyListeners();
+  }
 
   List<CreateworkoutModel>? ConvertedFutureCategoriesList;
   List<CreateworkoutModel>? ConvertedFutureExercisesList;
@@ -28,18 +38,9 @@ class EditworkoutViewModel with ChangeNotifier {
 
   List _pickedExercisesIDs = [];
 
-  List piickedExc = [];
-
   List<Map<int, int>> pickedExercisesIDsAndCount = [];
   // var f<String,dynamic> = {};
   // List<f, f> l;
-
-  bool _isLoading = false;
-
-  void setIsLoading(value) {
-    _isLoading = value;
-    notifyListeners();
-  }
 
   reset() {
     fetchedList = false;
@@ -47,6 +48,13 @@ class EditworkoutViewModel with ChangeNotifier {
     dropDownList = [];
     ConvertedFutureCategoriesList?.clear();
     ConvertedFutureExercisesList?.clear();
+    _pickedExercisesIDs = [];
+    pickedExercisesIDsAndCount = [];
+    _workout = Workout2Model();
+    userImage = XFile('');
+
+    notifyListeners();
+
     // fetchedExercisesList = false;
   }
 
@@ -92,7 +100,7 @@ class EditworkoutViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  getData(String lang, int page) async {
+  getData(String lang) async {
     try {
       futureworkoutList = CreateWorkoutAPI().getCategoriesList(lang);
       ConvertedFutureCategoriesList = await futureworkoutList;
@@ -147,6 +155,7 @@ class EditworkoutViewModel with ChangeNotifier {
 
   postWorkoutInfo(
       String nameVal,
+      String descriptionVal,
       String categoryVal,
       String equipmentVal,
       String difficultyVal,
@@ -158,14 +167,87 @@ class EditworkoutViewModel with ChangeNotifier {
     return await CreateWorkoutAPI.CreateWorkout(
         CreateworkoutModel(
           name: nameVal,
+          desc: descriptionVal,
           categorie_id: categoryVal,
           equipment: equipmentVal,
           difficulty: difficultyVal,
           excersisesList: exercisesVal,
           workout_image: imgVal,
+          // id:id
         ),
         URlVal,
         lang);
+  }
+
+  editWorkoutInfo(
+      String nameVal,
+      String descriptionVal,
+      String categoryVal,
+      String equipmentVal,
+      String difficultyVal,
+      List exercisesVal,
+      String URlVal,
+      String lang) async {
+    CreateworkoutModel? result;
+    return await CreateWorkoutAPI.EditWorkoutWithoutImage(
+        CreateworkoutModel(
+          name: nameVal,
+          desc: descriptionVal,
+          categorie_id: categoryVal,
+          equipment: equipmentVal,
+          difficulty: difficultyVal,
+          excersisesList: exercisesVal,
+        ),
+        URlVal,
+        lang);
+  }
+
+  addToListOfExercises() {
+    List<ExercisesModel> ExercisesList = _workout.exercises;
+
+    for (int i = 0; i < ExercisesList.length; i++) {
+      if (ExercisesList[i].count != 0)
+        _pickedExercisesIDs.add({
+          'id': ExercisesList[i].id,
+          'isTime': false,
+          'value': ExercisesList[i].count
+        });
+      else {
+        _pickedExercisesIDs.add({
+          'id': ExercisesList[i].id,
+          'isTime': true,
+          'value': ExercisesList[i].length
+        });
+      }
+      print(_pickedExercisesIDs[i]);
+    }
+    notifyListeners();
+  }
+
+  Future<void> setWorkout({required String lang, required int id}) async {
+    setIsLoading(true);
+    _workout = await Workout2Api().getSepcWorkout(lang: lang, id: id);
+    if (fetchedList == true) {
+      addToListOfExercises();
+      for (int i = 0; i < dropDownList!.length; i++) {
+        if (_workout.categorieId == ConvertedFutureCategoriesList![i].id) {
+          setdropDownNewValue(
+              ConvertedFutureCategoriesList![i].name.toString());
+        }
+      }
+      setequipmentDropDownNewValue(_workout.equipment);
+
+      if (_workout.difficulty == 1) {
+        setdifficultyDropDownNewValue('Easy');
+      } else if (_workout.difficulty == 2) {
+        setdifficultyDropDownNewValue('Medium');
+      } else {
+        setdifficultyDropDownNewValue('Hard');
+      }
+    }
+    // _workout.exercises
+    setIsLoading(false);
+    notifyListeners();
   }
 
   setdropDownNewValue(String dropDownNewVal) {
@@ -212,6 +294,13 @@ class EditworkoutViewModel with ChangeNotifier {
     } else {
       return null;
     }
+  }
+
+  String? checkDescription(String name, String lang) {
+    if (name.isEmpty) {
+      return lang == 'en' ? ' Enter description' : ' أدخل الوصف ';
+    } else
+      return null;
   }
 
   void changestateOfTime(int id) {
@@ -286,4 +375,5 @@ class EditworkoutViewModel with ChangeNotifier {
   List get getPickedExercises => _pickedExercisesIDs;
   bool get getIsLoading => _isLoading;
   bool get getswitchValue => switchValue;
+  Workout2Model get getWorkout => _workout;
 }

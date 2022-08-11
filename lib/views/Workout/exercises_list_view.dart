@@ -7,55 +7,32 @@ import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/workout_list_model.dart';
 import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/workout_list_view_model.dart';
+import 'package:home_workout_app/view_models/exercise_picker_view_model.dart';
 
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class ExercisesListView extends StatefulWidget {
+  const ExercisesListView({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ExercisesListView> createState() => _ExercisesListViewState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ExercisesListViewState extends State<ExercisesListView> {
   final ListViewController = ScrollController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration.zero).then((value) async {
-      Provider.of<WorkoutListViewModel>(context, listen: false).reset();
-      Provider.of<WorkoutListViewModel>(context, listen: false)
-          .getCategoriesData(getLang(context));
-      Provider.of<WorkoutListViewModel>(context, listen: false).getWorkoutsData(
-          context.locale == Locale('en') ? 'en' : 'ar',
-          Provider.of<WorkoutListViewModel>(context, listen: false).page,
-          Provider.of<WorkoutListViewModel>(context, listen: false)
-              .CategoryNumber,
-          Provider.of<WorkoutListViewModel>(context, listen: false)
-              .DifficultyNumber,
-          '/workout/filter');
-      print('ccccccccccccccccccccccccccc');
-      ListViewController.addListener(() {
-        if (ListViewController.position.maxScrollExtent ==
-            ListViewController.offset) {
-          Provider.of<WorkoutListViewModel>(context, listen: false)
-              .setIsLoading(true);
-          Provider.of<WorkoutListViewModel>(context, listen: false)
-              .getWorkoutsData(
-                  context.locale == Locale('en') ? 'en' : 'ar',
-                  Provider.of<WorkoutListViewModel>(context, listen: false)
-                      .page,
-                  Provider.of<WorkoutListViewModel>(context, listen: false)
-                      .CategoryNumber,
-                  Provider.of<WorkoutListViewModel>(context, listen: false)
-                      .DifficultyNumber,
-                  '/workout/filter');
-          // print(object)
-        }
-      });
+    Future.delayed(Duration.zero).then((value) {
+      Provider.of<exercisesListViewModel>(context, listen: false).reset();
+      Provider.of<exercisesListViewModel>(context, listen: false)
+          .getExercisesData(lang: getLang(context));
+      print('fffffffff]]]]]]]]');
+      // print(Provider.of<exercisesListViewModel>(context, listen: false)
+      //     .getIsFetched);
     });
   }
 
@@ -65,14 +42,14 @@ class _HomePageState extends State<HomePage> {
     final theme = Theme.of(context);
     var role_id = sharedPreferences.getInt("role_id");
     return Scaffold(
-      floatingActionButton: (role_id == 2 || role_id == 4 || role_id == 5)
-          ? FloatingActionButton(
-              onPressed: () {
-                buildDialog(context);
-              },
-              child: Icon(Icons.add),
-            )
-          : Container(),
+      // floatingActionButton: (role_id == 2 || role_id == 4 || role_id == 5)
+      //     ? FloatingActionButton(
+      //         onPressed: () {
+      //           buildDialog(context);
+      //         },
+      //         child: Icon(Icons.add),
+      //       )
+      //     : Container(),
       body: Container(
           child: Column(
         children: [
@@ -150,36 +127,27 @@ class _HomePageState extends State<HomePage> {
                               }
                               // consumer.changeSelectedCategorie(e.key, true);
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Container(
-                                // margin: const EdgeInsets.all(4),
+                            child: Container(
+                              margin: const EdgeInsets.all(4),
+                              padding: const EdgeInsets.all(7),
+                              decoration: BoxDecoration(
+                                  color: value.getCategoriesList![index].name ==
+                                          value.PickedCategoryValue
+                                      ? blueColor
+                                      : greyColor,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Padding(
                                 padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                    color:
-                                        value.getCategoriesList![index].name ==
-                                                value.PickedCategoryValue
-                                            ? blueColor
-                                            : greyColor,
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Text(
-                                      value.getCategoriesList![index].name
-                                          .toString(),
-                                      style: theme.textTheme.bodySmall!
-                                          .copyWith(
-                                              color: Colors.white,
-                                              fontSize: value
-                                                          .getCategoriesList![
-                                                              index]
-                                                          .name ==
-                                                      value.PickedCategoryValue
-                                                  ? 12
-                                                  : 10),
-                                    ),
-                                  ),
+                                child: Text(
+                                  value.getCategoriesList![index].name
+                                      .toString(),
+                                  style: theme.textTheme.bodySmall!.copyWith(
+                                      color: Colors.white,
+                                      fontSize: value.getCategoriesList![index]
+                                                  .name ==
+                                              value.PickedCategoryValue
+                                          ? 15
+                                          : 10),
                                 ),
                               ),
                             ),
@@ -191,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                     ))),
             ),
           ),
-          Expanded(
+          /*     Expanded(
             child: Consumer<WorkoutListViewModel>(
               builder: ((context, value, _) => (Provider.of<
                           WorkoutListViewModel>(context, listen: true)
@@ -252,32 +220,26 @@ class _HomePageState extends State<HomePage> {
                                 }
                                 // consumer.changeSelectedCategorie(e.key, true);
                               },
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Container(
-                                  // margin: const EdgeInsets.all(4),
+                              child: Container(
+                                margin: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(7),
+                                decoration: BoxDecoration(
+                                    color: value.getdifficultyList![index] ==
+                                            value.PickedDifficultyValue
+                                        ? blueColor
+                                        : greyColor,
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Padding(
                                   padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                      color: value.getdifficultyList![index] ==
-                                              value.PickedDifficultyValue
-                                          ? blueColor
-                                          : greyColor,
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: Text(
-                                        value.getdifficultyList![index]
-                                            .toString(),
-                                        style: theme.textTheme.bodySmall!.copyWith(
-                                            color: Colors.white,
-                                            fontSize: value.getdifficultyList![
-                                                        index] ==
+                                  child: Text(
+                                    value.getdifficultyList![index].toString(),
+                                    style: theme.textTheme.bodySmall!.copyWith(
+                                        color: Colors.white,
+                                        fontSize:
+                                            value.getdifficultyList![index] ==
                                                     value.PickedDifficultyValue
-                                                ? 12
+                                                ? 15
                                                 : 10),
-                                      ),
-                                    ),
                                   ),
                                 ),
                               ),
@@ -291,7 +253,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Expanded(
-            flex: 14,
+            flex: 11,
             child: Consumer<WorkoutListViewModel>(
               builder: ((context, value, _) => ((Provider.of<
                               WorkoutListViewModel>(context, listen: true)
@@ -323,8 +285,7 @@ class _HomePageState extends State<HomePage> {
                       },
                       child: ListView.builder(
                         controller: ListViewController,
-                        physics: AlwaysScrollableScrollPhysics(
-                            parent: BouncingScrollPhysics()),
+                        physics: BouncingScrollPhysics(),
                         // scrollDirection: Axis.horizontal,
                         itemCount: value.getfutureworkoutsList?.length,
                         itemBuilder: ((context, index) {
@@ -348,6 +309,7 @@ class _HomePageState extends State<HomePage> {
                   child: bigLoader(color: orangeColor),
                 )
               : Container(),
+      */
         ],
       )),
     );
@@ -408,171 +370,49 @@ class _HomePageState extends State<HomePage> {
     final theme = Theme.of(context);
     return Column(
       children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, '/anotherUserProfile',
-                  arguments: {'id': workoutValue.user_id});
-            },
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        workoutValue.prof_img_url.toString().substring(0, 4) !=
-                                'http'
-                            ? '$ip/${workoutValue.prof_img_url}'
-                            : workoutValue.prof_img_url.toString()
-                        // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612',
-                        ),
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${workoutValue.f_name} ${workoutValue.l_name}',
-                      style:
-                          theme.textTheme.bodySmall!.copyWith(color: blueColor),
-                    ),
-                    Text(
-                      '${workoutValue.created_at}',
-                      style: theme.textTheme.displaySmall!
-                          .copyWith(color: greyColor, fontSize: 10),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-          PopupMenuButton(
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'Favorite',
-                child: Text(
-                  workoutValue.saved != true
-                      ? 'Add to favorite'.tr()
-                      : 'Deleted form favorite'.tr(),
-                  style: TextStyle(color: orangeColor),
+        InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, '/anotherUserProfile',
+                arguments: {'id': workoutValue.user_id});
+          },
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      workoutValue.prof_img_url.toString().substring(0, 4) !=
+                              'http'
+                          ? '$ip/${workoutValue.prof_img_url}'
+                          : workoutValue.prof_img_url.toString()
+                      // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'
+                      ),
                 ),
               ),
-              if ((sharedPreferences.get("role_id") == 2 &&
-                      workoutValue.user_id == 2) ||
-                  sharedPreferences.get("role_id") == 4 ||
-                  sharedPreferences.get("role_id") == 5)
-                PopupMenuItem(
-                  child: Text(
-                    'Edit'.tr(),
-                    style: TextStyle(color: orangeColor),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Coach ${workoutValue.f_name}',
+                    style:
+                        theme.textTheme.bodySmall!.copyWith(color: blueColor),
                   ),
-                  value: 'Edit',
-                ),
-              if ((sharedPreferences.get("role_id") == 2 &&
-                      workoutValue.user_id == 2) ||
-                  sharedPreferences.get("role_id") == 4 ||
-                  sharedPreferences.get("role_id") == 5)
-                PopupMenuItem(
-                  child: Text(
-                    'Delete'.tr(),
-                    style: TextStyle(color: Colors.red),
-                  ),
-                  value: 'Delete',
-                ),
+                  Text(
+                    // '6/3/2022 - 5:33 PM',
+                    '${workoutValue.created_at}',
+                    style: theme.textTheme.displaySmall!
+                        .copyWith(color: greyColor, fontSize: 10),
+                  )
+                ],
+              )
             ],
-            onSelected: (newVal) async {
-              if (newVal == 'Favorite') {
-                final WorkoutListModel? BackEndMessage =
-                    await Provider.of<WorkoutListViewModel>(context,
-                            listen: false)
-                        .changeFavoriteState(
-                            context.locale == Locale('en') ? 'en' : 'ar',
-                            workoutValue.id!.toInt());
-                if (BackEndMessage!.message != '' ||
-                    BackEndMessage.message != '') {
-                  showSnackbar(
-                      Text(BackEndMessage.message.toString()), context);
-                }
-                if (BackEndMessage.statusCode == 200) {
-                  Provider.of<WorkoutListViewModel>(context, listen: false)
-                      .resetForFilter();
-                  Provider.of<WorkoutListViewModel>(context, listen: false)
-                      .getWorkoutsData(
-                          context.locale == Locale('en') ? 'en' : 'ar',
-                          Provider.of<WorkoutListViewModel>(context,
-                                  listen: false)
-                              .page,
-                          Provider.of<WorkoutListViewModel>(context,
-                                  listen: false)
-                              .CategoryNumber,
-                          Provider.of<WorkoutListViewModel>(context,
-                                  listen: false)
-                              .DifficultyNumber,
-                          '/workout/filter');
-                }
-              } else if (newVal == 'Edit') {
-                print(workoutValue.id);
-                await Navigator.of(context)
-                    .pushNamed('/editWorkout', arguments: {
-                  // 'Categories IDs': workoutValue.,
-                  'name': workoutValue.name,
-                  'description': workoutValue.description,
-                  'id': workoutValue.id,
-                });
-                Provider.of<WorkoutListViewModel>(context, listen: false)
-                    .resetForFilter();
-                Provider.of<WorkoutListViewModel>(context, listen: false)
-                    .getWorkoutsData(
-                        context.locale == Locale('en') ? 'en' : 'ar',
-                        Provider.of<WorkoutListViewModel>(context,
-                                listen: false)
-                            .page,
-                        Provider.of<WorkoutListViewModel>(context,
-                                listen: false)
-                            .CategoryNumber,
-                        Provider.of<WorkoutListViewModel>(context,
-                                listen: false)
-                            .DifficultyNumber,
-                        '/workout/filter');
-              } else if (newVal == 'Delete') {
-                print('yes');
-                final WorkoutListModel BackEndMessage =
-                    await Provider.of<WorkoutListViewModel>(context,
-                            listen: false)
-                        .deleteSpecificWorkout(
-                            context.locale == Locale('en') ? 'en' : 'ar',
-                            workoutValue.id);
-                if (BackEndMessage.message != '' ||
-                    BackEndMessage.message != '') {
-                  showSnackbar(
-                      Text(BackEndMessage.message.toString()), context);
-                }
-                if (BackEndMessage.statusCode == 200) {
-                  Provider.of<WorkoutListViewModel>(context, listen: false)
-                      .resetForFilter();
-                  Provider.of<WorkoutListViewModel>(context, listen: false)
-                      .getWorkoutsData(
-                          context.locale == Locale('en') ? 'en' : 'ar',
-                          Provider.of<WorkoutListViewModel>(context,
-                                  listen: false)
-                              .page,
-                          Provider.of<WorkoutListViewModel>(context,
-                                  listen: false)
-                              .CategoryNumber,
-                          Provider.of<WorkoutListViewModel>(context,
-                                  listen: false)
-                              .DifficultyNumber,
-                          '/workout/filter');
-                }
-              }
-            },
           ),
-        ]),
+        ),
         InkWell(
           onTap: () {
             //TODO:
-            Navigator.pushNamed(context, '/specificWorkout',
-                arguments: {'workoutId': workoutValue.id});
+            // Navigator.pushNamed(context, '/anotherUserProfile',
+            //     arguments: {'id': workoutValue.user_id});
           },
           child: Container(
             width: mq.width * 0.95,
@@ -706,20 +546,12 @@ class _HomePageState extends State<HomePage> {
                                         : Colors.red),
                                 size: 25,
                               ),
-                              FittedBox(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 6),
-                                  child: Text(
-                                    workoutValue.description.toString(),
-                                    style: theme.textTheme.displaySmall,
-                                    overflow: TextOverflow.fade,
-                                    maxLines: 3,
-                                    // softWrap: false,
-                                    // textAlign: TextAlign.left,
-                                  ),
-                                ),
-                              )
+                              // FittedBox(
+                              //   child: Text(
+                              //     'Published by:\ncoach ${e.publisherName}',
+                              //     style: theme.textTheme.displaySmall,
+                              //   ),
+                              // )
                             ],
                           ),
                         ),

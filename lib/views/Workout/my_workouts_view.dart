@@ -124,7 +124,8 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                         },
                         child: ListView.builder(
                           controller: ListViewController,
-                          physics: BouncingScrollPhysics(),
+                          physics: AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics()),
                           // scrollDirection: Axis.horizontal,
                           itemCount: value.getfutureworkoutsList?.length,
                           itemBuilder: ((context, index) {
@@ -236,12 +237,11 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Coach ${workoutValue.f_name}',
+                        '${workoutValue.f_name} ${workoutValue.l_name}',
                         style: theme.textTheme.bodySmall!
                             .copyWith(color: blueColor),
                       ),
                       Text(
-                        // '6/3/2022 - 5:33 PM', //TODO:
                         '${workoutValue.created_at}',
                         style: theme.textTheme.displaySmall!
                             .copyWith(color: greyColor, fontSize: 10),
@@ -251,29 +251,116 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                 ],
               ),
             ),
-            if ((sharedPreferences.get("role_id") == 2 &&
-                    workoutValue.user_id == 2) ||
-                sharedPreferences.get("role_id") == 4 ||
-                sharedPreferences.get("role_id") == 5) //TODO:
-              IconButton(
-                  onPressed: () {
+            PopupMenuButton(
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'Favorite',
+                  child: Text(
+                    workoutValue.saved != true
+                        ? 'Add to favorite'.tr()
+                        : 'Deleted form favorite'.tr(),
+                    style: TextStyle(color: orangeColor),
+                  ),
+                ),
+                if ((sharedPreferences.get("role_id") == 2 &&
+                        workoutValue.user_id == 2) ||
+                    sharedPreferences.get("role_id") == 4 ||
+                    sharedPreferences.get("role_id") == 5)
+                  PopupMenuItem(
+                    child: Text(
+                      'Edit'.tr(),
+                      style: TextStyle(color: orangeColor),
+                    ),
+                    value: 'Edit',
+                  ),
+                if ((sharedPreferences.get("role_id") == 2 &&
+                        workoutValue.user_id == 2) ||
+                    sharedPreferences.get("role_id") == 4 ||
+                    sharedPreferences.get("role_id") == 5)
+                  PopupMenuItem(
+                    child: Text(
+                      'Delete'.tr(),
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    value: 'Delete',
+                  ),
+              ],
+              onSelected: (newVal) async {
+                if (newVal == 'Favorite') {
+                  final WorkoutListModel? BackEndMessage =
+                      await Provider.of<MyWorkoutsViewModel>(context,
+                              listen: false)
+                          .changeFavoriteState(
+                              context.locale == Locale('en') ? 'en' : 'ar',
+                              workoutValue.id!.toInt());
+                  if (BackEndMessage!.message != '' ||
+                      BackEndMessage.message != '') {
+                    showSnackbar(
+                        Text(BackEndMessage.message.toString()), context);
+                  }
+                  if (BackEndMessage.statusCode == 200) {
                     Provider.of<MyWorkoutsViewModel>(context, listen: false)
-                        .deleteSpecificChallengeData(
-                            context.locale == Locale('en') ? 'en' : 'ar',
-                            // 2
-                            workoutValue.id);
-                  },
-                  icon: Icon(
-                    Icons.more_vert,
-                    color: blueColor,
-                  ))
+                        .reset();
+                    Provider.of<MyWorkoutsViewModel>(context, listen: false)
+                        .getWorkoutsData(
+                            getLang(context),
+                            Provider.of<MyWorkoutsViewModel>(context,
+                                    listen: false)
+                                .page,
+                            '/workout/my_workouts');
+                  }
+                } else if (newVal == 'Edit') {
+                  print(workoutValue.id);
+                  await Navigator.of(context)
+                      .pushNamed('/editWorkout', arguments: {
+                    // 'Categories IDs': workoutValue.,
+                    'name': workoutValue.name,
+                    'description': workoutValue.description,
+                    'id': workoutValue.id,
+                  });
+                  Provider.of<MyWorkoutsViewModel>(context, listen: false)
+                      .reset();
+                  Provider.of<MyWorkoutsViewModel>(context, listen: false)
+                      .getWorkoutsData(
+                          getLang(context),
+                          Provider.of<MyWorkoutsViewModel>(context,
+                                  listen: false)
+                              .page,
+                          '/workout/my_workouts');
+                } else if (newVal == 'Delete') {
+                  print('yes');
+                  final WorkoutListModel BackEndMessage =
+                      await Provider.of<MyWorkoutsViewModel>(context,
+                              listen: false)
+                          .deleteSpecificWorkout(
+                              context.locale == Locale('en') ? 'en' : 'ar',
+                              workoutValue.id);
+                  if (BackEndMessage.message != '' ||
+                      BackEndMessage.message != '') {
+                    showSnackbar(
+                        Text(BackEndMessage.message.toString()), context);
+                  }
+                  if (BackEndMessage.statusCode == 200) {
+                    Provider.of<MyWorkoutsViewModel>(context, listen: false)
+                        .reset();
+                    Provider.of<MyWorkoutsViewModel>(context, listen: false)
+                        .getWorkoutsData(
+                            getLang(context),
+                            Provider.of<MyWorkoutsViewModel>(context,
+                                    listen: false)
+                                .page,
+                            '/workout/my_workouts');
+                  }
+                }
+              },
+            ),
           ],
         ),
         InkWell(
           onTap: () {
             //TODO:
-            // Navigator.pushNamed(context, '/anotherUserProfile',
-            //     arguments: {'id': workoutValue.user_id});
+            Navigator.pushNamed(context, '/specificWorkout',
+                arguments: {'workoutId': workoutValue.id});
           },
           child: Container(
             width: mq.width * 0.95,
@@ -360,12 +447,6 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                                   )
                                 ],
                               ),
-                              // FittedBox(
-                              //   child: Text(
-                              //     'Published by:\ncoach ${e.publisherName}',
-                              //     style: theme.textTheme.displaySmall,
-                              //   ),
-                              // )
                             ],
                           ),
                         ),
@@ -407,12 +488,20 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                                         : Colors.red),
                                 size: 25,
                               ),
-                              // FittedBox(
-                              //   child: Text(
-                              //     'Published by:\ncoach ${e.publisherName}',
-                              //     style: theme.textTheme.displaySmall,
-                              //   ),
-                              // )
+                              FittedBox(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 6),
+                                  child: Text(
+                                    workoutValue.description.toString(),
+                                    style: theme.textTheme.displaySmall,
+                                    overflow: TextOverflow.fade,
+                                    maxLines: 3,
+                                    // softWrap: false,
+                                    // textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              )
                             ],
                           ),
                         ),

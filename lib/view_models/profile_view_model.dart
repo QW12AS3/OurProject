@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/diet_api.dart';
 import 'package:home_workout_app/Api%20services/health_record_api.dart';
 import 'package:home_workout_app/Api%20services/profile_api.dart';
+import 'package:home_workout_app/Api%20services/workout_list_api.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/diet_model.dart';
 import 'package:home_workout_app/models/health_record_model.dart';
 import 'package:home_workout_app/models/post_models.dart';
 import 'package:home_workout_app/models/user_model.dart';
+import 'package:home_workout_app/models/workout_list_model.dart';
 import 'package:provider/provider.dart';
 
 import '../Api services/post_api.dart';
@@ -23,6 +25,7 @@ class ProfileViewModel with ChangeNotifier {
   bool _isLoading = false;
   bool _isPostLoading = false;
   bool _isDietLoading = false;
+  bool _isWorkoutLoading = false;
 
   bool _iseditLoading = false;
   bool _islogoutLoading = false;
@@ -31,6 +34,7 @@ class ProfileViewModel with ChangeNotifier {
   bool _addDesc = false;
   bool _getMoreLoading = false;
   bool _getMoreDietsLoading = false;
+  bool _getMoreWorkoutsLoading = false;
 
   bool _infoWidgetVisible = false;
   List _followers = [];
@@ -39,11 +43,24 @@ class ProfileViewModel with ChangeNotifier {
 
   List<PostModel> _userPosts = [];
   List<DietModel> _userDiets = [];
+  List<WorkoutListModel> _userWorkouts = [];
   int _page = 0;
   int _dietpage = 0;
+  int _workoutpage = 0;
 
   bool _postsIsOpened = false;
   bool _dietsIsOpened = false;
+  bool _workoutsIsOpened = false;
+
+  void setIsWorkoutLoading(value) {
+    _isWorkoutLoading = value;
+    notifyListeners();
+  }
+
+  void setIsMoreWorkoutLoading(value) {
+    _getMoreWorkoutsLoading = value;
+    notifyListeners();
+  }
 
   void changeIsCV(value) {
     _userData.cv = value ?? false;
@@ -69,6 +86,11 @@ class ProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void setWorkoutIsOpened(value) {
+    _workoutsIsOpened = value;
+    notifyListeners();
+  }
+
   void setPage(int i) {
     _page = i;
     notifyListeners();
@@ -79,7 +101,28 @@ class ProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void setWorkoutPage(int i) {
+    _workoutpage = i;
+    notifyListeners();
+  }
+
   Future<void> deleteDiet(
+      {required String lang,
+      required int id,
+      required BuildContext context}) async {
+    final response = await DietAPI().deleteDiet(id: id, lang: lang);
+
+    if (response['success']) {
+      showSnackbar(Text(response['message'].toString()), context);
+      _userDiets.removeWhere((element) => element.id == id);
+      notifyListeners();
+    } else {
+      showSnackbar(Text(response['message'].toString()), context);
+    }
+  }
+
+  Future<void> deleteWorkout(
+      //TODO:
       {required String lang,
       required int id,
       required BuildContext context}) async {
@@ -107,6 +150,25 @@ class ProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setUserWorkouts(
+      {required String lang, required int userId}) async {
+    //TODO:
+    print('getting');
+    setWorkoutPage(getWorkoutpage + 1);
+    if (_userPosts.isNotEmpty) setIsMoreWorkoutLoading(true);
+    setIsWorkoutLoading(true);
+    List<WorkoutListModel> newWorkouts =
+        await WorkoutListsAPI().getUserworkouts(lang, userId, getWorkoutpage);
+    if (newWorkouts.isEmpty)
+      setWorkoutPage(getWorkoutpage - 1);
+    else
+      _userWorkouts.addAll(newWorkouts);
+
+    setIsWorkoutLoading(false);
+    setIsMoreWorkoutLoading(false);
+    notifyListeners();
+  }
+
   Future<void> setUserDiets(String lang) async {
     print('getting');
     setDietPage(getDietPage + 1);
@@ -128,6 +190,11 @@ class ProfileViewModel with ChangeNotifier {
 
   void clearDiets() {
     _userDiets.clear();
+    notifyListeners();
+  }
+
+  void clearWorkouts() {
+    _userWorkouts.clear();
     notifyListeners();
   }
 
@@ -367,14 +434,22 @@ class ProfileViewModel with ChangeNotifier {
   bool get getPostIsOpened => _postsIsOpened;
   bool get getIsDietLogoutLoading => _isDietLoading;
   bool get getDietIsOpened => _dietsIsOpened;
+  bool get getIsWorkoutLogoutLoading => _isWorkoutLoading;
+  bool get getWorkoutIsOpened => _workoutsIsOpened;
+
+  List<WorkoutListModel> get getUserWorkouts => _userWorkouts;
 
   int get getPage => _page;
   int get getDietPage => _dietpage;
+  int get getWorkoutpage => _workoutpage;
+
   List<PostModel> get getUserPosts => _userPosts;
   List<DietModel> get getUserDiets => _userDiets;
 
   bool get getMoreLoading => _getMoreLoading;
   bool get getMoreDietLoading => _getMoreDietsLoading;
+  bool get getIsWorkoutLoading => _isWorkoutLoading;
+  bool get getMoreWorkoutsLoading => _getMoreWorkoutsLoading;
 
   //bool get getPasswordObsecure => _PasswordObsecure;
 }
