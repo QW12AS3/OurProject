@@ -11,7 +11,7 @@ import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/create_workout_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/create_workout_view_model.dart';
-import 'package:home_workout_app/view_models/exercise_list_view_model.dart';
+import 'package:home_workout_app/view_models/exercise_picker_view_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +26,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
   // Future<List<CreateworkoutModel>>? futurechallengesList;
   final formGlobalKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   List workoutsId = [];
   @override
   void initState() {
@@ -145,6 +146,77 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                     fontWeight: FontWeight.bold),
                                 // maxLines: 5,
                                 keyboardType: TextInputType.name,
+                                textInputAction: TextInputAction.done,
+                              ),
+                            ),
+                            SizedBox(
+                              height: mq.size.height * 0.1,
+                            ),
+                            Container(
+                              width: mq.size.width * 0.7,
+                              decoration: BoxDecoration(
+                                  color: Colors.white70.withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: TextFormField(
+                                controller: descriptionController,
+                                validator: (value) {
+                                  return CreateworkoutViewModel()
+                                      .checkDescription(
+                                          value.toString(),
+                                          context.locale == Locale('en')
+                                              ? 'en'
+                                              : 'ar');
+                                },
+                                decoration: InputDecoration(
+                                  // focusedErrorBorder:  OutlineInputBorder(
+                                  //   borderSide:
+                                  //       BorderSide(color: blueColor, width: 1.5),
+                                  //   borderRadius: BorderRadius.all(
+                                  //     Radius.circular(15),
+                                  //   ),
+                                  // ),
+
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: greyColor, width: 1.5),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  errorBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.red, width: 1.5),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: orangeColor, width: 1.5),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  labelText: 'Description'.tr(),
+                                  labelStyle: TextStyle(
+                                      color: orangeColor,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                  prefixIcon: Icon(
+                                    Icons.description_outlined,
+                                    color: blueColor,
+                                    size: 33,
+                                  ),
+                                ),
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(300),
+                                ],
+                                style: TextStyle(
+                                    color: blueColor,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
+                                maxLines: 5,
+                                keyboardType: TextInputType.multiline,
                                 textInputAction: TextInputAction.done,
                               ),
                             ),
@@ -379,7 +451,8 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                       SizedBox(
                         height: mq.size.height * 0.05,
                       ),
-                      Consumer2<CreateworkoutViewModel, exercisesListViewModel>(
+                      Consumer2<CreateworkoutViewModel,
+                          exercisesPickerViewModel>(
                         builder: (context, workout, exercises, child) => workout
                                 .getPickedExercises.isEmpty
                             ? const Text('')
@@ -424,15 +497,15 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                                 ),
                                                 leading: CircleAvatar(
                                                   radius: 50,
-                                                  // backgroundImage: NetworkImage(e
-                                                  //             .exercise_img
-                                                  //             .toString()
-                                                  //             .substring(
-                                                  //                 0, 4) !=
-                                                  //         'http'
-                                                  //     ? '$ip/${e.exercise_img}'
-                                                  //     : e.exercise_img
-                                                  //         .toString()),
+                                                  backgroundImage: NetworkImage(e
+                                                              .exercise_img
+                                                              .toString()
+                                                              .substring(
+                                                                  0, 4) !=
+                                                          'http'
+                                                      ? '$ip/${e.exercise_img}'
+                                                      : e.exercise_img
+                                                          .toString()),
                                                 ),
                                               ),
                                               Row(
@@ -451,8 +524,8 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                                     activeTrackColor:
                                                         orangeColor,
                                                     inactiveThumbColor:
-                                                        orangeColor,
-                                                    activeColor: orangeColor,
+                                                        Colors.white,
+                                                    activeColor: Colors.white,
                                                     value: Provider.of<
                                                                 CreateworkoutViewModel>(
                                                             context,
@@ -523,68 +596,75 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                       ElevatedButton(
                           onPressed: () async {
                             if (Provider.of<CreateworkoutViewModel>(context,
-                                            listen: false)
-                                        .userImage !=
-                                    null &&
-                                Provider.of<CreateworkoutViewModel>(context,
-                                            listen: false)
-                                        .userImage
-                                        .path !=
-                                    '') {
-                              if (formGlobalKey.currentState!.validate()) {
-                                formGlobalKey.currentState!.save();
-                                print('ddddddddddddd');
-                                final CreateworkoutModel BackEndMessage =
-                                    await CreateworkoutViewModel()
-                                        .postWorkoutInfo(
-                                            nameController.text,
-                                            Provider.of<CreateworkoutViewModel>(
-                                                    context,
-                                                    listen: false)
-                                                .getIdOfDropDownValue()
-                                                .toString(),
-                                            Provider.of<CreateworkoutViewModel>(
-                                                    context,
-                                                    listen: false)
-                                                .equipmentDropDownNewValue
-                                                .toString(),
-                                            Provider.of<CreateworkoutViewModel>(
-                                                    context,
-                                                    listen: false)
-                                                .getIdOfDifficultyDropDownValue()
-                                                .toString(),
-                                            Provider.of<CreateworkoutViewModel>(
-                                                    context,
-                                                    listen: false)
-                                                .getPickedExercises,
-                                            Provider.of<CreateworkoutViewModel>(
-                                                    context,
-                                                    listen: false)
-                                                .userImage,
-                                            '/workout/create',
-                                            context.locale == Locale('en')
-                                                ? 'en'
-                                                : 'ar');
-                                print('ffffffffffssssssssssss');
-                                print(BackEndMessage.statusCode);
-                                print(BackEndMessage.message);
-                                if (BackEndMessage.message != null &&
-                                    BackEndMessage.message != '') {
-                                  showSnackbar(
-                                      Text(BackEndMessage.message.toString()),
-                                      context);
-                                }
-                                if (BackEndMessage.statusCode == 201) {
-                                  nameController.clear();
-
-                                  Navigator.of(context).pop();
-                                }
-                              }
+                                    listen: false)
+                                .getPickedExercises
+                                .isEmpty) {
+                              showSnackbar(Text('Add exercises'.tr()), context);
                             } else {
-                              showSnackbar(Text('Add photo'), context);
+                              if (Provider.of<CreateworkoutViewModel>(context,
+                                              listen: false)
+                                          .userImage !=
+                                      null &&
+                                  Provider.of<CreateworkoutViewModel>(context,
+                                              listen: false)
+                                          .userImage
+                                          .path !=
+                                      '') {
+                                if (formGlobalKey.currentState!.validate()) {
+                                  formGlobalKey.currentState!.save();
+                                  print('ddddddddddddd');
+                                  final CreateworkoutModel BackEndMessage =
+                                      await CreateworkoutViewModel().postWorkoutInfo(
+                                          nameController.text,
+                                          descriptionController.text,
+                                          Provider.of<CreateworkoutViewModel>(
+                                                  context,
+                                                  listen: false)
+                                              .getIdOfDropDownValue()
+                                              .toString(),
+                                          Provider.of<CreateworkoutViewModel>(
+                                                  context,
+                                                  listen: false)
+                                              .equipmentDropDownNewValue
+                                              .toString(),
+                                          Provider.of<CreateworkoutViewModel>(
+                                                  context,
+                                                  listen: false)
+                                              .getIdOfDifficultyDropDownValue()
+                                              .toString(),
+                                          Provider.of<CreateworkoutViewModel>(
+                                                  context,
+                                                  listen: false)
+                                              .getPickedExercises,
+                                          Provider.of<CreateworkoutViewModel>(
+                                                  context,
+                                                  listen: false)
+                                              .userImage,
+                                          '/workout/create',
+                                          context.locale == Locale('en')
+                                              ? 'en'
+                                              : 'ar');
+                                  print('ffffffffffssssssssssss');
+                                  print(BackEndMessage.statusCode);
+                                  print(BackEndMessage.message);
+                                  if (BackEndMessage.message != null &&
+                                      BackEndMessage.message != '') {
+                                    showSnackbar(
+                                        Text(BackEndMessage.message.toString()),
+                                        context);
+                                  }
+                                  if (BackEndMessage.statusCode == 201) {
+                                    nameController.clear();
+
+                                    Navigator.of(context).pop();
+                                  }
+                                }
+                              } else {
+                                showSnackbar(Text('Add photo'.tr()), context);
+                              }
                             }
                           },
-                          child: Text('Save')),
+                          child: Text('Save'.tr())),
                       SizedBox(
                         height: mq.size.height * 0.05,
                       ),
@@ -594,6 +674,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                 .pushNamed('/editWorkout', arguments: {
                               'Categories IDs': workoutsId,
                               'name': nameController.text,
+                              'description': descriptionController.text,
                               'Categories': Provider.of<CreateworkoutViewModel>(
                                       context,
                                       listen: false)
@@ -606,7 +687,9 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                       context,
                                       listen: false)
                                   .difficultyDropDownNewValue,
-                              'id': 3 //TODO:
+                              'id': 3, //TODO:
+                              'image':
+                                  'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'
                             });
                           },
                           child: Text('edit')),

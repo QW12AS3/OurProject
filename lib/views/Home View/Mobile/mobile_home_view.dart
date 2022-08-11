@@ -37,8 +37,6 @@ class _MobileHomeViewState extends State<MobileHomeView>
     });
 
     Future.delayed(Duration.zero).then((value) {
-      Navigator.pushNamed(context, '/specificWorkout',
-          arguments: {'workoutId': 37});
       Provider.of<ProfileViewModel>(context, listen: false)
           .setCurrentUserData(context);
       Provider.of<MobileHomeViewModel>(context, listen: false)

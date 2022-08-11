@@ -34,9 +34,11 @@ class WorkoutListViewModel with ChangeNotifier {
 
   reset() {
     workoutsList = [];
+    CategoriesList = [];
     page = 1;
     isLoading = false;
     CategoriesfetchedList = false;
+    notifyListeners();
   }
 
   resetForFilter() {
@@ -44,6 +46,7 @@ class WorkoutListViewModel with ChangeNotifier {
     page = 1;
     isLoading = false;
     // CategoriesfetchedList = false;
+    notifyListeners();
   }
 
   getWorkoutsData(String lang, int page, int category, int difficulty,
@@ -106,6 +109,16 @@ class WorkoutListViewModel with ChangeNotifier {
     } else {
       DifficultyNumber = 3;
     }
+    notifyListeners();
+  }
+
+  Future<WorkoutListModel> deleteSpecificWorkout(String lang, int? id) async {
+    return await WorkoutListsAPI().deleteWorkout(lang, id);
+    notifyListeners();
+  }
+
+  Future<WorkoutListModel?> changeFavoriteState(String lang, int id) async {
+    return await WorkoutListsAPI().changeFavoriteState(lang, id);
     notifyListeners();
   }
 

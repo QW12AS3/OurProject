@@ -3,15 +3,16 @@ import 'package:home_workout_app/Api%20services/exercise_api.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/exercise_model.dart';
 
-class exercisesListViewModel with ChangeNotifier {
+class exercisesPickerViewModel with ChangeNotifier {
   List<exerciseModel> _exercisesList = [];
   bool _isLoading = false;
   bool _isDeleteLoading = false;
 
   void reset() {
     // _page = 0;
-    _exercisesList.clear();
+    _exercisesList = [];
     _isLoading = false;
+    notifyListeners();
   }
 
   Future<void> getExercisesData({required String lang}) async {

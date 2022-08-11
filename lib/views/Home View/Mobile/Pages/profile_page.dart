@@ -6,6 +6,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
+import 'package:home_workout_app/models/workout_list_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view_widgets.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
@@ -52,6 +53,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 .getDietIsOpened) {
           Provider.of<ProfileViewModel>(context, listen: false)
               .setUserDiets(context.locale == const Locale('en') ? 'en' : 'ar');
+        }
+
+        if (_scrollController.offset ==
+                _scrollController.position.maxScrollExtent &&
+            Provider.of<ProfileViewModel>(context, listen: false)
+                .getWorkoutIsOpened) {
+          Provider.of<ProfileViewModel>(context, listen: false).setUserWorkouts(
+              lang: context.locale == const Locale('en') ? 'en' : 'ar',
+              userId: Provider.of<ProfileViewModel>(context, listen: false)
+                  .getUserData
+                  .id);
         }
       });
     });
@@ -576,16 +588,62 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ),
                         ),
+                        // if (Provider.of<ProfileViewModel>(context, listen: true)
+                        //         .getUserData
+                        //         .roleId ==
+                        //     2)
+                        //   ExpansionTile(
+                        //     iconColor: blueColor,
+                        //     title: Text(
+                        //       'Shared workouts',
+                        //       style: theme.textTheme.bodySmall,
+                        //     ).tr(),
+                        //   ),
                         if (Provider.of<ProfileViewModel>(context, listen: true)
-                                .getUserData
-                                .roleId ==
-                            2)
-                          ExpansionTile(
-                            iconColor: blueColor,
-                            title: Text(
-                              'Shared workouts',
-                              style: theme.textTheme.bodySmall,
-                            ).tr(),
+                                    .getUserData
+                                    .roleId ==
+                                2 ||
+                            Provider.of<ProfileViewModel>(context, listen: true)
+                                    .getUserData
+                                    .roleId !=
+                                0)
+                          Consumer<ProfileViewModel>(
+                            builder: (context, user, child) => ExpansionTile(
+                              onExpansionChanged: (change) async {
+                                if (change) {
+                                  user.setWorkoutIsOpened(true);
+                                  user.setWorkoutPage(0);
+                                  user.clearWorkouts();
+                                  await user.setUserWorkouts(
+                                      lang: getLang(context),
+                                      userId: user.getUserData.id);
+                                } else {
+                                  user.setWorkoutIsOpened(false);
+
+                                  user.clearWorkouts();
+                                }
+                              },
+                              iconColor: blueColor,
+                              title: Text(
+                                'Shared workouts',
+                                style: theme.textTheme.bodySmall,
+                              ).tr(),
+                              children: (user.getIsWorkoutLogoutLoading &&
+                                      user.getUserWorkouts.isEmpty)
+                                  ? [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                            child:
+                                                bigLoader(color: orangeColor)),
+                                      ),
+                                    ]
+                                  : user.getUserWorkouts
+                                      .map(
+                                        (e) => _buildWorkoutList(context, 1, e),
+                                      )
+                                      .toList(),
+                            ),
                           ),
                         if (Provider.of<ProfileViewModel>(context, listen: true)
                                     .getUserData
@@ -1182,5 +1240,339 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           );
+  }
+
+  Widget _buildWorkoutList(
+      BuildContext context, int index, WorkoutListModel workoutValue) {
+    final mq = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
+    return Column(
+      children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, '/anotherUserProfile',
+                  arguments: {'id': workoutValue.user_id});
+            },
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        workoutValue.prof_img_url.toString().substring(0, 4) !=
+                                'http'
+                            ? '$ip/${workoutValue.prof_img_url}'
+                            : workoutValue.prof_img_url.toString()
+                        // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612',
+                        ),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${workoutValue.f_name} ${workoutValue.l_name}',
+                      style:
+                          theme.textTheme.bodySmall!.copyWith(color: blueColor),
+                    ),
+                    Text(
+                      '${workoutValue.created_at}',
+                      style: theme.textTheme.displaySmall!
+                          .copyWith(color: greyColor, fontSize: 10),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          /*   PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'Favorite',
+                child: Text(
+                  workoutValue.saved != true
+                      ? 'Add to favorite'.tr()
+                      : 'Deleted form favorite'.tr(),
+                  style: TextStyle(color: orangeColor),
+                ),
+              ),
+              if ((sharedPreferences.get("role_id") == 2 &&
+                      workoutValue.user_id == 2) ||
+                  sharedPreferences.get("role_id") == 4 ||
+                  sharedPreferences.get("role_id") == 5)
+                PopupMenuItem(
+                  child: Text(
+                    'Edit'.tr(),
+                    style: TextStyle(color: orangeColor),
+                  ),
+                  value: 'Edit',
+                ),
+              if ((sharedPreferences.get("role_id") == 2 &&
+                      workoutValue.user_id == 2) ||
+                  sharedPreferences.get("role_id") == 4 ||
+                  sharedPreferences.get("role_id") == 5)
+                PopupMenuItem(
+                  child: Text(
+                    'Delete'.tr(),
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  value: 'Delete',
+                ),
+            ],
+            onSelected: (newVal) async {
+              if (newVal == 'Favorite') {
+                final WorkoutListModel? BackEndMessage =
+                    await Provider.of<WorkoutListViewModel>(context,
+                            listen: false)
+                        .changeFavoriteState(
+                            context.locale == Locale('en') ? 'en' : 'ar',
+                            workoutValue.id!.toInt());
+                if (BackEndMessage!.message != '' ||
+                    BackEndMessage.message != '') {
+                  showSnackbar(
+                      Text(BackEndMessage.message.toString()), context);
+                }
+                if (BackEndMessage.statusCode == 200) {
+                  Provider.of<WorkoutListViewModel>(context, listen: false)
+                      .resetForFilter();
+                  Provider.of<WorkoutListViewModel>(context, listen: false)
+                      .getWorkoutsData(
+                          context.locale == Locale('en') ? 'en' : 'ar',
+                          Provider.of<WorkoutListViewModel>(context,
+                                  listen: false)
+                              .page,
+                          Provider.of<WorkoutListViewModel>(context,
+                                  listen: false)
+                              .CategoryNumber,
+                          Provider.of<WorkoutListViewModel>(context,
+                                  listen: false)
+                              .DifficultyNumber,
+                          '/workout/filter');
+                }
+              } else if (newVal == 'Edit') {
+                print(workoutValue.id);
+                await Navigator.of(context)
+                    .pushNamed('/editWorkout', arguments: {
+                  // 'Categories IDs': workoutValue.,
+                  'name': workoutValue.name,
+                  'description': workoutValue.description,
+                  'id': workoutValue.id,
+                });
+                Provider.of<WorkoutListViewModel>(context, listen: false)
+                    .resetForFilter();
+                Provider.of<WorkoutListViewModel>(context, listen: false)
+                    .getWorkoutsData(
+                        context.locale == Locale('en') ? 'en' : 'ar',
+                        Provider.of<WorkoutListViewModel>(context,
+                                listen: false)
+                            .page,
+                        Provider.of<WorkoutListViewModel>(context,
+                                listen: false)
+                            .CategoryNumber,
+                        Provider.of<WorkoutListViewModel>(context,
+                                listen: false)
+                            .DifficultyNumber,
+                        '/workout/filter');
+              } else if (newVal == 'Delete') {
+                print('yes');
+                final WorkoutListModel BackEndMessage =
+                    await Provider.of<WorkoutListViewModel>(context,
+                            listen: false)
+                        .deleteSpecificWorkout(
+                            context.locale == Locale('en') ? 'en' : 'ar',
+                            workoutValue.id);
+                if (BackEndMessage.message != '' ||
+                    BackEndMessage.message != '') {
+                  showSnackbar(
+                      Text(BackEndMessage.message.toString()), context);
+                }
+                if (BackEndMessage.statusCode == 200) {
+                  Provider.of<WorkoutListViewModel>(context, listen: false)
+                      .resetForFilter();
+                  Provider.of<WorkoutListViewModel>(context, listen: false)
+                      .getWorkoutsData(
+                          context.locale == Locale('en') ? 'en' : 'ar',
+                          Provider.of<WorkoutListViewModel>(context,
+                                  listen: false)
+                              .page,
+                          Provider.of<WorkoutListViewModel>(context,
+                                  listen: false)
+                              .CategoryNumber,
+                          Provider.of<WorkoutListViewModel>(context,
+                                  listen: false)
+                              .DifficultyNumber,
+                          '/workout/filter');
+                }
+              }
+            },
+          ),
+       */
+        ]),
+        InkWell(
+          onTap: () {
+            //TODO:
+            Navigator.pushNamed(context, '/specificWorkout',
+                arguments: {'workoutId': workoutValue.id});
+          },
+          child: Container(
+            width: mq.width * 0.95,
+            height: 200,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade400,
+              borderRadius: BorderRadius.circular(17),
+              border: Border.all(color: blueColor, width: 2),
+            ),
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image(
+                    loadingBuilder: (context, child, loadingProgress) =>
+                        loadingProgress != null
+                            ? const LoadingContainer()
+                            : child,
+                    width: mq.width * 0.95,
+                    height: 250,
+                    fit: BoxFit.cover,
+                    image: NetworkImage(workoutValue.workout_image_url
+                                    .toString()
+                                    .substring(0, 4) !=
+                                'http'
+                            ? '$ip/${workoutValue.workout_image_url}'
+                            : workoutValue.workout_image_url.toString()
+                        // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612',
+                        ),
+                  ),
+                ),
+                Container(
+                  width: mq.width * 0.95,
+                  height: 250,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.65),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Container(
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              bottomLeft: Radius.circular(15)),
+                          color: orangeColor.withOpacity(0.5),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              FittedBox(
+                                child: Text(workoutValue.name.toString(),
+                                    style: TextStyle(
+                                        color: blueColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 25)),
+                              ),
+                              FittedBox(
+                                child: Text(
+                                  'Exercises: ${workoutValue.excersise_count}',
+                                  style: theme.textTheme.displaySmall,
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  const Icon(
+                                    Icons.alarm,
+                                    color: Colors.white,
+                                    size: 25,
+                                  ),
+                                  Text(
+                                    '${workoutValue.length} min',
+                                    style: theme.textTheme.displaySmall!
+                                        .copyWith(fontSize: 15),
+                                  )
+                                ],
+                              ),
+                              // FittedBox(
+                              //   child: Text(
+                              //     'Published by:\ncoach ${e.publisherName}',
+                              //     style: theme.textTheme.displaySmall,
+                              //   ),
+                              // )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(15),
+                              bottomRight: Radius.circular(15)),
+                          color: orangeColor.withOpacity(0.5),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              FittedBox(
+                                child: Text(
+                                  ' ',
+                                  style: theme.textTheme.displaySmall,
+                                ),
+                              ),
+                              FittedBox(
+                                child: Text(
+                                  '${workoutValue.predicted_burnt_calories} Kcal',
+                                  style: theme.textTheme.displaySmall,
+                                ),
+                              ),
+                              Icon(
+                                Icons.electric_bolt_rounded,
+                                color: workoutValue.difficulty == 1
+                                    ? Colors.green
+                                    : (workoutValue.difficulty == 2
+                                        ? Colors.yellow
+                                        : Colors.red),
+                                size: 25,
+                              ),
+                              FittedBox(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 6),
+                                  child: Text(
+                                    workoutValue.description.toString(),
+                                    style: theme.textTheme.displaySmall,
+                                    overflow: TextOverflow.fade,
+                                    maxLines: 3,
+                                    // softWrap: false,
+                                    // textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

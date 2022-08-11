@@ -28,6 +28,7 @@ class MyWorkoutsViewModel with ChangeNotifier {
     workoutsList = [];
     page = 1;
     isLoading = false;
+    notifyListeners();
   }
 
   getWorkoutsData(String lang, int page, String linkType) async {
@@ -39,8 +40,13 @@ class MyWorkoutsViewModel with ChangeNotifier {
     // return futureworkoutsList;
   }
 
-  deleteSpecificChallengeData(String lang, int? id) {
-    WorkoutListsAPI().deleteExercise(lang, id);
+  Future<WorkoutListModel> deleteSpecificWorkout(String lang, int? id) async {
+    return await WorkoutListsAPI().deleteWorkout(lang, id);
+    notifyListeners();
+  }
+
+  Future<WorkoutListModel?> changeFavoriteState(String lang, int id) async {
+    return await WorkoutListsAPI().changeFavoriteState(lang, id);
     notifyListeners();
   }
 

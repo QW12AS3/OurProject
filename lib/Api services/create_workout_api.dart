@@ -73,16 +73,17 @@ class CreateWorkoutAPI {
   }
 
   static Future<CreateworkoutModel?> EditWorkoutWithoutImage(
-      CreateworkoutModel user, String lang) async {
+      CreateworkoutModel user, String link, String lang) async {
     try {
-      print(sharedPreferences.get('access_token'));
-      String link;
-      if (user.id == -1 || user.id == 0) {
-        link = '$base_URL/workout/create';
-      } else {
-        link = '$base_URL/workout/update/${user.id}';
-      }
-      final Response response = await post(Uri.parse(link),
+      // print(sharedPreferences.get('access_token'));
+      // String link;
+      // if (user.id == -1 || user.id == 0) {
+      //   link = '$base_URL/workout/create';
+      // } else {
+      //   link = '$base_URL/workout/update/${user.id}';
+      // }
+      print(link);
+      final Response response = await post(Uri.parse('$base_URL$link'),
           headers: <String, String>{
             // "Access-Control-Allow-Origin": "*",
             // 'Content-Type': 'application/json;charset=UTF-8'
@@ -132,6 +133,7 @@ class CreateWorkoutAPI {
       request.fields['categorie_id'] = user.categorie_id!;
       request.fields['equipment'] = user.equipment!;
       request.fields['difficulty'] = user.difficulty!;
+      request.fields['description'] = user.desc!;
       request.fields['excersises'] = jsonEncode(user.excersisesList!);
       // if (user.time == 'true') {
       //   request.fields['time'] = '1';
