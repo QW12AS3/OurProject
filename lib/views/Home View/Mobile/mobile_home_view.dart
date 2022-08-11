@@ -39,10 +39,10 @@ class _MobileHomeViewState extends State<MobileHomeView>
     });
 
     Future.delayed(Duration.zero).then((value) {
-      Provider.of<ProfileViewModel>(context, listen: false)
-          .setCurrentUserData(context);
-      Provider.of<MobileHomeViewModel>(context, listen: false)
-          .getSummaryData(lang: getLang(context), context: context);
+      // Provider.of<ProfileViewModel>(context, listen: false)
+      //     .setCurrentUserData(context);
+      // Provider.of<MobileHomeViewModel>(context, listen: false)
+      //     .getSummaryData(lang: getLang(context), context: context);
 
       final args = ModalRoute.of(context)!.settings.arguments as Map;
       //log('Page ${args['page']}');
@@ -123,9 +123,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
                                       .getCurrentTab ==
                                   3
                           ? 50
-                          : context.locale == const Locale('en')
-                              ? 90
-                              : 130,
+                          : 130,
                   bottom: Provider.of<MobileHomeViewModel>(context,
                                       listen: true)
                                   .getCurrentTab ==

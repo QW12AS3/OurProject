@@ -65,7 +65,7 @@ class _SavedPostsViewState extends State<SavedPostsView> {
                           'There are no saved posts',
                           style: theme.textTheme.bodySmall!
                               .copyWith(color: greyColor),
-                        ),
+                        ).tr(),
                         TextButton(
                           onPressed: () async {
                             Provider.of<SavedPostsViewModel>(context,
@@ -87,7 +87,7 @@ class _SavedPostsViewState extends State<SavedPostsView> {
                             style: theme.textTheme.bodySmall!.copyWith(
                                 color: orangeColor,
                                 fontWeight: FontWeight.w300),
-                          ),
+                          ).tr(),
                         )
                       ],
                     ),

@@ -88,7 +88,7 @@ class _SavedDietsViewState extends State<SavedDietsView> {
                             style: theme.textTheme.bodySmall!.copyWith(
                                 color: orangeColor,
                                 fontWeight: FontWeight.w300),
-                          ),
+                          ).tr(),
                         )
                       ],
                     ),

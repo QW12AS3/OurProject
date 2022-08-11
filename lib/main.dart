@@ -150,7 +150,6 @@ class Vigor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.setLocale(const Locale('en'));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserInformationViewModel()),
@@ -210,177 +209,249 @@ class Vigor extends StatelessWidget {
         ChangeNotifierProvider(
             create: (context) => favoriteWorkoutsViewModel()),
       ],
-      child: MaterialApp(
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
-        // onGenerateRoute: (settings) {
-        //   switch (settings.name) {
-        //     case 'comments':
-        //       return PageTransition(
-        //           child: CommentsView(),
-        //           type: PageTransitionType.leftToRight);
-        //     case 'editProfile':
-        //       return PageTransition(
-        //           child: EditProfileView(), type: PageTransitionType.scale);
-        //     case 'changeEmail':
-        //       return PageTransition(
-        //           child: ChangeEmailView(),
-        //           type: PageTransitionType.leftToRight);
-        //     default:
-        //       return null;
-        //   }
-        // },
+      child: Consumer<SettingsViewModel>(builder: (context, settings, child) {
+        Future.delayed(Duration.zero).then((_) {
+          settings.setThemeFirstTime();
+        });
+        return MaterialApp(
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          // onGenerateRoute: (settings) {
+          //   switch (settings.name) {
+          //     case 'comments':
+          //       return PageTransition(
+          //           child: CommentsView(),
+          //           type: PageTransitionType.leftToRight);
+          //     case 'editProfile':
+          //       return PageTransition(
+          //           child: EditProfileView(), type: PageTransitionType.scale);
+          //     case 'changeEmail':
+          //       return PageTransition(
+          //           child: ChangeEmailView(),
+          //           type: PageTransitionType.leftToRight);
+          //     default:
+          //       return null;
+          //   }
+          // },
 
-        initialRoute: '/splash',
-        routes: {
-          '/signup': (context) => SignUp(),
-          '/signin': (context) => SignIn(),
-          '/start': (context) => StartView(),
-          '/otp': (context) => OTPView(),
-          '/comments': (context) => CommentsView(),
-          '/editProfile': (context) => EditProfileView(),
-          '/changeEmail': (context) => ChangeEmailView(),
-          '/changePassword': (context) => ChangePasswordView(),
-          '/anotherUserProfile': (context) => AnotherUserProfileView(),
-          '/home': (context) => MobileHomeView(),
-          '/userinfo': (context) => UserInformationView(),
-          '/addHealthRecord': (context) => AddHealthRecordView(),
-          '/splash': (context) => SplashView(),
-          '/editHealthRecord': (context) => EditHealthRecordView(),
-          '/createPost': (context) => CreatePostView(),
-          '/forgetPassword': (context) => ForgetPasswordView(),
-          '/resetPassword': (context) => ResetPasswordView(),
-          '/postView': (context) => PostView(),
-          '/savedPosts': (context) => SavedPostsView(),
-          '/editPostView': (context) => EditPostView(),
-          '/challenges': (context) => GeneralChallengesView(),
-          '/createChallenge': (context) => CreateChallengeView(),
-          '/': (context) => IPView(),
-          '/apply': (context) => ApplyView(),
-          '/pdf': (context) => PDFView(),
-          '/cv': (context) => CVView(),
-          '/editCV': (context) => EditApplyView(),
-          '/dashboard': (context) => DashboardsView(),
-          '/postsDashboard': (context) => PostsDashbaordView(),
-          '/cvsDashboard': (context) => CVsDashboard(),
-          '/reportedPostDashboard': (context) => ReportedPostsDashbaordView(),
-          '/reportedCommentsDashboard': (context) =>
-              ReportedCommentsDashboard(),
-          '/createFood': (context) => CreateFoodView(),
-          '/foodList': (context) => FoodsListView(),
-          '/editFood': (context) => EditFoodView(),
-          '/createMeal': (context) => CreateMealView(),
-          '/foodPicker': (context) => FoodsPickerListView(),
-          '/mealsList': (context) => MealsListView(),
-          '/editMeal': (context) => EditMealView(),
-          '/createDiet': (context) => CreateDietView(),
-          '/mealPicker': (context) => MealPickerView(),
-          '/editDiet': (context) => EditDietView(),
-          '/specDiet': (context) => SpecificDietView(),
-          '/createWorkout': (context) => CreateWorkoutView(),
-          '/createExercise': (context) => CreateExerciseView(),
-          '/EditExerciseView': (context) => EditExerciseView(),
-          '/savedDiets': (context) => SavedDietsView(),
-          '/exercisesPicker': (context) => ExercisePickerListView(),
-          '/appControl': (context) => AppControlView(),
-          '/search': (context) => SearchView(),
-          '/subscribedDiet': (context) => SubscribedDietView(),
-          '/specificWorkout': (context) => SpecificWorkoutView(),
-          '/practice': (context) => PracticingView(),
-          '/myWorkouts': (context) => MyWorkouts(),
-          '/editWorkout': (context) => EditWorkoutView(),
-          '/favoriteWorkouts': (context) => favoriteWorkoutsView(),
-          '/settings': (context) => SettingsView(),
-          '/finishWorkout': (context) => FinishWorkoutView(),
-          '/chat': (context) => ChatView(),
-          '/chatList': (context) => ChatListView()
-        },
-        title: 'Vigor',
-        debugShowCheckedModeBanner: false,
-        themeMode: ThemeMode.light,
-        theme: ThemeData(
-          colorSchemeSeed: orangeColor,
-          tabBarTheme: TabBarTheme(
-            labelColor: orangeColor,
-            unselectedLabelColor: greyColor,
-            indicatorSize: TabBarIndicatorSize.tab,
-          ),
-          appBarTheme: AppBarTheme(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              iconTheme: IconThemeData(color: orangeColor)),
-          snackBarTheme: SnackBarThemeData(
-            contentTextStyle: Theme.of(context).textTheme.bodyMedium!,
-            backgroundColor: orangeColor.withOpacity(0.9),
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-                side: BorderSide(color: blueColor)),
-          ),
-          checkboxTheme: CheckboxThemeData(
-            fillColor: MaterialStateProperty.all(blueColor),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
+          initialRoute: '/',
+          routes: {
+            '/signup': (context) => SignUp(),
+            '/signin': (context) => SignIn(),
+            '/start': (context) => StartView(),
+            '/otp': (context) => OTPView(),
+            '/comments': (context) => CommentsView(),
+            '/editProfile': (context) => EditProfileView(),
+            '/changeEmail': (context) => ChangeEmailView(),
+            '/changePassword': (context) => ChangePasswordView(),
+            '/anotherUserProfile': (context) => AnotherUserProfileView(),
+            '/home': (context) => MobileHomeView(),
+            '/userinfo': (context) => UserInformationView(),
+            '/addHealthRecord': (context) => AddHealthRecordView(),
+            '/splash': (context) => SplashView(),
+            '/editHealthRecord': (context) => EditHealthRecordView(),
+            '/createPost': (context) => CreatePostView(),
+            '/forgetPassword': (context) => ForgetPasswordView(),
+            '/resetPassword': (context) => ResetPasswordView(),
+            '/postView': (context) => PostView(),
+            '/savedPosts': (context) => SavedPostsView(),
+            '/editPostView': (context) => EditPostView(),
+            '/challenges': (context) => GeneralChallengesView(),
+            '/createChallenge': (context) => CreateChallengeView(),
+            '/': (context) => IPView(),
+            '/apply': (context) => ApplyView(),
+            '/pdf': (context) => PDFView(),
+            '/cv': (context) => CVView(),
+            '/editCV': (context) => EditApplyView(),
+            '/dashboard': (context) => DashboardsView(),
+            '/postsDashboard': (context) => PostsDashbaordView(),
+            '/cvsDashboard': (context) => CVsDashboard(),
+            '/reportedPostDashboard': (context) => ReportedPostsDashbaordView(),
+            '/reportedCommentsDashboard': (context) =>
+                ReportedCommentsDashboard(),
+            '/createFood': (context) => CreateFoodView(),
+            '/foodList': (context) => FoodsListView(),
+            '/editFood': (context) => EditFoodView(),
+            '/createMeal': (context) => CreateMealView(),
+            '/foodPicker': (context) => FoodsPickerListView(),
+            '/mealsList': (context) => MealsListView(),
+            '/editMeal': (context) => EditMealView(),
+            '/createDiet': (context) => CreateDietView(),
+            '/mealPicker': (context) => MealPickerView(),
+            '/editDiet': (context) => EditDietView(),
+            '/specDiet': (context) => SpecificDietView(),
+            '/createWorkout': (context) => CreateWorkoutView(),
+            '/createExercise': (context) => CreateExerciseView(),
+            '/EditExerciseView': (context) => EditExerciseView(),
+            '/savedDiets': (context) => SavedDietsView(),
+            '/exercisesPicker': (context) => ExercisePickerListView(),
+            '/appControl': (context) => AppControlView(),
+            '/search': (context) => SearchView(),
+            '/subscribedDiet': (context) => SubscribedDietView(),
+            '/specificWorkout': (context) => SpecificWorkoutView(),
+            '/practice': (context) => PracticingView(),
+            '/myWorkouts': (context) => MyWorkouts(),
+            '/editWorkout': (context) => EditWorkoutView(),
+            '/favoriteWorkouts': (context) => favoriteWorkoutsView(),
+            '/settings': (context) => SettingsView(),
+            '/finishWorkout': (context) => FinishWorkoutView(),
+            '/chat': (context) => ChatView(),
+            '/chatList': (context) => ChatListView()
+          },
+          title: 'Vigor',
+          debugShowCheckedModeBanner: false,
+          themeMode: settings.getTheme ? ThemeMode.light : ThemeMode.dark,
+          theme: ThemeData(
+            colorSchemeSeed: orangeColor,
+            tabBarTheme: TabBarTheme(
+              labelColor: orangeColor,
+              unselectedLabelColor: greyColor,
+              indicatorSize: TabBarIndicatorSize.tab,
+            ),
+            appBarTheme: AppBarTheme(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                iconTheme: IconThemeData(color: orangeColor)),
+            snackBarTheme: SnackBarThemeData(
+              contentTextStyle: Theme.of(context).textTheme.bodyMedium!,
+              backgroundColor: orangeColor.withOpacity(0.9),
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  side: BorderSide(color: blueColor)),
+            ),
+            checkboxTheme: CheckboxThemeData(
+              fillColor: MaterialStateProperty.all(blueColor),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+            floatingActionButtonTheme: FloatingActionButtonThemeData(
+              backgroundColor: orangeColor,
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ButtonStyle(
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15))),
+                  textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
+                      fontFamily: 'JosefinSans',
+                      color: orangeColor,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold)),
+                  backgroundColor: MaterialStateProperty.all(orangeColor),
+                  elevation: MaterialStateProperty.all(2)),
+            ),
+            fontFamily: 'JosefinSans',
+            textTheme: TextTheme(
+              displaySmall: const TextStyle(
+                  fontFamily: 'JosefinSans',
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+              bodyLarge: TextStyle(
+                  color: orangeColor,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold),
+              bodyMedium: TextStyle(
+                  fontFamily: 'JosefinSans',
+                  color: orangeColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+              bodySmall: TextStyle(
+                  fontFamily: 'JosefinSans',
+                  color: orangeColor,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
             ),
           ),
-          floatingActionButtonTheme: FloatingActionButtonThemeData(
-            backgroundColor: orangeColor,
+          darkTheme: ThemeData(
+            scaffoldBackgroundColor: Color.fromARGB(255, 35, 35, 36),
+            drawerTheme: const DrawerThemeData(
+                backgroundColor: Color.fromARGB(255, 48, 45, 40)),
+            colorSchemeSeed: orangeColor,
+            tabBarTheme: TabBarTheme(
+              labelColor: orangeColor,
+              unselectedLabelColor: greyColor,
+              indicatorSize: TabBarIndicatorSize.tab,
+            ),
+            appBarTheme: AppBarTheme(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                iconTheme: IconThemeData(color: orangeColor)),
+            snackBarTheme: SnackBarThemeData(
+              contentTextStyle: Theme.of(context).textTheme.bodyMedium!,
+              backgroundColor: orangeColor.withOpacity(0.9),
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  side: BorderSide(color: blueColor)),
+            ),
+            checkboxTheme: CheckboxThemeData(
+              fillColor: MaterialStateProperty.all(blueColor),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+            floatingActionButtonTheme: FloatingActionButtonThemeData(
+              backgroundColor: orangeColor,
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ButtonStyle(
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15))),
+                  textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
+                      fontFamily: 'JosefinSans',
+                      color: orangeColor,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold)),
+                  backgroundColor: MaterialStateProperty.all(orangeColor),
+                  elevation: MaterialStateProperty.all(2)),
+            ),
+            fontFamily: 'JosefinSans',
+            textTheme: TextTheme(
+              displaySmall: const TextStyle(
+                  fontFamily: 'JosefinSans',
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+              bodyLarge: TextStyle(
+                  color: orangeColor,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold),
+              bodyMedium: TextStyle(
+                  fontFamily: 'JosefinSans',
+                  color: orangeColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+              bodySmall: TextStyle(
+                  fontFamily: 'JosefinSans',
+                  color: orangeColor,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+            ),
           ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15))),
-                textStyle: MaterialStateProperty.all<TextStyle>(TextStyle(
-                    fontFamily: 'JosefinSans',
-                    color: orangeColor,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold)),
-                backgroundColor: MaterialStateProperty.all(orangeColor),
-                elevation: MaterialStateProperty.all(2)),
-          ),
-          fontFamily: 'JosefinSans',
-          textTheme: TextTheme(
-            displaySmall: const TextStyle(
-                fontFamily: 'JosefinSans',
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w500),
-            bodyLarge: TextStyle(
-                color: orangeColor, fontSize: 30, fontWeight: FontWeight.bold),
-            bodyMedium: TextStyle(
-                fontFamily: 'JosefinSans',
-                color: orangeColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-            bodySmall: TextStyle(
-                fontFamily: 'JosefinSans',
-                color: orangeColor,
-                fontSize: 15,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-        darkTheme: ThemeData(),
 
-        //home: kIsWeb ? const WebHomeView() : const MobileHomeView(),
-        // home: UserInformationView()
+          //home: kIsWeb ? const WebHomeView() : const MobileHomeView(),
+          // home: UserInformationView()
 
-        // StartView(),
-        //  home: UserInformationView(),
+          // StartView(),
+          //  home: UserInformationView(),
 
-        //home: SignUp(),
+          //home: SignUp(),
 
-        //home: SignUp(),
+          //home: SignUp(),
 
-        // home: StartView(),
-        //  home: const MobileHomeView(),
+          // home: StartView(),
+          //  home: const MobileHomeView(),
 
-        // home: SignIn(),
-        // home: OTPView(),
-        // home: SignUp(),
-//         home: MobileHomeView(),
-        //  UserInformationView(),
-      ),
+          // home: SignIn(),
+          // home: OTPView(),
+          // home: SignUp(),
+          //         home: MobileHomeView(),
+          //  UserInformationView(),
+        );
+      }),
     );
   }
 }
