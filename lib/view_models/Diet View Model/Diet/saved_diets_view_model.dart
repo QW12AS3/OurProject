@@ -38,7 +38,7 @@ class SavedDietsViewModel with ChangeNotifier {
   Future<void> getDietsList({required String lang}) async {
     setIsLoading(true);
     setPage(getPage + 1);
-    final response = await DietAPI().getUserSubDiets(lang: lang, page: getPage);
+    final response = await DietAPI().getSavedDiets(lang: lang, page: getPage);
     if (response.isEmpty)
       setPage(getPage - 1);
     else

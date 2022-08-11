@@ -74,7 +74,7 @@ class _SpecificWorkoutViewState extends State<SpecificWorkoutView> {
                 color: workout.getWorkout.difficulty == 1
                     ? Colors.green
                     : (workout.getWorkout.difficulty == 2
-                        ? Colors.orange
+                        ? Colors.yellow
                         : Colors.red),
               ),
             ],
@@ -172,47 +172,50 @@ class _SpecificWorkoutViewState extends State<SpecificWorkoutView> {
                               style: theme.textTheme.bodySmall!
                                   .copyWith(color: orangeColor)),
                         ),
-                        ListBody(
-                          children: workout.getWorkout.exercises
-                              .map(
-                                (e) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      border: Border.all(
-                                          color: blueColor, width: 1),
-                                    ),
-                                    child: InkWell(
-                                      child: ListTile(
-                                        title: Text(
-                                          e.name,
-                                          style: theme.textTheme.bodySmall,
-                                        ),
-                                        leading: CircleAvatar(
-                                          backgroundImage:
-                                              NetworkImage(e.imgUrl),
-                                        ),
-                                        subtitle: Text(
-                                          e.description,
-                                          style: theme.textTheme.bodySmall!
-                                              .copyWith(
-                                                  color: greyColor,
-                                                  fontSize: 12),
-                                        ),
-                                        trailing: Text(
-                                          e.count != 0
-                                              ? '${e.count} $reps'
-                                              : '${e.length} $sec',
-                                          style: theme.textTheme.bodySmall!
-                                              .copyWith(color: blueColor),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 60),
+                          child: ListBody(
+                            children: workout.getWorkout.exercises
+                                .map(
+                                  (e) => Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: Border.all(
+                                            color: blueColor, width: 1),
+                                      ),
+                                      child: InkWell(
+                                        child: ListTile(
+                                          title: Text(
+                                            e.name,
+                                            style: theme.textTheme.bodySmall,
+                                          ),
+                                          leading: CircleAvatar(
+                                            backgroundImage:
+                                                NetworkImage(e.imgUrl),
+                                          ),
+                                          subtitle: Text(
+                                            e.description,
+                                            style: theme.textTheme.bodySmall!
+                                                .copyWith(
+                                                    color: greyColor,
+                                                    fontSize: 12),
+                                          ),
+                                          trailing: Text(
+                                            e.count != 0
+                                                ? '${e.count} $reps'
+                                                : '${e.length} $sec',
+                                            style: theme.textTheme.bodySmall!
+                                                .copyWith(color: blueColor),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              )
-                              .toList(),
+                                )
+                                .toList(),
+                          ),
                         )
                       ],
                     ),

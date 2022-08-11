@@ -128,7 +128,7 @@ class DietAPI {
       print(jsonDecode(response.body));
       if (response.statusCode == 200) {
         List<DietModel> newDiet = [];
-        final data = jsonDecode(response.body)['data']['data'] as List;
+        final data = jsonDecode(response.body)['data'] as List;
         data.forEach((element) {
           newDiet.add(DietModel.fromJson(element));
         });
@@ -145,7 +145,7 @@ class DietAPI {
     print('Called');
     try {
       final response = await http.get(
-        Uri.parse('$base_URL/diet/favorites'),
+        Uri.parse('$base_URL/diet/favorites?page=$page'),
         headers: {
           'apikey': apiKey,
           'lang': lang,
@@ -158,7 +158,7 @@ class DietAPI {
       print(jsonDecode(response.body));
       if (response.statusCode == 200) {
         List<DietModel> newDiet = [];
-        final data = jsonDecode(response.body)['data']['data'] as List;
+        final data = jsonDecode(response.body)['data'] as List;
         data.forEach((element) {
           newDiet.add(DietModel.fromJson(element));
         });
@@ -188,7 +188,7 @@ class DietAPI {
       //print(jsonDecode(response.body));
       if (response.statusCode == 200) {
         List<DietModel> newDiet = [];
-        final data = jsonDecode(response.body)['data']['data'] as List;
+        final data = jsonDecode(response.body)['data'] as List;
         data.forEach((element) {
           newDiet.add(DietModel.fromJson(element));
         });
@@ -200,7 +200,7 @@ class DietAPI {
     return [];
   }
 
-  Future<List<DietModel>> getUserSubDiets(
+  Future<List<DietModel>> getUserSavedDiets(
       {required String lang, required int page}) async {
     print('Called');
     try {
@@ -218,7 +218,7 @@ class DietAPI {
       //print(jsonDecode(response.body));
       if (response.statusCode == 200) {
         List<DietModel> newDiet = [];
-        final data = jsonDecode(response.body)['data']['data'] as List;
+        final data = jsonDecode(response.body)['data'] as List;
         data.forEach((element) {
           newDiet.add(DietModel.fromJson(element));
         });
@@ -248,7 +248,7 @@ class DietAPI {
       print(jsonDecode(response.body));
       if (response.statusCode == 200) {
         List<DietModel> newDiet = [];
-        final data = jsonDecode(response.body)['data']['data'] as List;
+        final data = jsonDecode(response.body)['data'] as List;
         data.forEach((element) {
           newDiet.add(DietModel.fromJson(element));
         });
@@ -330,7 +330,7 @@ class DietAPI {
       );
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
-        List data = jsonDecode(response.body)['data']['data'];
+        List data = jsonDecode(response.body)['data'];
         List<CommentsModel> comments = [];
         data.forEach((element) {
           comments.add(CommentsModel.fromJsonForReview(element));

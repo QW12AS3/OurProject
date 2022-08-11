@@ -420,17 +420,17 @@ class ProfileApi {
   Future<Map<String, dynamic>> deleteAccount(
       String password, String lang) async {
     try {
-      final response = await http.post(
-        Uri.parse('$base_URL/user/delete'),
-        headers: {
-          'apikey': apiKey,
-          'lang': lang,
-          'accept': 'application/json',
-          'authorization':
-              'Bearer ${sharedPreferences.getString('access_token')}',
-          'timeZone': getTimezone()
-        },
-      );
+      final response =
+          await http.post(Uri.parse('$base_URL/user/delete'), headers: {
+        'apikey': apiKey,
+        'lang': lang,
+        'accept': 'application/json',
+        'authorization':
+            'Bearer ${sharedPreferences.getString('access_token')}',
+        'timeZone': getTimezone()
+      }, body: {
+        'password': password
+      });
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
         return {
@@ -476,5 +476,37 @@ class ProfileApi {
       return [];
     }
     return [];
+  }
+
+  Future<Map> removeRole({required String lang}) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$base_URL/cv/deleteRole'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
+        return {
+          'success': true,
+          'message': jsonDecode(response.body)['message']
+        };
+      } else {
+        print(jsonDecode(response.body));
+        return {
+          'success': false,
+          'message': jsonDecode(response.body)['message']
+        };
+      }
+    } catch (e) {
+      print('Remove Role error: $e');
+      return {'success': false, 'message': 'Something went wrong'};
+    }
   }
 }

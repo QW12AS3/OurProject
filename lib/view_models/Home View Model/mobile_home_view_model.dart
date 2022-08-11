@@ -14,6 +14,11 @@ class MobileHomeViewModel with ChangeNotifier {
 
   SummaryModel _summary = SummaryModel();
 
+  void setDietId(int id) {
+    _summary.dietId = id;
+    notifyListeners();
+  }
+
   void setisSummaryLoading(value) {
     _isSummaryLoading = value;
     notifyListeners();

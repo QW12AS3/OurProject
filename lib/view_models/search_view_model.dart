@@ -61,6 +61,7 @@ class SearchViewModel with ChangeNotifier {
     _diets.clear();
     _challenges.clear();
     _workouts.clear();
+    _isSugLoading = false;
     _page = 0;
     _isLoading = false;
     notifyListeners();

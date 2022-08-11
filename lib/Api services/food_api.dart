@@ -55,7 +55,7 @@ class FoodAPI {
       required String description}) async {
     try {
       var request =
-          http.MultipartRequest("Put", Uri.parse('$base_URL/food/update/$id'));
+          http.MultipartRequest("Post", Uri.parse('$base_URL/food/update/$id'));
       request.headers['accept'] = 'application/json';
       request.headers['apikey'] = apiKey;
       request.headers['timeZone'] = getTimezone();
@@ -63,7 +63,7 @@ class FoodAPI {
           'Bearer ${sharedPreferences.getString('access_token')}';
 
       //request.fields['food_id'] = id.toString();
-
+      request.fields['_method'] = 'PUT';
       request.fields['name'] = foodName;
       request.fields['calories'] = calories.toString();
       request.fields['description'] = description.toString();

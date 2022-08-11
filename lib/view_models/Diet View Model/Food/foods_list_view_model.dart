@@ -10,6 +10,12 @@ class FoodsListViewModel with ChangeNotifier {
   bool _isLoading = false;
   bool _isDeleteLoading = false;
   int _page = 0;
+  String _searchValue = '';
+
+  void setSearchValue(value) {
+    _searchValue = value;
+    notifyListeners();
+  }
 
   void setIsDeleteLoading(value) {
     _isDeleteLoading = value;
@@ -30,6 +36,7 @@ class FoodsListViewModel with ChangeNotifier {
     _page = 0;
     _foodsList.clear();
     _isLoading = false;
+    _searchValue = '';
   }
 
   Future<void> getFoods({required String lang}) async {
@@ -71,4 +78,5 @@ class FoodsListViewModel with ChangeNotifier {
   bool get getIsLoading => _isLoading;
   List<FoodModel> get getFoodsList => _foodsList;
   bool get getIsDeleteLoading => _isDeleteLoading;
+  String get getSearchValue => _searchValue;
 }

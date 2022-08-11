@@ -31,6 +31,12 @@ class ProfileViewModel with ChangeNotifier {
   bool _addDesc = false;
   bool _getMoreLoading = false;
   bool _getMoreDietsLoading = false;
+  bool _isRemoveLaoding = false;
+
+  void setIsRemoveLoading(value) {
+    _isRemoveLaoding = value;
+    notifyListeners();
+  }
 
   bool _infoWidgetVisible = false;
   List _followers = [];
@@ -226,9 +232,23 @@ class ProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> removeRole(
+      {required String lang, required BuildContext context}) async {
+    final response = await ProfileApi().removeRole(lang: lang);
+    if (response['success']) {
+      _userData.roleId = 1;
+      _userData.role = '';
+      notifyListeners();
+    } else {
+      showSnackbar(Text(response['message'] ?? ''), context);
+    }
+    setIsRemoveLoading(true);
+  }
+
   Future<void> logout(BuildContext context) async {
     setIslogoutLoading(true);
     final response = await ProfileApi().logout('en');
+    setIslogoutLoading(false);
 
     sharedPreferences.remove("access_token");
     sharedPreferences.remove("refresh_token");
@@ -245,6 +265,7 @@ class ProfileViewModel with ChangeNotifier {
   Future<void> logoutFromAll(BuildContext context) async {
     setIslogoutLoading(true);
     final response = await ProfileApi().logoutFromAll('en');
+    setIslogoutLoading(false);
 
     sharedPreferences.remove("access_token");
     sharedPreferences.remove("refresh_token");
@@ -338,7 +359,7 @@ class ProfileViewModel with ChangeNotifier {
       String password, String lang, BuildContext context) async {
     final response = await ProfileApi().deleteAccount(password, lang);
     if (response['success']) {
-      Navigator.pushReplacementNamed(context, 'startView');
+      Navigator.pushReplacementNamed(context, '/startView');
     } else {
       showSnackbar(Text(response['message'].toString()).tr(), context);
       Navigator.pop(context);
@@ -375,6 +396,7 @@ class ProfileViewModel with ChangeNotifier {
 
   bool get getMoreLoading => _getMoreLoading;
   bool get getMoreDietLoading => _getMoreDietsLoading;
+  bool get getIsRemoveLoading => _isRemoveLaoding;
 
   //bool get getPasswordObsecure => _PasswordObsecure;
 }

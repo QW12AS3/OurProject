@@ -213,245 +213,292 @@ class _ProfilePageState extends State<ProfilePage> {
                                     : Alignment.topLeft,
                                 child: Consumer<ProfileViewModel>(
                                   builder: (context, user, child) =>
-                                      PopupMenuButton<String>(
-                                    icon: Icon(
-                                      Icons.more_vert_rounded,
-                                      color: blueColor,
-                                    ),
-                                    onSelected: (String result) async {
-                                      switch (result) {
-                                        case 'edit':
-                                          Navigator.pushNamed(context,
-                                              '/editProfile', arguments: {
-                                            'userData':
-                                                Provider.of<ProfileViewModel>(
-                                                        context,
-                                                        listen: false)
-                                                    .getUserData
-                                          });
-                                          break;
-                                        case 'delete':
-                                          showDialog(
-                                              context: context,
-                                              builder:
-                                                  (BuildContext ctx) =>
-                                                      AlertDialog(
-                                                        title: Text(
-                                                          'Are you sure to delete your account ?',
-                                                          style: theme.textTheme
-                                                              .bodySmall,
-                                                        ).tr(),
-                                                        content: SizedBox(
-                                                          height: sharedPreferences
-                                                                      .getBool(
-                                                                          'provider') ==
-                                                                  true
-                                                              ? 25
-                                                              : 75,
-                                                          child: Column(
-                                                            children: [
-                                                              Text(
-                                                                'Note: You can reactive your account in 30 days.',
-                                                                style: theme
-                                                                    .textTheme
-                                                                    .bodySmall!
-                                                                    .copyWith(
-                                                                        color:
-                                                                            greyColor,
-                                                                        fontSize:
-                                                                            12),
-                                                              ).tr(),
-                                                              const SizedBox(
-                                                                height: 5,
-                                                              ),
-                                                              if (sharedPreferences
-                                                                      .getBool(
-                                                                          'provider') ==
-                                                                  false)
-                                                                TextField(
-                                                                  obscureText:
-                                                                      true,
-                                                                  controller:
-                                                                      passwordController,
-                                                                  keyboardType:
-                                                                      TextInputType
-                                                                          .visiblePassword,
-                                                                  decoration:
-                                                                      InputDecoration(
-                                                                    label: FittedBox(
-                                                                        child: const Text('Password')
-                                                                            .tr()),
-                                                                    floatingLabelStyle: theme
+                                      user.getIsRemoveLoading
+                                          ? smallLoader(color: orangeColor)
+                                          : PopupMenuButton<String>(
+                                              icon: Icon(
+                                                Icons.more_vert_rounded,
+                                                color: blueColor,
+                                              ),
+                                              onSelected:
+                                                  (String result) async {
+                                                switch (result) {
+                                                  case 'edit':
+                                                    Navigator.pushNamed(
+                                                        context, '/editProfile',
+                                                        arguments: {
+                                                          'userData': Provider
+                                                                  .of<ProfileViewModel>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                              .getUserData
+                                                        });
+                                                    break;
+                                                  case 'delete':
+                                                    showDialog(
+                                                        context: context,
+                                                        builder:
+                                                            (BuildContext
+                                                                    ctx) =>
+                                                                AlertDialog(
+                                                                  title: Text(
+                                                                    'Are you sure to delete your account ?',
+                                                                    style: theme
                                                                         .textTheme
                                                                         .bodySmall,
-                                                                    focusedErrorBorder:
-                                                                        OutlineInputBorder(
-                                                                      borderSide: BorderSide(
-                                                                          color:
-                                                                              orangeColor,
-                                                                          width:
-                                                                              1.5),
-                                                                      borderRadius:
-                                                                          const BorderRadius
-                                                                              .all(
-                                                                        Radius.circular(
-                                                                            15),
-                                                                      ),
-                                                                    ),
-                                                                    enabledBorder:
-                                                                        OutlineInputBorder(
-                                                                      borderSide: BorderSide(
-                                                                          color:
-                                                                              greyColor,
-                                                                          width:
-                                                                              1.5),
-                                                                      borderRadius:
-                                                                          const BorderRadius
-                                                                              .all(
-                                                                        Radius.circular(
-                                                                            15),
-                                                                      ),
-                                                                    ),
-                                                                    errorBorder:
-                                                                        const OutlineInputBorder(
-                                                                      borderSide: BorderSide(
-                                                                          color: Colors
-                                                                              .red,
-                                                                          width:
-                                                                              1.5),
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .all(
-                                                                        Radius.circular(
-                                                                            15),
-                                                                      ),
-                                                                    ),
-                                                                    focusedBorder:
-                                                                        OutlineInputBorder(
-                                                                      borderSide: BorderSide(
-                                                                          color:
-                                                                              orangeColor,
-                                                                          width:
-                                                                              1.5),
-                                                                      borderRadius:
-                                                                          const BorderRadius
-                                                                              .all(
-                                                                        Radius.circular(
-                                                                            15),
-                                                                      ),
+                                                                  ).tr(),
+                                                                  content:
+                                                                      SizedBox(
+                                                                    height: sharedPreferences.getBool('googleProvider') ==
+                                                                            true
+                                                                        ? 25
+                                                                        : 75,
+                                                                    child:
+                                                                        Column(
+                                                                      children: [
+                                                                        Text(
+                                                                          'Note: You can reactive your account in 30 days.',
+                                                                          style: theme
+                                                                              .textTheme
+                                                                              .bodySmall!
+                                                                              .copyWith(color: greyColor, fontSize: 12),
+                                                                        ).tr(),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              5,
+                                                                        ),
+                                                                        if (sharedPreferences.getBool('googleProvider') ==
+                                                                            false)
+                                                                          TextField(
+                                                                            obscureText:
+                                                                                true,
+                                                                            controller:
+                                                                                passwordController,
+                                                                            keyboardType:
+                                                                                TextInputType.visiblePassword,
+                                                                            decoration:
+                                                                                InputDecoration(
+                                                                              label: FittedBox(child: const Text('Password').tr()),
+                                                                              floatingLabelStyle: theme.textTheme.bodySmall,
+                                                                              focusedErrorBorder: OutlineInputBorder(
+                                                                                borderSide: BorderSide(color: orangeColor, width: 1.5),
+                                                                                borderRadius: const BorderRadius.all(
+                                                                                  Radius.circular(15),
+                                                                                ),
+                                                                              ),
+                                                                              enabledBorder: OutlineInputBorder(
+                                                                                borderSide: BorderSide(color: greyColor, width: 1.5),
+                                                                                borderRadius: const BorderRadius.all(
+                                                                                  Radius.circular(15),
+                                                                                ),
+                                                                              ),
+                                                                              errorBorder: const OutlineInputBorder(
+                                                                                borderSide: BorderSide(color: Colors.red, width: 1.5),
+                                                                                borderRadius: BorderRadius.all(
+                                                                                  Radius.circular(15),
+                                                                                ),
+                                                                              ),
+                                                                              focusedBorder: OutlineInputBorder(
+                                                                                borderSide: BorderSide(color: orangeColor, width: 1.5),
+                                                                                borderRadius: const BorderRadius.all(
+                                                                                  Radius.circular(15),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          )
+                                                                      ],
                                                                     ),
                                                                   ),
-                                                                )
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed:
-                                                                () async {
-                                                              await user.deleteAccount(
-                                                                  passwordController
-                                                                      .text
-                                                                      .trim(),
-                                                                  context.locale ==
-                                                                          const Locale(
-                                                                              'en')
-                                                                      ? 'en'
-                                                                      : 'ar',
-                                                                  context);
-                                                            },
-                                                            child: Text(
-                                                              'Yes',
-                                                              style: theme
-                                                                  .textTheme
-                                                                  .bodySmall,
-                                                            ).tr(),
-                                                          ),
-                                                          TextButton(
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    ctx);
-                                                              },
-                                                              child: Text(
-                                                                'Cancel',
-                                                                style: theme
-                                                                    .textTheme
-                                                                    .bodySmall!
-                                                                    .copyWith(
-                                                                        color:
-                                                                            blueColor),
-                                                              ).tr())
-                                                        ],
-                                                      ));
-                                          break;
-                                        case 'blocklist':
-                                          await user.setBlocklist(
-                                              context.locale == Locale('en')
-                                                  ? 'en'
-                                                  : 'ar');
-                                          showBottomList(context, 'Blocklist',
-                                              user.getBlocklist);
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed:
+                                                                          () async {
+                                                                        await user.deleteAccount(
+                                                                            passwordController.text
+                                                                                .trim(),
+                                                                            context.locale == const Locale('en')
+                                                                                ? 'en'
+                                                                                : 'ar',
+                                                                            context);
+                                                                      },
+                                                                      child:
+                                                                          Text(
+                                                                        'Yes',
+                                                                        style: theme
+                                                                            .textTheme
+                                                                            .bodySmall,
+                                                                      ).tr(),
+                                                                    ),
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              ctx);
+                                                                        },
+                                                                        child:
+                                                                            Text(
+                                                                          'Cancel',
+                                                                          style: theme
+                                                                              .textTheme
+                                                                              .bodySmall!
+                                                                              .copyWith(color: blueColor),
+                                                                        ).tr())
+                                                                  ],
+                                                                ));
+                                                    break;
+                                                  case 'blocklist':
+                                                    await user.setBlocklist(
+                                                        context.locale ==
+                                                                Locale('en')
+                                                            ? 'en'
+                                                            : 'ar');
+                                                    showBottomList(
+                                                        context,
+                                                        'Blocklist',
+                                                        user.getBlocklist);
 
-                                          break;
+                                                    break;
 
-                                        case 'apply':
-                                          Navigator.pushNamed(
-                                              context, '/apply');
-                                          break;
-                                        case 'editApply':
-                                          Navigator.pushNamed(context, '/cv');
-                                          break;
-                                        default:
-                                      }
-                                    },
-                                    itemBuilder: (BuildContext context) =>
-                                        <PopupMenuEntry<String>>[
-                                      PopupMenuItem<String>(
-                                        value: 'edit',
-                                        child: Text(
-                                          'Edit profile',
-                                          style: theme.textTheme.bodySmall!
-                                              .copyWith(color: blueColor),
-                                        ).tr(),
-                                      ),
-                                      if (user.getUserData.roleId != 1)
-                                        PopupMenuItem<String>(
-                                          value: 'blocklist',
-                                          child: Text(
-                                            'Blocklist',
-                                            style: theme.textTheme.bodySmall!
-                                                .copyWith(color: blueColor),
-                                          ).tr(),
-                                        ),
-                                      if (user.getUserData.roleId == 1 &&
-                                          user.getUserData.cv == false)
-                                        PopupMenuItem<String>(
-                                          value: 'apply',
-                                          child: Text(
-                                            'Apply to be coach or dietitian',
-                                            style: theme.textTheme.bodySmall!
-                                                .copyWith(color: blueColor),
-                                          ).tr(),
-                                        ),
-                                      if (user.getUserData.cv == true)
-                                        PopupMenuItem<String>(
-                                          value: 'editApply',
-                                          child: Text(
-                                            'CV',
-                                            style: theme.textTheme.bodySmall!
-                                                .copyWith(color: blueColor),
-                                          ).tr(),
-                                        ),
-                                      PopupMenuItem<String>(
-                                        value: 'delete',
-                                        child: Text(
-                                          'Delete account',
-                                          style: theme.textTheme.bodySmall!
-                                              .copyWith(color: Colors.red),
-                                        ).tr(),
-                                      ),
-                                    ],
-                                  ),
+                                                  case 'apply':
+                                                    Navigator.pushNamed(
+                                                        context, '/apply');
+                                                    break;
+                                                  case 'editApply':
+                                                    Navigator.pushNamed(
+                                                        context, '/cv');
+                                                    break;
+
+                                                  case 'removeRole':
+                                                    showDialog(
+                                                        context: context,
+                                                        builder:
+                                                            (BuildContext
+                                                                    ctx) =>
+                                                                AlertDialog(
+                                                                  title: Text(
+                                                                    'Are you sure to remove your role ?',
+                                                                    style: theme
+                                                                        .textTheme
+                                                                        .bodySmall,
+                                                                  ).tr(),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed:
+                                                                          () async {
+                                                                        Navigator.pop(
+                                                                            ctx);
+                                                                        await Provider.of<ProfileViewModel>(context, listen: false).removeRole(
+                                                                            lang:
+                                                                                getLang(context),
+                                                                            context: context);
+                                                                      },
+                                                                      child:
+                                                                          Text(
+                                                                        'Yes',
+                                                                        style: theme
+                                                                            .textTheme
+                                                                            .bodySmall,
+                                                                      ).tr(),
+                                                                    ),
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              ctx);
+                                                                        },
+                                                                        child:
+                                                                            Text(
+                                                                          'Cancel',
+                                                                          style: theme
+                                                                              .textTheme
+                                                                              .bodySmall!
+                                                                              .copyWith(color: blueColor),
+                                                                        ).tr())
+                                                                  ],
+                                                                ));
+
+                                                    break;
+                                                  default:
+                                                }
+                                              },
+                                              itemBuilder:
+                                                  (BuildContext context) =>
+                                                      <PopupMenuEntry<String>>[
+                                                PopupMenuItem<String>(
+                                                  value: 'edit',
+                                                  child: Text(
+                                                    'Edit profile',
+                                                    style: theme
+                                                        .textTheme.bodySmall!
+                                                        .copyWith(
+                                                            color: blueColor),
+                                                  ).tr(),
+                                                ),
+                                                if (user.getUserData.roleId !=
+                                                    1)
+                                                  PopupMenuItem<String>(
+                                                    value: 'blocklist',
+                                                    child: Text(
+                                                      'Blocklist',
+                                                      style: theme
+                                                          .textTheme.bodySmall!
+                                                          .copyWith(
+                                                              color: blueColor),
+                                                    ).tr(),
+                                                  ),
+                                                if (user.getUserData.roleId ==
+                                                        1 &&
+                                                    user.getUserData.cv ==
+                                                        false)
+                                                  PopupMenuItem<String>(
+                                                    value: 'apply',
+                                                    child: Text(
+                                                      'Apply to be coach or dietitian',
+                                                      style: theme
+                                                          .textTheme.bodySmall!
+                                                          .copyWith(
+                                                              color: blueColor),
+                                                    ).tr(),
+                                                  ),
+                                                if (user.getUserData.cv == true)
+                                                  PopupMenuItem<String>(
+                                                    value: 'editApply',
+                                                    child: Text(
+                                                      'CV',
+                                                      style: theme
+                                                          .textTheme.bodySmall!
+                                                          .copyWith(
+                                                              color: blueColor),
+                                                    ).tr(),
+                                                  ),
+                                                if (user.getUserData.roleId ==
+                                                        2 ||
+                                                    user.getUserData.roleId ==
+                                                        3)
+                                                  PopupMenuItem<String>(
+                                                    value: 'removeRole',
+                                                    child: Text(
+                                                      'Remove Role',
+                                                      style: theme
+                                                          .textTheme.bodySmall!
+                                                          .copyWith(
+                                                              color:
+                                                                  Colors.red),
+                                                    ).tr(),
+                                                  ),
+                                                PopupMenuItem<String>(
+                                                  value: 'delete',
+                                                  child: Text(
+                                                    'Delete account',
+                                                    style: theme
+                                                        .textTheme.bodySmall!
+                                                        .copyWith(
+                                                            color: Colors.red),
+                                                  ).tr(),
+                                                ),
+                                              ],
+                                            ),
                                 ),
                               ),
                             ],
@@ -734,7 +781,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                         listen:
                                                                             false)
                                                                     .getUserData
-                                                                    .roleId ==
+                                                                    .id ==
                                                                 e.userId)
                                                           PopupMenuItem(
                                                               value: 'edit',
@@ -760,7 +807,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                         listen:
                                                                             false)
                                                                     .getUserData
-                                                                    .roleId ==
+                                                                    .id ==
                                                                 e.userId)
                                                           PopupMenuItem(
                                                               value: 'delete',

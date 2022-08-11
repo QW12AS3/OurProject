@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/workout_list_api.dart';
@@ -456,6 +458,9 @@ class _HomePageState extends State<HomePage> {
         ),
         InkWell(
           onTap: () {
+            log('ssss');
+            Navigator.pushNamed(context, '/specificWorkout',
+                arguments: {'workoutId': workoutValue.id});
             //TODO:
             // Navigator.pushNamed(context, '/anotherUserProfile',
             //     arguments: {'id': workoutValue.user_id});

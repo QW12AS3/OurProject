@@ -224,5 +224,14 @@
     "There are no search results": "There are no search results",
     "Review stars cannot be 0": "Review stars cannot be 0",
     "Subscribe": "Subscribe",
-    "Unsubscribe": "Unsubscribe"
+    "Unsubscribe": "Unsubscribe",
+    "Are you sure to unsubscribe this diet ?": "Are you sure to unsubscribe this diet ?",
+    "If you are subscribed to another diet, it will be replaced by this diet": "If you are subscribed to another diet, it will be replaced by this diet",
+    "Subscribed diet:": "Subscribed diet:",
+    "My diet": "My diet",
+    "Predicted burnt calories:": "Predicted burnt calories:",
+    "Exercises:": "Exercises:",
+    "reps": "reps",
+    "sec": "sec",
+    "Break": "Break"
 }
