@@ -63,7 +63,7 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
             height: 30,
             child: Center(
               child: Text(
-                'Press back button when finished',
+                'Press back button when finished'.tr(),
                 style: theme.textTheme.bodySmall!.copyWith(color: greyColor),
               ).tr(),
             ),
@@ -127,7 +127,7 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
                                 child: CustomTextField(
                                     maxLines: 1,
                                     controller: _searchController,
-                                    title: 'Search'),
+                                    title: 'Search'.tr()),
                               ),
                               Expanded(
                                 child: SingleChildScrollView(

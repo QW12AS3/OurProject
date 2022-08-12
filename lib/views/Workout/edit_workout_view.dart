@@ -107,7 +107,7 @@ class _EditWorkoutViewState extends State<EditWorkoutView> {
         title: Text(
           'Edit workout',
           style: theme.textTheme.bodyMedium!,
-        ),
+        ).tr(),
       ),
       body: Provider.of<EditworkoutViewModel>(context).fetchedList == true
           ? SafeArea(

@@ -104,7 +104,7 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
             : Container(),
         appBar: AppBar(
             title: Text(
-          'Challenges',
+          'Challenges'.tr(),
           style: theme.textTheme.bodyMedium!,
         ).tr()),
         body: Column(

@@ -298,8 +298,7 @@
     "Challenge end date:": "Challenge end date:",
     "Practice by: ": "Practice by: ",
     "Repetition": "Repetition",
-    "There is a problem connecting to the internet": "There is a problem connecting to the internet"
-
+    "There is a problem connecting to the internet": "There is a problem connecting to the internet",
     "min": "min",
     "Unblock failed": "Unblock failed",
     "Follow failed": "Follow failed",
@@ -308,6 +307,12 @@
     "Please enter your gender": "Please enter your gender",
     "Please enter your birthdate": "Please enter your birthdate",
     "Please enter your country": "Please enter your country",
-    "Add exercises": "Add exercises"
-
+    "Add exercises": "Add exercises",
+    "Photo type": "Photo type",
+    "Hours": "Hours",
+    "Minutes": "Minutes",
+    "Time": "Time",
+    "Counts": "Counts",
+    "Edit workout": "Edit workout",
+    "Count": "Count"
 }
