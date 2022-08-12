@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/view_models/settings_view_mode.dart';
 import 'package:home_workout_app/views/Home%20View/Mobile/mobile_home_view_widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -282,10 +283,12 @@ class _PostViewState extends State<PostView> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  post.title,
-                  style: theme.textTheme.bodyMedium!
-                      .copyWith(color: Colors.black54),
+                child: Consumer<SettingsViewModel>(
+                  builder: (context, value, child) => Text(
+                    post.title,
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                        color: value.getTheme ? Colors.black54 : greyColor),
+                  ),
                 ),
               ),
             ),

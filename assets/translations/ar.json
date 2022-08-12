@@ -186,6 +186,7 @@
     "There are no saved diets": "لا يوجد انظمة غذائية محفوظة",
     "Shared diets": "الانظمة الغذائية المنشورة",
     "kcal": "سعرة",
+    "Kcal": "سعرة",
     "+ Add meals": "+ اضافة وجبات",
     "Meals:": "الوجبات:",
     "Day": "يوم",
@@ -287,5 +288,14 @@
     "Hard": "صعب",
     "Required": "مطلوب",
     "Not Required": "غير مطلوب",
-    "There are no comments": "لا يوجد تعليقات"
+    "There are no comments": "لا يوجد تعليقات",
+    "min": "دقيقة",
+    "Unblock failed": "فشل الغاء الحظر",
+    "Follow failed": "فشلت المتابعة",
+    "Unfollow failed": "فشل الغاء المتابعة",
+    "Change password failed": "فشل تغيير كلمة المرور",
+    "Please enter your gender": "الرجاء تحديد جنسك",
+    "Please enter your birthdate": "الرجاء ادخال تاريخ ميلادك",
+    "Please enter your country": "الرجاء تحديد بلدك",
+    "Add exercises": "اضافة تمارين"
 }

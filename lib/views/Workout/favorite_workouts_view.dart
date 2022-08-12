@@ -24,6 +24,9 @@ class favoriteWorkoutsView extends StatefulWidget {
 class _favoriteWorkoutsViewState extends State<favoriteWorkoutsView> {
   final ListViewController = ScrollController();
   TextEditingController _reviewController = TextEditingController();
+  String exer = 'Exercises:'.tr();
+  String min = 'min'.tr();
+  String kcal = 'Kcal'.tr();
 
   @override
   void initState() {
@@ -74,7 +77,7 @@ class _favoriteWorkoutsViewState extends State<favoriteWorkoutsView> {
           title: Text(
             'Favorite workouts',
             style: theme.textTheme.bodyMedium!,
-          ),
+          ).tr(),
         ),
         body: Container(
             child: Column(
@@ -441,7 +444,7 @@ class _favoriteWorkoutsViewState extends State<favoriteWorkoutsView> {
                               ),
                               FittedBox(
                                 child: Text(
-                                  'Exercises: ${workoutValue.excersise_count}',
+                                  '$exer ${workoutValue.excersise_count}',
                                   style: theme.textTheme.displaySmall,
                                 ),
                               ),
@@ -455,7 +458,7 @@ class _favoriteWorkoutsViewState extends State<favoriteWorkoutsView> {
                                     size: 25,
                                   ),
                                   Text(
-                                    '${workoutValue.length} min',
+                                    '${workoutValue.length} $min',
                                     style: theme.textTheme.displaySmall!
                                         .copyWith(fontSize: 15),
                                   )
@@ -495,7 +498,7 @@ class _favoriteWorkoutsViewState extends State<favoriteWorkoutsView> {
                               // ),
                               FittedBox(
                                 child: Text(
-                                  '${workoutValue.predicted_burnt_calories} Kcal',
+                                  '${workoutValue.predicted_burnt_calories} $kcal',
                                   style: theme.textTheme.displaySmall,
                                 ),
                               ),

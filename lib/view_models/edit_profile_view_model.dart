@@ -1,10 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/profile_api.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -144,7 +148,7 @@ class EditProfileViewModel with ChangeNotifier {
     if (response) {
       Navigator.pop(context);
     } else {
-      showSnackbar(const Text('Change password failed'), context);
+      showSnackbar(const Text('Change password failed').tr(), context);
     }
   }
 
@@ -164,12 +168,26 @@ class EditProfileViewModel with ChangeNotifier {
       DateTime birthdate,
       BuildContext context,
       String country) async {
+    log(getHeight.toString());
     setIsLoading(true);
-    final response = await ProfileApi().editProfile(fname, lname, image, bio,
-        height, weight, gender, birthdate, country, context);
+    final response = await ProfileApi().editProfile(
+        fname,
+        lname,
+        image,
+        bio,
+        height,
+        weight,
+        gender,
+        birthdate,
+        country,
+        context,
+        getHeight,
+        getWeight);
     _isLoading = false;
     if (response['success']) {
       showSnackbar(Text(response['message']), context);
+      Provider.of<MobileHomeViewModel>(context, listen: false)
+          .getSummaryData(lang: getLang(context), context: context);
       Navigator.pop(context);
     } else {
       showSnackbar(Text(response['message']), context);
