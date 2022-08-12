@@ -173,57 +173,45 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
                                     textInputAction: TextInputAction.done,
                                   ),
                                 ),
+                                SizedBox(height: 10),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text("Select exercise's name: "),
                                     ),
-                                    DropdownButton<String>(
-                                      value: Provider.of<
-                                                  CreateChallengesViewModel>(
-                                              context,
-                                              listen: false)
-                                          .dropDownNewValue,
-                                      icon: Icon(Icons.arrow_downward,
-                                          color: blueColor),
-                                      elevation: 16,
-                                      style: TextStyle(color: blueColor),
-                                      underline: Container(
-                                        height: 2,
-                                        color: blueColor,
-                                      ),
-                                      onChanged: (String? newValue) {
-                                        Provider.of<CreateChallengesViewModel>(
-                                                context,
-                                                listen: false)
-                                            .setdropDownNewValue(newValue!);
-                                      },
-                                      items: Provider.of<
-                                                  CreateChallengesViewModel>(
-                                              context)
-                                          .dropDownList
-                                          ?.map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    /*  DropdownButton(
-                                value: selectedDropDownValue,
-                                items: dropDownList.map((item) {
-                                  return DropdownMenuItem(
-                                    child: Text(item),
-                                    value: item,
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue) {
-                                  selectedDropDownValue = newValue!;
-                                }
-                                ),*/
                                   ],
+                                ),
+                                DropdownButton<String>(
+                                  value: Provider.of<CreateChallengesViewModel>(
+                                          context,
+                                          listen: false)
+                                      .dropDownNewValue,
+                                  icon: Icon(Icons.arrow_downward,
+                                      color: blueColor),
+                                  elevation: 16,
+                                  style: TextStyle(color: blueColor),
+                                  underline: Container(
+                                    height: 2,
+                                    color: blueColor,
+                                  ),
+                                  onChanged: (String? newValue) {
+                                    Provider.of<CreateChallengesViewModel>(
+                                            context,
+                                            listen: false)
+                                        .setdropDownNewValue(newValue!);
+                                  },
+                                  items: Provider.of<CreateChallengesViewModel>(
+                                          context)
+                                      .dropDownList
+                                      ?.map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
                                 ),
                                 SizedBox(
                                   height: mq.size.height * 0.03,
@@ -587,7 +575,7 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
                                             BorderRadius.circular(15)),
                                     child: TextFormField(
                                       inputFormatters: [
-                                        LengthLimitingTextInputFormatter(3),
+                                        LengthLimitingTextInputFormatter(4),
                                         FilteringTextInputFormatter.digitsOnly,
                                       ],
                                       controller: repetitionController,

@@ -92,6 +92,38 @@ class GeneralChallengesAPI {
     // }
   }
 
+  Future<ChallengeModel> saveSpecificChallengeData(
+      ChallengeModel user, int id, String lang) async {
+    try {
+      String? access_Token = sharedPreferences.getString('access_token');
+      print('aceeeeeeeeeeeeeess_token:   $access_Token');
+      final Response response = await post(Uri.parse('$base_URL/ch/done/$id'),
+          headers: <String, String>{
+            // 'Content-Type': 'application/json;charset=UTF-8'
+            'Accept': 'application/json',
+            'apikey': apiKey,
+            'lang': lang,
+            'authorization': 'Bearer $access_Token'
+          },
+          body: user.toJson());
+      print(user.toJson());
+      print(response.body);
+      if (response.statusCode == 200) {
+        print(response.body);
+        return ChallengeModel.fromJsonWithErrors(json.decode(response.body));
+      } else {
+        print(response.body);
+        return ChallengeModel.fromJsonWithErrors(json.decode(response.body));
+      }
+    } catch (e) {
+      print('object');
+      print(e);
+    }
+    return ChallengeModel(
+        message: 'There is a problem connecting to the internet',
+        statusCode: 0);
+  }
+
   Future<ChallengeModel> deleteChallenge(String lang, int? id) async {
     //business logic to send data to server
     try {

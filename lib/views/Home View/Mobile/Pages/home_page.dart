@@ -366,7 +366,7 @@ class _HomePageState extends State<HomePage> {
       title: Text(
         'Create type',
         style: TextStyle(color: blueColor),
-      ),
+      ).tr(),
       content: Container(
         height: 150,
         child: Column(

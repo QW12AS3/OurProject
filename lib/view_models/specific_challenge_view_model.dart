@@ -5,6 +5,10 @@ import 'package:home_workout_app/models/challenge_model.dart';
 class SpeceficChallengeViewModel with ChangeNotifier {
   ChallengeModel challenge = ChallengeModel();
   List<ChallengeModel> challengesList = [];
+  int challengeCount = 0;
+  int FinalCount = 0;
+  int proximityCount = 0;
+  bool previousProximityState = false;
   // int page = 1;
   bool isLoading = true;
   setfuturechallenge(List<ChallengeModel>? futurechallengesList) {
@@ -13,6 +17,16 @@ class SpeceficChallengeViewModel with ChangeNotifier {
     challenge = futurechallengesList[0];
     isLoading = false;
     print(challenge.img);
+    challengeCount = (challenge.total_count! - challenge.my_count!);
+    FinalCount = challengeCount;
+    notifyListeners();
+  }
+
+  setProximityVal(bool currentState) {
+    if (currentState != previousProximityState) {
+      if (challengeCount - proximityCount >= 0) proximityCount++;
+      setFinalCount(proximityCount);
+    }
     notifyListeners();
   }
 
@@ -30,6 +44,22 @@ class SpeceficChallengeViewModel with ChangeNotifier {
     challenge = ChallengeModel();
     // page = 1;
     isLoading = true;
+    challengeCount = 0;
+    FinalCount = 0;
+    proximityCount = 0;
+    previousProximityState = false;
+    notifyListeners();
+  }
+
+  setFinalCount(int Val) {
+    if (challengeCount - Val >= 0) FinalCount = challengeCount - Val;
+    notifyListeners();
+  }
+
+  decreaseFinalCount() {
+    if (FinalCount > 0) {
+      FinalCount--;
+    }
     notifyListeners();
   }
 
@@ -47,13 +77,23 @@ class SpeceficChallengeViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  getSpecificChallengeData(String lang, int? page, String linkType) {
-    GeneralChallengesAPI().getUserchallenges(lang, page, linkType);
-    notifyListeners();
-  }
+  // getSpecificChallengeData(String lang, int? page, String linkType) async {
+  //   await GeneralChallengesAPI().getUserchallenges(lang, page, linkType);
+  //   notifyListeners();
+  // }
 
   deleteSpecificChallengeData(String lang, int? id) async {
     return await GeneralChallengesAPI().deleteChallenge(lang, id);
+    notifyListeners();
+  }
+
+  saveSpecificChallengeData(int countVal, String lang, int id) async {
+    return await GeneralChallengesAPI().saveSpecificChallengeData(
+        ChallengeModel(
+          count: countVal,
+        ),
+        id,
+        lang);
     notifyListeners();
   }
 
