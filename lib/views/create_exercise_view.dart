@@ -368,7 +368,7 @@ class _CreateExerciseViewState extends State<CreateExerciseView> {
                                   }
                                 }
                               } else {
-                                showSnackbar(Text('Add photo'), context);
+                                showSnackbar(Text('Add photo').tr(), context);
                               }
 
                               // final CreateExerciseModel BackEndMessage =

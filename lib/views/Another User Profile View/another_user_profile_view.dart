@@ -30,6 +30,9 @@ class AnotherUserProfileView extends StatefulWidget {
 class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
   ScrollController _scrollController = ScrollController();
   TextEditingController _reviewController = TextEditingController();
+  String exer = 'Exercises:'.tr();
+  String min = 'min'.tr();
+  String kcal = 'Kcal'.tr();
   @override
   void initState() {
     // TODO: implement initState
@@ -1051,40 +1054,40 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                         }).toList(),
                                 ),
                               ),
-                            ExpansionTile(
-                              iconColor: blueColor,
-                              title: Text(
-                                'Statistics',
-                                style: theme.textTheme.bodySmall,
-                              ).tr(),
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Consumer<AnotherUserProfileViewModel>(
-                                      builder: (context, user, child) =>
-                                          CircularPercentIndicator(
-                                        radius: 50,
-                                        animation: true,
-                                        center: Text(
-                                          '$finishedWorkouts \n ${user.getUserData.finishedWorkouts}/${user.getUserData.enteredWorkouts}',
-                                          textAlign: TextAlign.center,
-                                          style: theme.textTheme.bodySmall!
-                                              .copyWith(
-                                                  fontSize: 10,
-                                                  color: blueColor),
-                                        ),
-                                        progressColor: blueColor,
-                                        percent: user
-                                                .getUserData.finishedWorkouts /
-                                            user.getUserData.enteredWorkouts,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
+                            // ExpansionTile(
+                            //   iconColor: blueColor,
+                            //   title: Text(
+                            //     'Statistics',
+                            //     style: theme.textTheme.bodySmall,
+                            //   ).tr(),
+                            //   children: [
+                            //     Row(
+                            //       mainAxisAlignment:
+                            //           MainAxisAlignment.spaceAround,
+                            //       children: [
+                            //         Consumer<AnotherUserProfileViewModel>(
+                            //           builder: (context, user, child) =>
+                            //               CircularPercentIndicator(
+                            //             radius: 50,
+                            //             animation: true,
+                            //             center: Text(
+                            //               '$finishedWorkouts \n ${user.getUserData.finishedWorkouts}/${user.getUserData.enteredWorkouts}',
+                            //               textAlign: TextAlign.center,
+                            //               style: theme.textTheme.bodySmall!
+                            //                   .copyWith(
+                            //                       fontSize: 10,
+                            //                       color: blueColor),
+                            //             ),
+                            //             progressColor: blueColor,
+                            //             percent: user
+                            //                     .getUserData.finishedWorkouts /
+                            //                 user.getUserData.enteredWorkouts,
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     )
+                            //   ],
+                            // ),
                           ],
                         ),
                       ),
@@ -1330,7 +1333,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                               ),
                               FittedBox(
                                 child: Text(
-                                  'Exercises: ${workoutValue.excersise_count}',
+                                  '$exer ${workoutValue.excersise_count}',
                                   style: theme.textTheme.displaySmall,
                                 ),
                               ),
@@ -1344,7 +1347,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                     size: 25,
                                   ),
                                   Text(
-                                    '${workoutValue.length} min',
+                                    '${workoutValue.length} $min',
                                     style: theme.textTheme.displaySmall!
                                         .copyWith(fontSize: 15),
                                   )
@@ -1384,7 +1387,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                               ),
                               FittedBox(
                                 child: Text(
-                                  '${workoutValue.predicted_burnt_calories} Kcal',
+                                  '${workoutValue.predicted_burnt_calories} $kcal',
                                   style: theme.textTheme.displaySmall,
                                 ),
                               ),

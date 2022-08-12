@@ -186,6 +186,7 @@
     "There are no saved diets": "There are no saved diets",
     "Shared diets": "Shared diets",
     "kcal": "kcal",
+    "Kcal": "Kcal",
     "+ Add meals": "+ Add meals",
     "Meals:": "Meals:",
     "Day": "Day",
@@ -287,5 +288,14 @@
     "Hard": "Hard",
     "Required": "Required",
     "Not Required": "Not Required",
-    "There are no comments": "There are no comments"
+    "There are no comments": "There are no comments",
+    "min": "min",
+    "Unblock failed": "Unblock failed",
+    "Follow failed": "Follow failed",
+    "Unfollow failed": "Unfollow failed",
+    "Change password failed": "Change password failed",
+    "Please enter your gender": "Please enter your gender",
+    "Please enter your birthdate": "Please enter your birthdate",
+    "Please enter your country": "Please enter your country",
+    "Add exercises": "Add exercises"
 }

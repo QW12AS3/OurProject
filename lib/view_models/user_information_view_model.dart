@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/sign_up_api.dart';
 import 'package:home_workout_app/components.dart';
@@ -78,13 +79,13 @@ class UserInformationViewModel with ChangeNotifier {
     String weight,
   ) async {
     if (gender == null) {
-      showSnackbar(const Text('Please enter your gender'), context);
+      showSnackbar(const Text('Please enter your gender').tr(), context);
     } else if (!dateIsSelected) {
-      showSnackbar(const Text('Please enter your birthdate'), context);
+      showSnackbar(const Text('Please enter your birthdate').tr(), context);
     } else if (_formkey.currentState != null) {
       if (_formkey.currentState!.validate()) {
         if (_country.isEmpty) {
-          showSnackbar(const Text('Please enter your country'), context);
+          showSnackbar(const Text('Please enter your country').tr(), context);
         } else {
           _isLoading = true;
           final response = await sendInfo(

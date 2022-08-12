@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/components.dart';
@@ -79,7 +80,9 @@ class ProfileApi {
       Gender gender,
       DateTime birthdate,
       String country,
-      BuildContext context) async {
+      BuildContext context,
+      Units heightUnit,
+      Units weightUnit) async {
     try {
       var request =
           http.MultipartRequest("Post", Uri.parse('$base_URL/user/update'));
@@ -96,6 +99,8 @@ class ProfileApi {
       request.fields['gender'] = gender.name;
       request.fields['birthdate'] = birthdate.toString();
       request.fields['country'] = country;
+      request.fields['height_unit'] = heightUnit.name.toString();
+      request.fields['weight_unit'] = weightUnit.name.toString();
       request.fields['_method'] = 'PUT';
 
       if (image.path != '') {
@@ -105,9 +110,11 @@ class ProfileApi {
       var response = await request.send();
       var responseData = await response.stream.toBytes();
       var responseString = String.fromCharCodes(responseData);
+      print(responseString);
       if (response.statusCode == 200) {
         return {'success': true, 'message': 'Edited successfully'};
       } else {
+        log(response.statusCode.toString());
         return {'success': false, 'message': 'Edit Failed'};
       }
     } catch (e) {

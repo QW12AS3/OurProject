@@ -851,10 +851,15 @@ class _CommentsViewState extends State<CommentsView> {
                                                                               ).tr(),
                                                                             ),
                                                                           ],
-                                                                          content: CustomTextField(
-                                                                              maxLines: 1,
-                                                                              controller: editCommentsController,
-                                                                              title: 'Type a comment...'),
+                                                                          content:
+                                                                              SizedBox(
+                                                                            height:
+                                                                                110,
+                                                                            child: CustomTextField(
+                                                                                maxLines: 1,
+                                                                                controller: editCommentsController,
+                                                                                title: 'Type a comment...'),
+                                                                          ),
                                                                         ),
                                                                       );
                                                                     },
