@@ -289,7 +289,6 @@
     "Required": "مطلوب",
     "Not Required": "غير مطلوب",
     "There are no comments": "لا يوجد تعليقات",
-
     "Edit exercise": "تعديل التمرين",
     "From gallery": "من المعرض",
     "From camera": "من الكاميرا",
@@ -299,8 +298,7 @@
     "Challenge end date:": "تاريخ انتهاء التحدي",
     "Practice by: ": "التمرين عن طريق",
     "Repetition": "التكرار",
-    "There is a problem connecting to the internet": "يوجد مشكلة بلاتصال بلانترنت"
-
+    "There is a problem connecting to the internet": "يوجد مشكلة بلاتصال بلانترنت",
     "min": "دقيقة",
     "Unblock failed": "فشل الغاء الحظر",
     "Follow failed": "فشلت المتابعة",
@@ -310,5 +308,4 @@
     "Please enter your birthdate": "الرجاء ادخال تاريخ ميلادك",
     "Please enter your country": "الرجاء تحديد بلدك",
     "Add exercises": "اضافة تمارين"
-
 }

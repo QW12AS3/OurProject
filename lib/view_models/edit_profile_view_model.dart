@@ -185,12 +185,12 @@ class EditProfileViewModel with ChangeNotifier {
         getWeight);
     _isLoading = false;
     if (response['success']) {
-      showSnackbar(Text(response['message']), context);
+      showSnackbar(Text(response['message']).tr(), context);
       Provider.of<MobileHomeViewModel>(context, listen: false)
           .getSummaryData(lang: getLang(context), context: context);
       Navigator.pop(context);
     } else {
-      showSnackbar(Text(response['message']), context);
+      showSnackbar(Text(response['message']).tr(), context);
     }
     setIsLoading(false);
   }
