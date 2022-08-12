@@ -1,5 +1,7 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -42,6 +44,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
               .id
               .toString() ==
           args['id'].toString()) {
+        log('sssssssssssssssssss');
         Navigator.pushNamed(context, '/home', arguments: {'page': 3});
       }
 
@@ -63,6 +66,19 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                       .getUserData
                       .id,
                   context);
+        }
+
+        if (_scrollController.offset ==
+                _scrollController.position.maxScrollExtent &&
+            Provider.of<AnotherUserProfileViewModel>(context, listen: false)
+                .getDietIsOpened) {
+          Provider.of<AnotherUserProfileViewModel>(context, listen: false)
+              .setAnotherUserDiets(
+                  context.locale == const Locale('en') ? 'en' : 'ar',
+                  Provider.of<AnotherUserProfileViewModel>(context,
+                          listen: false)
+                      .getUserData
+                      .id);
         }
       });
     });
@@ -147,6 +163,8 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                   ),
                   Expanded(
                     child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(
+                          parent: BouncingScrollPhysics()),
                       controller: _scrollController,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -220,6 +238,12 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                       icon: const Icon(Icons.more_vert_rounded),
                                       onSelected: (String result) {
                                         switch (result) {
+                                          case 'send':
+                                            Navigator.pushNamed(
+                                                context, '/chat', arguments: {
+                                              'id': user.getUserData.id
+                                            });
+                                            break;
                                           case 'block':
                                             if (user.getUserData.i_block)
                                               user.unblockUser(
@@ -242,6 +266,26 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                       },
                                       itemBuilder: (BuildContext context) =>
                                           <PopupMenuEntry<String>>[
+                                        if (Provider.of<AnotherUserProfileViewModel>(
+                                                        context,
+                                                        listen: false)
+                                                    .getUserData
+                                                    .roleId ==
+                                                2 ||
+                                            Provider.of<AnotherUserProfileViewModel>(
+                                                        context,
+                                                        listen: false)
+                                                    .getUserData
+                                                    .roleId ==
+                                                3)
+                                          PopupMenuItem<String>(
+                                            value: 'send',
+                                            child: Text(
+                                              'Send a message',
+                                              style: theme.textTheme.bodySmall!
+                                                  .copyWith(color: blueColor),
+                                            ),
+                                          ),
                                         if (Provider.of<ProfileViewModel>(
                                                     context,
                                                     listen: false)
@@ -658,7 +702,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                                                           listen:
                                                                               false)
                                                                       .getUserData
-                                                                      .roleId ==
+                                                                      .id ==
                                                                   e.userId)
                                                             PopupMenuItem(
                                                                 value: 'edit',
@@ -684,7 +728,7 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                                                           listen:
                                                                               false)
                                                                       .getUserData
-                                                                      .roleId ==
+                                                                      .id ==
                                                                   e.userId)
                                                             PopupMenuItem(
                                                                 value: 'delete',

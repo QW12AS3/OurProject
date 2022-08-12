@@ -109,10 +109,50 @@ class _FoodsPickerListViewState extends State<FoodsPickerListView> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: CustomTextField(
-                                  maxLines: 1,
-                                  controller: _searchController,
-                                  title: 'Search'),
+                              child: TextField(
+                                onChanged: (value) {
+                                  Provider.of<FoodsListViewModel>(context,
+                                          listen: false)
+                                      .setSearchValue(value);
+                                },
+                                maxLines: 1,
+                                controller: _searchController,
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                  label: FittedBox(child: Text('Search').tr()),
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.never,
+                                  floatingLabelStyle: theme.textTheme.bodySmall,
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: orangeColor, width: 1.5),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: greyColor, width: 1.5),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  errorBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.red, width: 1.5),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: orangeColor, width: 1.5),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                             Expanded(
                               child: SingleChildScrollView(
@@ -123,14 +163,15 @@ class _FoodsPickerListViewState extends State<FoodsPickerListView> {
                                   children: [
                                     Column(
                                       children: food.getFoodsList
-                                          .where((element) => _searchController
-                                                  .text
-                                                  .trim()
-                                                  .isEmpty
+                                          .where((element) => food
+                                                  .getSearchValue.isEmpty
                                               ? true
-                                              : element.name.contains(
-                                                  _searchController.text
-                                                      .trim()))
+                                              : (element.name.contains(food
+                                                      .getSearchValue
+                                                      .trim()) ||
+                                                  element.description.contains(
+                                                      food.getSearchValue
+                                                          .trim())))
                                           .map(
                                             (e) => InkWell(
                                               onTap: () {
@@ -160,6 +201,14 @@ class _FoodsPickerListViewState extends State<FoodsPickerListView> {
                                                         BorderRadius.circular(
                                                             15)),
                                                 child: ListTile(
+                                                  trailing: Text(
+                                                    '${e.calories} $kcalString',
+                                                    style: theme
+                                                        .textTheme.bodySmall!
+                                                        .copyWith(
+                                                            color: orangeColor,
+                                                            fontSize: 12),
+                                                  ),
                                                   title: Text(
                                                     e.name,
                                                     style: theme

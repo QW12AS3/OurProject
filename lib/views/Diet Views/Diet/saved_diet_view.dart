@@ -88,7 +88,7 @@ class _SavedDietsViewState extends State<SavedDietsView> {
                             style: theme.textTheme.bodySmall!.copyWith(
                                 color: orangeColor,
                                 fontWeight: FontWeight.w300),
-                          ),
+                          ).tr(),
                         )
                       ],
                     ),
@@ -170,16 +170,34 @@ class _SavedDietsViewState extends State<SavedDietsView> {
                                                         ).tr()),
                                                   ],
                                                 ),
-                                                title: Text(
-                                                  '${e.userFname} ${e.userLname}',
-                                                  style: theme
-                                                      .textTheme.bodySmall!
-                                                      .copyWith(
-                                                          color: orangeColor),
+                                                title: InkWell(
+                                                  onTap: () {
+                                                    Navigator.pushNamed(context,
+                                                        '/anotherUserProfile',
+                                                        arguments: {
+                                                          'id': e.userId
+                                                        });
+                                                  },
+                                                  child: Text(
+                                                    '${e.userFname} ${e.userLname}',
+                                                    style: theme
+                                                        .textTheme.bodySmall!
+                                                        .copyWith(
+                                                            color: orangeColor),
+                                                  ),
                                                 ),
-                                                leading: CircleAvatar(
-                                                  backgroundImage:
-                                                      NetworkImage(e.userImg),
+                                                leading: InkWell(
+                                                  onTap: () {
+                                                    Navigator.pushNamed(context,
+                                                        '/anotherUserProfile',
+                                                        arguments: {
+                                                          'id': e.userId
+                                                        });
+                                                  },
+                                                  child: CircleAvatar(
+                                                    backgroundImage:
+                                                        NetworkImage(e.userImg),
+                                                  ),
                                                 ),
                                                 subtitle: Text(
                                                   e.createAt,

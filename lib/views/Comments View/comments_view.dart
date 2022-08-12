@@ -114,6 +114,7 @@ class _CommentsViewState extends State<CommentsView> {
               child: isReviewd
                   ? null
                   : Center(
+//<<<<<<< specificchallenge
                       child: Consumer2<DietListViewModel, WorkoutListViewModel>(
                         builder: (context, review, workout, child) => review
                                 .getIsREviewLoading
@@ -169,6 +170,74 @@ class _CommentsViewState extends State<CommentsView> {
                                                         if (isReview) {
                                                           response = await review
                                                               .sendReview(
+//=======
+                      child: Consumer<DietListViewModel>(
+                          builder: (context, review, child) => review
+                                  .getIsREviewLoading
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: bigLoader(color: orangeColor),
+                                )
+                              : (Provider.of<ProfileViewModel>(context,
+                                              listen: true)
+                                          .getUserData
+                                          .id ==
+                                      review.getDiets
+                                          .firstWhere(
+                                              (element) => element.id == dietId)
+                                          .userId
+                                  ? Text('')
+                                  : TextButton(
+                                      onPressed: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext ctx) {
+                                              double stars = 0;
+                                              return AlertDialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                content: Container(
+                                                    height: 240,
+                                                    child: Column(
+                                                      children: [
+                                                        RatingBar.builder(
+                                                          itemCount: 5,
+                                                          allowHalfRating: true,
+                                                          unratedColor:
+                                                              greyColor,
+                                                          //initialRating: e.rating,
+                                                          maxRating: 5,
+                                                          itemBuilder: (context,
+                                                                  index) =>
+                                                              const Icon(
+                                                            Icons.star,
+                                                            color: Colors.amber,
+                                                          ),
+                                                          onRatingUpdate:
+                                                              (value) {
+                                                            stars = value;
+                                                            return;
+                                                          },
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: CustomTextField(
+                                                              maxLines: 5,
+                                                              controller:
+                                                                  _reviewController,
+                                                              title: 'Comment'),
+                                                        ),
+                                                        ElevatedButton(
+                                                            onPressed:
+                                                                () async {
+                                                              Navigator.pop(
+                                                                  ctx);
+                                                              final response = await review.sendReview(
+//>>>>>>> master
                                                                   lang: getLang(
                                                                       context),
                                                                   id: dietId,
@@ -179,6 +248,7 @@ class _CommentsViewState extends State<CommentsView> {
                                                                   stars: stars,
                                                                   context:
                                                                       context);
+//<<<<<<< specificchallenge
                                                         } else {
                                                           response = await workout
                                                               .sendReview(
@@ -215,6 +285,30 @@ class _CommentsViewState extends State<CommentsView> {
                                 ),
                               ),
                       ),
+//=======
+                                                              _reviewController
+                                                                  .clear();
+                                                              if (response) {
+                                                                setState(() {
+                                                                  isReviewd =
+                                                                      true;
+                                                                });
+                                                              }
+                                                            },
+                                                            child: const Text(
+                                                                'Submit'))
+                                                      ],
+                                                    )),
+                                              );
+                                            });
+                                      },
+                                      child: Text(
+                                        'Add a review',
+                                        style: theme.textTheme.bodySmall!
+                                            .copyWith(color: Colors.amber),
+                                      ),
+                                    ))),
+//>>>>>>> master
                     ),
             )
           : null,
@@ -458,129 +552,139 @@ class _CommentsViewState extends State<CommentsView> {
                                                                     .id)
                                                               Row(
                                                                 children: [
-                                                                  IconButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      double
-                                                                          stars =
-                                                                          0;
-                                                                      showDialog(
-                                                                        context:
-                                                                            context,
-                                                                        builder:
-                                                                            (BuildContext ctx) =>
-                                                                                AlertDialog(
-                                                                          shape:
-                                                                              RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(15),
-                                                                          ),
-                                                                          actions: [
-                                                                            TextButton(
-                                                                              onPressed: () {
-                                                                                FocusScope.of(context).unfocus();
-                                                                                Navigator.pop(ctx);
-                                                                                editCommentsController.clear();
-                                                                              },
-                                                                              child: Text(
-                                                                                'Cancel',
-                                                                                style: theme.textTheme.bodySmall!.copyWith(color: greyColor),
-                                                                              ).tr(),
+                                                                  if (e.ownerId ==
+                                                                      Provider.of<ProfileViewModel>(
+                                                                              context,
+                                                                              listen: false)
+                                                                          .getUserData
+                                                                          .id)
+                                                                    IconButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        double
+                                                                            stars =
+                                                                            0;
+                                                                        showDialog(
+                                                                          context:
+                                                                              context,
+                                                                          builder: (BuildContext ctx) =>
+                                                                              AlertDialog(
+                                                                            shape:
+                                                                                RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(15),
                                                                             ),
-                                                                            TextButton(
-                                                                              onPressed: () async {
-                                                                                FocusScope.of(context).unfocus();
-                                                                                if (stars == 0) {
+                                                                            actions: [
+                                                                              TextButton(
+                                                                                onPressed: () {
+                                                                                  FocusScope.of(context).unfocus();
                                                                                   Navigator.pop(ctx);
-                                                                                  showSnackbar(Text('Review stars cannot be 0').tr(), context);
-                                                                                  return;
-                                                                                }
-                                                                                await comments.updateReview(
-                                                                                  reviewId: e.id,
-                                                                                  dietId: dietId,
-                                                                                  stars: stars,
-                                                                                  comment: editCommentsController.text.trim(),
-                                                                                  lang: context.locale == const Locale('en') ? 'en' : 'ar',
-                                                                                  context: context,
-                                                                                );
-
-                                                                                Navigator.pop(ctx);
-                                                                                editCommentsController.clear();
-                                                                              },
-                                                                              child: Text(
-                                                                                'Edit',
-                                                                                style: theme.textTheme.bodySmall!.copyWith(color: orangeColor),
-                                                                              ).tr(),
-                                                                            ),
-                                                                          ],
-                                                                          content:
-                                                                              SizedBox(
-                                                                            height:
-                                                                                110,
-                                                                            child:
-                                                                                Column(
-                                                                              children: [
-                                                                                RatingBar.builder(
-                                                                                  itemCount: 5,
-                                                                                  allowHalfRating: true,
-                                                                                  unratedColor: greyColor,
-                                                                                  //initialRating: e.rating,
-                                                                                  maxRating: 5,
-                                                                                  itemBuilder: (context, index) => const Icon(
-                                                                                    Icons.star,
-                                                                                    color: Colors.amber,
-                                                                                  ),
-                                                                                  onRatingUpdate: (value) {
-                                                                                    stars = value;
+                                                                                  editCommentsController.clear();
+                                                                                },
+                                                                                child: Text(
+                                                                                  'Cancel',
+                                                                                  style: theme.textTheme.bodySmall!.copyWith(color: greyColor),
+                                                                                ).tr(),
+                                                                              ),
+                                                                              TextButton(
+                                                                                onPressed: () async {
+                                                                                  FocusScope.of(context).unfocus();
+                                                                                  if (stars == 0) {
+                                                                                    Navigator.pop(ctx);
+                                                                                    showSnackbar(Text('Review stars cannot be 0').tr(), context);
                                                                                     return;
-                                                                                  },
-                                                                                ),
-                                                                                const SizedBox(
-                                                                                  height: 10,
-                                                                                ),
-                                                                                CustomTextField(maxLines: 1, controller: editCommentsController, title: 'Type a comment...'),
-                                                                              ],
+                                                                                  }
+                                                                                  await comments.updateReview(
+                                                                                    reviewId: e.id,
+                                                                                    dietId: dietId,
+                                                                                    stars: stars,
+                                                                                    comment: editCommentsController.text.trim(),
+                                                                                    lang: context.locale == const Locale('en') ? 'en' : 'ar',
+                                                                                    context: context,
+                                                                                  );
+
+                                                                                  Navigator.pop(ctx);
+                                                                                  editCommentsController.clear();
+                                                                                },
+                                                                                child: Text(
+                                                                                  'Edit',
+                                                                                  style: theme.textTheme.bodySmall!.copyWith(color: orangeColor),
+                                                                                ).tr(),
+                                                                              ),
+                                                                            ],
+                                                                            content:
+                                                                                SizedBox(
+                                                                              height: 110,
+                                                                              child: Column(
+                                                                                children: [
+                                                                                  RatingBar.builder(
+                                                                                    itemCount: 5,
+                                                                                    allowHalfRating: true,
+                                                                                    unratedColor: greyColor,
+                                                                                    //initialRating: e.rating,
+                                                                                    maxRating: 5,
+                                                                                    itemBuilder: (context, index) => const Icon(
+                                                                                      Icons.star,
+                                                                                      color: Colors.amber,
+                                                                                    ),
+                                                                                    onRatingUpdate: (value) {
+                                                                                      stars = value;
+                                                                                      return;
+                                                                                    },
+                                                                                  ),
+                                                                                  const SizedBox(
+                                                                                    height: 10,
+                                                                                  ),
+                                                                                  CustomTextField(maxLines: 1, controller: editCommentsController, title: 'Type a comment...'),
+                                                                                ],
+                                                                              ),
                                                                             ),
                                                                           ),
-                                                                        ),
-                                                                      );
-                                                                    },
-                                                                    icon: Icon(
-                                                                      Icons
-                                                                          .edit,
-                                                                      size: 20,
-                                                                      color:
-                                                                          blueColor,
+                                                                        );
+                                                                      },
+                                                                      icon:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .edit,
+                                                                        size:
+                                                                            20,
+                                                                        color:
+                                                                            blueColor,
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                  comments
-                                                                          .getdeleteIsLoading
-                                                                      ? smallLoader(
-                                                                          color:
-                                                                              Colors.red)
-                                                                      : IconButton(
-                                                                          onPressed:
-                                                                              () async {
-                                                                            final response = await comments.deleteReview(
-                                                                                reviewId: e.id,
-                                                                                dietId: dietId,
-                                                                                lang: context.locale == const Locale('en') ? 'en' : 'ar',
-                                                                                context: context);
-                                                                            if (response)
-                                                                              // ignore: curly_braces_in_flow_control_structures
-                                                                              setState(() {
-                                                                                isReviewd = !isReviewd;
-                                                                              });
-                                                                          },
-                                                                          icon:
-                                                                              const Icon(
-                                                                            Icons.delete,
-                                                                            size:
-                                                                                20,
+                                                                  if (e.ownerId ==
+                                                                          Provider.of<ProfileViewModel>(context, listen: false)
+                                                                              .getUserData
+                                                                              .id ||
+                                                                      Provider.of<ProfileViewModel>(context, listen: false)
+                                                                              .getUserData
+                                                                              .id ==
+                                                                          4 ||
+                                                                      Provider.of<ProfileViewModel>(context, listen: false)
+                                                                              .getUserData
+                                                                              .id ==
+                                                                          5)
+                                                                    comments
+                                                                            .getdeleteIsLoading
+                                                                        ? smallLoader(
                                                                             color:
-                                                                                Colors.red,
+                                                                                Colors.red)
+                                                                        : IconButton(
+                                                                            onPressed:
+                                                                                () async {
+                                                                              final response = await comments.deleteReview(reviewId: e.id, dietId: dietId, lang: context.locale == const Locale('en') ? 'en' : 'ar', context: context);
+                                                                              if (response)
+                                                                                // ignore: curly_braces_in_flow_control_structures
+                                                                                setState(() {
+                                                                                  isReviewd = !isReviewd;
+                                                                                });
+                                                                            },
+                                                                            icon:
+                                                                                const Icon(
+                                                                              Icons.delete,
+                                                                              size: 20,
+                                                                              color: Colors.red,
+                                                                            ),
                                                                           ),
-                                                                        ),
                                                                 ],
                                                               ),
                                                           ],

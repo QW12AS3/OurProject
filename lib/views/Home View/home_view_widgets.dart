@@ -38,8 +38,11 @@ class workoutCard extends StatelessWidget {
       children: [
         InkWell(
           onTap: () {
-            Navigator.pushNamed(context, '/anotherUserProfile',
-                arguments: {'id': 1});
+            Navigator.pushNamed(context, '/anotherUserProfile', arguments: {
+              'id': Provider.of<ProfileViewModel>(context, listen: true)
+                  .getUserData
+                  .id
+            });
           },
           child: Row(
             children: [
@@ -197,7 +200,7 @@ class myDrawer extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 Navigator.pop(context);
-                tabController.animateTo(2);
+                tabController.animateTo(3);
               },
               child: Row(
                 children: [
@@ -255,7 +258,9 @@ class myDrawer extends StatelessWidget {
             thickness: 2,
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, '/settings');
+            },
             child: ListTile(
               title: Text(
                 'Settings',

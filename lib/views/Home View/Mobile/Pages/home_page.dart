@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -583,6 +585,9 @@ class _HomePageState extends State<HomePage> {
         ]),
         InkWell(
           onTap: () {
+            log('ssss');
+            Navigator.pushNamed(context, '/specificWorkout',
+                arguments: {'workoutId': workoutValue.id});
             //TODO:
             Navigator.pushNamed(context, '/specificWorkout',
                 arguments: {'workoutId': workoutValue.id});

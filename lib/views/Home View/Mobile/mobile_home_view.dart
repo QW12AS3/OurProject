@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/components.dart';
@@ -37,13 +39,15 @@ class _MobileHomeViewState extends State<MobileHomeView>
     });
 
     Future.delayed(Duration.zero).then((value) {
-      Provider.of<ProfileViewModel>(context, listen: false)
-          .setCurrentUserData(context);
-      Provider.of<MobileHomeViewModel>(context, listen: false)
-          .getSummaryData(lang: getLang(context), context: context);
+      // Provider.of<ProfileViewModel>(context, listen: false)
+      //     .setCurrentUserData(context);
+      // Provider.of<MobileHomeViewModel>(context, listen: false)
+      //     .getSummaryData(lang: getLang(context), context: context);
 
       final args = ModalRoute.of(context)!.settings.arguments as Map;
+      //log('Page ${args['page']}');
       if (args['page'] != null) {
+        //log('Page ${args['page']}');
         _tabController.animateTo(args['page']);
       }
     });
@@ -119,9 +123,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
                                       .getCurrentTab ==
                                   3
                           ? 50
-                          : context.locale == const Locale('en')
-                              ? 90
-                              : 130,
+                          : 130,
                   bottom: Provider.of<MobileHomeViewModel>(context,
                                       listen: true)
                                   .getCurrentTab ==
@@ -235,6 +237,12 @@ class _MobileHomeViewState extends State<MobileHomeView>
                           ),
                         ),
                   actions: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/chatList');
+                      },
+                      icon: const Icon(Icons.chat),
+                    ),
                     IconButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/search');

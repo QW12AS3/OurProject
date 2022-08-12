@@ -1,5 +1,7 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, prefer_interpolation_to_compose_strings
 
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -33,6 +35,15 @@ class _SearchViewState extends State<SearchView> {
     // TODO: implement initState
     super.initState();
 
+    Future.delayed(Duration.zero).then((value) {
+      Provider.of<SearchViewModel>(context, listen: false).reset();
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
     Future.delayed(Duration.zero).then((value) {
       Provider.of<SearchViewModel>(context, listen: false).reset();
     });
@@ -123,7 +134,7 @@ class _SearchViewState extends State<SearchView> {
                       : Text(
                           'Go',
                           style: theme.textTheme.bodySmall,
-                        ))
+                        ).tr())
             ],
           ),
         ),
@@ -407,7 +418,7 @@ class _SearchViewState extends State<SearchView> {
                                                                 context,
                                                                 listen: false)
                                                             .getUserData
-                                                            .roleId ==
+                                                            .id ==
                                                         e.userId)
                                                   PopupMenuItem(
                                                       value: 'edit',
@@ -435,7 +446,7 @@ class _SearchViewState extends State<SearchView> {
                                                                 context,
                                                                 listen: false)
                                                             .getUserData
-                                                            .roleId ==
+                                                            .id ==
                                                         e.userId)
                                                   PopupMenuItem(
                                                       value: 'delete',

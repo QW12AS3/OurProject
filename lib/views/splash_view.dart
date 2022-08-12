@@ -4,6 +4,9 @@ import 'package:home_workout_app/Api%20services/home_api.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
+import 'package:home_workout_app/view_models/Home%20View%20Model/mobile_home_view_model.dart';
+import 'package:home_workout_app/view_models/profile_view_model.dart';
+import 'package:provider/provider.dart';
 
 class SplashView extends StatefulWidget {
   SplashView({Key? key}) : super(key: key);
@@ -17,6 +20,7 @@ class _SplashViewState extends State<SplashView> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     print(
         'uuuuugggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg');
     getFirebaseNotificationToken();
@@ -24,13 +28,22 @@ class _SplashViewState extends State<SplashView> {
     Future.delayed(const Duration(seconds: 1)).then((value) {
       firebaseTrigger();
 
-      HomeAPI().getSummaryInfo(lang: getLang(context));
+      //HomeAPI().getSummaryInfo(lang: getLang(context));
 
       if (sharedPreferences.getBool('registered') == true &&
           sharedPreferences.getBool('is_info') == true &&
           ((sharedPreferences.getBool('is_verified') == true) ||
               (sharedPreferences.getBool('googleProvider') == true))) {
         print(sharedPreferences.getBool('is_info'));
+
+        ////remove here if error
+        Future.delayed(Duration.zero).then((_) {
+          Provider.of<MobileHomeViewModel>(context, listen: false)
+              .getSummaryData(lang: getLang(context), context: context);
+          Provider.of<ProfileViewModel>(context, listen: false)
+              .setCurrentUserData(context);
+        });
+        ////remove here if error
         Navigator.pushReplacementNamed(context, '/home');
       } else if (sharedPreferences.getBool('registered') == true &&
           sharedPreferences.getBool('is_verified') != true &&
@@ -67,6 +80,14 @@ class _SplashViewState extends State<SplashView> {
           print(message.data['page']);
           if (sharedPreferences.getBool('registered') == true &&
               sharedPreferences.getBool('is_info') == true) {
+            ////remove here if error
+            Future.delayed(Duration.zero).then((_) {
+              Provider.of<MobileHomeViewModel>(context, listen: false)
+                  .getSummaryData(lang: getLang(context), context: context);
+              Provider.of<ProfileViewModel>(context, listen: false)
+                  .setCurrentUserData(context);
+            });
+            ////remove here if error
             Navigator.pushReplacementNamed(context, '/home');
           }
         }
