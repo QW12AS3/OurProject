@@ -188,7 +188,7 @@ class UserInformationViewModel with ChangeNotifier {
     //print(dis);
     final response = await HealthRecordApi().sendHealthRecord(dis, lang, desc);
     if (response['success']) {
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
     } else {
       showSnackbar(Text(response['message'].toString()), context);
     }

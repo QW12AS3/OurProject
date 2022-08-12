@@ -19,7 +19,11 @@ class EditDietViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void addDayToMeals() {
+  void addDayToMeals(BuildContext context) {
+    if (_mealsId.length >= 7) {
+      showSnackbar(Text("You can't add more than 7 days").tr(), context);
+      return;
+    }
     _mealsId.add([]);
     notifyListeners();
   }

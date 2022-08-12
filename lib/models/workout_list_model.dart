@@ -66,8 +66,8 @@ class WorkoutListModel {
           created_at: user['created_at'] ?? '',
           description: user['description'] ?? '',
           categorie_name: user['categorie_name']['name'],
-          reviewd: user['is_reviewd'] ?? false,
-          rating: double.tryParse(user['rating'].toString()) ?? 0);
+          reviewd: user['is_reviewed'] ?? false,
+          rating: double.tryParse(user['review_count'].toString()) ?? 0);
 
   // factory WorkoutListModel.fromJsonForParticipate(Map<String, dynamic> user) =>
   //     WorkoutListModel(

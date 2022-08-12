@@ -8,6 +8,7 @@ import 'package:home_workout_app/models/challenge_model.dart';
 import 'package:home_workout_app/models/diet_model.dart';
 import 'package:home_workout_app/models/post_models.dart';
 import 'package:home_workout_app/models/user_model.dart';
+import 'package:home_workout_app/models/workout_list_model.dart';
 import 'package:home_workout_app/models/workout_model.dart';
 
 import '../Api services/diet_api.dart';
@@ -16,7 +17,7 @@ class SearchViewModel with ChangeNotifier {
   List<UserModel> _users = [];
   List<PostModel> _posts = [];
   List<DietModel> _diets = [];
-  List<WorkoutModel> _workouts = [];
+  List<WorkoutListModel> _workouts = [];
   List<ChallengeModel> _challenges = [];
   int _page = 0;
   Filters _filter = Filters.users;
@@ -116,7 +117,7 @@ class SearchViewModel with ChangeNotifier {
           _diets.addAll(response as List<DietModel>);
           break;
         case 'Workouts':
-          _workouts.addAll(response as List<WorkoutModel>);
+          _workouts.addAll(response as List<WorkoutListModel>);
           break;
         case 'Challenges':
           _challenges.addAll(response as List<ChallengeModel>);
@@ -156,7 +157,7 @@ class SearchViewModel with ChangeNotifier {
   List<PostModel> get getposts => _posts;
   List<DietModel> get getDiets => _diets;
   List<ChallengeModel> get getChallenges => _challenges;
-  List<WorkoutModel> get getWorkouts => _workouts;
+  List<WorkoutListModel> get getWorkouts => _workouts;
   int get getPage => _page;
   List<String> get getSugs => _suggestions;
   bool get getIsSugLoading => _isSugLoading;

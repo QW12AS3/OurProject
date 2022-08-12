@@ -78,7 +78,8 @@ class _PostsPageState extends State<PostsPage> {
                                       context);
                             },
                             child: Text('Refresh',
-                                style: theme.textTheme.bodySmall))
+                                    style: theme.textTheme.bodySmall)
+                                .tr())
                       ],
                     ))
                   : Column(

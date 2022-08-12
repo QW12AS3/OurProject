@@ -418,6 +418,41 @@ class DietAPI {
     }
   }
 
+  Future<Map> deleteReviewForWorkout(
+      {required String lang,
+      required int reviewId,
+      required int workoutId}) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('$base_URL/workout/review/$reviewId'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
+        return {
+          'success': true,
+          'message': jsonDecode(response.body)['message']
+        };
+      } else {
+        print(jsonDecode(response.body));
+        return {
+          'success': false,
+          'message': jsonDecode(response.body)['message']
+        };
+      }
+    } catch (e) {
+      print('Delete Review Error: $e');
+      return {'success': false, 'message': e.toString()};
+    }
+  }
+
   Future<Map> updateReview(
       {required String lang,
       required int reviewId,
@@ -428,6 +463,47 @@ class DietAPI {
       log(reviewId.toString());
       final response = await http
           .put(Uri.parse('$base_URL/diet/review/$reviewId'), headers: {
+        'apikey': apiKey,
+        'lang': lang,
+        'accept': 'application/json',
+        'authorization':
+            'Bearer ${sharedPreferences.getString('access_token')}',
+        'timeZone': getTimezone()
+      }, body: {
+        //'diet_id': dietId.toString(),
+        if (comment.trim().isNotEmpty) 'description': comment,
+        'stars': stars.toString()
+      });
+      print('Update' + jsonDecode(response.body).toString());
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
+        return {
+          'success': true,
+          'message': jsonDecode(response.body)['message']
+        };
+      } else {
+        print(jsonDecode(response.body));
+        return {
+          'success': false,
+          'message': jsonDecode(response.body)['message']
+        };
+      }
+    } catch (e) {
+      print('Update Review Error: $e');
+      return {'success': false, 'message': e.toString()};
+    }
+  }
+
+  Future<Map> updateReviewForWorkout(
+      {required String lang,
+      required int reviewId,
+      required int workoutId,
+      required double stars,
+      required String comment}) async {
+    try {
+      log(reviewId.toString());
+      final response = await http
+          .put(Uri.parse('$base_URL/workout/review/$reviewId'), headers: {
         'apikey': apiKey,
         'lang': lang,
         'accept': 'application/json',

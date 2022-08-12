@@ -110,7 +110,7 @@ class _CreateDietViewState extends State<CreateDietView> {
           TextButton(
               onPressed: () {
                 Provider.of<CreateDietViewModel>(context, listen: false)
-                    .addDayToMeals();
+                    .addDayToMeals(context);
               },
               child: Text(
                 '+ Add day',

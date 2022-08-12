@@ -66,7 +66,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
         title: Text(
           'Create workout',
           style: theme.textTheme.bodyMedium!,
-        ),
+        ).tr(),
       ),
       body: Provider.of<CreateworkoutViewModel>(context).fetchedList == true
           ? SafeArea(
@@ -231,7 +231,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text("Select category's name: "),
+                                Text("Select category's name: ").tr(),
                               ],
                             ),
                           ),
@@ -255,9 +255,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                 .dropDownList
                                 ?.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
+                                  value: value, child: Text(value).tr());
                             }).toList(),
                           ),
                           /*  DropdownButton(
@@ -284,7 +282,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text("Select equipment: "),
+                                Text("Select equipment: ").tr(),
                               ],
                             ),
                           ),
@@ -309,7 +307,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                 ?.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
-                                child: Text(value),
+                                child: Text(value).tr(),
                               );
                             }).toList(),
                           ),
@@ -337,7 +335,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text("Select difficulty: "),
+                                Text("Select difficulty: ").tr(),
                               ],
                             ),
                           ),
@@ -362,7 +360,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                 ?.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
-                                child: Text(value),
+                                child: Text(value).tr(),
                               );
                             }).toList(),
                           ),
@@ -415,9 +413,10 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                     print(value.userImage.path == '');
                                   },
                                   child: Text(value.userImage != null &&
-                                          value.userImage.path != ''
-                                      ? 'Change photo'
-                                      : 'Add photo'))
+                                              value.userImage.path != ''
+                                          ? 'Change photo'
+                                          : 'Add photo')
+                                      .tr())
                             ],
                           ),
                         ),

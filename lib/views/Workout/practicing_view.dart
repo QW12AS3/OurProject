@@ -90,8 +90,8 @@ class _PracticingViewState extends State<PracticingView> {
     breakTimer = null;
   }
 
-  String reps = 'reps'.trim();
-  String sec = 'sec'.trim();
+  String reps = 'reps'.tr();
+  String sec = 'sec'.tr();
 
   Workout2Model workout = Workout2Model();
   PageController _pageController = PageController();
@@ -137,7 +137,7 @@ class _PracticingViewState extends State<PracticingView> {
                         });
                   }
                 },
-                child: const Text('Skip'),
+                child: const Text('Skip').tr(),
               ),
             ),
       bottomNavigationBar: Consumer<PracticingViewModel>(
@@ -321,7 +321,7 @@ class _PracticingViewState extends State<PracticingView> {
                     }
                   },
                   child: Text(
-                    practice.getIsPlaying ? 'Finish' : 'Start',
+                    practice.getIsPlaying ? 'Finish'.tr() : 'Start'.tr(),
                     style: theme.textTheme.bodyMedium,
                   ),
                 )),
@@ -382,11 +382,14 @@ class _PracticingViewState extends State<PracticingView> {
                         }
                       },
                     ),
-                    Text(
-                      workout.exercises[practice.getCurrentExerciseIndex]
-                          .description,
-                      style:
-                          theme.textTheme.bodySmall!.copyWith(color: greyColor),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        workout.exercises[practice.getCurrentExerciseIndex]
+                            .description,
+                        style: theme.textTheme.bodySmall!
+                            .copyWith(color: greyColor),
+                      ),
                     ),
                     Divider(
                       indent: 50,
@@ -401,7 +404,7 @@ class _PracticingViewState extends State<PracticingView> {
                                     .length !=
                                 0
                             ? '${workout.exercises[practice.getCurrentExerciseIndex].length} $sec'
-                            : '${workout.exercises[practice.getCurrentExerciseIndex].length} $reps'),
+                            : '${workout.exercises[practice.getCurrentExerciseIndex].count} $reps'),
                       ),
                     ),
                     // if (practice.getTimer != 0)
@@ -413,7 +416,7 @@ class _PracticingViewState extends State<PracticingView> {
                           Text(
                             'Timer',
                             style: theme.textTheme.bodyMedium,
-                          ),
+                          ).tr(),
                           Text('${practice.getTimer} $sec',
                               style: theme.textTheme.bodySmall!
                                   .copyWith(color: greyColor)),

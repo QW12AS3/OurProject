@@ -44,7 +44,6 @@ class ProfileViewModel with ChangeNotifier {
 
   bool _getMoreWorkoutsLoading = false;
 
-
   bool _infoWidgetVisible = false;
   List _followers = [];
   List _followings = [];
@@ -303,8 +302,12 @@ class ProfileViewModel with ChangeNotifier {
   }
 
   Future<void> removeRole(
-      {required String lang, required BuildContext context}) async {
-    final response = await ProfileApi().removeRole(lang: lang);
+      {required String lang,
+      required BuildContext context,
+      required String password}) async {
+    setIsRemoveLoading(true);
+    final response =
+        await ProfileApi().removeRole(lang: lang, password: password);
     if (response['success']) {
       _userData.roleId = 1;
       _userData.role = '';
@@ -312,7 +315,7 @@ class ProfileViewModel with ChangeNotifier {
     } else {
       showSnackbar(Text(response['message'] ?? ''), context);
     }
-    setIsRemoveLoading(true);
+    setIsRemoveLoading(false);
   }
 
   Future<void> logout(BuildContext context) async {
@@ -476,7 +479,6 @@ class ProfileViewModel with ChangeNotifier {
 
   bool get getIsWorkoutLoading => _isWorkoutLoading;
   bool get getMoreWorkoutsLoading => _getMoreWorkoutsLoading;
-
 
   //bool get getPasswordObsecure => _PasswordObsecure;
 }

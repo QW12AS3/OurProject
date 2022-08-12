@@ -44,6 +44,14 @@ class _MealPickerViewState extends State<MealPickerView> {
       //         .getMeals(lang: getLang(context));
       //   }
       // });
+
+      _searchController.addListener(() {
+        if (_searchController.text.trim() != searchValue)
+          // ignore: curly_braces_in_flow_control_structures
+          setState(() {
+            searchValue = _searchController.text.trim();
+          });
+      });
     });
   }
 
@@ -142,15 +150,19 @@ class _MealPickerViewState extends State<MealPickerView> {
                                     Column(
                                       children: food.getMealsList
                                           .where((element) => element.type
-                                                      .contains(
-                                                          _searchController.text
-                                                              .trim()) ||
+                                                      .toLowerCase()
+                                                      .contains(searchValue
+                                                          .toLowerCase()) ||
+                                                  element.description
+                                                      .toLowerCase()
+                                                      .contains(searchValue
+                                                          .toLowerCase()) ||
                                                   element.foods
-                                                      .where((element) =>
-                                                          element.name.contains(
-                                                              _searchController
-                                                                  .text
-                                                                  .trim()))
+                                                      .where((element) => element
+                                                          .name
+                                                          .toLowerCase()
+                                                          .contains(searchValue
+                                                              .toLowerCase()))
                                                       .isNotEmpty
                                               ? true
                                               : false)

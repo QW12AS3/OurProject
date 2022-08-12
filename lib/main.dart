@@ -375,7 +375,7 @@ class Vigor extends StatelessWidget {
             ),
           ),
           darkTheme: ThemeData(
-            scaffoldBackgroundColor: Color.fromARGB(255, 35, 35, 36),
+            scaffoldBackgroundColor: Color.fromARGB(255, 54, 54, 58),
             drawerTheme: const DrawerThemeData(
                 backgroundColor: Color.fromARGB(255, 48, 45, 40)),
             colorSchemeSeed: orangeColor,

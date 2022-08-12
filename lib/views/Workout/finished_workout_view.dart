@@ -44,8 +44,8 @@ class _FinishWorkoutViewState extends State<FinishWorkoutView> {
   List<int> exercises = [];
   int totalTime = 0;
   Workout2Model workout = Workout2Model();
-  String reps = 'reps'.trim();
-  String sec = 'sec'.trim();
+  String reps = 'reps'.tr();
+  String sec = 'sec'.tr();
 
   String exerString = 'Exercises played:'.tr();
   String time = 'Time:'.tr();

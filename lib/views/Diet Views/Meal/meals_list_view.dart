@@ -117,15 +117,19 @@ class _MealsListViewState extends State<MealsListView> {
                                   Column(
                                     children: food.getMealsList
                                         .where((element) => element.type
-                                                    .contains(_searchController
-                                                        .text
-                                                        .trim()) ||
+                                                    .toLowerCase()
+                                                    .contains(searchValue
+                                                        .toLowerCase()) ||
+                                                element.description
+                                                    .toLowerCase()
+                                                    .contains(searchValue
+                                                        .toLowerCase()) ||
                                                 element.foods
-                                                    .where((element) =>
-                                                        element.name.contains(
-                                                            _searchController
-                                                                .text
-                                                                .trim()))
+                                                    .where((element) => element
+                                                        .name
+                                                        .toLowerCase()
+                                                        .contains(searchValue
+                                                            .toLowerCase()))
                                                     .isNotEmpty
                                             ? true
                                             : false)
