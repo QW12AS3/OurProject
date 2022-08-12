@@ -5,6 +5,7 @@ import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/workout_list_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/my_workouts_view_model.dart';
+import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -262,7 +263,11 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                     style: TextStyle(color: orangeColor),
                   ),
                 ),
-                if ((sharedPreferences.get("role_id") == 2) ||
+                if ((sharedPreferences.get("role_id") == 2 &&
+                        Provider.of<ProfileViewModel>(context, listen: false)
+                                .getUserData
+                                .id ==
+                            workoutValue.user_id) ||
                     sharedPreferences.get("role_id") == 4 ||
                     sharedPreferences.get("role_id") == 5)
                   PopupMenuItem(
@@ -272,7 +277,11 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                     ),
                     value: 'Edit',
                   ),
-                if ((sharedPreferences.get("role_id") == 2) ||
+                if ((sharedPreferences.get("role_id") == 2 &&
+                        Provider.of<ProfileViewModel>(context, listen: false)
+                                .getUserData
+                                .id ==
+                            workoutValue.user_id) ||
                     sharedPreferences.get("role_id") == 4 ||
                     sharedPreferences.get("role_id") == 5)
                   PopupMenuItem(

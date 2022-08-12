@@ -289,6 +289,17 @@
     "Required": "Required",
     "Not Required": "Not Required",
     "There are no comments": "There are no comments",
+    "Edit exercise": "Edit exercise",
+    "From gallery": "From gallery",
+    "From camera": "From camera",
+    "Challenge": "Challenge",
+    "Create challenge": "Create challenge",
+    "Select exercise's name: ": "Select exercise's name: ",
+    "Challenge end date:": "Challenge end date:",
+    "Practice by: ": "Practice by: ",
+    "Repetition": "Repetition",
+    "There is a problem connecting to the internet": "There is a problem connecting to the internet"
+
     "min": "min",
     "Unblock failed": "Unblock failed",
     "Follow failed": "Follow failed",
@@ -298,4 +309,5 @@
     "Please enter your birthdate": "Please enter your birthdate",
     "Please enter your country": "Please enter your country",
     "Add exercises": "Add exercises"
+
 }

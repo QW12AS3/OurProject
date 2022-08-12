@@ -261,7 +261,7 @@ class _SpecificChallengeState extends State<SpecificChallenge> {
                                                     context)
                                                 .FinalCount)
                                             .toString(),
-                                        header: 'Counts'),
+                                        header: 'Counts'.tr()),
                                     Provider.of<SpeceficChallengeViewModel>(
                                                     context)
                                                 .FinalCount >=
@@ -299,7 +299,17 @@ class _SpecificChallengeState extends State<SpecificChallenge> {
                                                 Text('Congratulations!').tr(),
                                           ),
                                   ],
-                                )
+                                ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text("Description".tr() +
+                            "${Provider.of<SpeceficChallengeViewModel>(context).challenge.desc.toString()}"),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text("Calories".tr() +
+                            "${Provider.of<SpeceficChallengeViewModel>(context).challenge.calory.toString()}"),
+                      ),
                     ],
                   ),
           ),

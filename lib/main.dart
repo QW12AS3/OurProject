@@ -102,7 +102,6 @@ import 'package:home_workout_app/views/Workout/edit_exercise_view.dart';
 import 'package:home_workout_app/views/Workout/edit_workout_view.dart';
 import 'package:home_workout_app/views/Workout/exercise_picker_view.dart';
 import 'package:home_workout_app/views/Workout/exercises_list_view.dart';
-
 import 'package:home_workout_app/views/Workout/favorite_workouts_view.dart';
 import 'package:home_workout_app/views/Workout/finished_workout_view.dart';
 import 'package:home_workout_app/views/Workout/practicing_view.dart';
@@ -242,7 +241,9 @@ class Vigor extends StatelessWidget {
           //   }
           // },
 
+
           initialRoute: '/',
+
           routes: {
             '/signup': (context) => SignUp(),
             '/signin': (context) => SignIn(),

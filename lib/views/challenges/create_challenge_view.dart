@@ -68,7 +68,7 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
             title: Text(
               'Create challenge',
               style: theme.textTheme.bodyMedium!,
-            ),
+            ).tr(),
           ),
           body: Provider.of<CreateChallengesViewModel>(context).fetchedList ==
                   true
@@ -179,7 +179,8 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text("Select exercise's name: "),
+                                      child:
+                                          Text("Select exercise's name: ").tr(),
                                     ),
                                   ],
                                 ),
@@ -251,8 +252,8 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
                                             child: Text(value.userImage !=
                                                         null &&
                                                     value.userImage.path != ''
-                                                ? 'Change photo'
-                                                : 'Add photo'))
+                                                ? 'Change photo'.tr()
+                                                : 'Add photo'.tr()))
                                       ],
                                     ),
                                   ),
@@ -382,7 +383,7 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text('Practice by: '),
+                                      child: Text('Practice by: ').tr(),
                                     ),
                                     ElevatedButton(
                                         onPressed: () {
@@ -396,8 +397,8 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
                                                         context,
                                                         listen: false)
                                                     .isTime
-                                                ? 'Time'
-                                                : 'Repetition'))
+                                                ? 'Time'.tr()
+                                                : 'Repetition'.tr()))
                                   ],
                                 ),
                                 SizedBox(

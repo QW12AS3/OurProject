@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -33,14 +34,16 @@ class _EditExerciseViewState extends State<EditExerciseView> {
     super.initState();
     Future.delayed(Duration.zero).then((value) {
       final args = ModalRoute.of(context)!.settings.arguments as Map;
+      log(args.toString());
       argu = args;
+      imageURL = args['image'].toString();
+      BurnCaloriesController.text = args['burn calories'].toString();
+      nameController.text = args['name'].toString();
+      descriptionController.text = args['description'].toString();
+      log(descriptionController.text);
+      // setState(() {
 
-      setState(() {
-        imageURL = argu['image'];
-        BurnCaloriesController.text = args['burn calories'] ?? '';
-        nameController.text = args['name'] ?? '';
-        descriptionController.text = args['description'] ?? '';
-      });
+      // });
     });
   }
 
@@ -51,7 +54,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Edit exercise',
+            'Edit exercise'.tr(),
             style: theme.textTheme.bodyMedium!,
           ),
         ),
@@ -310,7 +313,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                                       print(value.userImage == null);
                                       print(value.userImage.path == '');
                                     },
-                                    child: Text('Change photo'))
+                                    child: Text('Change photo').tr())
                               ],
                             ),
                           ),
@@ -412,7 +415,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                               //         //     .userImage,
                               //         context.locale == Locale('en') ? 'en' : 'ar');
                             },
-                            child: Text('Save')),
+                            child: Text('Save').tr()),
                         SizedBox(
                           height: mq.size.height * 0.05,
                         ),
@@ -431,7 +434,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
       title: Text(
         'Photo type',
         style: TextStyle(color: blueColor),
-      ),
+      ).tr(),
       content: Container(
         height: 150,
         child: Column(
@@ -446,7 +449,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
               child: Text(
                 'From gallery',
                 style: TextStyle(color: orangeColor),
-              ),
+              ).tr(),
             ),
             SizedBox(
               height: 15,
@@ -460,7 +463,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
               child: Text(
                 'From camera',
                 style: TextStyle(color: orangeColor),
-              ),
+              ).tr(),
             ),
           ],
         ),
