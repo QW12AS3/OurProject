@@ -352,7 +352,7 @@ class _EditDietViewState extends State<EditDietView> {
           TextButton(
               onPressed: () {
                 Provider.of<EditDietViewModel>(context, listen: false)
-                    .addDayToMeals();
+                    .addDayToMeals(context);
               },
               child: Text(
                 '+ Add day',

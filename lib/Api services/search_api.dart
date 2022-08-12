@@ -7,6 +7,7 @@ import 'package:home_workout_app/models/challenge_model.dart';
 import 'package:home_workout_app/models/diet_model.dart';
 import 'package:home_workout_app/models/post_models.dart';
 import 'package:home_workout_app/models/user_model.dart';
+import 'package:home_workout_app/models/workout_list_model.dart';
 import 'package:home_workout_app/models/workout_model.dart';
 
 import '../components.dart';
@@ -73,11 +74,11 @@ class SearchApi {
             return posts;
 
           case 'Workouts':
-            List<WorkoutModel> posts = [];
+            List<WorkoutListModel> posts = [];
 
             List data = jsonDecode(response.body)['data'] ?? [];
             data.forEach((element) {
-              posts.add(WorkoutModel.fromJson(element));
+              posts.add(WorkoutListModel.fromJson(element));
             });
             print(posts);
             return posts;

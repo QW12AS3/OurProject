@@ -1,5 +1,8 @@
 import 'dart:developer';
 
+import 'package:home_workout_app/view_models/profile_view_model.dart';
+import 'package:provider/provider.dart';
+
 import '../constants.dart';
 
 class CommentsModel {
@@ -34,6 +37,8 @@ class CommentsModel {
     comment = json['description'] ?? '';
     createdAt = json['created_at'] ?? '';
     id = json['id'] ?? 0;
+
+    log('userId $id');
     ownerId = json['user_id']['id'] ?? 0;
 
     ownerImageUrl = json['user_id']['prof_img_url'] ?? '';

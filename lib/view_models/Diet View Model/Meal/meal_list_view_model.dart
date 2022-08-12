@@ -10,6 +10,12 @@ class MealsListViewModel with ChangeNotifier {
   bool _isLoading = false;
   bool _isDeleteLoading = false;
   int _page = 0;
+  String _searchValue = '';
+
+  void setSearchValue(value) {
+    _searchValue = value;
+    notifyListeners();
+  }
 
   void setIsDeleteLoading(value) {
     _isDeleteLoading = value;
@@ -102,4 +108,5 @@ class MealsListViewModel with ChangeNotifier {
   bool get getIsLoading => _isLoading;
   List<MealModel> get getMealsList => _mealsList;
   bool get getIsDeleteLoading => _isDeleteLoading;
+  String get getSearchValue => _searchValue;
 }

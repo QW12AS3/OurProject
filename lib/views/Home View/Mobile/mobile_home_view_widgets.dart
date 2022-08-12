@@ -13,6 +13,7 @@ import 'package:home_workout_app/my_flutter_app_icons.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/posts_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/saved_posts_view_model.dart';
+import 'package:home_workout_app/view_models/settings_view_mode.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -529,12 +530,14 @@ class _NormalPostCardState extends State<NormalPostCard> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                widget.post.title,
-                style:
-                    theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 3,
+              child: Consumer<SettingsViewModel>(
+                builder: (context, settings, child) => Text(
+                  widget.post.title,
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                      color: settings.getTheme ? Colors.black54 : greyColor),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                ),
               ),
             ),
             if (widget.post.videosUrl.isNotEmpty &&
@@ -625,7 +628,7 @@ class _NormalPostCardState extends State<NormalPostCard> {
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           width: openContainer ? 250 : 75,
-                          height: 40,
+                          height: 70,
                           decoration: BoxDecoration(
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(15),
@@ -999,10 +1002,14 @@ class _pollPostCardState extends State<pollPostCard> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                widget.post.title,
-                style:
-                    theme.textTheme.bodyMedium!.copyWith(color: Colors.black54),
+              child: Consumer<SettingsViewModel>(
+                builder: (context, settings, child) => Text(
+                  widget.post.title,
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                      color: settings.getTheme ? Colors.black54 : greyColor),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                ),
               ),
             ),
             ListBody(
@@ -1031,7 +1038,14 @@ class _pollPostCardState extends State<pollPostCard> {
                               groupValue = selectedvalue ?? -1;
                             });
                         },
-                        title: Text(e['vote']),
+                        title: Consumer<SettingsViewModel>(
+                            builder: (context, settings, child) => Text(
+                                  e['vote'],
+                                  style: theme.textTheme.bodySmall!.copyWith(
+                                      color: settings.getTheme
+                                          ? Colors.black54
+                                          : greyColor),
+                                )),
                         secondary: groupValue == -1
                             ? null
                             : Text(
@@ -1116,7 +1130,7 @@ showBottomList(BuildContext context, String title, List user) {
                               .toString() ==
                           e['id'].toString()) {
                         Navigator.pushNamed(context, '/home',
-                            arguments: {'page': 2});
+                            arguments: {'page': 3});
                       } else {
                         Navigator.pushNamed(context, '/anotherUserProfile',
                             arguments: {'id': e['id']});

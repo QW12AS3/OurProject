@@ -29,8 +29,18 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
       print('fffffffff]]]]]]]]');
       // print(Provider.of<exercisesPickerViewModel>(context, listen: false)
       //     .getIsFetched);
+
+      _searchController.addListener(() {
+        if (_searchController.text.trim() != searchValue)
+          // ignore: curly_braces_in_flow_control_structures
+          setState(() {
+            searchValue = _searchController.text.trim();
+          });
+      });
     });
   }
+
+  String searchValue = '';
 
   TextEditingController _searchController = TextEditingController();
 
@@ -129,13 +139,12 @@ class _ExercisePickerListViewState extends State<ExercisePickerListView> {
                                       Column(
                                         children: exercise.getexercisesList
                                             .where((element) =>
-                                                _searchController.text
-                                                        .trim()
-                                                        .isEmpty
+                                                searchValue.isEmpty
                                                     ? true
-                                                    : element.name!.contains(
-                                                        _searchController.text
-                                                            .trim()))
+                                                    : element.name!
+                                                        .toLowerCase()
+                                                        .contains(searchValue
+                                                            .toLowerCase()))
                                             .map(
                                               (e) => InkWell(
                                                 onTap: () {

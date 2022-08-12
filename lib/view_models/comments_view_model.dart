@@ -9,6 +9,7 @@ import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/comments_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/diet_list_view_model.dart';
 import 'package:home_workout_app/view_models/Posts%20View%20Model/posts_view_model.dart';
+import 'package:home_workout_app/view_models/Workout_View_Model/workout_list_view_model.dart';
 import 'package:provider/provider.dart';
 
 class CommentsViewModel with ChangeNotifier {
@@ -153,6 +154,28 @@ class CommentsViewModel with ChangeNotifier {
     return false;
   }
 
+  Future<bool> deleteReviewForWorkout(
+      {required int reviewId,
+      required String lang,
+      required int workoutId,
+      required BuildContext context}) async {
+    setIsdeleteLoading(true);
+    final response = await DietAPI().deleteReviewForWorkout(
+        lang: lang, reviewId: reviewId, workoutId: workoutId);
+    setIsdeleteLoading(false);
+
+    if (response['success']) {
+      _comments.removeWhere((element) => element.id == reviewId);
+      Provider.of<WorkoutListViewModel>(context, listen: false)
+          .changeIsReviews(dietId: workoutId, value: false);
+      setIsdeleteLoading(false);
+      return true;
+    } else
+      showSnackbar(Text(response['message']), context);
+    setIsdeleteLoading(false);
+    return false;
+  }
+
   Future<void> updateComment(
       {required int commentId,
       required int postId,
@@ -183,6 +206,31 @@ class CommentsViewModel with ChangeNotifier {
         reviewId: reviewId,
         comment: comment,
         dietId: dietId,
+        stars: stars);
+    if (response['success']) {
+      {
+        _comments.firstWhere((element) => element.id == reviewId).comment =
+            comment;
+        _comments.firstWhere((element) => element.id == reviewId).reviewRate =
+            stars;
+        notifyListeners();
+      }
+    } else
+      showSnackbar(Text(response['message']), context);
+  }
+
+  Future<void> updateReviewForWorkout(
+      {required int reviewId,
+      required int workoutId,
+      required String comment,
+      required String lang,
+      required double stars,
+      required BuildContext context}) async {
+    final response = await DietAPI().updateReviewForWorkout(
+        lang: lang,
+        reviewId: reviewId,
+        comment: comment,
+        workoutId: workoutId,
         stars: stars);
     if (response['success']) {
       {

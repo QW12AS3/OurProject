@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
@@ -8,6 +9,10 @@ import 'package:home_workout_app/view_models/Workout_View_Model/favorite_workout
 import 'package:home_workout_app/view_models/Workout_View_Model/my_workouts_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
+
+import '../../view_models/Workout_View_Model/workout_list_view_model.dart';
+import '../../view_models/profile_view_model.dart';
+import '../Posts View/post_view_widgets.dart';
 
 class favoriteWorkoutsView extends StatefulWidget {
   const favoriteWorkoutsView({Key? key}) : super(key: key);
@@ -18,6 +23,7 @@ class favoriteWorkoutsView extends StatefulWidget {
 
 class _favoriteWorkoutsViewState extends State<favoriteWorkoutsView> {
   final ListViewController = ScrollController();
+  TextEditingController _reviewController = TextEditingController();
 
   @override
   void initState() {
@@ -526,6 +532,144 @@ class _favoriteWorkoutsViewState extends State<favoriteWorkoutsView> {
               ],
             ),
           ),
+        ),
+
+        //Review
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 10),
+                    child: RatingBarIndicator(
+                      rating: workoutValue.rating ?? 0,
+                      itemSize: 25,
+                      itemCount: 5,
+                      itemBuilder: (context, index) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                    )),
+                Text(
+                  workoutValue.rating.toString(),
+                  style: theme.textTheme.bodySmall!.copyWith(color: greyColor),
+                ),
+              ],
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/comments', arguments: {
+                  'id': workoutValue.id,
+                  'isWorkout': true,
+                  'isReviewd': workoutValue.reviewd,
+                });
+              },
+              child: Row(
+                children: [
+                  Text(
+                    'Comments',
+                    style: theme.textTheme.bodySmall,
+                  ).tr(),
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 15,
+                    color: orangeColor,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+        if (Provider.of<ProfileViewModel>(context, listen: true)
+                    .getUserData
+                    .id !=
+                workoutValue.user_id &&
+            workoutValue.reviewd == false)
+          Center(
+            child: Consumer<WorkoutListViewModel>(
+              builder: (context, review, child) => review.getIsREviewLoading
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: bigLoader(color: orangeColor),
+                    )
+                  : TextButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext ctx) {
+                              _reviewController.clear();
+                              double stars = 0;
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                content: Container(
+                                    height: 240,
+                                    child: Column(
+                                      children: [
+                                        RatingBar.builder(
+                                          itemCount: 5,
+                                          allowHalfRating: true,
+                                          unratedColor: greyColor,
+                                          //initialRating: e.rating,
+                                          maxRating: 5,
+                                          itemBuilder: (context, index) =>
+                                              const Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                          ),
+                                          onRatingUpdate: (value) {
+                                            stars = value;
+                                            return;
+                                          },
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: CustomTextField(
+                                              maxLines: 5,
+                                              controller: _reviewController,
+                                              title: 'Comment'),
+                                        ),
+                                        ElevatedButton(
+                                            onPressed: () async {
+                                              Navigator.pop(ctx);
+                                              final response =
+                                                  await review.sendReview(
+                                                      lang: getLang(context),
+                                                      id: workoutValue.id ?? 0,
+                                                      review: _reviewController
+                                                          .text
+                                                          .trim(),
+                                                      stars: stars,
+                                                      context: context);
+                                              if (response) {
+                                                setState(() {
+                                                  workoutValue.reviewd = true;
+                                                });
+                                              }
+                                              _reviewController.clear();
+                                            },
+                                            child: const Text('Submit')),
+                                      ],
+                                    )),
+                              );
+                            });
+                      },
+                      child: Text(
+                        'Add a review',
+                        style: theme.textTheme.bodySmall!
+                            .copyWith(color: Colors.amber),
+                      ),
+                    ),
+            ),
+          ),
+        Divider(
+          endIndent: 50,
+          indent: 50,
+          color: blueColor,
         ),
       ],
     );

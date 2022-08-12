@@ -58,7 +58,7 @@ class _CreateExerciseViewState extends State<CreateExerciseView> {
           title: Text(
             'Create exercise',
             style: theme.textTheme.bodyMedium!,
-          ),
+          ).tr(),
         ),
         body: SafeArea(
           child: Container(
@@ -302,9 +302,10 @@ class _CreateExerciseViewState extends State<CreateExerciseView> {
                                       print(value.userImage.path == '');
                                     },
                                     child: Text(value.userImage != null &&
-                                            value.userImage.path != ''
-                                        ? 'Change photo'
-                                        : 'Add photo'))
+                                                value.userImage.path != ''
+                                            ? 'Change photo'
+                                            : 'Add photo')
+                                        .tr())
                               ],
                             ),
                           ),
@@ -379,7 +380,7 @@ class _CreateExerciseViewState extends State<CreateExerciseView> {
                               //         //     .userImage,
                               //         context.locale == Locale('en') ? 'en' : 'ar');
                             },
-                            child: Text('Save')),
+                            child: Text('Save').tr()),
                         SizedBox(
                           height: mq.size.height * 0.05,
                         ),

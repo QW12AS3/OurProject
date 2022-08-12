@@ -157,36 +157,33 @@ class _HomePageState extends State<HomePage> {
                               }
                               // consumer.changeSelectedCategorie(e.key, true);
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Container(
-                                // margin: const EdgeInsets.all(4),
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                    color:
-                                        value.getCategoriesList![index].name ==
-                                                value.PickedCategoryValue
-                                            ? blueColor
-                                            : greyColor,
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Text(
-                                      value.getCategoriesList![index].name
-                                          .toString(),
-                                      style: theme.textTheme.bodySmall!
-                                          .copyWith(
-                                              color: Colors.white,
-                                              fontSize: value
-                                                          .getCategoriesList![
-                                                              index]
-                                                          .name ==
-                                                      value.PickedCategoryValue
-                                                  ? 12
-                                                  : 10),
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                  top: 2, right: 1, left: 1),
+                              padding: const EdgeInsets.all(4),
+                              width: 60,
+                              height: 150,
+                              decoration: BoxDecoration(
+                                  color: value.getCategoriesList![index].name ==
+                                          value.PickedCategoryValue
+                                      ? blueColor
+                                      : greyColor,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Center(
+                                child: FittedBox(
+                                  child: Text(
+                                    value.getCategoriesList![index].name
+                                        .toString(),
+                                    style: theme.textTheme.bodySmall!.copyWith(
+                                      color: Colors.white,
+                                      // fontSize: value
+                                      //             .getCategoriesList![index]
+                                      //             .name ==
+                                      //         value.PickedCategoryValue
+                                      //     ? 12
+                                      //     : 10,
                                     ),
-                                  ),
+                                  ).tr(),
                                 ),
                               ),
                             ),
@@ -263,33 +260,29 @@ class _HomePageState extends State<HomePage> {
                                 }
                                 // consumer.changeSelectedCategorie(e.key, true);
                               },
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Container(
-                                  // margin: const EdgeInsets.all(4),
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                      color: value.getdifficultyList![index] ==
-                                              value.PickedDifficultyValue
-                                          ? blueColor
-                                          : greyColor,
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: Text(
-                                        value.getdifficultyList![index]
-                                            .toString(),
-                                        style: theme.textTheme.bodySmall!.copyWith(
-                                            color: Colors.white,
-                                            fontSize: value.getdifficultyList![
-                                                        index] ==
-                                                    value.PickedDifficultyValue
-                                                ? 12
-                                                : 10),
-                                      ),
+                              child: Container(
+                                width: 60,
+                                height: 150,
+                                margin: const EdgeInsets.all(4),
+                                //padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                    color: value.getdifficultyList![index] ==
+                                            value.PickedDifficultyValue
+                                        ? blueColor
+                                        : greyColor,
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Center(
+                                  child: Text(
+                                    value.getdifficultyList![index].toString(),
+                                    style: theme.textTheme.bodySmall!.copyWith(
+                                      color: Colors.white,
+                                      // fontSize:
+                                      //     value.getdifficultyList![index] ==
+                                      //             value.PickedDifficultyValue
+                                      //         ? 12
+                                      //         : 10
                                     ),
-                                  ),
+                                  ).tr(),
                                 ),
                               ),
                             );
@@ -389,7 +382,7 @@ class _HomePageState extends State<HomePage> {
               child: Text(
                 'Create exercise',
                 style: TextStyle(color: orangeColor),
-              ),
+              ).tr(),
             ),
             SizedBox(
               height: 15,
@@ -404,7 +397,7 @@ class _HomePageState extends State<HomePage> {
               child: Text(
                 'Create workout',
                 style: TextStyle(color: orangeColor),
-              ),
+              ).tr(),
             ),
           ],
         ),
@@ -589,8 +582,8 @@ class _HomePageState extends State<HomePage> {
             Navigator.pushNamed(context, '/specificWorkout',
                 arguments: {'workoutId': workoutValue.id});
             //TODO:
-            Navigator.pushNamed(context, '/specificWorkout',
-                arguments: {'workoutId': workoutValue.id});
+            // Navigator.pushNamed(context, '/specificWorkout',
+            //     arguments: {'workoutId': workoutValue.id});
           },
           child: Container(
             width: mq.width * 0.95,
@@ -751,11 +744,6 @@ class _HomePageState extends State<HomePage> {
         ),
 
         //Review
-        Divider(
-          endIndent: 50,
-          indent: 50,
-          color: blueColor,
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -784,7 +772,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.pushNamed(context, '/comments', arguments: {
                   'id': workoutValue.id,
-                  'workout': true,
+                  'isWorkout': true,
                   'isReviewd': workoutValue.reviewd,
                 });
               },
@@ -886,6 +874,11 @@ class _HomePageState extends State<HomePage> {
                     ),
             ),
           ),
+        Divider(
+          endIndent: 50,
+          indent: 50,
+          color: blueColor,
+        ),
       ],
     );
   }

@@ -333,6 +333,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                                 ? 'en'
                                                                                 : 'ar',
                                                                             context);
+                                                                        passwordController
+                                                                            .clear();
                                                                       },
                                                                       child:
                                                                           Text(
@@ -388,12 +390,66 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             (BuildContext
                                                                     ctx) =>
                                                                 AlertDialog(
-                                                                  title: Text(
-                                                                    'Are you sure to remove your role ?',
-                                                                    style: theme
-                                                                        .textTheme
-                                                                        .bodySmall,
-                                                                  ).tr(),
+                                                                  title: Column(
+                                                                    children: [
+                                                                      Text(
+                                                                        'Are you sure to remove your role ?',
+                                                                        style: theme
+                                                                            .textTheme
+                                                                            .bodySmall,
+                                                                      ).tr(),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            10,
+                                                                      ),
+                                                                      if (sharedPreferences
+                                                                              .getBool('googleProvider') ==
+                                                                          false)
+                                                                        TextField(
+                                                                          obscureText:
+                                                                              true,
+                                                                          controller:
+                                                                              passwordController,
+                                                                          keyboardType:
+                                                                              TextInputType.visiblePassword,
+                                                                          decoration:
+                                                                              InputDecoration(
+                                                                            label:
+                                                                                FittedBox(child: const Text('Password').tr()),
+                                                                            floatingLabelStyle:
+                                                                                theme.textTheme.bodySmall,
+                                                                            focusedErrorBorder:
+                                                                                OutlineInputBorder(
+                                                                              borderSide: BorderSide(color: orangeColor, width: 1.5),
+                                                                              borderRadius: const BorderRadius.all(
+                                                                                Radius.circular(15),
+                                                                              ),
+                                                                            ),
+                                                                            enabledBorder:
+                                                                                OutlineInputBorder(
+                                                                              borderSide: BorderSide(color: greyColor, width: 1.5),
+                                                                              borderRadius: const BorderRadius.all(
+                                                                                Radius.circular(15),
+                                                                              ),
+                                                                            ),
+                                                                            errorBorder:
+                                                                                const OutlineInputBorder(
+                                                                              borderSide: BorderSide(color: Colors.red, width: 1.5),
+                                                                              borderRadius: BorderRadius.all(
+                                                                                Radius.circular(15),
+                                                                              ),
+                                                                            ),
+                                                                            focusedBorder:
+                                                                                OutlineInputBorder(
+                                                                              borderSide: BorderSide(color: orangeColor, width: 1.5),
+                                                                              borderRadius: const BorderRadius.all(
+                                                                                Radius.circular(15),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        )
+                                                                    ],
+                                                                  ),
                                                                   actions: [
                                                                     TextButton(
                                                                       onPressed:
@@ -401,9 +457,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                         Navigator.pop(
                                                                             ctx);
                                                                         await Provider.of<ProfileViewModel>(context, listen: false).removeRole(
-                                                                            lang:
-                                                                                getLang(context),
+                                                                            password:
+                                                                                passwordController.text.trim(),
+                                                                            lang: getLang(context),
                                                                             context: context);
+                                                                        passwordController
+                                                                            .clear();
                                                                       },
                                                                       child:
                                                                           Text(
@@ -647,13 +706,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         //     ).tr(),
                         //   ),
                         if (Provider.of<ProfileViewModel>(context, listen: true)
-                                    .getUserData
-                                    .roleId ==
-                                2 ||
-                            Provider.of<ProfileViewModel>(context, listen: true)
-                                    .getUserData
-                                    .roleId !=
-                                0)
+                                .getUserData
+                                .roleId ==
+                            2)
                           Consumer<ProfileViewModel>(
                             builder: (context, user, child) => ExpansionTile(
                               onExpansionChanged: (change) async {
@@ -693,13 +748,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                         if (Provider.of<ProfileViewModel>(context, listen: true)
-                                    .getUserData
-                                    .roleId ==
-                                3 ||
-                            Provider.of<ProfileViewModel>(context, listen: true)
-                                    .getUserData
-                                    .roleId !=
-                                0)
+                                .getUserData
+                                .roleId ==
+                            3)
                           Consumer<ProfileViewModel>(
                             builder: (context, user, child) => ExpansionTile(
                               onExpansionChanged: (change) async {
@@ -1002,13 +1053,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                         if (Provider.of<ProfileViewModel>(context, listen: true)
-                                    .getUserData
-                                    .roleId !=
-                                1 &&
-                            Provider.of<ProfileViewModel>(context, listen: true)
-                                    .getUserData
-                                    .roleId !=
-                                0)
+                                .getUserData
+                                .roleId !=
+                            1)
                           Consumer<ProfileViewModel>(
                             builder: (context, user, child) => ExpansionTile(
                               onExpansionChanged: (change) async {

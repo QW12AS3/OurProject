@@ -316,7 +316,7 @@ class myDrawer extends StatelessWidget {
                         style: theme.textTheme.bodySmall,
                       ).tr(),
                       trailing: Icon(
-                        Icons.star_rate_rounded,
+                        Icons.food_bank_outlined,
                         color: blueColor,
                       ),
                     ),

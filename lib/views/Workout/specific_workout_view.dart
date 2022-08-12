@@ -35,8 +35,8 @@ class _SpecificWorkoutViewState extends State<SpecificWorkoutView> {
   String kcalString = 'kcal'.tr();
   String dayString = 'Day'.tr();
   String eq = 'Equipment:'.tr();
-  String reps = 'reps'.trim();
-  String sec = 'sec'.trim();
+  String reps = 'reps'.tr();
+  String sec = 'sec'.tr();
 
   String predictedString = 'Predicted burnt calories:'.tr();
   String exer = 'Exercises:'.tr();
@@ -53,7 +53,7 @@ class _SpecificWorkoutViewState extends State<SpecificWorkoutView> {
           child: Text(
             'Start',
             style: theme.textTheme.bodySmall!.copyWith(color: Colors.white),
-          ),
+          ).tr(),
         ),
       ),
       appBar: AppBar(
@@ -157,7 +157,8 @@ class _SpecificWorkoutViewState extends State<SpecificWorkoutView> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text('$eq ${workout.getWorkout.equipment}',
+                          child: Text(
+                              '$eq ${workout.getWorkout.equipment.tr()}',
                               style: theme.textTheme.bodySmall!
                                   .copyWith(color: blueColor)),
                         ),
@@ -169,8 +170,9 @@ class _SpecificWorkoutViewState extends State<SpecificWorkoutView> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text('Exercises:',
-                              style: theme.textTheme.bodySmall!
-                                  .copyWith(color: orangeColor)),
+                                  style: theme.textTheme.bodySmall!
+                                      .copyWith(color: orangeColor))
+                              .tr(),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 60),

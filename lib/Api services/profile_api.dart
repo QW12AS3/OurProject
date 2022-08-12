@@ -365,7 +365,7 @@ class ProfileApi {
     return [];
   }
 
-  Future<bool> blockUser(int id, String lang) async {
+  Future<Map> blockUser(int id, String lang) async {
     try {
       final response = await http.get(
         Uri.parse('$base_URL/user/block/$id'),
@@ -380,14 +380,19 @@ class ProfileApi {
       );
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
-        return true;
+        return {
+          'success': true,
+          'message': jsonDecode(response.body)['message'] ?? ''
+        };
       } else {
-        print(jsonDecode(response.body));
-        return false;
+        return {
+          'success': false,
+          'message': jsonDecode(response.body)['message'] ?? ''
+        };
       }
     } catch (e) {
       print('Block error: $e');
-      return false;
+      return {'success': false, 'message': e.toString()};
     }
   }
 
@@ -478,19 +483,20 @@ class ProfileApi {
     return [];
   }
 
-  Future<Map> removeRole({required String lang}) async {
+  Future<Map> removeRole(
+      {required String lang, required String password}) async {
     try {
-      final response = await http.post(
-        Uri.parse('$base_URL/cv/deleteRole'),
-        headers: {
-          'apikey': apiKey,
-          'lang': lang,
-          'accept': 'application/json',
-          'authorization':
-              'Bearer ${sharedPreferences.getString('access_token')}',
-          'timeZone': getTimezone()
-        },
-      );
+      final response =
+          await http.post(Uri.parse('$base_URL/cv/deleteRole'), headers: {
+        'apikey': apiKey,
+        'lang': lang,
+        'accept': 'application/json',
+        'authorization':
+            'Bearer ${sharedPreferences.getString('access_token')}',
+        'timeZone': getTimezone()
+      }, body: {
+        'password': password
+      });
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
         return {

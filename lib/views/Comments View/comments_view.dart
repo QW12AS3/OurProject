@@ -8,6 +8,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/comments_model.dart';
+import 'package:home_workout_app/view_models/Workout_View_Model/workout_list_view_model.dart';
 import 'package:home_workout_app/view_models/comments_view_model.dart';
 import 'package:home_workout_app/view_models/profile_view_model.dart';
 import 'package:home_workout_app/views/Posts%20View/post_view_widgets.dart';
@@ -28,7 +29,9 @@ class _CommentsViewState extends State<CommentsView> {
   ScrollController _scrollController = ScrollController();
   int postId = 0;
   int dietId = 0;
+  int workoutId = 0;
   bool isReviewd = false;
+  bool isWorkout = false;
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -52,6 +55,28 @@ class _CommentsViewState extends State<CommentsView> {
             Provider.of<CommentsViewModel>(context, listen: false).setReviews(
                 id: dietId,
                 lang: context.locale == const Locale('en') ? 'en' : 'ar');
+          }
+        });
+      } else if (args['isWorkout'] != null) {
+        setState(() {
+          isWorkout = true;
+          isReviewd = args['isReviewd'] ?? false;
+          workoutId = args['id'] ?? 0;
+        });
+
+        Provider.of<CommentsViewModel>(context, listen: false).resetComments();
+        Provider.of<CommentsViewModel>(context, listen: false).setPage(0);
+        Provider.of<CommentsViewModel>(context, listen: false)
+            .setReviewsForWorkout(
+                id: workoutId,
+                lang: context.locale == const Locale('en') ? 'en' : 'ar');
+        _scrollController.addListener(() {
+          if (_scrollController.offset ==
+              _scrollController.position.maxScrollExtent) {
+            Provider.of<CommentsViewModel>(context, listen: false)
+                .setReviewsForWorkout(
+                    id: workoutId,
+                    lang: context.locale == const Locale('en') ? 'en' : 'ar');
           }
         });
       } else {
@@ -84,28 +109,43 @@ class _CommentsViewState extends State<CommentsView> {
     final mq = MediaQuery.of(context);
     final theme = Theme.of(context);
     return Scaffold(
-      bottomNavigationBar: isReview
+      bottomNavigationBar: isReview || isWorkout
           ? Container(
               height: 50,
               child: isReviewd
                   ? null
                   : Center(
-                      child: Consumer<DietListViewModel>(
-                          builder: (context, review, child) => review
+                      child: Consumer2<DietListViewModel, WorkoutListViewModel>(
+                          builder: (context, review, workoutReview, child) => review
                                   .getIsREviewLoading
                               ? Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: bigLoader(color: orangeColor),
                                 )
-                              : (Provider.of<ProfileViewModel>(context,
-                                              listen: true)
-                                          .getUserData
-                                          .id ==
-                                      review.getDiets
-                                          .firstWhere(
-                                              (element) => element.id == dietId)
-                                          .userId
-                                  ? Text('')
+                              : (isReview &&
+                                          Provider.of<ProfileViewModel>(context,
+                                                      listen: true)
+                                                  .getUserData
+                                                  .id ==
+                                              review.getDiets
+                                                  .firstWhere((element) =>
+                                                      element.id == dietId)
+                                                  .userId ||
+                                      (isWorkout &&
+                                              workoutReview
+                                                  .workoutsList!.isNotEmpty &&
+                                              Provider.of<ProfileViewModel>(
+                                                          context,
+                                                          listen: true)
+                                                      .getUserData
+                                                      .id ==
+                                                  workoutReview.workoutsList!
+                                                      .firstWhere((element) =>
+                                                          element.id ==
+                                                          workoutId)
+                                                      .user_id ||
+                                          isWorkout)
+                                  ? const Text('')
                                   : TextButton(
                                       onPressed: () {
                                         showDialog(
@@ -153,19 +193,35 @@ class _CommentsViewState extends State<CommentsView> {
                                                         ElevatedButton(
                                                             onPressed:
                                                                 () async {
+                                                              final response;
                                                               Navigator.pop(
                                                                   ctx);
-                                                              final response = await review.sendReview(
-                                                                  lang: getLang(
-                                                                      context),
-                                                                  id: dietId,
-                                                                  review:
-                                                                      _reviewController
-                                                                          .text
-                                                                          .trim(),
-                                                                  stars: stars,
-                                                                  context:
-                                                                      context);
+                                                              if (isReview) {
+                                                                response = await review.sendReview(
+                                                                    lang: getLang(
+                                                                        context),
+                                                                    id: dietId,
+                                                                    review: _reviewController
+                                                                        .text
+                                                                        .trim(),
+                                                                    stars:
+                                                                        stars,
+                                                                    context:
+                                                                        context);
+                                                              } else {
+                                                                response = await workoutReview.sendReview(
+                                                                    lang: getLang(
+                                                                        context),
+                                                                    id:
+                                                                        workoutId,
+                                                                    review: _reviewController
+                                                                        .text
+                                                                        .trim(),
+                                                                    stars:
+                                                                        stars,
+                                                                    context:
+                                                                        context);
+                                                              }
                                                               _reviewController
                                                                   .clear();
                                                               if (response) {
@@ -192,11 +248,12 @@ class _CommentsViewState extends State<CommentsView> {
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: isReview
+      floatingActionButton: isReview || isWorkout
           ? null
           : Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
+                height: 100,
                 padding: const EdgeInsets.all(8.0),
                 margin: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
@@ -286,6 +343,22 @@ class _CommentsViewState extends State<CommentsView> {
                                                   const Locale('en')
                                               ? 'en'
                                               : 'ar');
+                                } else if (isWorkout) {
+                                  log('hereeeee');
+                                  Provider.of<CommentsViewModel>(context,
+                                          listen: false)
+                                      .resetComments();
+                                  Provider.of<CommentsViewModel>(context,
+                                          listen: false)
+                                      .setPage(0);
+                                  await Provider.of<CommentsViewModel>(context,
+                                          listen: false)
+                                      .setReviewsForWorkout(
+                                          id: workoutId,
+                                          lang: context.locale ==
+                                                  const Locale('en')
+                                              ? 'en'
+                                              : 'ar');
                                 } else {
                                   Provider.of<CommentsViewModel>(context,
                                           listen: false)
@@ -302,6 +375,11 @@ class _CommentsViewState extends State<CommentsView> {
                                               ? 'en'
                                               : 'ar');
                                 }
+                                log(Provider.of<ProfileViewModel>(context,
+                                        listen: false)
+                                    .getUserData
+                                    .id
+                                    .toString());
                               },
                               child: Text('Refresh',
                                       style: theme.textTheme.bodySmall)
@@ -312,6 +390,11 @@ class _CommentsViewState extends State<CommentsView> {
                   : RefreshIndicator(
                       color: orangeColor,
                       onRefresh: () async {
+                        log(Provider.of<ProfileViewModel>(context,
+                                listen: false)
+                            .getUserData
+                            .id
+                            .toString());
                         if (isReview) {
                           Provider.of<CommentsViewModel>(context, listen: false)
                               .resetComments();
@@ -321,6 +404,18 @@ class _CommentsViewState extends State<CommentsView> {
                                   listen: false)
                               .setReviews(
                                   id: dietId,
+                                  lang: context.locale == const Locale('en')
+                                      ? 'en'
+                                      : 'ar');
+                        } else if (isWorkout) {
+                          Provider.of<CommentsViewModel>(context, listen: false)
+                              .resetComments();
+                          Provider.of<CommentsViewModel>(context, listen: false)
+                              .setPage(0);
+                          await Provider.of<CommentsViewModel>(context,
+                                  listen: false)
+                              .setReviewsForWorkout(
+                                  id: workoutId,
                                   lang: context.locale == const Locale('en')
                                       ? 'en'
                                       : 'ar');
@@ -350,7 +445,7 @@ class _CommentsViewState extends State<CommentsView> {
                                 child: Column(
                                   children: comments.getComments
                                       .map(
-                                        (e) => isReview
+                                        (e) => isReview || isWorkout
                                             ? Center(
                                                 child: Padding(
                                                   padding: const EdgeInsets
@@ -472,14 +567,25 @@ class _CommentsViewState extends State<CommentsView> {
                                                                                     showSnackbar(Text('Review stars cannot be 0').tr(), context);
                                                                                     return;
                                                                                   }
-                                                                                  await comments.updateReview(
-                                                                                    reviewId: e.id,
-                                                                                    dietId: dietId,
-                                                                                    stars: stars,
-                                                                                    comment: editCommentsController.text.trim(),
-                                                                                    lang: context.locale == const Locale('en') ? 'en' : 'ar',
-                                                                                    context: context,
-                                                                                  );
+                                                                                  if (isReview) {
+                                                                                    await comments.updateReview(
+                                                                                      reviewId: e.id,
+                                                                                      dietId: dietId,
+                                                                                      stars: stars,
+                                                                                      comment: editCommentsController.text.trim(),
+                                                                                      lang: context.locale == const Locale('en') ? 'en' : 'ar',
+                                                                                      context: context,
+                                                                                    );
+                                                                                  } else if (isWorkout) {
+                                                                                    await comments.updateReviewForWorkout(
+                                                                                      reviewId: e.id,
+                                                                                      workoutId: workoutId,
+                                                                                      stars: stars,
+                                                                                      comment: editCommentsController.text.trim(),
+                                                                                      lang: context.locale == const Locale('en') ? 'en' : 'ar',
+                                                                                      context: context,
+                                                                                    );
+                                                                                  }
 
                                                                                   Navigator.pop(ctx);
                                                                                   editCommentsController.clear();
@@ -531,16 +637,16 @@ class _CommentsViewState extends State<CommentsView> {
                                                                       ),
                                                                     ),
                                                                   if (e.ownerId ==
-                                                                          Provider.of<ProfileViewModel>(context, listen: false)
+                                                                          Provider.of<ProfileViewModel>(context, listen: true)
                                                                               .getUserData
                                                                               .id ||
                                                                       Provider.of<ProfileViewModel>(context, listen: false)
                                                                               .getUserData
-                                                                              .id ==
+                                                                              .roleId ==
                                                                           4 ||
                                                                       Provider.of<ProfileViewModel>(context, listen: false)
                                                                               .getUserData
-                                                                              .id ==
+                                                                              .roleId ==
                                                                           5)
                                                                     comments
                                                                             .getdeleteIsLoading
@@ -550,8 +656,13 @@ class _CommentsViewState extends State<CommentsView> {
                                                                         : IconButton(
                                                                             onPressed:
                                                                                 () async {
-                                                                              final response = await comments.deleteReview(reviewId: e.id, dietId: dietId, lang: context.locale == const Locale('en') ? 'en' : 'ar', context: context);
-                                                                              if (response)
+                                                                              bool? response;
+                                                                              if (isReview) {
+                                                                                final response = await comments.deleteReview(reviewId: e.id, dietId: dietId, lang: context.locale == const Locale('en') ? 'en' : 'ar', context: context);
+                                                                              } else if (isWorkout) {
+                                                                                final response = await comments.deleteReviewForWorkout(reviewId: e.id, workoutId: workoutId, lang: context.locale == const Locale('en') ? 'en' : 'ar', context: context);
+                                                                              }
+                                                                              if (response ?? false)
                                                                                 // ignore: curly_braces_in_flow_control_structures
                                                                                 setState(() {
                                                                                   isReviewd = !isReviewd;

@@ -66,7 +66,7 @@ class _SavedDietsViewState extends State<SavedDietsView> {
                           'There are no saved diets',
                           style: theme.textTheme.bodySmall!
                               .copyWith(color: greyColor),
-                        ),
+                        ).tr(),
                         TextButton(
                           onPressed: () async {
                             Provider.of<SavedDietsViewModel>(context,

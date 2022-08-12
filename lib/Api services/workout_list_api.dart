@@ -129,7 +129,7 @@ class WorkoutListsAPI {
       );
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
-        List data = jsonDecode(response.body)['data']['data'];
+        List data = jsonDecode(response.body)['data'];
         List<CommentsModel> comments = [];
         data.forEach((element) {
           comments.add(CommentsModel.fromJsonForReview(element));

@@ -8,10 +8,14 @@ import 'package:home_workout_app/models/user_model.dart';
 
 import '../Api services/diet_api.dart';
 import '../Api services/post_api.dart';
+import '../Api services/workout_list_api.dart';
 import '../models/diet_model.dart';
+import '../models/workout_list_model.dart';
 
 class AnotherUserProfileViewModel with ChangeNotifier {
   UserModel _anotherUserData = UserModel();
+  bool _isWorkoutLoading = false;
+
   bool _isLoading = false;
   bool _infoWidgetVisible = false;
 
@@ -26,6 +30,12 @@ class AnotherUserProfileViewModel with ChangeNotifier {
   bool _postsIsOpened = false;
 
   bool _getMoreLoading = false;
+
+  List<WorkoutListModel> _userWorkouts = [];
+
+  int _workoutpage = 0;
+
+  bool _workoutsIsOpened = false;
 
   void setMoreLoading(value) {
     _getMoreLoading = value;
@@ -44,6 +54,56 @@ class AnotherUserProfileViewModel with ChangeNotifier {
 
   void setPage(int i) {
     _page = i;
+    notifyListeners();
+  }
+
+  void setWorkoutIsOpened(value) {
+    _workoutsIsOpened = value;
+    notifyListeners();
+  }
+
+  void setWorkoutPage(int i) {
+    _workoutpage = i;
+    notifyListeners();
+  }
+
+  Future<void> setAnotherUserWorkouts(
+      {required String lang, required int userId}) async {
+    //TODO:
+    print('getting');
+    setWorkoutPage(getWorkoutpage + 1);
+    if (_userPosts.isNotEmpty) setIsMoreWorkoutLoading(true);
+    setIsWorkoutLoading(true);
+    List<WorkoutListModel> newWorkouts =
+        await WorkoutListsAPI().getUserworkouts(lang, userId, getWorkoutpage);
+    if (newWorkouts.isEmpty)
+      setWorkoutPage(getWorkoutpage - 1);
+    else
+      _userWorkouts.addAll(newWorkouts);
+
+    setIsWorkoutLoading(false);
+    setIsMoreWorkoutLoading(false);
+    notifyListeners();
+  }
+
+  Future<void> deleteWorkout(
+      //TODO:
+      {required String lang,
+      required int id,
+      required BuildContext context}) async {
+    final response = await DietAPI().deleteDiet(id: id, lang: lang);
+
+    if (response['success']) {
+      showSnackbar(Text(response['message'].toString()), context);
+      _userDiets.removeWhere((element) => element.id == id);
+      notifyListeners();
+    } else {
+      showSnackbar(Text(response['message'].toString()), context);
+    }
+  }
+
+  void clearWorkouts() {
+    _userWorkouts.clear();
     notifyListeners();
   }
 
@@ -107,12 +167,22 @@ class AnotherUserProfileViewModel with ChangeNotifier {
   //   }
   // };
 
+  void setIsWorkoutLoading(value) {
+    _isWorkoutLoading = value;
+    notifyListeners();
+  }
+
+  void setIsMoreWorkoutLoading(value) {
+    _getMoreWorkoutsLoading = value;
+    notifyListeners();
+  }
+
   Future<void> blockUser(int id, String lang, BuildContext context) async {
-    bool response = await ProfileApi().blockUser(id, lang);
-    if (response)
+    final response = await ProfileApi().blockUser(id, lang);
+    if (response['success'])
       _anotherUserData.isBlocked = true;
     else {
-      showSnackbar(Text('Block failed'), context);
+      showSnackbar(Text(response['message'] ?? ''), context);
     }
     notifyListeners();
   }
@@ -241,4 +311,13 @@ class AnotherUserProfileViewModel with ChangeNotifier {
   int get getPage => _page;
   List<PostModel> get getUserPosts => _userPosts;
   bool get getMoreLoading => _getMoreLoading;
+  bool get getIsWorkoutLoading => _isWorkoutLoading;
+  bool get getMoreWorkoutsLoading => _getMoreWorkoutsLoading;
+  bool get getIsWorkoutLogoutLoading => _isWorkoutLoading;
+  bool _getMoreWorkoutsLoading = false;
+  int get getWorkoutpage => _workoutpage;
+
+  bool get getWorkoutIsOpened => _workoutsIsOpened;
+
+  List<WorkoutListModel> get getUserWorkouts => _userWorkouts;
 }

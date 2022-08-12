@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/workout_list_api.dart';
 import 'package:home_workout_app/components.dart';
@@ -18,7 +20,9 @@ class WorkoutListViewModel with ChangeNotifier {
   bool _isReviewLoading = false;
 
   void changeIsReviews({required int dietId, required bool value}) {
-    workoutsList!.firstWhere((element) => element.id == dietId).reviewd = value;
+    if (workoutsList != null && workoutsList!.isNotEmpty)
+      workoutsList!.firstWhere((element) => element.id == dietId).reviewd =
+          value;
     notifyListeners();
   }
 
@@ -51,6 +55,7 @@ class WorkoutListViewModel with ChangeNotifier {
   List<String>? difficultyList = ['All', 'Easy', 'Medium', 'Hard'];
   setfutureworkoutsList(List<WorkoutListModel>? futureworkoutsList) {
     workoutsList?.addAll(futureworkoutsList!);
+    log('woooooooooooooooooooooooooo' + workoutsList.toString());
     isLoading = false;
     print(futureworkoutsList);
     notifyListeners();
