@@ -384,19 +384,19 @@ class _CreateExerciseViewState extends State<CreateExerciseView> {
                         SizedBox(
                           height: mq.size.height * 0.05,
                         ),
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .pushNamed('/EditExerciseView', arguments: {
-                                'burn calories': BurnCaloriesController.text,
-                                'name': nameController.text,
-                                'description': descriptionController.text,
-                                'id': '1', //TODO:
-                                'image':
-                                    'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'
-                              });
-                            },
-                            child: Text('edit')),
+                        // ElevatedButton(
+                        //     onPressed: () {
+                        //       Navigator.of(context)
+                        //           .pushNamed('/EditExerciseView', arguments: {
+                        //         'burn calories': BurnCaloriesController.text,
+                        //         'name': nameController.text,
+                        //         'description': descriptionController.text,
+                        //         'id': '1', //TODO:
+                        //         'image':
+                        //             'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'
+                        //       });
+                        //     },
+                        //     child: Text('edit')),
                       ]),
                     ),
                   ),

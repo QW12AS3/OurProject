@@ -10,6 +10,7 @@ class CreateChallengeModel {
   String? count;
   String? ex_id;
   String? desc;
+  String? ca;
 
   int? statusCode;
   CreateChallengeModel(
@@ -22,7 +23,8 @@ class CreateChallengeModel {
       this.time,
       this.count,
       this.ex_id,
-      this.desc});
+      this.desc,
+      this.ca});
   // to convert data from json to dart object
   factory CreateChallengeModel.fromJson(Map<String, dynamic> user) =>
       CreateChallengeModel(

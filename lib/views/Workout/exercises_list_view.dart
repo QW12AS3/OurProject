@@ -5,6 +5,7 @@ import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/exercise_model.dart';
 import 'package:home_workout_app/view_models/Workout_View_Model/exercises_list_view_model.dart';
+import 'package:home_workout_app/view_models/profile_view_model.dart';
 
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
@@ -218,7 +219,11 @@ class _ExercisesListViewState extends State<ExercisesListView> {
                 ],
               ),
             ),
-            if ((sharedPreferences.get("role_id") == 2) ||
+            if ((sharedPreferences.get("role_id") == 2 &&
+                    Provider.of<ProfileViewModel>(context, listen: false)
+                            .getUserData
+                            .id ==
+                        exerciseValue.user_id) ||
                 sharedPreferences.get("role_id") == 4 ||
                 sharedPreferences.get("role_id") == 5)
               PopupMenuButton(
@@ -250,6 +255,17 @@ class _ExercisesListViewState extends State<ExercisesListView> {
                       'image': exerciseValue.exercise_img,
                       'id': exerciseValue.id,
                     });
+                    print(exerciseValue.name);
+                    print(exerciseValue.id);
+                    //   Navigator.of(context)
+                    //     .pushNamed('/EditExerciseView', arguments: {
+                    //   'burn calories': BurnCaloriesController.text,
+                    //   'name': nameController.text,
+                    //   'description': descriptionController.text,
+                    //   'id': '1', //TODO:
+                    //   'image':
+                    //       'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'
+                    // });
                     Provider.of<exercisesListViewModel>(context, listen: false)
                         .reset();
                     Provider.of<exercisesListViewModel>(context, listen: false)

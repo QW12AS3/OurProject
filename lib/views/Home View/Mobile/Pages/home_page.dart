@@ -465,7 +465,11 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(color: orangeColor),
                 ),
               ),
-              if ((sharedPreferences.get("role_id") == 2) ||
+              if ((sharedPreferences.get("role_id") == 2 &&
+                      Provider.of<ProfileViewModel>(context, listen: false)
+                              .getUserData
+                              .id ==
+                          workoutValue.user_id) ||
                   sharedPreferences.get("role_id") == 4 ||
                   sharedPreferences.get("role_id") == 5)
                 PopupMenuItem(
@@ -475,7 +479,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                   value: 'Edit',
                 ),
-              if ((sharedPreferences.get("role_id") == 2) ||
+              if ((sharedPreferences.get("role_id") == 2 &&
+                      Provider.of<ProfileViewModel>(context, listen: false)
+                              .getUserData
+                              .id ==
+                          workoutValue.user_id) ||
                   sharedPreferences.get("role_id") == 4 ||
                   sharedPreferences.get("role_id") == 5)
                 PopupMenuItem(

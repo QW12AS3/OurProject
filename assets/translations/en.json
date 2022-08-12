@@ -287,5 +287,15 @@
     "Hard": "Hard",
     "Required": "Required",
     "Not Required": "Not Required",
-    "There are no comments": "There are no comments"
+    "There are no comments": "There are no comments",
+    "Edit exercise": "Edit exercise",
+    "From gallery": "From gallery",
+    "From camera": "From camera",
+    "Challenge": "Challenge",
+    "Create challenge": "Create challenge",
+    "Select exercise's name: ": "Select exercise's name: ",
+    "Challenge end date:": "Challenge end date:",
+    "Practice by: ": "Practice by: ",
+    "Repetition": "Repetition",
+    "There is a problem connecting to the internet": "There is a problem connecting to the internet"
 }
