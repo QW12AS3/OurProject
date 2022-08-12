@@ -258,12 +258,11 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                   child: Text(
                     workoutValue.saved != true
                         ? 'Add to favorite'.tr()
-                        : 'Deleted form favorite'.tr(),
+                        : 'Delete from favorite'.tr(),
                     style: TextStyle(color: orangeColor),
                   ),
                 ),
-                if ((sharedPreferences.get("role_id") == 2 &&
-                        workoutValue.user_id == 2) ||
+                if ((sharedPreferences.get("role_id") == 2) ||
                     sharedPreferences.get("role_id") == 4 ||
                     sharedPreferences.get("role_id") == 5)
                   PopupMenuItem(
@@ -273,8 +272,7 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                     ),
                     value: 'Edit',
                   ),
-                if ((sharedPreferences.get("role_id") == 2 &&
-                        workoutValue.user_id == 2) ||
+                if ((sharedPreferences.get("role_id") == 2) ||
                     sharedPreferences.get("role_id") == 4 ||
                     sharedPreferences.get("role_id") == 5)
                   PopupMenuItem(

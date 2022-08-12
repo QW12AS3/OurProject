@@ -668,7 +668,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                       SizedBox(
                         height: mq.size.height * 0.05,
                       ),
-                      ElevatedButton(
+                      /*   ElevatedButton(
                           onPressed: () {
                             Navigator.of(context)
                                 .pushNamed('/editWorkout', arguments: {
@@ -676,7 +676,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                               'name': nameController.text,
                               'description': descriptionController.text,
                               'Categories': Provider.of<CreateworkoutViewModel>(
-                                      context,
+          Z                            context,
                                       listen: false)
                                   .dropDownNewValue,
                               'Equipment': Provider.of<CreateworkoutViewModel>(
@@ -692,7 +692,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                   'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'
                             });
                           },
-                          child: Text('edit')),
+                          child: Text('edit')),*/
                     ]),
                   ),
                 ),

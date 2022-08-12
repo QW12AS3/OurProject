@@ -1344,8 +1344,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: TextStyle(color: orangeColor),
                 ),
               ),
-              if ((sharedPreferences.get("role_id") == 2 &&
-                      workoutValue.user_id == 2) ||
+              if ((sharedPreferences.get("role_id") == 2 ) ||
                   sharedPreferences.get("role_id") == 4 ||
                   sharedPreferences.get("role_id") == 5)
                 PopupMenuItem(
@@ -1355,8 +1354,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   value: 'Edit',
                 ),
-              if ((sharedPreferences.get("role_id") == 2 &&
-                      workoutValue.user_id == 2) ||
+              if ((sharedPreferences.get("role_id") == 2 ) ||
                   sharedPreferences.get("role_id") == 4 ||
                   sharedPreferences.get("role_id") == 5)
                 PopupMenuItem(

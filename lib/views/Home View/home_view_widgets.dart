@@ -366,7 +366,7 @@ class myDrawer extends StatelessWidget {
               color: blueColor,
             ),
             title: Text(
-              'Challenges',
+              'Challenges system',
               style: theme.textTheme.bodySmall,
             ).tr(),
             iconColor: blueColor,
@@ -377,22 +377,22 @@ class myDrawer extends StatelessWidget {
                 },
                 child: ListTile(
                   title: Text(
-                    'My challenges',
+                    'Challenges',
                     style: theme.textTheme.bodySmall,
                   ).tr(),
                 ),
               ),
-              InkWell(
-                onTap: () async {
-                  Navigator.of(context).pushNamed('/createChallenge');
-                },
-                child: ListTile(
-                  title: Text(
-                    'My created challenges',
-                    style: theme.textTheme.bodySmall,
-                  ).tr(),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () async {
+              //     Navigator.of(context).pushNamed('/createChallenge');
+              //   },
+              //   child: ListTile(
+              //     title: Text(
+              //       'My created challenges',
+              //       style: theme.textTheme.bodySmall,
+              //     ).tr(),
+              //   ),
+              // ),
             ],
           ),
           if (Provider.of<ProfileViewModel>(context,
@@ -515,18 +515,18 @@ class myDrawer extends StatelessWidget {
                   5)
             ExpansionTile(
               trailing: Icon(
-                Icons.food_bank_rounded,
+                Icons.electric_bolt_sharp,
                 color: blueColor,
               ),
               title: Text(
-                'Workout system',
+                'Workout system'.tr(),
                 style: theme.textTheme.bodySmall,
               ).tr(),
               iconColor: blueColor,
               children: [
                 ExpansionTile(
                   title: Text(
-                    'Workouts ',
+                    'Workouts',
                     style: theme.textTheme.bodySmall,
                   ).tr(),
                   children: [
@@ -539,77 +539,23 @@ class myDrawer extends StatelessWidget {
                           'My Workouts',
                           style: theme.textTheme.bodySmall,
                         ).tr(),
-                        trailing: Icon(
-                          Icons.star_rate_rounded,
-                          color: blueColor,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () async {},
-                      child: ListTile(
-                        title: Text(
-                          'Diets list',
-                          style: theme.textTheme.bodySmall,
-                        ).tr(),
                       ),
                     ),
                   ],
                 ),
                 ExpansionTile(
                   title: Text(
-                    'Foods',
+                    'Exercises',
                     style: theme.textTheme.bodySmall,
                   ).tr(),
                   children: [
                     InkWell(
                       onTap: () async {
-                        Navigator.pushNamed(context, '/createFood');
+                        Navigator.pushNamed(context, '/exerciseList');
                       },
                       child: ListTile(
                         title: Text(
-                          'Add food',
-                          style: theme.textTheme.bodySmall,
-                        ).tr(),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        Navigator.pushNamed(context, '/foodList');
-                      },
-                      child: ListTile(
-                        title: Text(
-                          'Foods list',
-                          style: theme.textTheme.bodySmall,
-                        ).tr(),
-                      ),
-                    ),
-                  ],
-                ),
-                ExpansionTile(
-                  title: Text(
-                    'Meals',
-                    style: theme.textTheme.bodySmall,
-                  ).tr(),
-                  children: [
-                    InkWell(
-                      onTap: () async {
-                        Navigator.pushNamed(context, '/createMeal');
-                      },
-                      child: ListTile(
-                        title: Text(
-                          'Add meal',
-                          style: theme.textTheme.bodySmall,
-                        ).tr(),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        Navigator.pushNamed(context, '/mealsList');
-                      },
-                      child: ListTile(
-                        title: Text(
-                          'Meals list',
+                          'Exercises list',
                           style: theme.textTheme.bodySmall,
                         ).tr(),
                       ),

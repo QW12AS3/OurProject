@@ -72,6 +72,7 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mq = MediaQuery.of(context);
+    var role_id = sharedPreferences.getInt("role_id");
     return SafeArea(
       child: Scaffold(
         // bottomNavigationBar:
@@ -80,12 +81,31 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
         //         true
         //     ? bigLoader(color: orangeColor)
         //     : Container(),
+
+        floatingActionButton: (role_id == 2 || role_id == 4 || role_id == 5)
+            ? FloatingActionButton(
+                onPressed: () async {
+                  await Navigator.of(context).pushNamed('/createChallenge');
+                  Provider.of<GeneralChallengesViewModel>(context,
+                          listen: false)
+                      .reset();
+                  Provider.of<GeneralChallengesViewModel>(context,
+                          listen: false)
+                      .getData(
+                          context.locale == Locale('en') ? 'en' : 'ar',
+                          Provider.of<GeneralChallengesViewModel>(context,
+                                  listen: false)
+                              .page,
+                          'out');
+                },
+                child: Icon(Icons.add),
+              )
+            : Container(),
         appBar: AppBar(
-          title: Text(
-            'Challenges',
-            style: theme.textTheme.bodyMedium!,
-          ),
-        ),
+            title: Text(
+          'Challenges',
+          style: theme.textTheme.bodyMedium!,
+        ).tr()),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -117,7 +137,8 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
                         },
                         child: ListView.builder(
                           controller: ListViewController,
-                          physics: BouncingScrollPhysics(),
+                          physics: AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics()),
                           // scrollDirection: Axis.horizontal,
                           itemCount: value.challengesList?.length,
                           itemBuilder: ((context, index) {
@@ -154,97 +175,153 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
     return Padding(
         padding: EdgeInsets.symmetric(
             horizontal: mq.size.width * 0.01, vertical: mq.size.height * 0.01),
-        child: InkWell(
-          onTap: () {
-            Provider.of<GeneralChallengesViewModel>(context, listen: false)
-                .getSpecificChallengeData(
-                    context.locale == Locale('en') ? 'en' : 'ar',
-                    challengeValue.id,
-                    'in');
-            print('tapped');
-            print(challengeValue.id.toString());
-          },
-          child: Container(
-            // height: mq.size.height * 0.3,
-            // width: mq.size.width * 0.95,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 30,
-                    offset: Offset(10, 15),
-                  )
-                ]),
-            child: Padding(
-              padding: EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/anotherUserProfile',
-                              arguments: {'id': challengeValue.user_id});
-                        },
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(challengeValue
-                                                .user_img
-                                                .toString()
-                                                .substring(0, 4) !=
-                                            'http'
-                                        ? '$ip/${challengeValue.user_img}'
-                                        : challengeValue.user_img.toString()
-                                    // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'
-                                    ),
+        child: Container(
+          // height: mq.size.height * 0.3,
+          // width: mq.size.width * 0.95,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 30,
+                  offset: Offset(10, 15),
+                )
+              ]),
+          child: Padding(
+            padding: EdgeInsets.all(8),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/anotherUserProfile',
+                            arguments: {'id': challengeValue.user_id});
+                      },
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(challengeValue
+                                              .user_img
+                                              .toString()
+                                              .substring(0, 4) !=
+                                          'http'
+                                      ? '$ip/${challengeValue.user_img}'
+                                      : challengeValue.user_img.toString()
+                                  // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'
+                                  ),
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${challengeValue.user_name}',
+                                style: theme.textTheme.bodySmall!
+                                    .copyWith(color: blueColor),
                               ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Coach ${challengeValue.user_name}',
-                                  style: theme.textTheme.bodySmall!
-                                      .copyWith(color: blueColor),
-                                ),
-                                Text(
-                                  '${challengeValue.created_at}',
-                                  style: theme.textTheme.displaySmall!
-                                      .copyWith(color: greyColor, fontSize: 10),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
+                              Text(
+                                '${challengeValue.created_at}',
+                                style: theme.textTheme.displaySmall!
+                                    .copyWith(color: greyColor, fontSize: 10),
+                              )
+                            ],
+                          ),
+                        ],
                       ),
-                      if ((sharedPreferences.get("role_id") == 2 &&
-                              challengeValue.user_id == 2) ||
-                          sharedPreferences.get("role_id") == 4 ||
-                          sharedPreferences.get("role_id") == 5) //TODO:
-                        IconButton(
-                            onPressed: () {
+                    ), //&& challengeValue.user_id == sharedPreferences.get("user_id")
+                    if ((sharedPreferences.get("role_id") == 2) ||
+                        sharedPreferences.get("role_id") == 4 ||
+                        sharedPreferences.get("role_id") == 5)
+                      PopupMenuButton(
+                        itemBuilder: (context) => [
+                          /* PopupMenuItem(
+                  child: Text(
+                    'Edit'.tr(),
+                    style: TextStyle(color: orangeColor),
+                  ),
+                  value: 'Edit',
+                ),*/
+                          PopupMenuItem(
+                            child: Text(
+                              'Delete'.tr(),
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            value: 'Delete',
+                          ),
+                        ],
+                        onSelected: (newVal) async {
+                          /* if (newVal == 'Edit') {
+                  print(exerciseValue.id);
+                  await Navigator.of(context)
+                      .pushNamed('/EditExerciseView', arguments: {
+                    // 'Categories IDs': exerciseValue.,
+                    'name': exerciseValue.name,
+                    'burn calories': exerciseValue.burn_calories,
+                    'description': exerciseValue.desc,
+                    'image': exerciseValue.exercise_img,
+                    'id': exerciseValue.id,
+                  });
+                  Provider.of<GeneralChallengesViewModel>(context, listen: false)
+                      .reset();
+                  Provider.of<GeneralChallengesViewModel>(context, listen: false)
+                      .getExercisesData(lang: getLang(context));
+                } else */
+                          if (newVal == 'Delete') {
+                            print('yes');
+                            final ChallengeModel BackEndMessage =
+                                await Provider.of<GeneralChallengesViewModel>(
+                                        context,
+                                        listen: false)
+                                    .deleteSpecificChallengeData(
+                                        context.locale == Locale('en')
+                                            ? 'en'
+                                            : 'ar',
+                                        // 2
+                                        challengeValue.id);
+
+                            if (BackEndMessage.message != '' ||
+                                BackEndMessage.message != '') {
+                              showSnackbar(
+                                  Text(BackEndMessage.message.toString()),
+                                  context);
+                            }
+                            if (BackEndMessage.statusCode == 200) {
                               Provider.of<GeneralChallengesViewModel>(context,
                                       listen: false)
-                                  .deleteSpecificChallengeData(
+                                  .reset();
+                              Provider.of<GeneralChallengesViewModel>(context,
+                                      listen: false)
+                                  .getData(
                                       context.locale == Locale('en')
                                           ? 'en'
                                           : 'ar',
-                                      // 2
-                                      challengeValue.id);
-                            },
-                            icon: Icon(
-                              Icons.more_vert,
-                              color: blueColor,
-                            ))
-                    ],
-                  ),
-                  Row(
+                                      Provider.of<GeneralChallengesViewModel>(
+                                              context,
+                                              listen: false)
+                                          .page,
+                                      'out');
+                            }
+                          }
+                        },
+                      ),
+                  ],
+                ),
+                InkWell(
+                  onTap: () {
+                    if (challengeValue.is_sub!) {
+                      Navigator.pushNamed(context, '/specificChallenge',
+                          arguments: {'id': challengeValue.id});
+                    } else {
+                      showSnackbar(
+                          Text('Please! Subscribe before').tr(), context);
+                    }
+                  },
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Container(
@@ -259,8 +336,9 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
                                     : child,
                             fit: BoxFit.fill,
                             image: NetworkImage(
-                                // "$ip/${challengeValue.img.toString()}",
-                                'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'),
+                              // "$ip/${challengeValue.img.toString()}",//TODO:
+                              'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612',
+                            ),
                           ),
                         ),
                       ),
@@ -296,32 +374,52 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          challengeValue.sub_count.toString() + ' participants',
-                          style: TextStyle(
-                              color: blueColor, fontWeight: FontWeight.w300)),
-                      ElevatedButton(
-                          onPressed: () {
-                            print(challengeValue.id);
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(challengeValue.sub_count.toString() + ' participants',
+                        style: TextStyle(
+                            color: blueColor, fontWeight: FontWeight.w300)),
+                    ElevatedButton(
+                        onPressed: () async {
+                          final ChallengeModel BackEndMessage = await Provider
+                                  .of<GeneralChallengesViewModel>(context,
+                                      listen: false)
+                              .sendParticipate(
+                                  context.locale == Locale('en') ? 'en' : 'ar',
+                                  // 2
+                                  challengeValue.id);
+
+                          if (BackEndMessage.message != '' ||
+                              BackEndMessage.message != '') {
+                            showSnackbar(
+                                Text(BackEndMessage.message.toString()),
+                                context);
+                          }
+                          if (BackEndMessage.statusCode == 200) {
                             Provider.of<GeneralChallengesViewModel>(context,
                                     listen: false)
-                                .sendParticipate(
+                                .reset();
+                            Provider.of<GeneralChallengesViewModel>(context,
+                                    listen: false)
+                                .getData(
                                     context.locale == Locale('en')
                                         ? 'en'
                                         : 'ar',
-                                    // 2
-                                    challengeValue.id);
-                          },
-                          child: Text(
-                            'Participate', //TODO:
-                          ))
-                    ],
-                  )
-                ],
-              ),
+                                    Provider.of<GeneralChallengesViewModel>(
+                                            context,
+                                            listen: false)
+                                        .page,
+                                    'out');
+                          }
+                        },
+                        child: Text(
+                          challengeValue.is_sub! ? 'Unsubscribe' : 'Subscribe',
+                        ).tr())
+                  ],
+                )
+              ],
             ),
           ),
         ));

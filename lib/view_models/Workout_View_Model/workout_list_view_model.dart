@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/workout_list_api.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/workout_list_model.dart';
 
 class WorkoutListViewModel with ChangeNotifier {
@@ -7,14 +8,47 @@ class WorkoutListViewModel with ChangeNotifier {
 
   List<WorkoutListModel>? CategoriesList = [];
   String PickedCategoryValue = '';
-  String PickedDifficultyValue = 'Easy';
+  String PickedDifficultyValue = 'All';
   int CategoryNumber = 1;
-  int DifficultyNumber = 1;
+  int DifficultyNumber = 4;
   int page = 1;
   bool isLoading = false;
   bool CategoriesfetchedList = false;
+
+  bool _isReviewLoading = false;
+
+  void changeIsReviews({required int dietId, required bool value}) {
+    workoutsList!.firstWhere((element) => element.id == dietId).reviewd = value;
+    notifyListeners();
+  }
+
+  Future<bool> sendReview(
+      {required String lang,
+      required int id,
+      required String review,
+      required double stars,
+      required BuildContext context}) async {
+    setIsReviewLoading(true);
+    final response = await WorkoutListsAPI()
+        .sendReview(id: id, lang: lang, review: review, stars: stars);
+
+    setIsReviewLoading(false);
+
+    if (response['success']) {
+      return true;
+    } else {
+      showSnackbar(Text(response['message'].toString()), context);
+      return false;
+    }
+  }
+
+  void setIsReviewLoading(value) {
+    _isReviewLoading = value;
+    notifyListeners();
+  }
+
   // bool DiffetchedList = false;
-  List<String>? difficultyList = ['Easy', 'Medium', 'Hard'];
+  List<String>? difficultyList = ['All', 'Easy', 'Medium', 'Hard'];
   setfutureworkoutsList(List<WorkoutListModel>? futureworkoutsList) {
     workoutsList?.addAll(futureworkoutsList!);
     isLoading = false;
@@ -106,8 +140,10 @@ class WorkoutListViewModel with ChangeNotifier {
       DifficultyNumber = 1;
     } else if (PickedDifficultyValue == 'Medium') {
       DifficultyNumber = 2;
-    } else {
+    } else if (PickedDifficultyValue == 'Hard') {
       DifficultyNumber = 3;
+    } else {
+      DifficultyNumber = 4;
     }
     notifyListeners();
   }
@@ -125,4 +161,5 @@ class WorkoutListViewModel with ChangeNotifier {
   List<WorkoutListModel>? get getfutureworkoutsList => workoutsList;
   List<WorkoutListModel>? get getCategoriesList => CategoriesList;
   List<String>? get getdifficultyList => difficultyList;
+  bool get getIsREviewLoading => _isReviewLoading;
 }

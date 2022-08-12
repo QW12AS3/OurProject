@@ -16,21 +16,36 @@ class exerciseModel {
   String? difficulty;
   List? excersisesList;
   int? statusCode;
-  exerciseModel(
-      {this.id,
-      this.name,
-      this.message,
-      this.statusCode,
-      this.end_time,
-      this.time,
-      this.count,
-      this.ex_id,
-      this.desc,
-      this.exercise_img,
-      this.categorie_id,
-      this.equipment,
-      this.difficulty,
-      this.excersisesList});
+
+  String? f_name;
+  String? l_name;
+  String? prof_img_url;
+  int? burn_calories;
+  String? created_at;
+  int? user_id;
+
+  exerciseModel({
+    this.id,
+    this.name,
+    this.message,
+    this.statusCode,
+    this.end_time,
+    this.time,
+    this.count,
+    this.ex_id,
+    this.desc,
+    this.exercise_img,
+    this.categorie_id,
+    this.equipment,
+    this.difficulty,
+    this.excersisesList,
+    this.f_name,
+    this.l_name,
+    this.burn_calories,
+    this.created_at,
+    this.prof_img_url,
+    this.user_id,
+  });
 
   // exerciseModel.fromJson(Map json) {
   //   print(json);
@@ -52,6 +67,15 @@ class exerciseModel {
         name: user['name'] ?? '',
         desc: user['description'] ?? '',
         exercise_img: user['excersise_media_url'] ?? '',
+        user_id: user['user_id']['id'] ?? '',
+        f_name: user['user_id']['f_name'] ?? '',
+        l_name: user['user_id']['l_name'] ?? '',
+        prof_img_url: user['user_id']['prof_img_url'] ?? '',
+        burn_calories: user['burn_calories'] ?? 0,
+        created_at: user['created_at'] ?? '',
+
         //  ca: user['ca'] ?? '',
       );
+  factory exerciseModel.fromJsonWithErrors(Map<String, dynamic> user) =>
+      exerciseModel(message: user['message'], statusCode: user['status'] ?? 0);
 }

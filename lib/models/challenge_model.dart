@@ -48,6 +48,7 @@ class ChallengeModel {
       message: user['message'] ?? '',
       statusCode: user['status'] ?? 0,
       id: user['id'] ?? 0,
+      user_id: user['user_id'] ?? 0,
       name: user['name'] ?? '',
       user_name: user['user_name'] ?? '',
       desc: user['desc'] ?? '',

@@ -39,6 +39,9 @@ class _EditWorkoutViewState extends State<EditWorkoutView> {
       argu = args;
 
       Provider.of<EditworkoutViewModel>(context, listen: false).reset();
+      // Provider.of<EditworkoutViewModel>(context, listen: false)
+      //     .setdropDownNewValue(argu['categorie_name']);
+
       // argu['Exercises IDs'].forEach((element) {
       //   Provider.of<EditworkoutViewModel>(context, listen: false)
       //       .addToExercises(element);
@@ -53,8 +56,6 @@ class _EditWorkoutViewState extends State<EditWorkoutView> {
       if (Provider.of<EditworkoutViewModel>(context, listen: false)
               .fetchedList ==
           false) {
-        Provider.of<EditworkoutViewModel>(context, listen: false)
-            .getData(context.locale == Locale('en') ? 'en' : 'ar');
         print(Provider.of<EditworkoutViewModel>(context, listen: false)
                 .fetchedList ==
             false);
@@ -63,6 +64,8 @@ class _EditWorkoutViewState extends State<EditWorkoutView> {
 
         Provider.of<exercisesPickerViewModel>(context, listen: false)
             .getExercisesData(lang: getLang(context));
+        Provider.of<EditworkoutViewModel>(context, listen: false)
+            .getData(context.locale == Locale('en') ? 'en' : 'ar');
         // List data = jsonDecode(response.body)['data'] ?? [];
 
         // print(Provider.of<EditworkoutViewModel>(context, listen: false).getChallengesList(lang));

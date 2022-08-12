@@ -15,6 +15,7 @@ import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 import '../../view_models/Diet View Model/Diet/diet_list_view_model.dart';
+import '../../view_models/Workout_View_Model/workout_list_view_model.dart';
 
 class CommentsView extends StatefulWidget {
   CommentsView({Key? key}) : super(key: key);
@@ -54,6 +55,28 @@ class _CommentsViewState extends State<CommentsView> {
                 lang: context.locale == const Locale('en') ? 'en' : 'ar');
           }
         });
+      } else if (args['workout'] != null) {
+        setState(() {
+          isReviewForWorkout = true;
+          isReviewd = args['isReviewd'] ?? false;
+          dietId = args['id'] ?? 0;
+        });
+
+        Provider.of<CommentsViewModel>(context, listen: false).resetComments();
+        Provider.of<CommentsViewModel>(context, listen: false).setPage(0);
+        Provider.of<CommentsViewModel>(context, listen: false)
+            .setReviewsForWorkout(
+                id: dietId,
+                lang: context.locale == const Locale('en') ? 'en' : 'ar');
+        _scrollController.addListener(() {
+          if (_scrollController.offset ==
+              _scrollController.position.maxScrollExtent) {
+            Provider.of<CommentsViewModel>(context, listen: false)
+                .setReviewsForWorkout(
+                    id: dietId,
+                    lang: context.locale == const Locale('en') ? 'en' : 'ar');
+          }
+        });
       } else {
         postId = args['id'] ?? 0;
         Provider.of<CommentsViewModel>(context, listen: false).resetComments();
@@ -74,6 +97,7 @@ class _CommentsViewState extends State<CommentsView> {
   }
 
   bool isReview = false;
+  bool isReviewForWorkout = false;
 
   TextEditingController commentsController = TextEditingController();
   TextEditingController editCommentsController = TextEditingController();
@@ -90,6 +114,63 @@ class _CommentsViewState extends State<CommentsView> {
               child: isReviewd
                   ? null
                   : Center(
+//<<<<<<< specificchallenge
+                      child: Consumer2<DietListViewModel, WorkoutListViewModel>(
+                        builder: (context, review, workout, child) => review
+                                .getIsREviewLoading
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: bigLoader(color: orangeColor),
+                              )
+                            : TextButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext ctx) {
+                                        double stars = 0;
+                                        return AlertDialog(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          content: Container(
+                                              height: 240,
+                                              child: Column(
+                                                children: [
+                                                  RatingBar.builder(
+                                                    itemCount: 5,
+                                                    allowHalfRating: true,
+                                                    unratedColor: greyColor,
+                                                    //initialRating: e.rating,
+                                                    maxRating: 5,
+                                                    itemBuilder:
+                                                        (context, index) =>
+                                                            const Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    ),
+                                                    onRatingUpdate: (value) {
+                                                      stars = value;
+                                                      return;
+                                                    },
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: CustomTextField(
+                                                        maxLines: 5,
+                                                        controller:
+                                                            _reviewController,
+                                                        title: 'Comment'),
+                                                  ),
+                                                  ElevatedButton(
+                                                      onPressed: () async {
+                                                        Navigator.pop(ctx);
+                                                        final response;
+                                                        if (isReview) {
+                                                          response = await review
+                                                              .sendReview(
+//=======
                       child: Consumer<DietListViewModel>(
                           builder: (context, review, child) => review
                                   .getIsREviewLoading
@@ -156,6 +237,7 @@ class _CommentsViewState extends State<CommentsView> {
                                                               Navigator.pop(
                                                                   ctx);
                                                               final response = await review.sendReview(
+//>>>>>>> master
                                                                   lang: getLang(
                                                                       context),
                                                                   id: dietId,
@@ -166,6 +248,44 @@ class _CommentsViewState extends State<CommentsView> {
                                                                   stars: stars,
                                                                   context:
                                                                       context);
+//<<<<<<< specificchallenge
+                                                        } else {
+                                                          response = await workout
+                                                              .sendReview(
+                                                                  lang: getLang(
+                                                                      context),
+                                                                  id: dietId,
+                                                                  review:
+                                                                      _reviewController
+                                                                          .text
+                                                                          .trim(),
+                                                                  stars: stars,
+                                                                  context:
+                                                                      context);
+                                                        }
+                                                        _reviewController
+                                                            .clear();
+                                                        if (response) {
+                                                          setState(() {
+                                                            isReviewd = true;
+                                                          });
+                                                        }
+                                                      },
+                                                      child:
+                                                          const Text('Submit'))
+                                                ],
+                                              )),
+                                        );
+                                      });
+                                },
+                                child: Text(
+                                  'Add a review',
+                                  style: theme.textTheme.bodySmall!
+                                      .copyWith(color: Colors.amber),
+                                ),
+                              ),
+                      ),
+//=======
                                                               _reviewController
                                                                   .clear();
                                                               if (response) {
@@ -188,6 +308,7 @@ class _CommentsViewState extends State<CommentsView> {
                                             .copyWith(color: Colors.amber),
                                       ),
                                     ))),
+//>>>>>>> master
                     ),
             )
           : null,
