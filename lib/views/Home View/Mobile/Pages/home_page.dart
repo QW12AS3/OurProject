@@ -373,7 +373,7 @@ class _HomePageState extends State<HomePage> {
       title: Text(
         'Create type',
         style: TextStyle(color: blueColor),
-      ),
+      ).tr(),
       content: Container(
         height: 150,
         child: Column(
@@ -389,7 +389,7 @@ class _HomePageState extends State<HomePage> {
               child: Text(
                 'Create exercise',
                 style: TextStyle(color: orangeColor),
-              ),
+              ).tr(),
             ),
             SizedBox(
               height: 15,
@@ -404,7 +404,7 @@ class _HomePageState extends State<HomePage> {
               child: Text(
                 'Create workout',
                 style: TextStyle(color: orangeColor),
-              ),
+              ).tr(),
             ),
           ],
         ),

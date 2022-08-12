@@ -7,9 +7,12 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/models/challenge_model.dart';
 import 'package:home_workout_app/view_models/specific_challenge_view_model.dart';
 import 'package:home_workout_app/views/Home%20View/home_view_widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:proximity_sensor/proximity_sensor.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 class SpecificChallenge extends StatefulWidget {
   const SpecificChallenge({Key? key}) : super(key: key);
@@ -19,30 +22,76 @@ class SpecificChallenge extends StatefulWidget {
 }
 
 class _SpecificChallengeState extends State<SpecificChallenge> {
-  Duration countDownDuration = Duration(hours: 1000);
+  Duration countDownDuration = Duration(seconds: 50);
   Duration duration = Duration();
   Timer? timer;
 
   bool isCountdown = true;
 
   var argu;
+  bool isSensor = false;
+
+  bool _isNear = false;
+  late StreamSubscription<dynamic> _streamSubscription;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    listenSensor();
+
     Future.delayed(Duration.zero).then((value) async {
       final args = ModalRoute.of(context)!.settings.arguments as Map;
-      argu = args;
-      Provider.of<SpeceficChallengeViewModel>(context, listen: false)
-          .getSpecificChallengeData(
-              context.locale == Locale('en') ? 'en' : 'ar', argu['id'], 'in');
+      setState(() {
+        argu = args;
+        isSensor = argu['sensor'];
+      });
+
+      Provider.of<SpeceficChallengeViewModel>(context, listen: false).reset();
+      Provider.of<SpeceficChallengeViewModel>(context, listen: false).getData(
+          context.locale == Locale('en') ? 'en' : 'ar', argu['id'], 'in');
       print('tapped');
       print(argu['id']);
+      // countDownDuration = Duration(
+      //     seconds:
+      //         Provider.of<SpeceficChallengeViewModel>(context, listen: true)
+      //             .challengeCount);
+      setState(() {
+        // int initalTime =
+        //     Provider.of<SpeceficChallengeViewModel>(context, listen: false)
+        //         .challengeCount;
+        duration = Duration(seconds: argu['count'] ?? 3);
+        print('ddddddddddddddfffffff');
+        print(duration.inSeconds);
+      });
+      listenSensor();
     });
 
     // startTimer();
     reset();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    timer?.cancel();
+    _streamSubscription.cancel();
+  }
+
+  Future<void> listenSensor() async {
+    FlutterError.onError = (FlutterErrorDetails details) {
+      if (foundation.kDebugMode) {
+        FlutterError.dumpErrorToConsole(details);
+      }
+    };
+    _streamSubscription = ProximitySensor.events.listen((int event) {
+      Provider.of<SpeceficChallengeViewModel>(context, listen: false)
+          .setProximityVal(event > 0);
+      setState(() {
+        _isNear = (event > 0) ? true : false;
+      });
+    });
   }
 
   void reset() {
@@ -93,86 +142,167 @@ class _SpecificChallengeState extends State<SpecificChallenge> {
     final mq = MediaQuery.of(context);
     return SafeArea(
         child: Scaffold(
+      bottomNavigationBar: Container(
+        height: 70,
+        child: ElevatedButton(
+          onPressed: () async {
+            if (Provider.of<SpeceficChallengeViewModel>(context, listen: false)
+                .challenge
+                .is_time!) {
+              Provider.of<SpeceficChallengeViewModel>(context, listen: false)
+                  .setFinalCount(duration.inSeconds);
+            } else if (argu['sensor']) {
+              Provider.of<SpeceficChallengeViewModel>(context, listen: false)
+                  .setFinalCount(Provider.of<SpeceficChallengeViewModel>(
+                          context,
+                          listen: false)
+                      .proximityCount);
+              print('object');
+              print(Provider.of<SpeceficChallengeViewModel>(context,
+                      listen: false)
+                  .setFinalCount(Provider.of<SpeceficChallengeViewModel>(
+                          context,
+                          listen: false)
+                      .FinalCount));
+            } else {
+              Provider.of<SpeceficChallengeViewModel>(context, listen: false)
+                  .setFinalCount(Provider.of<SpeceficChallengeViewModel>(
+                          context,
+                          listen: false)
+                      .FinalCount);
+            }
+
+            final ChallengeModel BackEndMessage =
+                await Provider.of<SpeceficChallengeViewModel>(context,
+                        listen: false)
+                    .saveSpecificChallengeData(
+                        Provider.of<SpeceficChallengeViewModel>(context,
+                                listen: false)
+                            .FinalCount,
+                        getLang(context),
+                        argu['id']);
+
+            if (BackEndMessage.message != '' || BackEndMessage.message != '') {
+              showSnackbar(Text(BackEndMessage.message.toString()), context);
+            }
+            if (BackEndMessage.statusCode == 200) {
+              Navigator.of(context).pop();
+              timer?.cancel();
+            }
+          },
+          child: Text('Finish').tr(),
+        ),
+      ),
       appBar: AppBar(
           title: Text(
         'Challenge',
         style: theme.textTheme.bodyMedium!,
       ).tr()),
-      body: Container(
-        color: Colors.white,
-        child: SingleChildScrollView(
-          // controller: controller,
-          child: !Provider.of<SpeceficChallengeViewModel>(context, listen: true)
-                  .getchallengesList!
-                  .isEmpty
-              ? bigLoader(color: orangeColor)
-              : Column(
-                  children: [
-                    Container(
-                      // width: mq.size.width * 0.3,
-                      // height: mq.size.height * 0.2,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image(
-                          loadingBuilder: (context, child, loadingProgress) =>
-                              loadingProgress != null
-                                  ? const LoadingContainer()
-                                  : child,
-                          fit: BoxFit.fill,
-                          image: NetworkImage(
-                            // 'https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                            "$ip/${Provider.of<SpeceficChallengeViewModel>(context).getchallenge.img}",
+      body: Center(
+        child: Container(
+          color: Colors.white,
+          child: SingleChildScrollView(
+            // controller: controller,
+            child: Provider.of<SpeceficChallengeViewModel>(context,
+                        listen: true)
+                    .getisLoading
+                ? bigLoader(color: orangeColor)
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Text('$_isNear'),
+                      Container(
+                        // width: mq.size.width * 0.3,
+                        // height: mq.size.height * 0.2,
+
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image(
+                            loadingBuilder: (context, child, loadingProgress) =>
+                                loadingProgress != null
+                                    ? const LoadingContainer()
+                                    : child,
+                            fit: BoxFit.fill,
+                            image: NetworkImage(
+                              // 'https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+                              "$ip/${Provider.of<SpeceficChallengeViewModel>(context).getchallenge.img}",
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: mq.size.height * 0.1,
-                    ),
-                    Provider.of<SpeceficChallengeViewModel>(context)
-                                .getchallenge
-                                .is_time ??
-                            true
-                        ? Column(
-                            children: [
-                              Container(
-                                child: buildTime(),
-                              ),
-                              buildButtons(),
-                              // Row(
-                              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              //   children: [
-                              //     ElevatedButton(
-                              //       onPressed: () {
-                              //         if ((timer != null && timer!.isActive)) {
-                              //           startTimer();
-                              //         } else {
-                              //           timer?.cancel();
-                              //         }
-                              //         print(timer != null && timer!.isActive);
-                              //       },
-                              //       child: Text(
-                              //         (timer != null && timer!.isActive)
-                              //             ? 'Finish'.tr()
-                              //             : 'Start'.tr(),
-                              //       ),
-                              //     ),
-                              //   ],
-                              // )
-                              ElevatedButton(
-                                  onPressed: () {
-                                    print(duration.inMinutes);
-                                  },
-                                  child: Text('test'))
-                            ],
-                          )
-                        : ElevatedButton(
-                            onPressed: () {
-                              print(duration.inMinutes);
-                            },
-                            child: Icon(Icons.add_circle_outline))
-                  ],
-                ),
+                      SizedBox(
+                        height: mq.size.height * 0.1,
+                      ),
+                      Provider.of<SpeceficChallengeViewModel>(context)
+                                  .getchallenge
+                                  .is_time ??
+                              true
+                          ? Column(
+                              children: [
+                                Container(
+                                  child: buildTime(),
+                                ),
+                                buildButtons(),
+
+                                // ElevatedButton(
+                                //     onPressed: () {
+                                //       print(duration.inMinutes);
+                                //     },
+                                //     child: Text('test'))
+                              ],
+                            )
+                          : isSensor
+                              ? Column(
+                                  children: [
+                                    buildTimeCard(
+                                        time: (Provider.of<
+                                                        SpeceficChallengeViewModel>(
+                                                    context)
+                                                .FinalCount)
+                                            .toString(),
+                                        header: 'Counts'),
+                                    Provider.of<SpeceficChallengeViewModel>(
+                                                    context)
+                                                .FinalCount >=
+                                            0
+                                        ? Container()
+                                        : Container(
+                                            child:
+                                                Text('Congratulations!').tr(),
+                                          ),
+                                  ],
+                                )
+                              : Column(
+                                  children: [
+                                    buildTimeCard(
+                                        time: Provider.of<
+                                                    SpeceficChallengeViewModel>(
+                                                context)
+                                            .FinalCount
+                                            .toString(),
+                                        header: 'Counts'),
+                                    Provider.of<SpeceficChallengeViewModel>(
+                                                    context)
+                                                .FinalCount >=
+                                            0
+                                        ? ElevatedButton(
+                                            onPressed: () {
+                                              Provider.of<SpeceficChallengeViewModel>(
+                                                      context,
+                                                      listen: false)
+                                                  .decreaseFinalCount();
+                                            },
+                                            child: Icon(Icons.remove))
+                                        : Container(
+                                            child:
+                                                Text('Congratulations!').tr(),
+                                          ),
+                                  ],
+                                )
+                    ],
+                  ),
+          ),
         ),
       ),
     ));
@@ -215,7 +345,7 @@ class _SpecificChallengeState extends State<SpecificChallenge> {
               fontSize: 72,
               decoration: TextDecoration.none,
             ),
-          ),
+          ).tr(),
         ),
         SizedBox(
           height: 10,
@@ -246,14 +376,10 @@ class _SpecificChallengeState extends State<SpecificChallenge> {
                 startTimer(resets: false);
               }
             },
-            child: Text(isRunning ? 'Stop'.tr() : 'Resume'.tr()))
-        : ElevatedButton(
-            onPressed: () {
-              print('yes');
-              // startTimer();
-              // isRunning = true;
-            },
-            child: Text('Start'));
+            child: Text(isRunning ? 'Stop'.tr() : 'Start'.tr()))
+        : Container(
+            child: Text('Congratulations!').tr(),
+          );
     // return isRuning ? ElevatedButton(onPressed: () {}, child: Text('Stop'));
   }
 }

@@ -312,10 +312,30 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
                   ],
                 ),
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
                     if (challengeValue.is_sub!) {
-                      Navigator.pushNamed(context, '/specificChallenge',
-                          arguments: {'id': challengeValue.id});
+                      print(challengeValue.ex_id);
+                      if (challengeValue.ex_id?.toInt() == 3) {
+                        buildDialog(context, challengeValue);
+                      } else {
+                        await Navigator.pushNamed(context, '/specificChallenge',
+                            arguments: {
+                              'id': challengeValue.id,
+                              'sensor': false,
+                              'count': challengeValue.total_count
+                            });
+                      }
+                      Provider.of<GeneralChallengesViewModel>(context,
+                              listen: false)
+                          .reset();
+                      Provider.of<GeneralChallengesViewModel>(context,
+                              listen: false)
+                          .getData(
+                              context.locale == Locale('en') ? 'en' : 'ar',
+                              Provider.of<GeneralChallengesViewModel>(context,
+                                      listen: false)
+                                  .page,
+                              'out');
                     } else {
                       showSnackbar(
                           Text('Please! Subscribe before').tr(), context);
@@ -336,8 +356,8 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
                                     : child,
                             fit: BoxFit.fill,
                             image: NetworkImage(
-                              // "$ip/${challengeValue.img.toString()}",//TODO:
-                              'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612',
+                              "$ip/${challengeValue.img.toString()}", //TODO:
+                              // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612',
                             ),
                           ),
                         ),
@@ -423,5 +443,79 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
             ),
           ),
         ));
+  }
+
+  void buildDialog(BuildContext Bcontext, ChallengeModel challengeValue) {
+    final alert = AlertDialog(
+      title: Text(
+        'Exercise type',
+        style: TextStyle(color: blueColor),
+      ).tr(),
+      content: Container(
+        height: 150,
+        child: Column(
+          children: [
+            Divider(),
+            TextButton(
+              onPressed: () async {
+                await Navigator.of(context).pushNamed('/specificChallenge',
+                    arguments: {
+                      'id': challengeValue.id,
+                      'sensor': true,
+                      'count': challengeValue.total_count
+                    });
+                Navigator.of(context).pop();
+                Provider.of<GeneralChallengesViewModel>(context, listen: false)
+                    .reset();
+                Provider.of<GeneralChallengesViewModel>(context, listen: false)
+                    .getData(
+                        context.locale == Locale('en') ? 'en' : 'ar',
+                        Provider.of<GeneralChallengesViewModel>(context,
+                                listen: false)
+                            .page,
+                        'out');
+              },
+              child: Text(
+                'With sensor',
+                style: TextStyle(color: orangeColor),
+              ).tr(),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            TextButton(
+              onPressed: () async {
+                await Navigator.of(context).pushNamed('/specificChallenge',
+                    arguments: {
+                      'id': challengeValue.id,
+                      'sensor': false,
+                      'count': challengeValue.total_count
+                    });
+                Navigator.of(context).pop();
+                Provider.of<GeneralChallengesViewModel>(context, listen: false)
+                    .reset();
+                Provider.of<GeneralChallengesViewModel>(context, listen: false)
+                    .getData(
+                        context.locale == Locale('en') ? 'en' : 'ar',
+                        Provider.of<GeneralChallengesViewModel>(context,
+                                listen: false)
+                            .page,
+                        'out');
+              },
+              child: Text(
+                'Without sensor',
+                style: TextStyle(color: orangeColor),
+              ).tr(),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+        context: context,
+        barrierColor: orangeColor.withOpacity(0.1),
+        builder: (BuildContext ctx) {
+          return alert;
+        });
   }
 }

@@ -70,7 +70,7 @@ class CreateChallengesViewModel with ChangeNotifier {
   getSumOfTime(String h, String m) {
     hours = int.parse(h);
     minuites = int.parse(m);
-    return (hours! * 60) + minuites!;
+    return (hours! * 60 * 60) + (minuites! * 60);
   }
 
   resetData() {

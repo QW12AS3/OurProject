@@ -8,9 +8,7 @@ Color orangeColor = const Color(0xFFFB8500);
 Color blueColor = const Color(0xff126782);
 Color greyColor = Colors.grey;
 
-
-String base_URL = 'http://192.168.1.105:8000/api';
-
+String base_URL = 'http://192.168.43.113:8000/api';
 
 String ip = base_URL.replaceAll('/api', '');
 
