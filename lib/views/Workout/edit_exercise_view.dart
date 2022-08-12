@@ -24,7 +24,8 @@ class _EditExerciseViewState extends State<EditExerciseView> {
   TextEditingController BurnCaloriesController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  String imageURL = '';
+  String imageURL =
+      'storage/images/users/Default/RrmDmqreoLbR6dhjSVuFenDAii8uBWdqhi2fYSjK9pRISPykLSdefaultprofileimg.jpg';
   var argu; //Is the main
   @override
   void initState() {
@@ -293,15 +294,14 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                                         width: 150,
                                         decoration: BoxDecoration(
                                             image: DecorationImage(
-                                          image: NetworkImage(
-                                            // imageURL
-                                            //               .toString()
-                                            //               .substring(0, 4) !=
-                                            //           'http'
-                                            //       ? '$ip/${imageURL}'
-                                            //       : imageURL.toString()
-                                            imageURL,
-                                          ),
+                                          image: NetworkImage(imageURL
+                                                          .toString()
+                                                          .substring(0, 4) !=
+                                                      'http'
+                                                  ? '$ip/${imageURL}'
+                                                  : imageURL.toString()
+                                              // imageURL,
+                                              ),
                                         )),
                                       ),
                                 ElevatedButton(
@@ -383,7 +383,7 @@ class _EditExerciseViewState extends State<EditExerciseView> {
                                               nameController.text,
                                               descriptionController.text,
                                               BurnCaloriesController.text,
-                                              argu['id'],
+                                              argu['id'].toString(),
                                               context.locale == Locale('en')
                                                   ? 'en'
                                                   : 'ar');

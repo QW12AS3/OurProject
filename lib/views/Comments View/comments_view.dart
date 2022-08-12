@@ -15,6 +15,7 @@ import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 import '../../view_models/Diet View Model/Diet/diet_list_view_model.dart';
+import '../../view_models/Workout_View_Model/workout_list_view_model.dart';
 
 class CommentsView extends StatefulWidget {
   CommentsView({Key? key}) : super(key: key);
@@ -54,6 +55,28 @@ class _CommentsViewState extends State<CommentsView> {
                 lang: context.locale == const Locale('en') ? 'en' : 'ar');
           }
         });
+      } else if (args['workout'] != null) {
+        setState(() {
+          isReviewForWorkout = true;
+          isReviewd = args['isReviewd'] ?? false;
+          dietId = args['id'] ?? 0;
+        });
+
+        Provider.of<CommentsViewModel>(context, listen: false).resetComments();
+        Provider.of<CommentsViewModel>(context, listen: false).setPage(0);
+        Provider.of<CommentsViewModel>(context, listen: false)
+            .setReviewsForWorkout(
+                id: dietId,
+                lang: context.locale == const Locale('en') ? 'en' : 'ar');
+        _scrollController.addListener(() {
+          if (_scrollController.offset ==
+              _scrollController.position.maxScrollExtent) {
+            Provider.of<CommentsViewModel>(context, listen: false)
+                .setReviewsForWorkout(
+                    id: dietId,
+                    lang: context.locale == const Locale('en') ? 'en' : 'ar');
+          }
+        });
       } else {
         postId = args['id'] ?? 0;
         Provider.of<CommentsViewModel>(context, listen: false).resetComments();
@@ -74,6 +97,7 @@ class _CommentsViewState extends State<CommentsView> {
   }
 
   bool isReview = false;
+  bool isReviewForWorkout = false;
 
   TextEditingController commentsController = TextEditingController();
   TextEditingController editCommentsController = TextEditingController();
@@ -90,8 +114,8 @@ class _CommentsViewState extends State<CommentsView> {
               child: isReviewd
                   ? null
                   : Center(
-                      child: Consumer<DietListViewModel>(
-                        builder: (context, review, child) => review
+                      child: Consumer2<DietListViewModel, WorkoutListViewModel>(
+                        builder: (context, review, workout, child) => review
                                 .getIsREviewLoading
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -141,18 +165,34 @@ class _CommentsViewState extends State<CommentsView> {
                                                   ElevatedButton(
                                                       onPressed: () async {
                                                         Navigator.pop(ctx);
-                                                        final response =
-                                                            await review.sendReview(
-                                                                lang: getLang(
-                                                                    context),
-                                                                id: dietId,
-                                                                review:
-                                                                    _reviewController
-                                                                        .text
-                                                                        .trim(),
-                                                                stars: stars,
-                                                                context:
-                                                                    context);
+                                                        final response;
+                                                        if (isReview) {
+                                                          response = await review
+                                                              .sendReview(
+                                                                  lang: getLang(
+                                                                      context),
+                                                                  id: dietId,
+                                                                  review:
+                                                                      _reviewController
+                                                                          .text
+                                                                          .trim(),
+                                                                  stars: stars,
+                                                                  context:
+                                                                      context);
+                                                        } else {
+                                                          response = await workout
+                                                              .sendReview(
+                                                                  lang: getLang(
+                                                                      context),
+                                                                  id: dietId,
+                                                                  review:
+                                                                      _reviewController
+                                                                          .text
+                                                                          .trim(),
+                                                                  stars: stars,
+                                                                  context:
+                                                                      context);
+                                                        }
                                                         _reviewController
                                                             .clear();
                                                         if (response) {

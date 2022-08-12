@@ -79,9 +79,4 @@ class EditExerciseViewModel with ChangeNotifier {
     }
     notifyListeners();
   }
-
-  deleteSpecificChallengeData(String lang, int? id) {
-    CreateExerciseAPI().deleteExercise(lang, id);
-    notifyListeners();
-  }
 }

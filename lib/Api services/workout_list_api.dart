@@ -5,6 +5,8 @@ import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/workout_list_model.dart';
 import 'package:http/http.dart';
 
+import '../models/comments_model.dart';
+
 class WorkoutListsAPI {
   Future<List<WorkoutListModel>> getworkouts(String lang, String category,
       String difficulty, int page, String link) async {
@@ -108,6 +110,75 @@ class WorkoutListsAPI {
     } catch (e) {
       print('Get Categories List Error: $e');
       return [];
+    }
+  }
+
+  Future<List<CommentsModel>> getReviews(
+      {required int id, required String lang, required int page}) async {
+    try {
+      final response = await get(
+        Uri.parse('$base_URL/workout/review/$id?page=$page'),
+        headers: {
+          'apikey': apiKey,
+          'lang': lang,
+          'accept': 'application/json',
+          'authorization':
+              'Bearer ${sharedPreferences.getString('access_token')}',
+          'timeZone': getTimezone()
+        },
+      );
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
+        List data = jsonDecode(response.body)['data']['data'];
+        List<CommentsModel> comments = [];
+        data.forEach((element) {
+          comments.add(CommentsModel.fromJsonForReview(element));
+        });
+        print(comments);
+
+        return comments;
+      } else {
+        print(jsonDecode(response.body));
+        return [];
+      }
+    } catch (e) {
+      print('Get Reviews Error: $e');
+      return [];
+    }
+  }
+
+  Future<Map> sendReview(
+      {required String lang,
+      required int id,
+      required String review,
+      required double stars}) async {
+    try {
+      final response =
+          await post(Uri.parse('$base_URL/workout/review/$id'), headers: {
+        'apikey': apiKey,
+        'lang': lang,
+        'accept': 'application/json',
+        'authorization':
+            'Bearer ${sharedPreferences.getString('access_token')}',
+        'timeZone': getTimezone()
+      }, body: {
+        'stars': stars.toString(),
+        if (review.trim().isNotEmpty) 'description': review
+      });
+
+      if (response.statusCode == 200) {
+        return {
+          'success': true,
+          'message': jsonDecode(response.body)['message']
+        };
+      } else
+        return {
+          'success': false,
+          'message': jsonDecode(response.body)['message']
+        };
+    } catch (e) {
+      print('Send Review Error: $e');
+      return {'success': false, 'message': e.toString()};
     }
   }
 

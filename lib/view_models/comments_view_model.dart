@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:home_workout_app/Api%20services/comments_api.dart';
 import 'package:home_workout_app/Api%20services/diet_api.dart';
 import 'package:home_workout_app/Api%20services/post_api.dart';
+import 'package:home_workout_app/Api%20services/workout_list_api.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/models/comments_model.dart';
 import 'package:home_workout_app/view_models/Diet%20View%20Model/Diet/diet_list_view_model.dart';
@@ -72,6 +73,23 @@ class CommentsViewModel with ChangeNotifier {
     print('Page: ${getPage.toString()}');
     final newComments =
         await DietAPI().getReviews(id: id, lang: lang, page: getPage);
+    _comments.addAll(newComments);
+
+    if (newComments.isEmpty) setPage(getPage - 1);
+    setIsLoading(false);
+    setMoreLoading(false);
+    notifyListeners();
+  }
+
+  Future<void> setReviewsForWorkout(
+      {required int id, required String lang}) async {
+    print('called');
+    if (_comments.isEmpty) setIsLoading(true);
+    setPage(getPage + 1);
+    if (_comments.isNotEmpty) setMoreLoading(true);
+    print('Page: ${getPage.toString()}');
+    final newComments =
+        await WorkoutListsAPI().getReviews(id: id, lang: lang, page: getPage);
     _comments.addAll(newComments);
 
     if (newComments.isEmpty) setPage(getPage - 1);

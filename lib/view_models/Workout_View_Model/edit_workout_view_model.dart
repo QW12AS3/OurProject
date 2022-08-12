@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/create_workout_api.dart';
 import 'package:home_workout_app/Api%20services/workout2_api.dart';
@@ -115,7 +117,9 @@ class EditworkoutViewModel with ChangeNotifier {
           print('dddddddddddd');
           print(dropDownList![i]);
         }
-        dropDownNewValue = ConvertedFutureCategoriesList![0].name.toString();
+        dropDownNewValue = ConvertedFutureCategoriesList![0]
+            .name
+            .toString(); //TODO: //remeber to uncommnet it if you recieved any error
       }
       fetchedList = true;
       notifyListeners();
@@ -225,26 +229,39 @@ class EditworkoutViewModel with ChangeNotifier {
   }
 
   Future<void> setWorkout({required String lang, required int id}) async {
+    print('iiiiiiiiiiiiiiiiiiiiiiiiiiiii');
     setIsLoading(true);
     _workout = await Workout2Api().getSepcWorkout(lang: lang, id: id);
-    if (fetchedList == true) {
-      addToListOfExercises();
-      for (int i = 0; i < dropDownList!.length; i++) {
-        if (_workout.categorieId == ConvertedFutureCategoriesList![i].id) {
-          setdropDownNewValue(
-              ConvertedFutureCategoriesList![i].name.toString());
-        }
-      }
-      setequipmentDropDownNewValue(_workout.equipment);
-
-      if (_workout.difficulty == 1) {
-        setdifficultyDropDownNewValue('Easy');
-      } else if (_workout.difficulty == 2) {
-        setdifficultyDropDownNewValue('Medium');
-      } else {
-        setdifficultyDropDownNewValue('Hard');
+    // if (fetchedList == true) {
+    addToListOfExercises();
+    print(_workout.categorieId);
+    for (int i = 0; i < dropDownList!.length; i++) {
+      print('categgoooooooorrrrrrrrrrrry');
+      print(_workout.categorieId);
+      print(ConvertedFutureCategoriesList![i].id);
+      print(ConvertedFutureCategoriesList![i].name);
+      log(ConvertedFutureCategoriesList![i].name.toString());
+      log(ConvertedFutureCategoriesList![i].name.toString());
+      if (_workout.categorieId ==
+          ConvertedFutureCategoriesList![i].id!.toInt()) {
+        setdropDownNewValue(ConvertedFutureCategoriesList![i].name.toString());
+        print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        print(_workout.categorieId);
+        print(ConvertedFutureCategoriesList![i].id);
+        print(ConvertedFutureCategoriesList![i].name);
+        log(ConvertedFutureCategoriesList![i].name.toString());
       }
     }
+    setequipmentDropDownNewValue(_workout.equipment);
+
+    if (_workout.difficulty == 1) {
+      setdifficultyDropDownNewValue('Easy');
+    } else if (_workout.difficulty == 2) {
+      setdifficultyDropDownNewValue('Medium');
+    } else {
+      setdifficultyDropDownNewValue('Hard');
+    }
+    // }
     // _workout.exercises
     setIsLoading(false);
     notifyListeners();
@@ -252,6 +269,7 @@ class EditworkoutViewModel with ChangeNotifier {
 
   setdropDownNewValue(String dropDownNewVal) {
     dropDownNewValue = dropDownNewVal;
+    print(dropDownNewValue);
     notifyListeners();
   }
 

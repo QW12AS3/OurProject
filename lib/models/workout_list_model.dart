@@ -15,9 +15,12 @@ class WorkoutListModel {
   String? created_at;
   String? description;
   bool? saved;
+  String? categorie_name;
+  bool? reviewd;
 
   String? f_name;
   String? l_name;
+  double? rating;
 
   // bool? save;
   WorkoutListModel(
@@ -38,7 +41,10 @@ class WorkoutListModel {
       this.created_at,
       this.description,
       this.saved,
-      this.l_name});
+      this.l_name,
+      this.categorie_name,
+      this.reviewd,
+      this.rating});
   // to convert data from json to dart object
   factory WorkoutListModel.fromJson(Map<String, dynamic> user) =>
       WorkoutListModel(
@@ -58,7 +64,11 @@ class WorkoutListModel {
           workout_image_url: user['workout_image_url'] ?? '',
           saved: user['saved'] ?? false,
           created_at: user['created_at'] ?? '',
-          description: user['description'] ?? '');
+          description: user['description'] ?? '',
+          categorie_name: user['categorie_name']['name'],
+          reviewd: user['is_reviewd'] ?? false,
+          rating: double.tryParse(user['rating'].toString()) ?? 0);
+
   // factory WorkoutListModel.fromJsonForParticipate(Map<String, dynamic> user) =>
   //     WorkoutListModel(
   //       message: user['message'] ?? '',
