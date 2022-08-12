@@ -311,7 +311,9 @@
     "Photo type": "نمط الصورة",
     "Minutes": "الدقائق",
     "Time": "الثواني",
-    "Counts": "",
-    "Edit workout": "",
-    "Count": ""
+    "Counts": "التكرارات",
+    "Edit workout": "تعديل البرنامج الرياضي",
+    "Count": "التكرار",
+    "Add exercises": "اضافة تمارين"
+
 }
