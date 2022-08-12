@@ -27,6 +27,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final ListViewController = ScrollController();
   TextEditingController _reviewController = TextEditingController();
+  String exer = 'Exercises:'.tr();
+  String min = 'min'.tr();
+  String kcal = 'Kcal'.tr();
 
   @override
   void initState() {
@@ -207,6 +210,9 @@ class _HomePageState extends State<HomePage> {
                         Provider.of<WorkoutListViewModel>(context,
                                 listen: false)
                             .reset();
+                        Provider.of<MobileHomeViewModel>(context, listen: false)
+                            .getSummaryData(
+                                lang: getLang(context), context: context);
                         Provider.of<WorkoutListViewModel>(context,
                                 listen: false)
                             .getCategoriesData(getLang(context));
@@ -658,7 +664,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               FittedBox(
                                 child: Text(
-                                  'Exercises: ${workoutValue.excersise_count}',
+                                  '$exer ${workoutValue.excersise_count}',
                                   style: theme.textTheme.displaySmall,
                                 ),
                               ),
@@ -672,7 +678,7 @@ class _HomePageState extends State<HomePage> {
                                     size: 25,
                                   ),
                                   Text(
-                                    '${workoutValue.length} min',
+                                    '${workoutValue.length} $min',
                                     style: theme.textTheme.displaySmall!
                                         .copyWith(fontSize: 15),
                                   )
@@ -712,7 +718,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               FittedBox(
                                 child: Text(
-                                  '${workoutValue.predicted_burnt_calories} Kcal',
+                                  '${workoutValue.predicted_burnt_calories} $kcal',
                                   style: theme.textTheme.displaySmall,
                                 ),
                               ),

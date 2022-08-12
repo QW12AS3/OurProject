@@ -577,6 +577,10 @@ class myDrawer extends StatelessWidget {
                   'App Control',
                   style: theme.textTheme.bodySmall,
                 ).tr(),
+                trailing: Icon(
+                  Icons.app_settings_alt_outlined,
+                  color: blueColor,
+                ),
               ),
             ),
           if (!Provider.of<ProfileViewModel>(context, listen: true)

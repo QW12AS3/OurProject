@@ -1,5 +1,6 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:home_workout_app/Api%20services/profile_api.dart';
 import 'package:home_workout_app/components.dart';
@@ -192,7 +193,7 @@ class AnotherUserProfileViewModel with ChangeNotifier {
     if (response)
       _anotherUserData.isBlocked = false;
     else {
-      showSnackbar(Text('Unblock failed'), context);
+      showSnackbar(Text('Unblock failed').tr(), context);
     }
     notifyListeners();
   }
@@ -217,7 +218,7 @@ class AnotherUserProfileViewModel with ChangeNotifier {
       _anotherUserData.followings = response['followings'];
       _isLoading = false;
     } else {
-      showSnackbar(Text('Follow failed'), context);
+      showSnackbar(Text('Follow failed').tr(), context);
     }
 
     notifyListeners();
@@ -232,7 +233,7 @@ class AnotherUserProfileViewModel with ChangeNotifier {
       _anotherUserData.followings = response['followings'];
       _isLoading = false;
     } else {
-      showSnackbar(Text('Unfollow failed'), context);
+      showSnackbar(Text('Unfollow failed').tr(), context);
     }
     _isLoading = false;
     notifyListeners();

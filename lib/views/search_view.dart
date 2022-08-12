@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_workout_app/components.dart';
 import 'package:home_workout_app/constants.dart';
+import 'package:home_workout_app/models/challenge_model.dart';
 import 'package:home_workout_app/view_models/search_view_model.dart';
 import 'package:home_workout_app/views/Posts%20View/post_view_widgets.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,9 @@ class _SearchViewState extends State<SearchView> {
   TextEditingController _controller = TextEditingController();
   ScrollController _scrollController = ScrollController();
   TextEditingController _reviewController = TextEditingController();
+  String exer = 'Exercises:'.tr();
+  String min = 'min'.tr();
+  String kcal = 'Kcal'.tr();
 
   @override
   void initState() {
@@ -703,43 +707,37 @@ class _SearchViewState extends State<SearchView> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: mq.size.width * 0.01,
                                     vertical: mq.size.height * 0.01),
-                                child: InkWell(
-                                  onTap: () {
-                                    Provider.of<GeneralChallengesViewModel>(
-                                            context,
-                                            listen: false)
-                                        .getSpecificChallengeData(
-                                            context.locale == Locale('en')
-                                                ? 'en'
-                                                : 'ar',
-                                            challengeValue.id,
-                                            'in');
-                                    print('tapped');
-                                    print(challengeValue.id.toString());
-                                  },
-                                  child: Container(
-                                    // height: mq.size.height * 0.3,
-                                    // width: mq.size.width * 0.95,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(20),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                Colors.black.withOpacity(0.3),
-                                            blurRadius: 30,
-                                            offset: Offset(10, 15),
-                                          )
-                                        ]),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
+                                child: Container(
+                                  // height: mq.size.height * 0.3,
+                                  // width: mq.size.width * 0.95,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.3),
+                                          blurRadius: 30,
+                                          offset: Offset(10, 15),
+                                        )
+                                      ]),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                Navigator.pushNamed(context,
+                                                    '/anotherUserProfile',
+                                                    arguments: {
+                                                      'id':
+                                                          challengeValue.user_id
+                                                    });
+                                              },
+                                              child: Row(
                                                 children: [
                                                   Padding(
                                                     padding:
@@ -757,7 +755,9 @@ class _SearchViewState extends State<SearchView> {
                                                               ? '$ip/${challengeValue.user_img}'
                                                               : challengeValue
                                                                   .user_img
-                                                                  .toString()),
+                                                                  .toString()
+                                                          // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612'
+                                                          ),
                                                     ),
                                                   ),
                                                   Column(
@@ -766,7 +766,7 @@ class _SearchViewState extends State<SearchView> {
                                                             .start,
                                                     children: [
                                                       Text(
-                                                        'Coach ${challengeValue.user_name}',
+                                                        '${challengeValue.user_name}',
                                                         style: theme.textTheme
                                                             .bodySmall!
                                                             .copyWith(
@@ -786,31 +786,154 @@ class _SearchViewState extends State<SearchView> {
                                                   ),
                                                 ],
                                               ),
-                                              if (sharedPreferences
-                                                      .get("role_id") ==
-                                                  2) //TODO:
-                                                IconButton(
-                                                    onPressed: () {
+                                            ), //&& challengeValue.user_id == sharedPreferences.get("user_id")
+                                            if ((sharedPreferences
+                                                        .get("role_id") ==
+                                                    2) ||
+                                                sharedPreferences
+                                                        .get("role_id") ==
+                                                    4 ||
+                                                sharedPreferences
+                                                        .get("role_id") ==
+                                                    5)
+                                              PopupMenuButton(
+                                                itemBuilder: (context) => [
+                                                  /* PopupMenuItem(
+                  child: Text(
+                    'Edit'.tr(),
+                    style: TextStyle(color: orangeColor),
+                  ),
+                  value: 'Edit',
+                ),*/
+                                                  PopupMenuItem(
+                                                    child: Text(
+                                                      'Delete'.tr(),
+                                                      style: TextStyle(
+                                                          color: Colors.red),
+                                                    ),
+                                                    value: 'Delete',
+                                                  ),
+                                                ],
+                                                onSelected: (newVal) async {
+                                                  /* if (newVal == 'Edit') {
+                  print(exerciseValue.id);
+                  await Navigator.of(context)
+                      .pushNamed('/EditExerciseView', arguments: {
+                    // 'Categories IDs': exerciseValue.,
+                    'name': exerciseValue.name,
+                    'burn calories': exerciseValue.burn_calories,
+                    'description': exerciseValue.desc,
+                    'image': exerciseValue.exercise_img,
+                    'id': exerciseValue.id,
+                  });
+                  Provider.of<GeneralChallengesViewModel>(context, listen: false)
+                      .reset();
+                  Provider.of<GeneralChallengesViewModel>(context, listen: false)
+                      .getExercisesData(lang: getLang(context));
+                } else */
+                                                  if (newVal == 'Delete') {
+                                                    print('yes');
+                                                    final ChallengeModel
+                                                        BackEndMessage =
+                                                        await Provider.of<
+                                                                    GeneralChallengesViewModel>(
+                                                                context,
+                                                                listen: false)
+                                                            .deleteSpecificChallengeData(
+                                                                context.locale ==
+                                                                        Locale(
+                                                                            'en')
+                                                                    ? 'en'
+                                                                    : 'ar',
+                                                                // 2
+                                                                challengeValue
+                                                                    .id);
+
+                                                    if (BackEndMessage
+                                                                .message !=
+                                                            '' ||
+                                                        BackEndMessage
+                                                                .message !=
+                                                            '') {
+                                                      showSnackbar(
+                                                          Text(BackEndMessage
+                                                              .message
+                                                              .toString()),
+                                                          context);
+                                                    }
+                                                    if (BackEndMessage
+                                                            .statusCode ==
+                                                        200) {
                                                       Provider.of<GeneralChallengesViewModel>(
                                                               context,
                                                               listen: false)
-                                                          .deleteSpecificChallengeData(
+                                                          .reset();
+                                                      Provider.of<GeneralChallengesViewModel>(
+                                                              context,
+                                                              listen: false)
+                                                          .getData(
                                                               context.locale ==
                                                                       Locale(
                                                                           'en')
                                                                   ? 'en'
                                                                   : 'ar',
-                                                              // 2
-                                                              challengeValue
-                                                                  .id);
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.more_vert,
-                                                      color: blueColor,
-                                                    ))
-                                            ],
-                                          ),
-                                          Row(
+                                                              Provider.of<GeneralChallengesViewModel>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .page,
+                                                              'out');
+                                                    }
+                                                  }
+                                                },
+                                              ),
+                                          ],
+                                        ),
+                                        InkWell(
+                                          onTap: () async {
+                                            if (challengeValue.is_sub!) {
+                                              print(challengeValue.ex_id);
+                                              if (challengeValue.ex_id
+                                                      ?.toInt() ==
+                                                  3) {
+                                                buildDialog(
+                                                    context, challengeValue);
+                                              } else {
+                                                await Navigator.pushNamed(
+                                                    context,
+                                                    '/specificChallenge',
+                                                    arguments: {
+                                                      'id': challengeValue.id,
+                                                      'sensor': false,
+                                                      'count': challengeValue
+                                                          .total_count
+                                                    });
+                                              }
+                                              Provider.of<GeneralChallengesViewModel>(
+                                                      context,
+                                                      listen: false)
+                                                  .reset();
+                                              Provider.of<GeneralChallengesViewModel>(
+                                                      context,
+                                                      listen: false)
+                                                  .getData(
+                                                      context.locale ==
+                                                              Locale('en')
+                                                          ? 'en'
+                                                          : 'ar',
+                                                      Provider.of<GeneralChallengesViewModel>(
+                                                              context,
+                                                              listen: false)
+                                                          .page,
+                                                      'out');
+                                            } else {
+                                              showSnackbar(
+                                                  Text('Please! Subscribe before')
+                                                      .tr(),
+                                                  context);
+                                            }
+                                          },
+                                          child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceAround,
                                             children: [
@@ -829,7 +952,8 @@ class _SearchViewState extends State<SearchView> {
                                                             : child,
                                                     fit: BoxFit.fill,
                                                     image: NetworkImage(
-                                                      "$ip/${challengeValue.img.toString()}",
+                                                      "$ip/${challengeValue.img.toString()}", //TODO:
+                                                      // 'https://media.istockphoto.com/photos/various-sport-equipments-on-grass-picture-id949190756?s=612x612',
                                                     ),
                                                   ),
                                                 ),
@@ -875,39 +999,78 @@ class _SearchViewState extends State<SearchView> {
                                               ),
                                             ],
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                  challengeValue.sub_count
-                                                          .toString() +
-                                                      ' participants',
-                                                  style: TextStyle(
-                                                      color: blueColor,
-                                                      fontWeight:
-                                                          FontWeight.w300)),
-                                              ElevatedButton(
-                                                  onPressed: () {
-                                                    print(challengeValue.id);
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                                challengeValue.sub_count
+                                                        .toString() +
+                                                    ' participants',
+                                                style: TextStyle(
+                                                    color: blueColor,
+                                                    fontWeight:
+                                                        FontWeight.w300)),
+                                            ElevatedButton(
+                                                onPressed: () async {
+                                                  final ChallengeModel
+                                                      BackEndMessage =
+                                                      await Provider.of<
+                                                                  GeneralChallengesViewModel>(
+                                                              context,
+                                                              listen: false)
+                                                          .sendParticipate(
+                                                              context.locale ==
+                                                                      Locale(
+                                                                          'en')
+                                                                  ? 'en'
+                                                                  : 'ar',
+                                                              // 2
+                                                              challengeValue
+                                                                  .id);
+
+                                                  if (BackEndMessage.message !=
+                                                          '' ||
+                                                      BackEndMessage.message !=
+                                                          '') {
+                                                    showSnackbar(
+                                                        Text(BackEndMessage
+                                                            .message
+                                                            .toString()),
+                                                        context);
+                                                  }
+                                                  if (BackEndMessage
+                                                          .statusCode ==
+                                                      200) {
                                                     Provider.of<GeneralChallengesViewModel>(
                                                             context,
                                                             listen: false)
-                                                        .sendParticipate(
+                                                        .reset();
+                                                    Provider.of<GeneralChallengesViewModel>(
+                                                            context,
+                                                            listen: false)
+                                                        .getData(
                                                             context.locale ==
                                                                     Locale('en')
                                                                 ? 'en'
                                                                 : 'ar',
-                                                            // 2
-                                                            challengeValue.id);
-                                                  },
-                                                  child: Text(
-                                                    'Participate', //TODO:
-                                                  ))
-                                            ],
-                                          )
-                                        ],
-                                      ),
+                                                            Provider.of<GeneralChallengesViewModel>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .page,
+                                                            'out');
+                                                  }
+                                                },
+                                                child: Text(
+                                                  challengeValue.is_sub!
+                                                      ? 'Unsubscribe'
+                                                      : 'Subscribe',
+                                                ).tr())
+                                          ],
+                                        )
+                                      ],
                                     ),
                                   ),
                                 )))
@@ -1261,7 +1424,7 @@ class _SearchViewState extends State<SearchView> {
                                                     ),
                                                     FittedBox(
                                                       child: Text(
-                                                        'Exercises: ${workoutValue.excersise_count}',
+                                                        '$exer ${workoutValue.excersise_count}',
                                                         style: theme.textTheme
                                                             .displaySmall,
                                                       ),
@@ -1277,7 +1440,7 @@ class _SearchViewState extends State<SearchView> {
                                                           size: 25,
                                                         ),
                                                         Text(
-                                                          '${workoutValue.length} min',
+                                                          '${workoutValue.length} $min',
                                                           style: theme.textTheme
                                                               .displaySmall!
                                                               .copyWith(
@@ -1328,7 +1491,7 @@ class _SearchViewState extends State<SearchView> {
                                                     ),
                                                     FittedBox(
                                                       child: Text(
-                                                        '${workoutValue.predicted_burnt_calories} Kcal',
+                                                        '${workoutValue.predicted_burnt_calories} $kcal',
                                                         style: theme.textTheme
                                                             .displaySmall,
                                                       ),
@@ -1564,5 +1727,79 @@ class _SearchViewState extends State<SearchView> {
         ),
       ),
     );
+  }
+
+  void buildDialog(BuildContext Bcontext, ChallengeModel challengeValue) {
+    final alert = AlertDialog(
+      title: Text(
+        'Exercise type',
+        style: TextStyle(color: blueColor),
+      ).tr(),
+      content: Container(
+        height: 150,
+        child: Column(
+          children: [
+            Divider(),
+            TextButton(
+              onPressed: () async {
+                await Navigator.of(context).pushNamed('/specificChallenge',
+                    arguments: {
+                      'id': challengeValue.id,
+                      'sensor': true,
+                      'count': challengeValue.total_count
+                    });
+                Navigator.of(context).pop();
+                Provider.of<GeneralChallengesViewModel>(context, listen: false)
+                    .reset();
+                Provider.of<GeneralChallengesViewModel>(context, listen: false)
+                    .getData(
+                        context.locale == Locale('en') ? 'en' : 'ar',
+                        Provider.of<GeneralChallengesViewModel>(context,
+                                listen: false)
+                            .page,
+                        'out');
+              },
+              child: Text(
+                'With sensor',
+                style: TextStyle(color: orangeColor),
+              ).tr(),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            TextButton(
+              onPressed: () async {
+                await Navigator.of(context).pushNamed('/specificChallenge',
+                    arguments: {
+                      'id': challengeValue.id,
+                      'sensor': false,
+                      'count': challengeValue.total_count
+                    });
+                Navigator.of(context).pop();
+                Provider.of<GeneralChallengesViewModel>(context, listen: false)
+                    .reset();
+                Provider.of<GeneralChallengesViewModel>(context, listen: false)
+                    .getData(
+                        context.locale == Locale('en') ? 'en' : 'ar',
+                        Provider.of<GeneralChallengesViewModel>(context,
+                                listen: false)
+                            .page,
+                        'out');
+              },
+              child: Text(
+                'Without sensor',
+                style: TextStyle(color: orangeColor),
+              ).tr(),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+        context: context,
+        barrierColor: orangeColor.withOpacity(0.1),
+        builder: (BuildContext ctx) {
+          return alert;
+        });
   }
 }

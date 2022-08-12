@@ -90,7 +90,7 @@ class _MobileHomeViewState extends State<MobileHomeView>
                             Provider.of<ProfileViewModel>(context, listen: true)
                                     .getUserData
                                     .roleId !=
-                                0
+                                4
                         ? FloatingActionButton(
                             onPressed: () {
                               Navigator.pushNamed(context, '/createPost');

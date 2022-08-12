@@ -253,7 +253,7 @@ class CommentsViewModel with ChangeNotifier {
         await CommentsApi().reportComment(lang: lang, commentId: commentId);
     setIsReportLoading(false);
 
-    showSnackbar(Text(response['message']), context);
+    //showSnackbar(Text(response['message']), context);
   }
 
   List<CommentsModel> get getComments => _comments;

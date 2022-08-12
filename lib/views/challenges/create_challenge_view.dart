@@ -726,10 +726,10 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
                                     //     .getIdOfDropDownValue());
                                   }
                                 } else {
-                                  showSnackbar(Text('Add photo'), context);
+                                  showSnackbar(Text('Add photo').tr(), context);
                                 }
                               },
-                              child: Text('Save')),
+                              child: Text('Save').tr()),
                         ),
                       ],
                     ),
