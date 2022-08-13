@@ -313,14 +313,14 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                                                       .roleId ==
                                                   3)
                                             PopupMenuItem<String>(
-                                              value: 'send',
-                                              child: Text(
-                                                'Send a message',
-                                                style: theme
-                                                    .textTheme.bodySmall!
-                                                    .copyWith(color: blueColor),
-                                              ),
-                                            ),
+                                                value: 'send',
+                                                child: Text(
+                                                  'Send a message',
+                                                  style: theme
+                                                      .textTheme.bodySmall!
+                                                      .copyWith(
+                                                          color: blueColor),
+                                                ).tr()),
                                           if (Provider.of<ProfileViewModel>(
                                                           context,
                                                           listen: false)

@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:home_workout_app/Api%20services/sign_up_api.dart';
@@ -127,6 +129,7 @@ class UserInformationViewModel with ChangeNotifier {
   }
 
   void ChangeHeightUnit(Units unit) {
+    log(unit.name);
     heightUnit = unit;
     notifyListeners();
   }

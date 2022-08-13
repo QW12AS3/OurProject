@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:home_workout_app/components.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
@@ -168,17 +169,21 @@ class ChangeEmailView extends StatelessWidget {
                 ),
               ),
             ),
-            ElevatedButton(
-                onPressed: () async {
-                  await Provider.of<EditProfileViewModel>(context,
-                          listen: false)
-                      .changeEmail(
-                          oldEmailController.text.trim(),
-                          newEmailController.text.trim(),
-                          passwordController.text.trim(),
-                          context);
-                },
-                child: const Text('Save changes').tr())
+            Consumer<EditProfileViewModel>(
+              builder: (context, value, child) => value.getIsChangeLoading
+                  ? bigLoader(color: orangeColor)
+                  : ElevatedButton(
+                      onPressed: () async {
+                        await Provider.of<EditProfileViewModel>(context,
+                                listen: false)
+                            .changeEmail(
+                                oldEmailController.text.trim(),
+                                newEmailController.text.trim(),
+                                passwordController.text.trim(),
+                                context);
+                      },
+                      child: const Text('Save changes').tr()),
+            )
           ],
         ),
       ),
