@@ -18,7 +18,9 @@ class MyWorkouts extends StatefulWidget {
 
 class _MyWorkoutsState extends State<MyWorkouts> {
   final ListViewController = ScrollController();
-
+  String exer = 'Exercises:'.tr();
+  String min = 'min'.tr();
+  String kcal = 'Kcal'.tr();
   @override
   void initState() {
     // TODO: implement initState
@@ -434,9 +436,9 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                               ),
                               FittedBox(
                                 child: Text(
-                                  'Exercises: ${workoutValue.excersise_count}',
+                                  '$exer ${workoutValue.excersise_count}',
                                   style: theme.textTheme.displaySmall,
-                                ),
+                                ).tr(),
                               ),
                               Row(
                                 mainAxisAlignment:
@@ -448,7 +450,7 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                                     size: 25,
                                   ),
                                   Text(
-                                    '${workoutValue.length} min',
+                                    '${workoutValue.length} $min',
                                     style: theme.textTheme.displaySmall!
                                         .copyWith(fontSize: 15),
                                   )
@@ -482,9 +484,9 @@ class _MyWorkoutsState extends State<MyWorkouts> {
                               ),
                               FittedBox(
                                 child: Text(
-                                  '${workoutValue.predicted_burnt_calories} Kcal',
+                                  '${workoutValue.predicted_burnt_calories} $kcal',
                                   style: theme.textTheme.displaySmall,
-                                ),
+                                ).tr(),
                               ),
                               Icon(
                                 Icons.electric_bolt_rounded,

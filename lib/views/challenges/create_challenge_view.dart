@@ -759,7 +759,7 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
               child: Text(
                 'From gallery',
                 style: TextStyle(color: orangeColor),
-              ),
+              ).tr(),
             ),
             SizedBox(
               height: 15,
@@ -773,7 +773,7 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
               child: Text(
                 'From camera',
                 style: TextStyle(color: orangeColor),
-              ),
+              ).tr(),
             ),
           ],
         ),

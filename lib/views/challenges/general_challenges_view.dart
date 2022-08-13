@@ -404,7 +404,9 @@ class _GeneralChallengesViewState extends State<GeneralChallengesView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(challengeValue.sub_count.toString() + ' participants',
+                    Text(
+                        challengeValue.sub_count.toString() +
+                            ' participants'.tr(),
                         style: TextStyle(
                             color: blueColor, fontWeight: FontWeight.w300)),
                     ElevatedButton(

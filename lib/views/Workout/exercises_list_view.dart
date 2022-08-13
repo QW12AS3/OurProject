@@ -366,7 +366,7 @@ class _ExercisesListViewState extends State<ExercisesListView> {
                                 child: Text(
                                   '${exerciseValue.burn_calories} Kcal',
                                   style: theme.textTheme.displaySmall,
-                                ),
+                                ).tr(),
                               ),
                               // Row(
                               //   mainAxisAlignment:

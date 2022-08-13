@@ -272,7 +272,7 @@ class _EditWorkoutViewState extends State<EditWorkoutView> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text("Select category's name: "),
+                                Text("Select category's name: ".tr()),
                               ],
                             ),
                           ),
@@ -325,7 +325,7 @@ class _EditWorkoutViewState extends State<EditWorkoutView> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text("Select equipment: "),
+                                Text("Select equipment: ".tr()),
                               ],
                             ),
                           ),
@@ -378,7 +378,7 @@ class _EditWorkoutViewState extends State<EditWorkoutView> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text("Select difficulty: "),
+                                Text("Select difficulty: ".tr()),
                               ],
                             ),
                           ),
@@ -467,7 +467,7 @@ class _EditWorkoutViewState extends State<EditWorkoutView> {
                                     print(value.userImage == null);
                                     print(value.userImage.path == '');
                                   },
-                                  child: Text('Change photo'))
+                                  child: Text('Change photo').tr())
                             ],
                           ),
                         ),
@@ -566,7 +566,7 @@ class _EditWorkoutViewState extends State<EditWorkoutView> {
                                                             .spaceEvenly,
                                                     children: [
                                                       Text(
-                                                        'Count',
+                                                        'Count'.tr(),
                                                         style: TextStyle(
                                                             color: blueColor),
                                                       ),
@@ -603,7 +603,7 @@ class _EditWorkoutViewState extends State<EditWorkoutView> {
                                                         },
                                                       ),
                                                       Text(
-                                                        'Time',
+                                                        'Time'.tr(),
                                                         style: TextStyle(
                                                             color: blueColor),
                                                       ),
@@ -773,7 +773,7 @@ class _EditWorkoutViewState extends State<EditWorkoutView> {
                               }
                             }
                           },
-                          child: Text('Save')),
+                          child: Text('Save'.tr())),
                       SizedBox(
                         height: mq.size.height * 0.05,
                       ),
@@ -792,7 +792,7 @@ void buildDialog(BuildContext context) {
     title: Text(
       'Photo type',
       style: TextStyle(color: blueColor),
-    ),
+    ).tr(),
     content: Container(
       height: 150,
       child: Column(
@@ -807,7 +807,7 @@ void buildDialog(BuildContext context) {
             child: Text(
               'From gallery',
               style: TextStyle(color: orangeColor),
-            ),
+            ).tr(),
           ),
           SizedBox(
             height: 15,
@@ -821,7 +821,7 @@ void buildDialog(BuildContext context) {
             child: Text(
               'From camera',
               style: TextStyle(color: orangeColor),
-            ),
+            ).tr(),
           ),
         ],
       ),

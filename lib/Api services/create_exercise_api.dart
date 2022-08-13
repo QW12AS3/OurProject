@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/create_exercise_model.dart';
@@ -78,7 +79,7 @@ class CreateExerciseAPI {
       print('dddddaaaaaaaaaa' + user.description!);
       print("error in posting exercise $e");
       return CreateExerciseModel(
-          message: 'There is a problem connecting to the internet',
+          message: 'There is a problem connecting to the internet'.tr(),
           statusCode: 0);
     }
   }
@@ -120,7 +121,7 @@ class CreateExerciseAPI {
       print(e);
     }
     return CreateExerciseModel(
-        message: 'There is a problem connecting to the internet',
+        message: 'There is a problem connecting to the internet'.tr(),
         statusCode: 0);
   }
 }

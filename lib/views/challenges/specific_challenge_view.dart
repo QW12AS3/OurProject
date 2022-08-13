@@ -368,7 +368,7 @@ class _SpecificChallengeState extends State<SpecificChallenge> {
             fontSize: 20,
             decoration: TextDecoration.none,
           ),
-        ),
+        ).tr(),
       ],
     );
   }
