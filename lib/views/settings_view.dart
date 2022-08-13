@@ -94,7 +94,7 @@ class _SettingsViewState extends State<SettingsView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Light',
+                  Text('Light'.tr(),
                       style: theme.textTheme.bodySmall!.copyWith(
                           color: settings.getTheme ? orangeColor : greyColor)),
                   const SizedBox(
@@ -113,7 +113,7 @@ class _SettingsViewState extends State<SettingsView> {
                   const SizedBox(
                     width: 5,
                   ),
-                  Text('Dark',
+                  Text('Dark'.tr(),
                       style: theme.textTheme.bodySmall!.copyWith(
                           color: !settings.getTheme ? orangeColor : greyColor)),
                 ],

@@ -666,7 +666,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Text(
                                   '$exer ${workoutValue.excersise_count}',
                                   style: theme.textTheme.displaySmall,
-                                ),
+                                ).tr(),
                               ),
                               Row(
                                 mainAxisAlignment:
@@ -853,7 +853,7 @@ class _HomePageState extends State<HomePage> {
                                           child: CustomTextField(
                                               maxLines: 5,
                                               controller: _reviewController,
-                                              title: 'Comment'),
+                                              title: 'Comment'.tr()),
                                         ),
                                         ElevatedButton(
                                             onPressed: () async {
@@ -874,7 +874,7 @@ class _HomePageState extends State<HomePage> {
                                               }
                                               _reviewController.clear();
                                             },
-                                            child: const Text('Submit')),
+                                            child: const Text('Submit').tr()),
                                       ],
                                     )),
                               );
@@ -884,7 +884,7 @@ class _HomePageState extends State<HomePage> {
                         'Add a review',
                         style: theme.textTheme.bodySmall!
                             .copyWith(color: Colors.amber),
-                      ),
+                      ).tr(),
                     ),
             ),
           ),

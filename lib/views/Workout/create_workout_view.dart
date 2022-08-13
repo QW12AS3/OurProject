@@ -71,7 +71,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
       body: Provider.of<CreateworkoutViewModel>(context).fetchedList == true
           ? SafeArea(
               child: Container(
-                color: Colors.white,
+                // color: Colors.white,
                 child: Center(
                   child: SingleChildScrollView(
                     // controller: controller,

@@ -713,10 +713,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         //       style: theme.textTheme.bodySmall,
                         //     ).tr(),
                         //   ),
-                        if (Provider.of<ProfileViewModel>(context, listen: true)
-                                .getUserData
-                                .roleId ==
-                            2)
+                        if (Provider.of<ProfileViewModel>(context,
+                                        listen: true)
+                                    .getUserData
+                                    .roleId ==
+                                2 ||
+                            Provider.of<ProfileViewModel>(context, listen: true)
+                                    .getUserData
+                                    .roleId ==
+                                4 ||
+                            Provider.of<ProfileViewModel>(context, listen: true)
+                                    .getUserData
+                                    .roleId ==
+                                5)
                           Consumer<ProfileViewModel>(
                             builder: (context, user, child) => ExpansionTile(
                               onExpansionChanged: (change) async {
@@ -755,10 +764,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                       .toList(),
                             ),
                           ),
-                        if (Provider.of<ProfileViewModel>(context, listen: true)
-                                .getUserData
-                                .roleId ==
-                            3)
+                        if (Provider.of<ProfileViewModel>(context,
+                                        listen: true)
+                                    .getUserData
+                                    .roleId ==
+                                3 ||
+                            Provider.of<ProfileViewModel>(context, listen: true)
+                                    .getUserData
+                                    .roleId ==
+                                4 ||
+                            Provider.of<ProfileViewModel>(context, listen: true)
+                                    .getUserData
+                                    .roleId ==
+                                5)
                           Consumer<ProfileViewModel>(
                             builder: (context, user, child) => ExpansionTile(
                               onExpansionChanged: (change) async {
