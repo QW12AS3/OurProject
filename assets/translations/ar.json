@@ -310,8 +310,17 @@
     "Add exercises": "اضافة تمارين",
     "Photo type": "نمط الصورة",
     "Minutes": "الدقائق",
-    "Time": "الثواني",
-    "Counts": "",
-    "Edit workout": "",
-    "Count": ""
+    "Time": "الوقت",
+    "Counts": "التكرارات",
+    "Edit workout": "تعديل البرنامج الرياضي",
+    "Count": "التكرار",
+    "Create type": "نمط الانشاء",
+    "Add to favorite": "إضافة إالى المفضلة",
+    "My workouts": "برنامجي الرياضي",
+    "Delete from favorite": "إزالة من المفضلة",
+    "Congratulations!": "مبروك",
+    "Please! Subscribe before": "",
+    " participants": "المشاركين",
+    "With sensor": "مع حساس",
+    "Without sensor": "من دون حساس"
 }

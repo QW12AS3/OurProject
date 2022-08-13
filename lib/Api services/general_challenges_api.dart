@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/challenge_model.dart';
@@ -70,7 +71,7 @@ class GeneralChallengesAPI {
       print(e);
     }
     return ChallengeModel(
-        message: 'There is a problem connecting to the internet',
+        message: 'There is a problem connecting to the internet'.tr(),
         statusCode: 0);
     // print(response.body);
     // if (response.statusCode == 200) {
@@ -120,7 +121,7 @@ class GeneralChallengesAPI {
       print(e);
     }
     return ChallengeModel(
-        message: 'There is a problem connecting to the internet',
+        message: 'There is a problem connecting to the internet'.tr(),
         statusCode: 0);
   }
 
@@ -150,7 +151,7 @@ class GeneralChallengesAPI {
       print(e);
     }
     return ChallengeModel(
-        message: 'There is a problem connecting to the internet',
+        message: 'There is a problem connecting to the internet'.tr(),
         statusCode: 0);
   }
 }

@@ -257,7 +257,7 @@ class _CreateExerciseViewState extends State<CreateExerciseView> {
                                 color: blueColor,
                                 size: 33,
                               ),
-                              suffixText: 'Kcal',
+                              suffixText: 'Kcal'.tr(),
                             ),
                             style: TextStyle(
                                 color: blueColor,
