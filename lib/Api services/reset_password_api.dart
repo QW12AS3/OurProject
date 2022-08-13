@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/models/Reset_password_model.dart';
 import 'package:http/http.dart';
@@ -32,7 +33,7 @@ class ResetPasswordAPI {
       print(e);
     }
     return ResetPasswordModel(
-        message: 'There is a problem connecting to the internet',
+        message: 'There is a problem connecting to the internet'.tr(),
         statusCode: 0);
   }
 }

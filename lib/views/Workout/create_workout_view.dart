@@ -516,7 +516,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                                     'Count',
                                                     style: TextStyle(
                                                         color: blueColor),
-                                                  ),
+                                                  ).tr(),
                                                   Switch(
                                                     inactiveTrackColor:
                                                         orangeColor,
@@ -550,7 +550,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
                                                     'Time',
                                                     style: TextStyle(
                                                         color: blueColor),
-                                                  ),
+                                                  ).tr(),
                                                 ],
                                               ),
                                               Text(Provider.of<
@@ -706,7 +706,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
       title: Text(
         'Photo type',
         style: TextStyle(color: blueColor),
-      ),
+      ).tr(),
       content: Container(
         height: 150,
         child: Column(
@@ -721,7 +721,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
               child: Text(
                 'From gallery',
                 style: TextStyle(color: orangeColor),
-              ),
+              ).tr(),
             ),
             SizedBox(
               height: 15,
@@ -735,7 +735,7 @@ class _CreateWorkoutViewState extends State<CreateWorkoutView> {
               child: Text(
                 'From camera',
                 style: TextStyle(color: orangeColor),
-              ),
+              ).tr(),
             ),
           ],
         ),

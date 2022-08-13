@@ -543,7 +543,7 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
                                                 Radius.circular(15),
                                               ),
                                             ),
-                                            labelText: 'Minuites'.tr(),
+                                            labelText: 'Minutes'.tr(),
                                             labelStyle: TextStyle(
                                                 color: orangeColor,
                                                 fontSize: 15,
@@ -744,7 +744,7 @@ class _CreateChallengeViewState extends State<CreateChallengeView> {
       title: Text(
         'Photo type',
         style: TextStyle(color: blueColor),
-      ),
+      ).tr(),
       content: Container(
         height: 150,
         child: Column(

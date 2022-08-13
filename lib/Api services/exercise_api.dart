@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:home_workout_app/constants.dart';
 import 'package:home_workout_app/main.dart';
 import 'package:home_workout_app/models/exercise_model.dart';
@@ -65,7 +66,7 @@ class exerciseAPI {
       print(e);
     }
     return exerciseModel(
-        message: 'There is a problem connecting to the internet',
+        message: 'There is a problem connecting to the internet'.tr(),
         statusCode: 0);
   }
 }

@@ -293,7 +293,7 @@
     "From gallery": "من المعرض",
     "From camera": "من الكاميرا",
     "Challenge": "التحدي",
-    "Create challenge": "غنشاء تحدي",
+    "Create challenge": "انشاء تحدي",
     "Select exercise's name: ": "اختيار اسم التمرين",
     "Challenge end date:": "تاريخ انتهاء التحدي",
     "Practice by: ": "التمرين عن طريق",
@@ -307,5 +307,13 @@
     "Please enter your gender": "الرجاء تحديد جنسك",
     "Please enter your birthdate": "الرجاء ادخال تاريخ ميلادك",
     "Please enter your country": "الرجاء تحديد بلدك",
+    "Add exercises": "اضافة تمارين",
+    "Photo type": "نمط الصورة",
+    "Minutes": "الدقائق",
+    "Time": "الثواني",
+    "Counts": "التكرارات",
+    "Edit workout": "تعديل البرنامج الرياضي",
+    "Count": "التكرار",
     "Add exercises": "اضافة تمارين"
+
 }

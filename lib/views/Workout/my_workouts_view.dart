@@ -65,7 +65,7 @@ class _MyWorkoutsState extends State<MyWorkouts> {
           title: Text(
             'My workouts',
             style: theme.textTheme.bodyMedium!,
-          ),
+          ).tr(),
         ),
         body: Container(
             child: Column(

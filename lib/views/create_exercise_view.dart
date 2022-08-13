@@ -412,7 +412,7 @@ class _CreateExerciseViewState extends State<CreateExerciseView> {
       title: Text(
         'Photo type',
         style: TextStyle(color: blueColor),
-      ),
+      ).tr(),
       content: Container(
         height: 150,
         child: Column(
@@ -427,7 +427,7 @@ class _CreateExerciseViewState extends State<CreateExerciseView> {
               child: Text(
                 'From gallery',
                 style: TextStyle(color: orangeColor),
-              ),
+              ).tr(),
             ),
             SizedBox(
               height: 15,
@@ -441,7 +441,7 @@ class _CreateExerciseViewState extends State<CreateExerciseView> {
               child: Text(
                 'From camera',
                 style: TextStyle(color: orangeColor),
-              ),
+              ).tr(),
             ),
           ],
         ),
