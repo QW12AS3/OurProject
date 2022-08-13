@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:country_picker/country_picker.dart';
@@ -322,40 +323,41 @@ class _EditProfileViewState extends State<EditProfileView> {
                         onSaved: (val) {},
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                          suffixIcon: Consumer<UserInformationViewModel>(
+                          suffixIcon: Consumer<EditProfileViewModel>(
                             builder: (context, value, child) => Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    if (value.weightUnit != Units.cm) {
+                                    log('here');
+                                    if (value.getHeight != Units.cm) {
                                       value.ChangeHeightUnit(Units.cm);
                                     }
                                   },
                                   child: Text(
                                     'cm',
                                     style: theme.textTheme.bodySmall!.copyWith(
-                                        fontSize: value.heightUnit == Units.cm
+                                        fontSize: value.getHeight == Units.cm
                                             ? 17
                                             : 15,
-                                        color: value.heightUnit == Units.cm
+                                        color: value.getHeight == Units.cm
                                             ? orangeColor
                                             : greyColor),
                                   ).tr(),
                                 ),
                                 InkWell(
                                   onTap: () {
-                                    if (value.weightUnit != Units.ft) {
+                                    if (value.getHeight != Units.ft) {
                                       value.ChangeHeightUnit(Units.ft);
                                     }
                                   },
                                   child: Text(
                                     'ft',
                                     style: theme.textTheme.bodySmall!.copyWith(
-                                        fontSize: value.heightUnit == Units.ft
+                                        fontSize: value.getHeight == Units.ft
                                             ? 17
                                             : 15,
-                                        color: value.heightUnit == Units.ft
+                                        color: value.getHeight == Units.ft
                                             ? orangeColor
                                             : greyColor),
                                   ).tr(),

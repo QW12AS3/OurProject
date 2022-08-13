@@ -21,6 +21,8 @@ class EditProfileViewModel with ChangeNotifier {
   String _country = '';
   Units _weightUnit = Units.kg;
   Units _heightUnit = Units.cm;
+  bool _isChangeLoading = false;
+  bool _ChangePasswordLoading = false;
 
   bool _emailpasswordObsecure = true;
 
@@ -30,12 +32,23 @@ class EditProfileViewModel with ChangeNotifier {
 
   bool _isLoading = false;
 
+  void setIsChangeLoading(value) {
+    _isChangeLoading = value;
+    notifyListeners();
+  }
+
+  void setIsChangePasswordLoading(value) {
+    _ChangePasswordLoading = value;
+    notifyListeners();
+  }
+
   void ChangeWeightUnit(Units unit) {
     _weightUnit = unit;
     notifyListeners();
   }
 
   void ChangeHeightUnit(Units unit) {
+    log(unit.name.toString());
     _heightUnit = unit;
     notifyListeners();
   }
@@ -123,8 +136,11 @@ class EditProfileViewModel with ChangeNotifier {
 
   Future<void> changeEmail(String oldEmail, String newEmail, String password,
       BuildContext context) async {
+    setIsChangeLoading(true);
     final response =
         await ProfileApi().changeEmail(oldEmail, newEmail, password);
+    setIsChangeLoading(false);
+
     if (response['success']) {
       Navigator.pushNamed(
         context,
@@ -143,8 +159,11 @@ class EditProfileViewModel with ChangeNotifier {
 
   Future<void> changePassword(String oldPassword, String newPassword,
       String confirmPassword, BuildContext context) async {
+    setIsChangePasswordLoading(true);
     bool response = await ProfileApi()
         .changePassword(oldPassword, newPassword, confirmPassword);
+    setIsChangePasswordLoading(false);
+
     if (response) {
       Navigator.pop(context);
     } else {
@@ -168,7 +187,7 @@ class EditProfileViewModel with ChangeNotifier {
       DateTime birthdate,
       BuildContext context,
       String country) async {
-    log(getHeight.toString());
+    log('unittttt' + getHeight.toString());
     setIsLoading(true);
     final response = await ProfileApi().editProfile(
         fname,
@@ -209,4 +228,6 @@ class EditProfileViewModel with ChangeNotifier {
   Units get getWeight => _weightUnit;
   Units get getHeight => _heightUnit;
   bool get getIsLoading => _isLoading;
+  bool get getIsChangeLoading => _isChangeLoading;
+  bool get getIsChangePasswordLoading => _ChangePasswordLoading;
 }

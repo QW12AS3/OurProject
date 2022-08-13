@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../components.dart';
 import '../../constants.dart';
 import '../../view_models/edit_profile_view_model.dart';
 
@@ -189,17 +190,21 @@ class ChangePasswordView extends StatelessWidget {
                 ),
               ),
             ),
-            ElevatedButton(
-                onPressed: () async {
-                  await Provider.of<EditProfileViewModel>(context,
-                          listen: false)
-                      .changePassword(
-                          oldPasswordController.text.trim(),
-                          newPasswordController.text.trim(),
-                          confirmPasswordController.text.trim(),
-                          context);
-                },
-                child: const Text('Save changes').tr())
+            Consumer<EditProfileViewModel>(
+                builder: (context, value, child) =>
+                    value.getIsChangePasswordLoading
+                        ? bigLoader(color: orangeColor)
+                        : ElevatedButton(
+                            onPressed: () async {
+                              await Provider.of<EditProfileViewModel>(context,
+                                      listen: false)
+                                  .changePassword(
+                                      oldPasswordController.text.trim(),
+                                      newPasswordController.text.trim(),
+                                      confirmPasswordController.text.trim(),
+                                      context);
+                            },
+                            child: const Text('Save changes').tr()))
           ],
         ),
       ),

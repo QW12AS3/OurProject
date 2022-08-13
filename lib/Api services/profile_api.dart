@@ -99,6 +99,7 @@ class ProfileApi {
       request.fields['gender'] = gender.name;
       request.fields['birthdate'] = birthdate.toString();
       request.fields['country'] = country;
+      log(heightUnit.name.toString());
       request.fields['height_unit'] = heightUnit.name.toString();
       request.fields['weight_unit'] = weightUnit.name.toString();
       request.fields['_method'] = 'PUT';
