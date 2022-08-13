@@ -355,13 +355,14 @@ class _ExercisesListViewState extends State<ExercisesListView> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              FittedBox(
-                                child: Text(exerciseValue.name.toString(),
-                                    style: TextStyle(
-                                        color: blueColor,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 25)),
-                              ),
+                              Text(exerciseValue.name.toString(),
+                                  style: TextStyle(
+                                    color: blueColor,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 25,
+                                  ),
+                                  overflow: TextOverflow.fade,
+                                  maxLines: 2),
                               FittedBox(
                                 child: Text(
                                   '${exerciseValue.burn_calories} Kcal',

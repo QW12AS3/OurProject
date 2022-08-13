@@ -555,11 +555,21 @@ class _AnotherUserProfileViewState extends State<AnotherUserProfileView> {
                             //     ).tr(),
                             //   ),
                             if (Provider.of<AnotherUserProfileViewModel>(
-                                        context,
-                                        listen: true)
-                                    .getUserData
-                                    .roleId ==
-                                2)
+                                            context,
+                                            listen: true)
+                                        .getUserData
+                                        .roleId ==
+                                    2 ||
+                                Provider.of<ProfileViewModel>(context,
+                                            listen: true)
+                                        .getUserData
+                                        .roleId ==
+                                    4 ||
+                                Provider.of<ProfileViewModel>(context,
+                                            listen: true)
+                                        .getUserData
+                                        .roleId ==
+                                    5)
                               Consumer<AnotherUserProfileViewModel>(
                                 builder: (context, user, child) =>
                                     ExpansionTile(

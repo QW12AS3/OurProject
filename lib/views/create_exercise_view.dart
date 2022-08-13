@@ -62,7 +62,7 @@ class _CreateExerciseViewState extends State<CreateExerciseView> {
         ),
         body: SafeArea(
           child: Container(
-            color: Colors.white,
+            // color: Colors.white,
             child: SingleChildScrollView(
               // controller: controller,
               child: Column(

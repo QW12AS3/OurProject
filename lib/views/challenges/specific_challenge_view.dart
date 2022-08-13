@@ -200,7 +200,7 @@ class _SpecificChallengeState extends State<SpecificChallenge> {
       ).tr()),
       body: Center(
         child: Container(
-          color: Colors.white,
+          // color: Colors.white,
           child: SingleChildScrollView(
             // controller: controller,
             child: Provider.of<SpeceficChallengeViewModel>(context,

@@ -165,8 +165,9 @@ class ProfileViewModel with ChangeNotifier {
     setWorkoutPage(getWorkoutpage + 1);
     if (_userPosts.isNotEmpty) setIsMoreWorkoutLoading(true);
     setIsWorkoutLoading(true);
-    List<WorkoutListModel> newWorkouts =
-        await WorkoutListsAPI().getUserworkouts(lang, userId, getWorkoutpage);
+    List<WorkoutListModel> newWorkouts = await WorkoutListsAPI()
+        .getworkouts(lang, '', '', getWorkoutpage, '/workout/my_workouts');
+    // .getUserworkouts(lang, userId, getWorkoutpage);
     if (newWorkouts.isEmpty)
       setWorkoutPage(getWorkoutpage - 1);
     else
